@@ -1,0 +1,2 @@
+# pupupeli
+Pelialusta Python-ohjelmointikurssille
