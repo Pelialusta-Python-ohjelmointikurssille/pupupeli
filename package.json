@@ -6,6 +6,7 @@
     "jest": "^29.7.0"
   },
   "scripts": {
-    "lint": "eslint scripts"
+    "lint": "eslint scripts",
+    "test": "jest"
   }
 }
