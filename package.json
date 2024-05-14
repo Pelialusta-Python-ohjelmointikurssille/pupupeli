@@ -12,7 +12,7 @@
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
-    "lint": "eslint scripts",
+    "lint": "eslint src",
     "test": "jest",
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
