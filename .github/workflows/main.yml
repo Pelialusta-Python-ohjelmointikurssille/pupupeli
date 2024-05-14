@@ -25,10 +25,12 @@ jobs:
       - name: Run jest and collect coverage
         run: npm run test
 
-      - name: Run eslint
-        run: npm run lint
+
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Run eslint
+        run: npm run lint
