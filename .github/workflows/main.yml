@@ -22,9 +22,11 @@ jobs:
         run: npm install
 
 
-
-      - name: Run jest  
+      - name: Run jest and collect coverage
         run: npm run test
 
       - name: Run eslint
         run: npm run lint
+
+      - name: upload coverage to codecov
+        run: codecov/codecov-action@v3
