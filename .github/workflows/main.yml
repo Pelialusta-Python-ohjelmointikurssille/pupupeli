@@ -28,5 +28,7 @@ jobs:
       - name: Run eslint
         run: npm run lint
 
-      - name: upload coverage to codecov
-        run: codecov/codecov-action@v3
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

@@ -1,3 +1,5 @@
+[![CI](https://github.com/Pelialusta-Python-ohjelmointikurssille/pupupeli/actions/workflows/main.yml/badge.svg)](https://github.com/Pelialusta-Python-ohjelmointikurssille/pupupeli/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/Pelialusta-Python-ohjelmointikurssille/pupupeli/graph/badge.svg?token=S2MRVEVLNA)](https://codecov.io/gh/Pelialusta-Python-ohjelmointikurssille/pupupeli)
 # pupupeli
 Pelialusta Python-ohjelmointikurssille
 
