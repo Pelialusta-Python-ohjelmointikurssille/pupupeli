@@ -4,11 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <title>PupuPeli</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
  
 <body>
-    <script src="src/helloworld.js" onload="document.body.innerHTML = helloworld()"></script>
+    <h1>Pupu moves!</h1>
+    <canvas id="gridCanvas" width=800 height=600 style="border:1px solid"></canvas>
+    <button id="upButton">ylos</button>
+    <button id="leftButton">vasemmalle</button>
+    <button id="downButton">alas</button>
+    <button id="rightButton">oikealle</button>
+    <script src="src/game/game.js" type="module"></script>
 </body>
  
 </html>
