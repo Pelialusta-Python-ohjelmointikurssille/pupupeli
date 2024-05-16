@@ -1,4 +1,8 @@
 ## Building
+First install npm packages:
+~~~
+npm install
+~~~
 
 Dev build:
 ~~~
