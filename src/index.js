@@ -34,7 +34,7 @@ document.body.appendChild(leftButton);
 document.body.appendChild(rightButton);
 document.body.appendChild(downButton);
 
-initGrid(11, 8);
+initGrid(8, 8);
 pupu = getNewGridObject("pupu");
 addToGrid(pupu, 0, 0);
 
