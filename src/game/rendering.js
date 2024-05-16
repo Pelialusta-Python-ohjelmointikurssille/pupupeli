@@ -10,8 +10,8 @@ await app.init({
 })
 app.ticker.maxFPS = 60;
 
-const bunny_texture = await PIXI.Assets.load("images/pupu_edesta_lapinakyva.png");
-const background_texture = await PIXI.Assets.load("images/Tausta1.png");
+const bunny_texture = await PIXI.Assets.load("static/game_assets/pupu_edesta_lapinakyva.png");
+const background_texture = await PIXI.Assets.load("static/game_assets/Tausta1.png");
 
 const bunny_sprite = new PIXI.Sprite(bunny_texture);
 const background_sprite = new PIXI.Sprite(background_texture);
