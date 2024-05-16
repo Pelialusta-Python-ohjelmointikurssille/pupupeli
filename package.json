@@ -1,8 +1,9 @@
 {
-  "name": "my-webpack-project",
   "version": "1.0.0",
-  "description": "My webpack project",
+  "description": "Pelialusta Python-ohjelmointikurssille", 
+  "name": "pupupeli",
   "dependencies": {
+    "pixi.js": "^8.1.2",
     "express": "^4.19.2"
   },
   "devDependencies": {

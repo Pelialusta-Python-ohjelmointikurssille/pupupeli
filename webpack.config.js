@@ -3,7 +3,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const isProduction = process.env.NODE_ENV == 'production';
 
 
@@ -23,6 +23,7 @@ const config = {
     plugins: [
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
+        new HtmlWebpackPlugin()
     ],
     module: {
         rules: [
@@ -39,6 +40,7 @@ const config = {
             // Learn more about loaders from https://webpack.js.org/loaders/
         ],
     },
+    devtool: "source-map"
 };
 
 module.exports = () => {
