@@ -35,8 +35,7 @@ export function setBunnyPos(x, y) {
 }
 
 
-app.ticker.add((time) =>
+app.ticker.add(() =>
 {bunny_sprite.position.x = bx * 80 + 32;
   bunny_sprite.position.y = by * 80 + 32;
 });
-

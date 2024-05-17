@@ -1,6 +1,7 @@
+
 import { Cell } from "./cell.js";
 
-var grid = null;
+export var grid = null;
 
 export function initGrid(widht, height) {
     //Needs to be called first!

@@ -1,5 +1,5 @@
 // src/game/cell.js
-class Cell {
+export class Cell {
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -16,5 +16,3 @@ class Cell {
         return this.entities;
     }
 }
-
-module.exports = { Cell };

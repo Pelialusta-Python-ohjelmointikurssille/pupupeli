@@ -1,5 +1,5 @@
 // src/game/tests/cell.test.js
-const { Cell } = require("../cell.js");
+import { Cell } from "../cell.js";
 
 describe('Cell', () => {
     let cell;
