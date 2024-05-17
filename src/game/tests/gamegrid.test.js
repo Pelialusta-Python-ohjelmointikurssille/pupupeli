@@ -1,4 +1,4 @@
-import { initGrid, moveGridObjectToDir, addToGrid, grid } from '../gamegrid';
+import { initGrid, moveGridObjectToDir, addToGrid, removeFromGrid, grid, boundaryCheck, ConsoleLogGrid } from '../gamegrid';
 import { Cell } from '../cell';
 
 describe('Grid functions', () => {
@@ -36,5 +36,30 @@ describe('Grid functions', () => {
         expect(moved).toBe(false);
         expect(grid[4][4].entities).toContain(gridObject);
         expect(grid[5] && grid[5][4]).toBeUndefined();
+    });
+
+    test(('removeFromGrid removes the object from the grid'), () => {
+        addToGrid(gridObject, 1, 1);
+        expect(grid[1][1].entities).toContain(gridObject);
+        removeFromGrid(gridObject);
+        expect(grid[1][1].entities).not.toContain(gridObject);
+    });
+
+    test(('boundaryCheck returns true for coordinates within bounds'), () => {
+        expect(boundaryCheck(0, 0)).toBe(true);
+        expect(boundaryCheck(4, 4)).toBe(true);
+    });
+
+    test(('boundaryCheck returns false for coordinates out of bounds'), () => {
+        expect(boundaryCheck(-1, 0)).toBe(false);
+        expect(boundaryCheck(0, -1)).toBe(false);
+        expect(boundaryCheck(5, 0)).toBe(false);
+        expect(boundaryCheck(0, 5)).toBe(false);
+    });
+});
+
+describe('ConsoleLogGrid null', () => {
+    test('ConsoleLogGrid returns early if grid is null', () => {
+        expect(ConsoleLogGrid(null)).toBeUndefined();
     });
 });

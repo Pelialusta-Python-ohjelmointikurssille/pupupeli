@@ -27,7 +27,7 @@ export function moveGridObjectToDir(gridObject, x, y) {
     return true;
 }
 
-function boundaryCheck(x, y) {
+export function boundaryCheck(x, y) {
     if (x < 0 | x >= grid.length) return false;
     if (y < 0 | y >= grid[0].length) return false;
     return true;
@@ -39,7 +39,7 @@ export function addToGrid(gridObject, x, y) {
     ConsoleLogGrid(grid);
 }
 
-function removeFromGrid(gridObject) {
+export function removeFromGrid(gridObject) {
     let x = gridObject.cell.x;
     let y = gridObject.cell.y;
     let cell = grid[x][y];
@@ -49,7 +49,7 @@ function removeFromGrid(gridObject) {
     gridObject.cell = null;
 }
 
-function ConsoleLogGrid(grid) {
+export function ConsoleLogGrid(grid) {
     if (grid == null) return;
     let debugStr = "";
     for (let x = 0; x < grid.length; x++) {
