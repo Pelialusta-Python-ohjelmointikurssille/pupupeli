@@ -4,4 +4,5 @@ module.exports = {
     transform: {
         '^.+\\.js$': 'babel-jest',
     },
-}
+    testMatch: ["**/?(*.)+(test).js?(x)"], // Ensure it matches your test files
+};

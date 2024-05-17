@@ -1,25 +1,17 @@
-import { initGrid, addToGrid, moveGridObjectToDir as tryMoveGridObjectToDir } from "./game/gamegrid.js";
-import { getNewGridObject } from "./game/gridobject.js";
 import { app, setBunnyPos } from "./game/rendering.js"
+import {InitGame, MovePupu} from "./game/initgame.js"
 var pupu;
 
-main();
 
 function main() {
     document.body.appendChild(app.canvas);
     CreateMovePupuButtons();
-    InitGame();
-}
-
-function InitGame() {
-    initGrid(8, 8);
-    pupu = getNewGridObject("pupu");
-    addToGrid(pupu, 0, 0);
+    pupu = InitGame();
 }
 
 function onMovePupu(x, y) {
     console.log("MOVE");
-    if (tryMoveGridObjectToDir(pupu, x, y)) {
+    if (MovePupu(pupu, x, y)) {
         setBunnyPos(x, y);
     }
 }
@@ -46,3 +38,5 @@ function createOnClickButtonDirectionEvent(buttonName, x, y) {
     let buttonInput = document.getElementById(buttonName);
     buttonInput.addEventListener("click", function () { onMovePupu(x, y) }, false);
 }
+
+main();
