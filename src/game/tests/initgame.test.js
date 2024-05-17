@@ -1,4 +1,4 @@
-import { InitGame } from '../initgame';
+import { InitGame, MovePupu } from '../initgame';
 import * as gamegrid from '../gamegrid';
 import * as gridobject from '../gridobject';
 
@@ -27,6 +27,14 @@ describe('InitGame function', () => {
         gridobject.getNewGridObject.mockReturnValue(mockPupu);
         InitGame();
         expect(gamegrid.addToGrid).toHaveBeenCalledWith(mockPupu, 0, 0);
+    });
+
+    it('should call addToGrid with correct arguments', () => {
+        const mockPupu = { name: 'pupu' };
+        gridobject.getNewGridObject.mockReturnValue(mockPupu);
+        InitGame();
+        MovePupu(mockPupu, 0, 1)
+        expect(gamegrid.moveGridObjectToDir).toHaveBeenCalledWith(mockPupu, 0, 1);
     });
 });
 
