@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js"
+import { GridSpaceToScreenSpace } from "./coord_helper.js"
 
 export const app = new PIXI.Application();
 await app.init({
@@ -31,11 +32,12 @@ var by = 0;
 export function setBunnyPos(x, y) {
   bx += x;
   by += y;
-  console.log("SET POS");
 }
 
 
 app.ticker.add(() =>
-{bunny_sprite.position.x = bx * 80 + 32;
-  bunny_sprite.position.y = by * 80 + 32;
+{
+  let coords = GridSpaceToScreenSpace(bx, by, 640, 640, 8, 8, 0, 0);
+  bunny_sprite.position.x = coords[0];
+  bunny_sprite.position.y = coords[1];
 });
