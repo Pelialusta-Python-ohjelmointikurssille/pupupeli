@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="en-US">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
 </head>
- 
+
 <body>
+    <div class="editor-container">
+        <div id="editor"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" type="text/javascript"
+            charset="utf-8"></script>
+        <script src="src/editor.js" type="text/javascript" charset="utf-8"></script>
+
+        <div>
+            <button id="editor-button" type=button onclick="suorita()">Suorita</button>
+        </div>
+
+    </div>
+
+    <canvas id=canvas width=800 height=600 style="background: url('src/static/game_assets/Tausta1.png')"></canvas>
+
 </body>
- 
+
 </html>
