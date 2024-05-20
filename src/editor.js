@@ -6,6 +6,23 @@ editor.setOptions({
     copyWithEmptySelection: true,
 });
 
+main();
+
+var pyodide;
+
 function start() {
     console.log(editor.getValue());
+    test(editor.getValue());
+}
+
+function test(string) {
+    pyodide.runPython(`
+        import sys
+        sys.version
+    `);
+    pyodide.runPython(string);
+}
+
+async function main() {
+    pyodide = await loadPyodide();
 }
