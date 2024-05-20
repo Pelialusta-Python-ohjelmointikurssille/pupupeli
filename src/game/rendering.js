@@ -2,6 +2,8 @@ import { GridSpaceToScreenSpace } from "./coord_helper.js"
 
 //refactor pls
 
+/* global PIXI */
+
 export const app = new PIXI.Application();
 await app.init({
   width: 640,
