@@ -1,19 +1,20 @@
-## Building
+## Running linting and tests
+
 First install npm packages:
 ~~~
 npm install
 ~~~
 
-Dev build:
+Run tests:
 ~~~
-npm run build:dev
+npm test
 ~~~
 
-Production build:
+Run linting:
 ~~~
-npm run build:prod
+npm run lint
 ~~~
 
 ## Run locally
 
-Start a live webserver from dist folder, for example using VSCode Live Preview Plugin.
+Start a webserver from root folder.
