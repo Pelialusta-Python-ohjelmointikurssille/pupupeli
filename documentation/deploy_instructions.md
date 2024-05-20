@@ -1,19 +1,32 @@
-## Building
+## Running linting and tests
+
 First install npm packages:
 ~~~
 npm install
 ~~~
 
-Dev build:
+Run tests:
 ~~~
-npm run build:dev
+npm test
 ~~~
 
-Production build:
+Run linting:
 ~~~
-npm run build:prod
+npm run lint
 ~~~
 
 ## Run locally
 
-Start a live webserver from dist folder, for example using VSCode Live Preview Plugin.
+Start a webserver from root folder.
+
+One way is to create it is by:
+
+~~~
+python3 -m http.server
+~~~
+
+Or using the VSCode Live Preview Extension
+
+## OpenShift deployment
+
+The Httpd option works for running on OpenShift.
