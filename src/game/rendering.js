@@ -63,18 +63,30 @@ class Renderer {
     async init () {
         this.pixiApp = await this.initPixi();
         await this.loadBuiltinBundles();
+        this.createBackground();
+        this.createGrid();
+        this.createCharacter();
+    }
+
+    createBackground () {
+        let bg = new PIXI.Sprite(this.builtinAssets.builtin_backgrounds.background_grass);
+        this.pixiApp.stage.addChild(bg);
+        bg.width = this.pixiApp.screen.width;
+        bg.height = this.pixiApp.screen.height;
+    }
+
+    createGrid () {
+        let grid = new GraphicsGrid(new Vector2(this.pixiApp.screen.width, this.pixiApp.screen.height), new Vector2(8, 8), new Vector2(0, 0), 0x003300, 2);
+        this.pixiApp.stage.addChild(grid.lineContainer);
+    }
+
+    createCharacter () {
         let bunnyTextures = [
             this.builtinAssets.builtin_characters.bunny_up,
             this.builtinAssets.builtin_characters.bunny_right,
             this.builtinAssets.builtin_characters.bunny_down,
             this.builtinAssets.builtin_characters.bunny_left
         ];
-        let bg = new PIXI.Sprite(this.builtinAssets.builtin_backgrounds.background_grass);
-        this.pixiApp.stage.addChild(bg)
-        bg.width = this.pixiApp.screen.width;
-        bg.height = this.pixiApp.screen.height;
-        let grid = new GraphicsGrid(new Vector2(640, 640), new Vector2(8, 8), new Vector2(0, 0), 0x003300, 2);
-        this.pixiApp.stage.addChild(grid.lineContainer);
         this.characterObject = new Character(new Vector2(0, 0), bunnyTextures, new Vector2(64, 64));
         this.pixiApp.stage.addChild(this.characterObject.renderSprite);
     }
