@@ -4,6 +4,23 @@ import { GridSpaceToScreenSpace } from "./coord_helper.js"
 
 /* global PIXI */
 
+// write doc for app
+/**
+ * Represents the game application
+ * @class
+ * @classdesc Represents the game application
+ * @property {PIXI.Application} app - The PIXI application
+ * @property {PIXI.Sprite} bunny_sprite - The bunny sprite
+ * @property {PIXI.Sprite} background_sprite - The background sprite
+ * @property {number} gridX - The x coordinate of the grid
+ * @property {number} gridY - The y coordinate of the grid
+ * @property {number} targetX - The x coordinate of the target
+ * @property {number} targetY - The y coordinate of the target
+ * @property {number} xdir - The x direction
+ * @property {number} ydir - The y direction
+ * @property {number} bunnySpeedMod - The bunny speed modifier
+ * @property {boolean} atTarget - True if the bunny is at the target, false if it is not
+ */
 export const app = new PIXI.Application();
 await app.init({
   width: 640,
@@ -47,6 +64,12 @@ function GetDistance(ax, ay, bx, by) {
   return Math.sqrt((bx-ax)**2 + (by-ay)**2);
 }
 
+// write doc for setBunnyPos
+/** 
+ * Sets the bunny position
+ * @param {number} x - The x coordinate of the bunny
+ * @param {number} y - The y coordinate of the bunny
+ */
 export function setBunnyPos(x, y) {
   gridX += x;
   gridY += y;
@@ -58,6 +81,11 @@ export function setBunnyPos(x, y) {
   atTarget = false;
 }
 
+// write doc for app.ticker.add
+/** 
+ * Adds a ticker event to the application
+ * @param {function} time - The time function
+ */
 app.ticker.add((time) =>
 {  
   if (atTarget == false){
