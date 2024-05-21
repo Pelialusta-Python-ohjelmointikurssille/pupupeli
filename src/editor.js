@@ -1,3 +1,5 @@
+import { movePupuHandler } from "./index.js"
+
 // write doc for this file
 /**
  * This file contains the code for the editor and Python code execution
@@ -42,9 +44,22 @@ function onClickRunCodeButton() {
  * @param {string} string - The Python code to run
  */
 function runPythonCode(string) {
+    registerJSModules()
     pyodide.runPython(`
-        import sys
-        sys.version
+        import sys, js
+        from bunny_module import moveBunny
     `);
     pyodide.runPython(string);
+}
+
+function registerJSModules() {
+    pyodide.registerJsModule('bunny_module', { moveBunny });
+}
+
+// write doc for main
+/**
+ * Initializes the Pyodide module
+ */
+async function main() {
+    pyodide = await loadPyodide();
 }
