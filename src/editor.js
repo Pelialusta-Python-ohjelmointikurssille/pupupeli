@@ -1,4 +1,4 @@
-import { movePupuHandler } from "./index.js"
+import { moveBunny } from "./index.js"
 
 // write doc for this file
 /**
@@ -54,12 +54,4 @@ function runPythonCode(string) {
 
 function registerJSModules() {
     pyodide.registerJsModule('bunny_module', { moveBunny });
-}
-
-// write doc for main
-/**
- * Initializes the Pyodide module
- */
-async function main() {
-    pyodide = await loadPyodide();
 }

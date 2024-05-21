@@ -24,7 +24,7 @@ function onMovePupu(x, y) {
     }
 }
 
-export function movePupuHandler(direction) {
+export function moveBunny(direction) {
     switch (direction) {
         case "oikea":
             onMovePupu(1, 0)
