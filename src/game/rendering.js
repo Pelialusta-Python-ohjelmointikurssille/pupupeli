@@ -126,19 +126,19 @@ class Character {
         this.renderSprite.texture = this.textures[direction];
         this.isMoving = true;
         if (direction == 0) {
-            this.gridPosition.SetValue(this.gridPosition.x, this.gridPosition.y - 1);
+            this.gridPosition.y -= 1
             this.moveDirection = new Vector2(0, -1);
         }
         else if (direction == 1) {
-            this.gridPosition.SetValue(this.gridPosition.x + 1, this.gridPosition.y);
+            this.gridPosition.x += 1
             this.moveDirection = new Vector2(1, 0);
         }
         else if (direction == 2) {
-            this.gridPosition.SetValue(this.gridPosition.x, this.gridPosition.y + 1);
+            this.gridPosition.y += 1
             this.moveDirection = new Vector2(0, 1);
         }
         else if (direction == 3) {
-            this.gridPosition.SetValue(this.gridPosition.x - 1, this.gridPosition.y);
+            this.gridPosition.x -= 1
             this.moveDirection = new Vector2(-1, 0);
         }
         this.targetPosition = this.getScreenPosition(this.gridPosition);
@@ -151,10 +151,8 @@ class Character {
                 this.screenPosition.y + (this.moveDirection.y * (this.moveSpeed) * deltaTime)
             );
             if (this.screenPosition.DistanceTo(this.targetPosition) > this.screenPosition.DistanceTo(predictedPosition)){
-                this.screenPosition.SetValue(
-                    this.screenPosition.x + (this.moveDirection.x * (this.moveSpeed) * deltaTime),
-                    this.screenPosition.y + (this.moveDirection.y * (this.moveSpeed) * deltaTime)
-                );
+                this.screenPosition.x += this.moveDirection.x * (this.moveSpeed) * deltaTime
+                this.screenPosition.y += this.moveDirection.y * (this.moveSpeed) * deltaTime
             }
             else {
                 this.isMoving = false;
