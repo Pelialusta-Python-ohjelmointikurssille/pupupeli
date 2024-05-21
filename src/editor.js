@@ -45,7 +45,12 @@ function onClickRunCodeButton() {
 async function runPythonCode(string) {
     let pythonFileStr = await GetPythonFile();
     pyodide.runPython(pythonFileStr);
+
     pyodide.runPython(string);
+
+    let lista = pyodide.globals.get("liikelista").toJs()
+
+    console.log(lista)
 }
 
 async function GetPythonFile() {

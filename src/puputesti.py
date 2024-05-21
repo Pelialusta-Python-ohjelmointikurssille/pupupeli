@@ -1,11 +1,25 @@
 import sys
 sys.version
 
-class PupuTesti:
-    def __init__(self):
-        self.tervehdys = "Tervehdys!\n"
+liikelista = []
 
-    def sano(self, string):
-        print("Pupu sanoo: " + string)
+class Pelaaja:
+    def __init__(self, nimi="pupu"):
+        self.nimi = nimi
+        self.liikkeet = {"oikea", "vasen", "ylös", "alas"}
+        # self.liikelista = []
+        self.alusta_liikelista()
 
-pupu = PupuTesti()
+
+    def alusta_liikelista(self):
+        global liikelista
+        liikelista = []
+
+    def liiku(self, liike: str):
+        global liikelista
+        if liike in self.liikkeet:
+            liikelista.append(liike)
+
+pupu = Pelaaja()
+
+liikkeet = pupu.liikkeet
