@@ -1,3 +1,5 @@
+import { Vector2 } from "./vector.js";
+
 /**
  * Returns screen space coordinates of a given grid cell. Coordinates are of
  * the cell center.
@@ -18,6 +20,20 @@ export function GridSpaceToScreenSpace(cellX, cellY, gridWidth, gridHeight, colu
     let screenCoordinates = [Number, Number];
     screenCoordinates = [screenX, screenY];
     return screenCoordinates;
+}
+
+export function GridVectorToScreenVector(cellVector, gridScreenSizeVector, gridSizeVector, offsetVector=new Vector2(0, 0)) {
+    let screenCoordinates = GridSpaceToScreenSpace(
+        cellVector.x,
+        cellVector.y,
+        gridScreenSizeVector.x,
+        gridScreenSizeVector.y,
+        gridSizeVector.x,
+        gridSizeVector.y,
+        offsetVector.x,
+        offsetVector.y
+    );
+    return new Vector2(screenCoordinates[0], screenCoordinates[1]);
 }
 
 /**
