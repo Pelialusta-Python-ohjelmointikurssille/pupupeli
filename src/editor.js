@@ -26,14 +26,27 @@ export function onClickRunCodeButton() {
     runPythonCode(editor.getValue());
 }
 
-function runPythonCode(string) {
-    registerJSModules()
-    pyodide.runPython(`
-        import sys, js
-        from bunny_module import moveBunny
-    `);
+async function runPythonCode(string) {
+    let pythonFileStr = await GetPythonFile();
+    pyodide.runPython(pythonFileStr);
+
     pyodide.runPython(string);
+
+    let lista = pyodide.globals.get("liikelista").toJs()
+
+    console.log(lista)
 }
+
+async function GetPythonFile() {
+    let path = "src/puputesti.py";
+    return await GetFileAsText(path); 
+}
+
+async function GetFileAsText(filepath) {
+    const response = await fetch(filepath);
+    const pythonText = await response.text();
+    return pythonText;
+  }
 
 function registerJSModules() {
     pyodide.registerJsModule('bunny_module', { moveBunny });
