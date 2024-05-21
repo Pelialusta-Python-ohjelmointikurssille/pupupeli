@@ -73,7 +73,7 @@ class Renderer {
         this.pixiApp.stage.addChild(bg)
         bg.width = this.pixiApp.screen.width;
         bg.height = this.pixiApp.screen.height;
-        let grid = new GraphicsGrid(new Vector2(640, 640), new Vector2(8, 8), new Vector2(0, 0));
+        let grid = new GraphicsGrid(new Vector2(640, 640), new Vector2(8, 8), new Vector2(0, 0), 0x003300, 2);
         this.pixiApp.stage.addChild(grid.lineContainer);
         this.characterObject = new Character(new Vector2(0, 0), bunnyTextures, new Vector2(64, 64));
         this.pixiApp.stage.addChild(this.characterObject.renderSprite);
@@ -154,27 +154,33 @@ class Character {
 }
 
 class GraphicsGrid {
-    constructor (sizeOnScreen, gridSize, position) {
+    constructor (sizeOnScreen, gridSize, position, lineColor, lineWidth) {
         this.sizeOnScreen = sizeOnScreen;
         this.gridSize = gridSize;
         this.position = position;
         this.lines = [];
         this.lineContainer = new PIXI.Container();
+        this.lineColor = lineColor;
+        this.lineWidth = lineWidth;
         this.createLines();
     }
 
     createLines () {
-        for (let i=0; i<this.gridSize.x+1; i++) {
+        let linexcount = this.gridSize.x + 1;
+        let lineycount = this.gridSize.y + 1;
+        let linexgap = this.sizeOnScreen.x / this.gridSize.x;
+        let lineygap = this.sizeOnScreen.y / this.gridSize.y;
+        for (let i=0; i<linexcount; i++) {
             let lineGraphics = new PIXI.Graphics()
-            .rect(i*80-1, 0, 2, 640)
-            .fill(0xff0000);
+            .rect(i*linexgap-(this.lineWidth/2), this.position.y, this.lineWidth, this.sizeOnScreen.y + this.position.y)
+            .fill(this.lineColor);
             this.lines.push(lineGraphics);
             this.lineContainer.addChild(lineGraphics);
         }
-        for (let i=0; i<this.gridSize.y+1; i++) {
+        for (let i=0; i<lineycount; i++) {
             let lineGraphics = new PIXI.Graphics()
-            .rect(0, i*80-1, 640, 2)
-            .fill(0xff0000);
+            .rect(this.position.x, i*lineygap-(this.lineWidth/2), this.sizeOnScreen.x + this.position.x, this.lineWidth)
+            .fill(this.lineColor);
             this.lines.push(lineGraphics);
             this.lineContainer.addChild(lineGraphics);
         }
