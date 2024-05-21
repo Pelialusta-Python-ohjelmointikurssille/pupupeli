@@ -29,11 +29,20 @@ function start() {
  * @param {string} string - The Python code to test
  */
 function test(string) {
+    pyodide.registerJsModule('bunny_module', { moveBunny });
+
     pyodide.runPython(`
         import sys
         sys.version
     `);
+    pyodide.runPython(`
+        import js
+        from bunny_module import moveBunny\n`);
     pyodide.runPython(string);
+}
+
+function moveBunny(direction) {
+    console.log(`Bunny moves ${direction}`);
 }
 
 // write doc for main
