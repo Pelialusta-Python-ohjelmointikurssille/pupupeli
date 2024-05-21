@@ -73,8 +73,12 @@ class Renderer {
         this.pixiApp.stage.addChild(bg)
         bg.width = this.pixiApp.screen.width;
         bg.height = this.pixiApp.screen.height;
+        let grid = new GraphicsGrid(new Vector2(640, 640), new Vector2(8, 8), new Vector2(0, 0));
+        this.pixiApp.stage.addChild(grid.lineContainer);
         this.characterObject = new Character(new Vector2(0, 0), bunnyTextures, new Vector2(64, 64));
         this.pixiApp.stage.addChild(this.characterObject.renderSprite);
+        
+        //this.pixiApp.stage.addChild(grid.lines[0]);
     }
 
     addProcessLoop () {
@@ -148,6 +152,38 @@ class Character {
         }
         this.renderSprite.x = this.screenPosition.x;
         this.renderSprite.y = this.screenPosition.y;
+    }
+}
+
+class GraphicsGrid {
+    constructor (sizeOnScreen, gridSize, position) {
+        this.sizeOnScreen = sizeOnScreen;
+        this.gridSize = gridSize;
+        this.position = position;
+        this.lines = [];
+        this.lineContainer = new PIXI.Container();
+        this.createLines();
+    }
+
+    createLines () {
+        for (let i=0; i<this.gridSize.x+1; i++) {
+            let lineGraphics = new PIXI.Graphics()
+            .rect(i*80-1, 0, 2, 640)
+            .fill(0xff0000);
+            this.lines.push(lineGraphics);
+            this.lineContainer.addChild(lineGraphics);
+        }
+        for (let i=0; i<this.gridSize.y+1; i++) {
+            let lineGraphics = new PIXI.Graphics()
+            .rect(0, i*80-1, 640, 2)
+            .fill(0xff0000);
+            this.lines.push(lineGraphics);
+            this.lineContainer.addChild(lineGraphics);
+        }
+    }
+
+    getLines () {
+        return this.lines;
     }
 }
 
