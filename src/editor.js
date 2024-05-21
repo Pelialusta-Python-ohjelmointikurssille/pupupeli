@@ -27,6 +27,8 @@ export function onClickRunCodeButton() {
 }
 
 function runPythonCode(string) {
+    // registerJSModules(); // poista kommentti jos poistat puputesti.py kommentit
+
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
 
@@ -34,9 +36,6 @@ function runPythonCode(string) {
 
     let lista = pyodide.globals.get("liikelista").toJs();
     console.log(lista);
-    lista.forEach((suunta) => {
-        moveBunny(suunta);
-    });
 }
 
 function GetPythonFile() {
