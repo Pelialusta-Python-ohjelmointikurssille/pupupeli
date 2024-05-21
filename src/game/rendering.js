@@ -1,92 +1,175 @@
+import { Vector2 } from "./vector.js";
+import { Direction } from "./direction.js"
 import { GridSpaceToScreenSpace } from "./coord_helper.js"
 
-export const app = new PIXI.Application();
-await app.init({
-    width: 640,
-    height: 640,
-    backgroundColor: 0x1099bb,
-    view: document.querySelector("#scene"),
-    antialias: true
-})
-app.ticker.maxFPS = 60;
+const builtinAssetManifest = {
+    bundles : [
+        {
+            name: "builtin_characters",
+            assets: [
+                {
+                    alias: "bunny_down",
+                    src: "src/static/game_assets/bunny_front.png"
+                },
+                {
+                    alias: "bunny_right",
+                    src: "src/static/game_assets/bunny_right.png"
+                },
+                {
+                    alias: "bunny_left",
+                    src: "src/static/game_assets/bunny_left.png"
+                },
+                {
+                    alias: "bunny_up",
+                    src: "src/static/game_assets/bunny_back.png"
+                }
+            ]
+        },
+        {
+            name: "builtin_backgrounds",
+            assets: [
+                {
+                    alias: "background_grass",
+                    src: "src/static/game_assets/background_grass.png"
+                }
+            ]
+        }
+    ]
+};
 
-const bunny_texture_front = await PIXI.Assets.load("src/static/game_assets/bunny_front.png");
-const bunny_texture_right = await PIXI.Assets.load("src/static/game_assets/bunny_right.png");
-const bunny_texture_left = await PIXI.Assets.load("src/static/game_assets/bunny_left.png");
-const bunny_texture_back = await PIXI.Assets.load("src/static/game_assets/bunny_back.png");
-const background_texture = await PIXI.Assets.load("src/static/game_assets/background_grass.png");
+class Renderer {
+    constructor () {
+        this.pixiApp = null;
+        this.characterObject = null;
+        this.builtinAssets = null;
+    }
 
-const bunny_sprite = new PIXI.Sprite(bunny_texture_back);
-const background_sprite = new PIXI.Sprite(background_texture);
-background_sprite.width = app.screen.width;
-background_sprite.height = app.screen.height;
+    async initPixi (screenWidth=640, screenHeight=640) {
+        let pixiApp = new PIXI.Application();
+        await pixiApp.init({
+            width: screenWidth,
+            height: screenHeight,
+            backgroundColor: 0x1099bb,
+            antialias: true
+        })
+        return pixiApp;
+    }
 
-bunny_sprite.width = 64;
-bunny_sprite.height = 64;
-bunny_sprite.anchor.set(0.5);
+    async loadBuiltinBundles () {
+        await PIXI.Assets.init({ manifest: builtinAssetManifest});
+        this.builtinAssets = await PIXI.Assets.loadBundle(["builtin_characters", "builtin_backgrounds"]);
+    }
 
-app.stage.addChild(background_sprite);
-app.stage.addChild(bunny_sprite);
+    async init () {
+        this.pixiApp = await this.initPixi();
+        await this.loadBuiltinBundles();
+        let bunnyTextures = [
+            this.builtinAssets.builtin_characters.bunny_up,
+            this.builtinAssets.builtin_characters.bunny_right,
+            this.builtinAssets.builtin_characters.bunny_down,
+            this.builtinAssets.builtin_characters.bunny_left
+        ];
+        let bg = new PIXI.Sprite(this.builtinAssets.builtin_backgrounds.background_grass);
+        this.pixiApp.stage.addChild(bg)
+        bg.width = this.pixiApp.screen.width;
+        bg.height = this.pixiApp.screen.height;
+        this.characterObject = new Character(new Vector2(0, 0), bunnyTextures, new Vector2(64, 64));
+        this.pixiApp.stage.addChild(this.characterObject.renderSprite);
+    }
 
-var gridX = 0;
-var gridY = 0;
-let coords = GridSpaceToScreenSpace(gridX, gridY, 640, 640, 8, 8, 0, 0);
-var targetX = coords[0];
-var targetY = coords[1];
-var xdir = 0;
-var ydir = 0;
-var bunnySpeedMod = 0.1;
-var dir = 0;
-
-bunny_sprite.x = targetX;
-bunny_sprite.y = targetY;
-
-var atTarget = true;
-
-function GetDistance(ax, ay, bx, by) {
-    return Math.sqrt((bx-ax)**2 + (by-ay)**2);
+    addProcessLoop () {
+        this.pixiApp.ticker.add((time) =>
+        {  
+            this.characterObject.process(time.deltaTime);
+        });
+    }
 }
 
-export function setBunnyPos(x, y) {
-    gridX += x;
-    gridY += y;
-    let coords = GridSpaceToScreenSpace(gridX, gridY, 640, 640, 8, 8, 0, 0);
-    targetX = coords[0];
-    targetY = coords[1];
-    xdir = ((coords[0]-bunny_sprite.x));
-    ydir = ((coords[1]-bunny_sprite.y));
-    atTarget = false;
-    if (x == 1) {
-        dir = 1;
-        bunny_sprite.texture = bunny_texture_right;
+class Character {
+    constructor (gridPosition, textures, size) {
+        this.gridPosition = gridPosition;
+        this.screenPosition = this.getScreenPosition(this.gridPosition);
+        this.direction = Direction.Right;
+        this.textures = textures;
+        this.renderSprite = new PIXI.Sprite(this.textures[0])
+        this.renderSprite.anchor.set(0.5);
+        this.renderSprite.width = size.x;
+        this.renderSprite.height = size.y;
+        this.targetPosition = new Vector2(this.screenPosition.x, this.screenPosition.y);
+        this.moveDirection = new Vector2(0, 0);
+        this.isMoving = false;
+        this.moveSpeed = 5;
     }
-    if (x == -1) {
-        dir = 3;
-        bunny_sprite.texture = bunny_texture_left;
+
+    getScreenPosition (position) {
+        let positionTuple = GridSpaceToScreenSpace(position.x, position.y, 640, 640, 8, 8);
+        console.log(positionTuple)
+        return new Vector2(positionTuple[0], positionTuple[1]);
+    }
+
+    moveToDirection (direction) {
+        this.direction = direction;
+        this.renderSprite.texture = this.textures[direction];
+        this.isMoving = true;
+        if (direction == 0) {
+            this.gridPosition.SetValue(this.gridPosition.x, this.gridPosition.y - 1);
+            this.moveDirection = new Vector2(0, -1);
+        }
+        else if (direction == 1) {
+            this.gridPosition.SetValue(this.gridPosition.x + 1, this.gridPosition.y);
+            this.moveDirection = new Vector2(1, 0);
+        }
+        else if (direction == 2) {
+            this.gridPosition.SetValue(this.gridPosition.x, this.gridPosition.y + 1);
+            this.moveDirection = new Vector2(0, 1);
+        }
+        else if (direction == 3) {
+            this.gridPosition.SetValue(this.gridPosition.x - 1, this.gridPosition.y);
+            this.moveDirection = new Vector2(-1, 0);
+        }
+        this.targetPosition = this.getScreenPosition(this.gridPosition);
+    }
+
+    process (deltaTime) {
+        if (this.isMoving) {
+            console.log("moving");
+            let predictedPosition = new Vector2(
+                this.screenPosition.x + (this.moveDirection.x * (this.moveSpeed) * deltaTime),
+                this.screenPosition.y + (this.moveDirection.y * (this.moveSpeed) * deltaTime)
+            );
+            if (this.screenPosition.DistanceTo(this.targetPosition) > this.screenPosition.DistanceTo(predictedPosition)){
+                this.screenPosition.SetValue(
+                    this.screenPosition.x + (this.moveDirection.x * (this.moveSpeed) * deltaTime),
+                    this.screenPosition.y + (this.moveDirection.y * (this.moveSpeed) * deltaTime)
+                );
+            }
+            else {
+                this.isMoving = false;
+                this.moveDirection = new Vector2(0, 0);
+                this.screenPosition = new Vector2(this.targetPosition.x, this.targetPosition.y);
+            }
+        }
+        this.renderSprite.x = this.screenPosition.x;
+        this.renderSprite.y = this.screenPosition.y;
+    }
+}
+
+const renderer = new Renderer();
+await renderer.init();
+renderer.addProcessLoop();
+export const app = renderer.pixiApp;
+
+export function setBunnyPos (x, y) { 
+    if (y == -1) {
+        renderer.characterObject.moveToDirection (Direction.Up);
     }
     if (y == 1) {
-        dir = 2;
-        bunny_sprite.texture = bunny_texture_front;
+        renderer.characterObject.moveToDirection (Direction.Down);
     }
-    if (y == -1) {
-        dir = 0;
-        bunny_sprite.texture = bunny_texture_back;
+    if (x == 1) {
+        renderer.characterObject.moveToDirection (Direction.Right);
+    }
+    if (x == -1) {
+        renderer.characterObject.moveToDirection (Direction.Left);
     }
 }
-
-app.ticker.add((time) =>
-{ 
-    if (atTarget == false){
-        if (
-            GetDistance(bunny_sprite.x, bunny_sprite.y, targetX, targetY) <= 
-            GetDistance(bunny_sprite.x+(xdir*time.deltaTime * bunnySpeedMod), bunny_sprite.y+(ydir*time.deltaTime * bunnySpeedMod), targetX, targetY)
-        ){
-        bunny_sprite.position.x = targetX;
-        bunny_sprite.position.y = targetY;
-        atTarget = true;
-        } else {
-        bunny_sprite.position.x += xdir * time.deltaTime * bunnySpeedMod;
-        bunny_sprite.position.y += ydir * time.deltaTime * bunnySpeedMod;
-        }
-    }
-});
