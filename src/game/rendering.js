@@ -2,6 +2,8 @@ import { Vector2 } from "./vector.js";
 import { Direction } from "./direction.js"
 import { GridVectorToScreenVector } from "./coord_helper.js"
 
+/* global PIXI */
+
 const builtinAssetManifest = {
     bundles : [
         {
@@ -170,7 +172,6 @@ class GraphicsGrid {
         this.sizeOnScreen = sizeOnScreen;
         this.gridSize = gridSize;
         this.position = position;
-        this.lines = [];
         this.lineContainer = new PIXI.Container();
         this.lineColor = lineColor;
         this.lineWidth = lineWidth;
@@ -186,20 +187,14 @@ class GraphicsGrid {
             let lineGraphics = new PIXI.Graphics()
             .rect(i*linexgap-(this.lineWidth/2), this.position.y, this.lineWidth, this.sizeOnScreen.y + this.position.y)
             .fill(this.lineColor);
-            this.lines.push(lineGraphics);
             this.lineContainer.addChild(lineGraphics);
         }
         for (let i=0; i<lineycount; i++) {
             let lineGraphics = new PIXI.Graphics()
             .rect(this.position.x, i*lineygap-(this.lineWidth/2), this.sizeOnScreen.x + this.position.x, this.lineWidth)
             .fill(this.lineColor);
-            this.lines.push(lineGraphics);
             this.lineContainer.addChild(lineGraphics);
         }
-    }
-
-    getLines () {
-        return this.lines;
     }
 }
 
