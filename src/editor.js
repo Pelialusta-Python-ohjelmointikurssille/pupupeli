@@ -26,27 +26,35 @@ export function onClickRunCodeButton() {
     runPythonCode(editor.getValue());
 }
 
-async function runPythonCode(string) {
-    let pythonFileStr = await GetPythonFile();
+function runPythonCode(string) {
+    let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
 
     pyodide.runPython(string);
 
-    let lista = pyodide.globals.get("liikelista").toJs()
-
-    console.log(lista)
+    let lista = pyodide.globals.get("liikelista").toJs();
+    console.log(lista);
+    lista.forEach((suunta) => {
+        moveBunny(suunta);
+    });
 }
 
-async function GetPythonFile() {
+function GetPythonFile() {
     let path = "src/puputesti.py";
-    return await GetFileAsText(path); 
+    return GetFileAsText(path);
 }
 
-async function GetFileAsText(filepath) {
-    const response = await fetch(filepath);
-    const pythonText = await response.text();
-    return pythonText;
-  }
+function GetFileAsText(filepath) {
+    let request = new XMLHttpRequest();
+    request.open('GET', filepath, false); // false = ei async
+    request.send(null);
+
+    if (request.status === 200) {
+        return request.responseText;
+    } else {
+        throw new Error(`Error fetching file: ${filepath}`);
+    }
+}
 
 function registerJSModules() {
     pyodide.registerJsModule('bunny_module', { moveBunny });
