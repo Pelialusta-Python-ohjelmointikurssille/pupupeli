@@ -1,6 +1,6 @@
 import { Vector2 } from "./vector.js";
 import { Direction } from "./direction.js"
-import { GridSpaceToScreenSpace } from "./coord_helper.js"
+import { GridVectorToScreenVector } from "./coord_helper.js"
 
 const builtinAssetManifest = {
     bundles : [
@@ -102,9 +102,7 @@ class Character {
     }
 
     getScreenPosition (position) {
-        let positionTuple = GridSpaceToScreenSpace(position.x, position.y, 640, 640, 8, 8);
-        console.log(positionTuple)
-        return new Vector2(positionTuple[0], positionTuple[1]);
+        return GridVectorToScreenVector(position, new Vector2(640, 640), new Vector2(8, 8));
     }
 
     moveToDirection (direction) {
@@ -132,7 +130,6 @@ class Character {
 
     process (deltaTime) {
         if (this.isMoving) {
-            console.log("moving");
             let predictedPosition = new Vector2(
                 this.screenPosition.x + (this.moveDirection.x * (this.moveSpeed) * deltaTime),
                 this.screenPosition.y + (this.moveDirection.y * (this.moveSpeed) * deltaTime)
