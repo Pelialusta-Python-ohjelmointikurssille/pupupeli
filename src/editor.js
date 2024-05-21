@@ -36,15 +36,25 @@ function onClickRunCodeButton() {
     runPythonCode(editor.getValue());
 }
 
+
 // write doc for test
 /**
  * Tests the Python code
  * @param {string} string - The Python code to run
  */
-function runPythonCode(string) {
-    pyodide.runPython(`
-        import sys
-        sys.version
-    `);
+async function runPythonCode(string) {
+    let pythonFileStr = await GetPythonFile();
+    pyodide.runPython(pythonFileStr);
     pyodide.runPython(string);
 }
+
+async function GetPythonFile() {
+    let path = "src/puputesti.py";
+    return await GetFileAsText(path); 
+}
+
+async function GetFileAsText(filepath) {
+    const response = await fetch(filepath);
+    const pythonText = await response.text();
+    return pythonText;
+  }
