@@ -14,6 +14,7 @@ initializeEditor();
  */
 async function initializePyodide() {
     pyodide = await loadPyodide();
+    pyodide.setStdin();
 }
 
 function initializeEditor() {
