@@ -5,4 +5,9 @@ module.exports = {
         '^.+\\.js$': 'babel-jest',
     },
     testMatch: ["**/?(*.)+(test).js?(x)"], // Ensure it matches your test files
+    coverageThreshold: {
+        global: {
+            branches: 75,
+        }
+    }
 };
