@@ -77,8 +77,6 @@ class Renderer {
         this.pixiApp.stage.addChild(grid.lineContainer);
         this.characterObject = new Character(new Vector2(0, 0), bunnyTextures, new Vector2(64, 64));
         this.pixiApp.stage.addChild(this.characterObject.renderSprite);
-        
-        //this.pixiApp.stage.addChild(grid.lines[0]);
     }
 
     addProcessLoop () {
