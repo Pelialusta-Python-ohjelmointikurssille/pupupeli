@@ -17,5 +17,11 @@ module.exports = {
             "filename": "report.html",
             "expand": true
         }]
+    ],
+    collectCoverageFrom: [
+        "src/**/*.js",
+        "!src/**/rendering.js", // Exclude specific file
+        "!src/**/editor.js", // Exclude specific file
+        "!src/**/example/**" // Exclude all files in specific directory
     ]
 };
