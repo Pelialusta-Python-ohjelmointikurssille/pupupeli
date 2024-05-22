@@ -15,13 +15,15 @@ module.exports = {
         ["jest-html-reporters", {
             "publicPath": "./html-report",
             "filename": "report.html",
-            "expand": true
+            "expand": true,
+            "darkTheme": true
         }]
     ],
     collectCoverageFrom: [
         "src/**/*.js",
         "!src/**/rendering.js", // Exclude specific file
-        "!src/**/editor.js", // Exclude specific file
+        "!src/**/index.js",
+        "!src/**/editor.js",
         "!src/**/example/**" // Exclude all files in specific directory
     ]
 };
