@@ -1,5 +1,8 @@
 import { moveBunny } from "./index.js"
 
+/* global ace loadPyodide */
+
+
 var pyodide;
 var editor;
 
@@ -27,7 +30,7 @@ export function onClickRunCodeButton() {
 }
 
 function runPythonCode(string) {
-    // registerJSModules(); // poista kommentti jos poistat puputesti.py kommentit
+    registerJSModules(); // poista kommentti jos poistat puputesti.py kommentit
 
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
@@ -55,6 +58,6 @@ function GetFileAsText(filepath) {
     }
 }
 
-function registerJSModules() {
+function registerJSModules() { // poista kommentti kun käytetään registerJSModules
     pyodide.registerJsModule('bunny_module', { moveBunny });
 }
