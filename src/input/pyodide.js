@@ -18,7 +18,7 @@ export function runPythonCode(codeString) {
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
     try {
-        pyodide.runPython(string);
+        pyodide.runPython(codeString);
     } catch (error) {
         // Catch and display the error as an alert
         let errorDetails = extractErrorDetails(error.message);
