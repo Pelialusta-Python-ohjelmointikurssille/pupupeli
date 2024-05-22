@@ -2,6 +2,7 @@ import { Vector2 } from "./vector.js";
 import { Direction } from "./direction.js"
 import { GridVectorToScreenVector } from "./coord_helper.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
+import { InitGame, MovePupu } from "./initgame.js"
 
 const builtinAssetManifest = {
     bundles : [
@@ -98,7 +99,6 @@ class Renderer {
     }
 
     processTurn () {
-        //console.log(this.commands);
         if (this.commands == null) {
             return;
         }
@@ -108,16 +108,16 @@ class Renderer {
 
         switch (this.commands.shift()) {
             case "oikea":
-                setBunnyPos(1, 0)
+                onMovePupu(1, 0)
                 break;
             case "vasen":
-                setBunnyPos(-1, 0)
+                onMovePupu(-1, 0)
                 break;
             case "ylös":
-                setBunnyPos(0, -1)
+                onMovePupu(0, -1)
                 break;
             case "alas":
-                setBunnyPos(0, 1)
+                onMovePupu(0, 1)
                 break;
         }
         
@@ -257,10 +257,17 @@ class GraphicsGrid {
         }
     }
 }
-
+var pupu;
 const renderer = new Renderer();
 await renderer.init();
 renderer.addProcessLoop();
+pupu = InitGame();
+function onMovePupu(x, y) {
+    console.log("MOVE");
+    if (MovePupu(pupu, x, y)) {
+        setBunnyPos(x, y);
+    }
+}
 export const app = renderer.pixiApp;
 
 export function setBunnyPos (x, y) { 

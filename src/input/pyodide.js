@@ -1,4 +1,3 @@
-import { moveBunny } from "../index.js"
 
 /* global loadPyodide */
 
@@ -14,7 +13,6 @@ async function initializePyodide() {
 
 export function runPythonCode(codeString) {
     console.log("Running python code...");
-    registerJSModules(); // poista kommentti jos poistat puputesti.py kommentit
 
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
@@ -40,8 +38,4 @@ function GetFileAsText(filepath) {
     } else {
         throw new Error(`Error fetching file: ${filepath}`);
     }
-}
-
-function registerJSModules() { // poista kommentti kun käytetään registerJSModules
-    pyodide.registerJsModule('bunny_module', { moveBunny });
 }
