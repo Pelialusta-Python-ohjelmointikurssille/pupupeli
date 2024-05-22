@@ -26,7 +26,7 @@ export function runPythonCode(codeString) {
 }
 
 function GetPythonFile() {
-    let path = "src/puputesti.py";
+    let path = "src/pythonfiles/puputesti.py";
     return GetFileAsText(path);
 }
 
