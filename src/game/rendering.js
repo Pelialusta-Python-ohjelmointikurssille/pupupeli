@@ -43,6 +43,9 @@ class Renderer {
         this.pixiApp = null;
         this.characterObject = null;
         this.builtinAssets = null;
+        this.turnTimer = 0;
+        this.turnTimeSeconds = 0.5;
+        this.commands = [];
     }
 
     async initPixi (screenWidth=640, screenHeight=640) {
@@ -94,9 +97,43 @@ class Renderer {
         this.pixiApp.stage.addChild(this.characterObject.renderSprite);
     }
 
+    processTurn () {
+        //console.log(this.commands);
+        if (this.commands == null) {
+            return;
+        }
+        if (this.commands.length <= 0) {
+            return;
+        }
+
+        switch (this.commands.shift()) {
+            case "oikea":
+                setBunnyPos(1, 0)
+                break;
+            case "vasen":
+                setBunnyPos(-1, 0)
+                break;
+            case "ylös":
+                setBunnyPos(0, -1)
+                break;
+            case "alas":
+                setBunnyPos(0, 1)
+                break;
+        }
+        
+        
+    }
+
     addProcessLoop () {
         this.pixiApp.ticker.add((time) =>
         {  
+            if (this.turnTimer < this.turnTimeSeconds) {
+                this.turnTimer += time.deltaTime / 60;
+            }
+            if (this.turnTimer >= this.turnTimeSeconds) {
+                this.processTurn();
+                this.turnTimer = 0;
+            }
             this.characterObject.process((time.deltaTime / 60));
         });
     }
@@ -239,4 +276,12 @@ export function setBunnyPos (x, y) {
     if (x == -1) {
         renderer.characterObject.moveToDirection (Direction.Left);
     }
+}
+
+export function processList(list) {
+    if (list == null || renderer == null) {
+        return;
+    }
+    console.log(list)
+    renderer.commands = list;
 }

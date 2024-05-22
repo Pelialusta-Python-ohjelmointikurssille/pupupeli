@@ -22,7 +22,7 @@ export function runPythonCode(codeString) {
     pyodide.runPython(codeString);
 
     let lista = pyodide.globals.get("liikelista").toJs();
-    console.log(lista);
+    return lista;
 }
 
 function GetPythonFile() {
