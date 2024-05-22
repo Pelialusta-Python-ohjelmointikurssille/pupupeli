@@ -1,3 +1,4 @@
+import { extractErrorDetails } from "./py_error_handling.js"
 
 /* global loadPyodide */
 
@@ -16,9 +17,15 @@ export function runPythonCode(codeString) {
 
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
+    try {
+        pyodide.runPython(string);
+    } catch (error) {
+        // Catch and display the error as an alert
+        let errorDetails = extractErrorDetails(error.message);
 
-    pyodide.runPython(codeString);
-
+        // Display the error type and line number as an alert
+        alert(`Voi ei! \n \n Virhe: \n ${errorDetails.type} \n \n Rivillä: \n ${errorDetails.line}`);
+    }
     let lista = pyodide.globals.get("liikelista").toJs();
     return lista;
 }
