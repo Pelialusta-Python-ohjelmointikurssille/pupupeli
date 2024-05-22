@@ -12,13 +12,14 @@ async function initializePyodide() {
 }
 
 
-export function runPythonCode(string) {
+export function runPythonCode(codeString) {
+    console.log("Running python code...");
     registerJSModules(); // poista kommentti jos poistat puputesti.py kommentit
 
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
 
-    pyodide.runPython(string);
+    pyodide.runPython(codeString);
 
     let lista = pyodide.globals.get("liikelista").toJs();
     console.log(lista);
