@@ -20,4 +20,8 @@ export class Vector2 {
     ToString() {
         return `Vector2(${this.x}, ${this.y})`;
     }
+
+    MultipliedBy(multiplier) {
+        return new Vector2(this.x * multiplier, this.y * multiplier);
+    }
 }
