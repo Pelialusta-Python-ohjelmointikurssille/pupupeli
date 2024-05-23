@@ -21,7 +21,7 @@ export class GraphicsGrid {
         for (let i=0; i<linexcount; i++) {
             this.lineGraphics
             .rect(i*linexgap-(this.lineWidth/2), this.position.y, this.lineWidth, this.sizeOnScreen.y + this.position.y)
-            .fill(this.lineColor);
+            .fill({color: this.lineColor});
             let textObject = new PIXI.Text({ text: `${i}`, style: { fontFamily: this.font, fontSize: 16, fill : this.lineColor } });
             textObject.x = i*linexgap + (linexgap / 2);
             textObject.y = 4;
@@ -31,7 +31,7 @@ export class GraphicsGrid {
         for (let i=0; i<lineycount; i++) {
             this.lineGraphics
             .rect(this.position.x, i*lineygap-(this.lineWidth/2), this.sizeOnScreen.x + this.position.x, this.lineWidth)
-            .fill(this.lineColor);
+            .fill({color: this.lineColor});
             let textObject = new PIXI.Text({ text: `${i}`, style: { fontFamily: this.font, fontSize: 16, fill : this.lineColor } });
             textObject.x = 4;
             textObject.y = i*lineygap + (lineygap / 2);

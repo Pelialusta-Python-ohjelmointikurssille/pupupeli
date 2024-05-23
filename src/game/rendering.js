@@ -31,7 +31,7 @@ export class Renderer {
             width: screenWidth,
             height: screenHeight,
             backgroundColor: 0x1099bb,
-            antialias: true
+            antialias: true,
         })
         pixiApp.ticker.maxFPS = 60;
         return pixiApp;
