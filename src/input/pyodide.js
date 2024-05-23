@@ -5,6 +5,12 @@
 self.importScripts('https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js');
 
 self.onmessage = async function (e) {
+    // should print "Running inside a Web Worker"
+    if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
+        console.log("Running inside a Web Worker");
+    } else {
+        console.log("Running in the main thread");
+    }
     initializePyodide(e);
 }
 

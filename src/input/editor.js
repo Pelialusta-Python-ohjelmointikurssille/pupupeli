@@ -40,12 +40,16 @@ function addEventToButton(id) {
 }
 
 function onClickCodeButton () {
+    // should print "Running in the main thread"
+    if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
+        console.log("Running inside a Web Worker");
+    } else {
+        console.log("Running in the main thread");
+    }
+
     const worker = new Worker('src/input/pyodide.js');
 
     worker.onmessage = function (e) {
-        console.log("------");
-        console.log(e.data);
-        console.log("------");
         runGameCommands(e.data);
     }
 
