@@ -1,5 +1,5 @@
 import { runPythonCode} from "./pyodide.js"
-import { processList } from "../game/rendering.js"
+import { runGameCommands } from "../index.js";
 
 //Lint cheese below
 /* global ace */
@@ -43,5 +43,13 @@ function initializeEditor() {
 
 function addEventToButton(id) {
     let buttonInput = document.getElementById(id);
-    buttonInput.addEventListener("click", function () {let value = runPythonCode(editor.getValue()); processList(value) }, false);
+    buttonInput.addEventListener("click", onClickCodeButton, false);
+    //buttonInput.addEventListener("click", function () {let value = runPythonCode(editor.getValue()); game.setCommandList(value) }, false);
+}
+
+function onClickCodeButton () {
+    console.log("Pressed code run button");
+    let value = runPythonCode(editor.getValue());
+    console.log(value);
+    runGameCommands(value);
 }
