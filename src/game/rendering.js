@@ -37,7 +37,7 @@ export class Renderer {
 
     async loadBuiltinBundles () {
         await PIXI.Assets.init({ manifest: builtinAssetManifest});
-        this.builtinAssets = await PIXI.Assets.loadBundle(["builtin_characters", "builtin_backgrounds"]);
+        this.builtinAssets = await PIXI.Assets.loadBundle(["builtin_characters", "builtin_backgrounds", "builtin_fonts"]);
     }
 
     createBackground () {
@@ -48,8 +48,16 @@ export class Renderer {
     }
 
     createGrid (gWidht, gHeight) {
-        let grid = new GraphicsGrid(new Vector2(this.pixiApp.screen.width, this.pixiApp.screen.height), new Vector2(gWidht, gHeight), new Vector2(0, 0), 0x003300, 2);
+        let grid = new GraphicsGrid(
+            new Vector2(this.pixiApp.screen.width, this.pixiApp.screen.height),
+            new Vector2(gWidht, gHeight),
+            new Vector2(0, 0),
+            0x000000,
+            2,
+            "Roboto Light"
+        );
         this.pixiApp.stage.addChild(grid.lineContainer);
+        grid.createLines();
     }
 
     createCharacter () {
@@ -108,6 +116,23 @@ const builtinAssetManifest = {
                 {
                     alias: "background_grass",
                     src: "src/static/game_assets/background_grass.png"
+                }
+            ]
+        },
+        {
+            name: "builtin_fonts",
+            assets : [
+                {
+                    /*
+                    Apache License
+                    Version 2.0, January 2004
+                    http://www.apache.org/licenses/
+                    Mainly just placeholder font for testing font loading.
+                    */ 
+                    alias: "builtin_roboto_light",
+                    src: "src/static/game_assets/Roboto-Light.ttf",
+                    data: { family: 'Roboto Light' }
+
                 }
             ]
         }
