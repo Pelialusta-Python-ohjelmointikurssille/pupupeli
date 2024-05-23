@@ -48,8 +48,6 @@ function addEventToButton(id) {
 }
 
 function onClickCodeButton () {
-    console.log("Pressed code run button");
     let value = runPythonCode(editor.getValue());
-    console.log(value);
     runGameCommands(value);
 }

@@ -7,13 +7,25 @@ import { getNewGridObject } from "./gridobject.js";
 let renderer;
 let app;
 let player;
+let turnTimer = 0;
+const turnTimeSeconds = 0.5;
+let commands = [];
+var pupu;
+
+let commandDirs = {
+    "oikea": Direction.Right,
+    "vasen": Direction.Left,
+    "alas": Direction.Down,
+    "ylös": Direction.Up
+}
 
 export async function InitGame() {
     initGrid(8, 8);
-    var pupu = getNewGridObject("pupu");
+    pupu = getNewGridObject("pupu");
     addToGrid(pupu, 0, 0);
     renderer = await getRenderer();
     await renderer.init();
+    renderer.addFunctionToLoop(onUpdate);
     return renderer.pixiApp;
 }
 
@@ -24,13 +36,33 @@ async function getRenderer() {
 }
 
 export function setCommandList(list) {
-    console.log("game.js")
-    console.log(list);
-    console.log(renderer);
-    console.log("................")
     if (list == null || renderer == null) {
         return;
     }
-    console.log(list)
-    renderer.commands = list;
+    if (commands.length > 0) return;
+    commands = list;
 }
+
+function onUpdate(deltaTime) {
+    if (turnTimer < turnTimeSeconds && commands.length > 0) {
+        turnTimer += deltaTime;
+    }
+    if (turnTimer >= turnTimeSeconds) {
+        processTurn();
+        turnTimer = 0;
+    }
+}
+
+function processTurn () {
+    if (commands == null) {
+        return;
+    }
+    if (commands.length <= 0) {
+        return;
+    }
+    let newCommand = commands.shift();
+    if (tryMoveGridObjectToDir(pupu, commandDirs[newCommand])) {
+        renderer.player.moveToDirection (commandDirs[newCommand]);
+    }
+}
+

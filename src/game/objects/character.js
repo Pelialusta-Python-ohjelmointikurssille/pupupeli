@@ -18,7 +18,7 @@ export class Character {
         this.moveDirection = new Vector2(0, 0);
         this.oldPosition = new Vector2(this.screenPosition.x, this.screenPosition.y);
         this.isMoving = false;
-        this.moveSpeed = 4;
+        this.moveSpeed = 6;
         this.moveProgress = 0;
         this.scaledMoveDirection = this.moveDirection; 
         this.shadowGraphics = new PIXI.Graphics();

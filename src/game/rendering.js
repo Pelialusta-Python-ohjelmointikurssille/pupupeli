@@ -13,6 +13,7 @@ export class Renderer {
         this.turnTimer = 0;
         this.turnTimeSeconds = 0.5;
         this.commands = [];
+        this.runnableFunc = [];
     }
 
     async init () {
@@ -65,55 +66,16 @@ export class Renderer {
         this.pixiApp.stage.addChild(this.player.renderSprite);
     }
 
-    processTurn () {
-        if (this.commands == null) {
-            return;
-        }
-        if (this.commands.length <= 0) {
-            return;
-        }
-
-        switch (this.commands.shift()) {
-            case "oikea":
-                this.movePlayer(1, 0)
-                break;
-            case "vasen":
-                this.movePlayer(-1, 0)
-                break;
-            case "ylös":
-                this.movePlayer(0, -1)
-                break;
-            case "alas":
-                this.movePlayer(0, 1)
-                break;
-        }
-    }
-
-    movePlayer (x, y) { 
-        if (y == -1) {
-            this.player.moveToDirection (Direction.Up);
-        }
-        if (y == 1) {
-            this.player.moveToDirection (Direction.Down);
-        }
-        if (x == 1) {
-            this.player.moveToDirection (Direction.Right);
-        }
-        if (x == -1) {
-            this.player.moveToDirection (Direction.Left);
-        }
+    addFunctionToLoop(func) {
+        this.runnableFunc.push(func);
     }
 
     addProcessLoop () {
         this.pixiApp.ticker.add((time) =>
         {  
-            if (this.turnTimer < this.turnTimeSeconds) {
-                this.turnTimer += time.deltaTime / 60;
-            }
-            if (this.turnTimer >= this.turnTimeSeconds) {
-                this.processTurn();
-                this.turnTimer = 0;
-            }
+            this.runnableFunc.forEach(element => {
+                element(time.deltaTime/60);
+            });
             this.player.process((time.deltaTime / 60));
         });
     }
