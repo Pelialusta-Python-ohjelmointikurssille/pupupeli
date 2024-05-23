@@ -263,7 +263,6 @@ await renderer.init();
 renderer.addProcessLoop();
 pupu = InitGame();
 function onMovePupu(x, y) {
-    console.log("MOVE");
     if (MovePupu(pupu, x, y)) {
         setBunnyPos(x, y);
     }
@@ -289,6 +288,5 @@ export function processList(list) {
     if (list == null || renderer == null) {
         return;
     }
-    console.log(list)
     renderer.commands = list;
 }

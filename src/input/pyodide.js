@@ -13,8 +13,6 @@ async function initializePyodide() {
 
 
 export function runPythonCode(codeString) {
-    console.log("Running python code...");
-
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
     try {

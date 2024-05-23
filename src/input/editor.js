@@ -31,7 +31,6 @@ function initializeEditor() {
     let buttonID = "editor-button";
     //CreateButton(buttonID, "Suorita");
     addEventToButton(buttonID);
-    console.log("initialized Editor");
 }
 
 //Use when you figure out how to add button to an div or make a div in js

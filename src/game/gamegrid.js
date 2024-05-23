@@ -15,7 +15,6 @@ export function initGrid(widht, height) {
     //Tutorial I was following used these export functions.
     //Refactoring later, but heard OOP isn't good for javascript(???).
     grid = CreateDoubleArray(widht, height);
-    ConsoleLogGrid(grid);
 }
 
 // write doc for moveGridObjectToDir
@@ -27,17 +26,11 @@ export function initGrid(widht, height) {
  * @returns {boolean} - True if the object was moved, false if it was not
  */
 export function moveGridObjectToDir(gridObject, x, y) {
-    console.log(gridObject + " tried moving towards (" + x + ", " + y + ")");
     let newX = gridObject.cell.x + x;
     let newY = gridObject.cell.y + y;
 
-    if (!boundaryCheck(newX, newY)) {
-        console.log("...but failed.");
-        return false;
-    }
     removeFromGrid(gridObject);
     addToGrid(gridObject, newX, newY);
-    ConsoleLogGrid(grid);
     return true;
 }
 
@@ -64,7 +57,6 @@ export function boundaryCheck(x, y) {
 export function addToGrid(gridObject, x, y) {
     grid[x][y].entities.push(gridObject);
     gridObject.cell = grid[x][y];
-    ConsoleLogGrid(grid);
 }
 
 // write doc for removeFromGrid
@@ -78,25 +70,7 @@ export function removeFromGrid(gridObject) {
     let cell = grid[x][y];
     let index = cell.entities.indexOf(gridObject);
     cell.entities.splice(index, 1);
-    console.log(cell.entities);
     gridObject.cell = null;
-}
-
-// write doc for ConsoleLogGrid
-/** 
- * Logs the grid to the console
- * @param {Array} grid - The grid to log
- */
-export function ConsoleLogGrid(grid) {
-    if (grid == null) return;
-    let debugStr = "";
-    for (let x = 0; x < grid.length; x++) {
-        for (let y = 0; y < grid[0].length; y++) {
-            debugStr += grid[x][y];
-        }
-        debugStr += "\n";
-    }
-    console.log(debugStr)
 }
 
 // write doc for CreateDoubleArray
