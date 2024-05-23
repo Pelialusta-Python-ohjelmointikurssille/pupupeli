@@ -1,5 +1,5 @@
-
 import { Cell } from "./cell.js";
+import { Vector2 } from "./vector.js";
 
 export var grid = null;
 
@@ -25,13 +25,12 @@ export function initGrid(widht, height) {
  * @param {number} y - The y direction to move
  * @returns {boolean} - True if the object was moved, false if it was not
  */
-export function moveGridObjectToDir(gridObject, x, y) {
-    let newX = gridObject.cell.x + x;
-    let newY = gridObject.cell.y + y;
-
-    if (!boundaryCheck(newX, newY)) {
-        return false;
-    }
+export function moveGridObjectToDir(gridObject, direction) {
+    if (gridObject == null) return false;
+    let dirVector = Vector2.FromDirection(direction);
+    let newX = gridObject.cell.x + dirVector.x;
+    let newY = gridObject.cell.y + dirVector.y;
+    if (boundaryCheck(newX, newY) == false) return false; 
     removeFromGrid(gridObject);
     addToGrid(gridObject, newX, newY);
     return true;
