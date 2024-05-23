@@ -13,6 +13,7 @@ export class Renderer {
         this.commands = [];
         this.runnableFunc = [];
         this.isGridEnabled = true;
+        this.grid = null;
     }
 
     async init () {
@@ -49,7 +50,7 @@ export class Renderer {
     }
 
     createGrid (gWidht, gHeight) {
-        let grid = new GraphicsGrid(
+        this.grid = new GraphicsGrid(
             new Vector2(this.pixiApp.screen.width, this.pixiApp.screen.height),
             new Vector2(gWidht, gHeight),
             new Vector2(0, 0),
@@ -57,8 +58,8 @@ export class Renderer {
             2,
             "Roboto Light"
         );
-        this.pixiApp.stage.addChild(grid.lineContainer);
-        if (this.isGridEnabled) grid.createLines();
+        this.pixiApp.stage.addChild(this.grid.lineContainer);
+        if (this.isGridEnabled) this.grid.createLines();
     }
 
     createCharacter () {
@@ -79,11 +80,11 @@ export class Renderer {
 
     toggleGrid() {
         if (this.isGridEnabled == false) {
-            grid.createLines();
+            this.grid.createLines();
             this.isGridEnabled = true;
         }
         else {
-            grid.removeLines();
+            this.grid.removeLines();
             this.isGridEnabled = false;
         }
     }
