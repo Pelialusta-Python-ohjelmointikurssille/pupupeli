@@ -1,4 +1,16 @@
 body {
     font-family: 'Courier New', Courier, monospace;
-    text-align: center;
+}
+
+#editor {
+    border-radius: 5px;
+    font-size: 15px;
+    width: 800px;
+    height: 300px;
+}
+
+#editor-button {
+    height: 40px;
+    width: 800px;
+    margin: 10px 0px 10px 0px;
 }
