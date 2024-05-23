@@ -1,0 +1,54 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#app, #game, #editor, #editor-button, #task, #task-container {
+    margin: 1rem;
+}
+
+#left-container, #editor-container {
+    flex-direction: column;
+}
+
+.is-margin-1rem {
+    margin: 1rem;
+}
+
+#app {
+    flex-direction: row;
+    background-color: #ddd;
+    border-radius: 8px;
+    border: 1px solid black;
+}
+
+.is-flex {
+    display: flex;
+}
+
+#task {
+    width: calc(100% - 2rem);
+    text-align: justify;
+}
+
+#editor {
+    border-radius: 5px;
+    font-size: 15px;
+    width: calc(100% - 2rem);
+    height: 300px;
+    border: 1px solid black;
+}
+
+#editor-button {
+    height: 40px;
+    width: calc(100% - 2rem);
+}
+
+@media (max-width: 1280px) {
+    #app {
+        flex-direction: column;
+    }
+
+    #editor, #editor-button {
+        width: calc(100% - 2rem);
+    }
+  }

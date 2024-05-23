@@ -11,7 +11,11 @@ async function main() {
 
 async function CreateGameWindow() {
     let app = await InitGame();
-    document.body.appendChild(app.canvas);
+    let canvas = app.canvas;
+
+    document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
+    canvas.classList.add("is-flex");
+    canvas.id = "game";
 }
 
 export function runGameCommands(list) {
