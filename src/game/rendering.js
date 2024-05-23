@@ -12,6 +12,7 @@ export class Renderer {
         this.turnTimeSeconds = 0.5;
         this.commands = [];
         this.runnableFunc = [];
+        this.isGridEnabled = true;
     }
 
     async init () {
@@ -57,7 +58,7 @@ export class Renderer {
             "Roboto Light"
         );
         this.pixiApp.stage.addChild(grid.lineContainer);
-        grid.createLines();
+        if (this.isGridEnabled) grid.createLines();
     }
 
     createCharacter () {
@@ -74,6 +75,17 @@ export class Renderer {
 
     addFunctionToLoop(func) {
         this.runnableFunc.push(func);
+    }
+
+    toggleGrid() {
+        if (this.isGridEnabled == false) {
+            grid.createLines();
+            this.isGridEnabled = true;
+        }
+        else {
+            grid.removeLines();
+            this.isGridEnabled = false;
+        }
     }
 
     addProcessLoop () {
