@@ -1,10 +1,16 @@
-import { app } from "./game/rendering.js"
+import { InitGame, setCommandList } from "./game/game.js"
 
 // write doc for main
 /**
  * Adds the canvas to the document
  */
-function main() {
+
+async function main() {
+    await CreateGameWindow();
+}
+
+async function CreateGameWindow() {
+    let app = await InitGame();
     let canvas = app.canvas;
     
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
@@ -12,4 +18,8 @@ function main() {
     canvas.id = "game";
 }
 
-main();
+export function runGameCommands(list) {
+    setCommandList(list);
+    console.log("RUNNING COMMANDS FROM INDEX")
+}
+await main();

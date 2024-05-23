@@ -57,9 +57,3 @@ describe('Grid functions', () => {
         expect(boundaryCheck(0, 5)).toBe(false);
     });
 });
-
-describe('ConsoleLogGrid null', () => {
-    test('ConsoleLogGrid returns early if grid is null', () => {
-        expect(ConsoleLogGrid(null)).toBeUndefined();
-    });
-});

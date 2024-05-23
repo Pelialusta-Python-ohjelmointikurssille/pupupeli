@@ -24,4 +24,19 @@ export class Vector2 {
     MultipliedBy(multiplier) {
         return new Vector2(this.x * multiplier, this.y * multiplier);
     }
+
+    static FromDirection(direction) {
+        // Uses values from direction.js
+        // DO NOT CHANGE!!!!!
+        switch(direction){
+            case 0:
+                return new Vector2(0, -1);
+            case 1:
+                return new Vector2(1, 0);
+            case 2:
+                return new Vector2(0, 1);
+            case 3:
+                return new Vector2(-1, 0);
+        }
+    }
 }

@@ -36,4 +36,18 @@ describe('Vector2', () => {
     expect(multipliedVector.x).toBe(4);
     expect(multipliedVector.y).toBe(6);
   });
+  it('vector from direction works correctly', () => {
+    const vectorUp = Vector2.FromDirection(0);
+    expect(vectorUp.x).toBe(0);
+    expect(vectorUp.y).toBe(-1);
+    const vectorDown = Vector2.FromDirection(2);
+    expect(vectorDown.x).toBe(0);
+    expect(vectorDown.y).toBe(1);
+    const vectorLeft = Vector2.FromDirection(3);
+    expect(vectorLeft.x).toBe(-1);
+    expect(vectorLeft.y).toBe(0);
+    const vectorRight = Vector2.FromDirection(1);
+    expect(vectorRight.x).toBe(1);
+    expect(vectorRight.y).toBe(0);
+  });
 });

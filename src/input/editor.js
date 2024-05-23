@@ -1,5 +1,5 @@
 import { runPythonCode} from "./pyodide.js"
-import { processList } from "../game/rendering.js"
+import { runGameCommands } from "../index.js";
 
 //Lint cheese below
 /* global ace */
@@ -33,15 +33,13 @@ function initializeEditor() {
     addEventToButton(buttonID);
 }
 
-//Use when you figure out how to add button to an div or make a div in js
-//function CreateButton(id, innerText) {
-//    let button = document.createElement("button");
-//    button.id = id;
-//    button.innerText = innerText;
-//    document.body.appendChild(button);
-//}
 
 function addEventToButton(id) {
     let buttonInput = document.getElementById(id);
-    buttonInput.addEventListener("click", function () {let value = runPythonCode(editor.getValue()); processList(value) }, false);
+    buttonInput.addEventListener("click", onClickCodeButton, false);
+}
+
+function onClickCodeButton () {
+    let value = runPythonCode(editor.getValue());
+    runGameCommands(value);
 }

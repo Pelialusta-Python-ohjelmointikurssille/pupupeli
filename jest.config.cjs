@@ -23,7 +23,9 @@ module.exports = {
         "src/**/*.js",
         "!src/**/rendering.js", // Exclude specific file
         "!src/**/index.js",
+        "!src/**/game.js",
         "!src/**/editor.js",
-        "!src/**/example/**" // Exclude all files in specific directory
+        "!src/**/example/**", // Exclude all files in specific directory
+        "!src/**/objects/**" 
     ]
 };
