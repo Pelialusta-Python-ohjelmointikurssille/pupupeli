@@ -1,4 +1,4 @@
-import { runPythonCode} from "./pyodide.js"
+// import { runPythonCode} from "./pyodide.js"
 import { runGameCommands } from "../index.js";
 
 //Lint cheese below
@@ -40,6 +40,14 @@ function addEventToButton(id) {
 }
 
 function onClickCodeButton () {
-    let value = runPythonCode(editor.getValue());
-    runGameCommands(value);
+    const worker = new Worker('src/input/pyodide.js');
+
+    worker.onmessage = function (e) {
+        console.log("------");
+        console.log(e.data);
+        console.log("------");
+        runGameCommands(e.data);
+    }
+
+    worker.postMessage(editor.getValue());
 }

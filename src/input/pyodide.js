@@ -1,18 +1,21 @@
-import { extractErrorDetails } from "./py_error_handling.js"
 
 /* global loadPyodide */
 
-var pyodide;
+//var pyodide;
+self.importScripts('https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js');
 
-initializePyodide();
+self.onmessage = async function (e) {
+    initializePyodide(e);
+}
 
-async function initializePyodide() {
+async function initializePyodide(e) {
     pyodide = await loadPyodide();
     pyodide.setStdin();
+    runPythonCode(pyodide, e.data);
 }
 
 
-export function runPythonCode(codeString) {
+function runPythonCode(pyodide, codeString) {
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
     try {
@@ -20,16 +23,16 @@ export function runPythonCode(codeString) {
     } catch (error) {
         // Catch and display the error as an alert
         let errorDetails = extractErrorDetails(error.message);
-
         // Display the error type and line number as an alert
-        alert(`Voi ei! \n \n Virhe: \n ${errorDetails.type} \n \n Rivillä: \n ${errorDetails.line}`);
+        //alert(`Voi ei! \n \n Virhe: \n ${errorDetails.type} \n \n Rivillä: \n ${errorDetails.line}`);
+        console.log(errorDetails); // alert ei toimi webworkereissa?
     }
     let lista = pyodide.globals.get("liikelista").toJs();
-    return lista;
+    self.postMessage(lista);
 }
 
 function GetPythonFile() {
-    let path = "src/pythonfiles/puputesti.py";
+    let path = "../pythonfiles/puputesti.py";
     return GetFileAsText(path);
 }
 
@@ -42,5 +45,25 @@ function GetFileAsText(filepath) {
         return request.responseText;
     } else {
         throw new Error(`Error fetching file: ${filepath}`);
+    }
+}
+
+function extractErrorDetails(errorMessage) {
+    const regex = /File .*?, line (\d+)/g;
+    let match;
+    let lastLineReference;
+
+    while ((match = regex.exec(errorMessage)) !== null) {
+        lastLineReference = match[1];
+    }
+    const lineNumberMatch = lastLineReference;
+
+    const lines = errorMessage.split('\n');
+    const errorTypeMatch = lines[lines.length - 2];
+
+    if (errorTypeMatch && lineNumberMatch) {
+        return { type: errorTypeMatch, line: lineNumberMatch };
+    } else {
+        return { type: "Unknown Error", line: "Unknown Line" };
     }
 }
