@@ -10,12 +10,21 @@ body {
     flex-direction: column;
 }
 
+#left-container {
+    min-width: 640px;
+}
+
 .is-margin-1rem {
     margin: 1rem;
 }
 
 #app {
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#app-container {
     background-color: #ddd;
     border-radius: 8px;
     border: 1px solid black;
@@ -44,11 +53,7 @@ body {
 }
 
 @media (max-width: 1280px) {
-    #app {
+    #app-container {
         flex-direction: column;
-    }
-
-    #editor, #editor-button {
-        width: calc(100% - 2rem);
     }
   }

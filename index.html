@@ -11,20 +11,28 @@
 </head>
 
 <body>
-    <div id="app" class="container is-flex">
-        <div id="left-container" class="is-flex">
-            <div id="task-container">
-                <div>
-                    <h1>Tehtävä 1</h1>
-                    <p>Aseta pupu liikkumaan oikeaan alareunaan</p>
-                    <p id="error"></p>
+    <div id="app" class="is-flex">
+        <div id="app-container" class="is-flex">
+            <div id="left-container" class="is-flex">
+                <div id="task-container">
+                    <div>
+                        <h1>Tehtävä 1</h1>
+                        <p>Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:</p>
+                        <code>
+                            <p>pupu.liiku("ylös")</p>
+                            <p>pupu.liiku("oikea")</p>
+                            <p>pupu.liiku("alas")</p>
+                            <p>pupu.liiku("vasen")</p>
+                        </code>
+                        <p id="error"></p>
+                    </div>
                 </div>
-            </div>
-            <div id="editor-container" class="is-flex">
-                <div id="editor"></div>
+                <div id="editor-container" class="is-flex">
+                    <div id="editor"></div>
 
-                <div>
-                    <button id="editor-button" type="button">Suorita</button>
+                    <div>
+                        <button id="editor-button" type="button">Suorita</button>
+                    </div>
                 </div>
             </div>
         </div>
