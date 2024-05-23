@@ -1,4 +1,3 @@
-import { Direction } from "./direction.js";
 import { Cell } from "./cell.js";
 import { Vector2 } from "./vector.js";
 

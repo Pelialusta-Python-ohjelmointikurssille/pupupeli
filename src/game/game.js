@@ -5,8 +5,6 @@ import { getNewGridObject } from "./gridobject.js";
 
 
 let renderer;
-let app;
-let player;
 let turnTimer = 0;
 const turnTimeSeconds = 0.5;
 let commands = [];
