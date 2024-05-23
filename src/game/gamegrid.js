@@ -29,6 +29,9 @@ export function moveGridObjectToDir(gridObject, x, y) {
     let newX = gridObject.cell.x + x;
     let newY = gridObject.cell.y + y;
 
+    if (!boundaryCheck(newX, newY)) {
+        return false;
+    }
     removeFromGrid(gridObject);
     addToGrid(gridObject, newX, newY);
     return true;
