@@ -3,6 +3,9 @@ import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi
 import { Character } from "./objects/character.js"
 import { GraphicsGrid } from "./objects/gridvisualizer.js"
 
+/**
+ * Class used for game visuals and PixiJS app management.
+ */
 export class Renderer {
     constructor () {
         this.pixiApp = null;
@@ -15,7 +18,12 @@ export class Renderer {
         this.isGridEnabled = false;
         this.grid = null;
     }
-
+    /**
+     * Initializes PixiJS.
+     * Loads assets from manifest.
+     * Creates game objects.
+     * Starts game loop.
+     */
     async init () {
         this.pixiApp = await this.initPixi();
         await this.loadBuiltinBundles();
@@ -25,6 +33,12 @@ export class Renderer {
         this.addProcessLoop();
     }
 
+    /**
+     * Initializes PixiJS application
+     * @param {*} screenWidth Width of game windows in pixels.
+     * @param {*} screenHeight Height of game window in pixels.
+     * @returns PixiJS app.
+     */
     async initPixi (screenWidth=640, screenHeight=640) {
         let pixiApp = new PIXI.Application();
         await pixiApp.init({
@@ -37,11 +51,18 @@ export class Renderer {
         return pixiApp;
     }
 
+    /**
+     * Loads asset bundles from manifest.
+     * Contains character and background textures.
+     */
     async loadBuiltinBundles () {
         await PIXI.Assets.init({ manifest: builtinAssetManifest});
         this.builtinAssets = await PIXI.Assets.loadBundle(["builtin_characters", "builtin_backgrounds", "builtin_fonts"]);
     }
 
+    /**
+     * Creates background sprite object.
+     */
     createBackground () {
         let bg = new PIXI.Sprite(this.builtinAssets.builtin_backgrounds.background_grass);
         this.pixiApp.stage.addChild(bg);
@@ -49,6 +70,11 @@ export class Renderer {
         bg.height = this.pixiApp.screen.height;
     }
 
+    /**
+     * Creates grid object with lines and cell numbers.
+     * @param {*} columns Number of cell columns in the grid.
+     * @param {*} rows Number of cell rows in the grid.
+     */
     createGrid (gWidht, gHeight) {
         this.grid = new GraphicsGrid(
             new Vector2(this.pixiApp.screen.width, this.pixiApp.screen.height),
@@ -62,6 +88,10 @@ export class Renderer {
         if (this.isGridEnabled) this.grid.createLines();
     }
 
+    /**
+     * Creates the character object.
+     * Also adds a shadow graphics object.
+     */
     createCharacter () {
         let bunnyTextures = [
             this.builtinAssets.builtin_characters.bunny_up,
@@ -74,10 +104,15 @@ export class Renderer {
         this.pixiApp.stage.addChild(this.player.renderSprite);
     }
 
+    /**
+     * Used to add functions to the main game loop.
+     * These given functions will be run every frame.
+     * @param {*} func The function that should run every frame.
+     */
     addFunctionToLoop(func) {
         this.runnableFunc.push(func);
     }
-
+  
     toggleGrid() {
         if (this.isGridEnabled == false) {
             this.grid.createLines();
@@ -89,6 +124,9 @@ export class Renderer {
         }
     }
 
+    /**
+     * Creates the PixiJS ticker loop.
+     */
     addProcessLoop () {
         this.pixiApp.ticker.add((time) =>
         {  
@@ -100,6 +138,11 @@ export class Renderer {
     }
 }
 
+/**
+ * Asset manifest containing asset bundles
+ * of sprites for characters and backgrounds.
+ * Used for all game assets.
+ */
 const builtinAssetManifest = {
     bundles : [
         {
