@@ -22,7 +22,7 @@ export function runPythonCode(codeString) {
         let errorDetails = extractErrorDetails(error.message);
 
         // Display the error type and line number as an alert
-        alert(`Voi ei! \n \n Virhe: \n ${errorDetails.type} \n \n Rivillä: \n ${errorDetails.line}`);
+        document.getElementById("error").innerHTML = `Voi ei! \n \n Virhe: \n ${errorDetails.type} \n \n Rivillä: \n ${errorDetails.line}`
     }
     let lista = pyodide.globals.get("liikelista").toJs();
     return lista;
