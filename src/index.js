@@ -1,4 +1,4 @@
-import { InitGame, setCommandList } from "./game/game.js"
+import { InitGame, setCommandList, rendererToggleGrid } from "./game/game.js"
 
 // write doc for main
 /**
@@ -16,6 +16,10 @@ async function CreateGameWindow() {
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
+}
+
+export function toggleGrid () {
+    rendererToggleGrid();
 }
 
 export function runGameCommands(list) {

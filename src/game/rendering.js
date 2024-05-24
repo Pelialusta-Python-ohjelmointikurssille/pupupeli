@@ -15,6 +15,8 @@ export class Renderer {
         this.turnTimeSeconds = 0.5;
         this.commands = [];
         this.runnableFunc = [];
+        this.isGridEnabled = false;
+        this.grid = null;
     }
     /**
      * Initializes PixiJS.
@@ -43,7 +45,7 @@ export class Renderer {
             width: screenWidth,
             height: screenHeight,
             backgroundColor: 0x1099bb,
-            antialias: true
+            antialias: true,
         })
         pixiApp.ticker.maxFPS = 60;
         return pixiApp;
@@ -55,7 +57,7 @@ export class Renderer {
      */
     async loadBuiltinBundles () {
         await PIXI.Assets.init({ manifest: builtinAssetManifest});
-        this.builtinAssets = await PIXI.Assets.loadBundle(["builtin_characters", "builtin_backgrounds"]);
+        this.builtinAssets = await PIXI.Assets.loadBundle(["builtin_characters", "builtin_backgrounds", "builtin_fonts"]);
     }
 
     /**
@@ -73,9 +75,17 @@ export class Renderer {
      * @param {*} columns Number of cell columns in the grid.
      * @param {*} rows Number of cell rows in the grid.
      */
-    createGrid (columns, rows) {
-        let grid = new GraphicsGrid(new Vector2(this.pixiApp.screen.width, this.pixiApp.screen.height), new Vector2(columns, rows), new Vector2(0, 0), 0x003300, 2);
-        this.pixiApp.stage.addChild(grid.lineContainer);
+    createGrid (gWidht, gHeight) {
+        this.grid = new GraphicsGrid(
+            new Vector2(this.pixiApp.screen.width, this.pixiApp.screen.height),
+            new Vector2(gWidht, gHeight),
+            new Vector2(0, 0),
+            0x000000,
+            2,
+            "Roboto Light"
+        );
+        this.pixiApp.stage.addChild(this.grid.lineContainer);
+        if (this.isGridEnabled) this.grid.createLines();
     }
 
     /**
@@ -101,6 +111,17 @@ export class Renderer {
      */
     addFunctionToLoop(func) {
         this.runnableFunc.push(func);
+    }
+  
+    toggleGrid() {
+        if (this.isGridEnabled == false) {
+            this.grid.createLines();
+            this.isGridEnabled = true;
+        }
+        else {
+            this.grid.removeLines();
+            this.isGridEnabled = false;
+        }
     }
 
     /**
@@ -151,6 +172,23 @@ const builtinAssetManifest = {
                 {
                     alias: "background_grass",
                     src: "src/static/game_assets/background_grass.png"
+                }
+            ]
+        },
+        {
+            name: "builtin_fonts",
+            assets : [
+                {
+                    /*
+                    Apache License
+                    Version 2.0, January 2004
+                    http://www.apache.org/licenses/
+                    Mainly just placeholder font for testing font loading.
+                    */ 
+                    alias: "builtin_roboto_light",
+                    src: "src/static/game_assets/Roboto-Light.ttf",
+                    data: { family: 'Roboto Light' }
+
                 }
             ]
         }
