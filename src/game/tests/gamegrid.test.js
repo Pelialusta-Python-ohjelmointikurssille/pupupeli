@@ -22,6 +22,12 @@ describe('Grid functions', () => {
         expect(gridObject.cell).toBe(grid[2][3]);
     });
 
+
+    test('moveGridObjectToDir returns false if gridObject is null', () => {
+        gridObject = null;
+        expect(moveGridObjectToDir(gridObject, 1, 0)).toBe(false);
+    });
+
     test('moveGridObjectToDir moves the object within bounds', () => {
         addToGrid(gridObject, 2, 2);
         const moved = moveGridObjectToDir(gridObject, 1, 0); // Move right
