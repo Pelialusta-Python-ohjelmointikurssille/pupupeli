@@ -12,7 +12,7 @@ export class Renderer {
         this.turnTimeSeconds = 0.5;
         this.commands = [];
         this.runnableFunc = [];
-        this.isGridEnabled = true;
+        this.isGridEnabled = false;
         this.grid = null;
     }
 
