@@ -1,5 +1,5 @@
 import { runPythonCode} from "./pyodide.js"
-import { runGameCommands } from "../index.js";
+import { runGameCommands, toggleGrid } from "../index.js";
 
 //Lint cheese below
 /* global ace */
@@ -31,6 +31,9 @@ function initializeEditor() {
     let buttonID = "editor-button";
     //CreateButton(buttonID, "Suorita");
     addEventToButton(buttonID);
+
+    // Toggle grid nappi, voi muuttaa missä annetaan event
+    document.getElementById("grid-toggle-button").addEventListener("click", toggleGrid, false);
 }
 
 

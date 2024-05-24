@@ -56,4 +56,14 @@ body {
     #app-container {
         flex-direction: column;
     }
+
+    #editor, #editor-button {
+        width: calc(100% - 2rem);
+    }
   }
+
+#grid-toggle-button {
+    float: right;
+    min-height: 32px;
+    min-width: 64px;
+}
