@@ -40,23 +40,21 @@ function addEventToButton(id) {
 }
 
 function onClickCodeButton () {
-    // should print "Running in the main thread"
-    if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
-        console.log("Running inside a Web Worker");
-    } else {
-        console.log("Running in the main thread (1)");
-    }
-
     const worker = new Worker('src/input/pyodide.js');
 
-    worker.onmessage = function (e) {
-        if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
-            console.log("Running inside a Web Worker");
-        } else {
-            console.log("Running in the main thread (2)");
-        }    
-        runGameCommands(e.data);
+    worker.onmessage = function (event) {
+        if (event.data.type === 'prompt') {
+            // Prompt the user for input
+            const userInput = prompt(event.data.data);
+            // Send the user input back to the worker
+            worker.postMessage({ type: 'input', input: userInput });
+        } else if (event.data.type === 'output') {
+            // Handle other types of output from the worker
+            console.log(event.data.output);
+        } else if (event.data.type === 'run') {
+            runGameCommands(event.data.data);
+        }
     }
 
-    worker.postMessage(editor.getValue());
+    worker.postMessage({type: 'start', data: editor.getValue()});
 }

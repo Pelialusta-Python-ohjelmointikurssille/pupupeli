@@ -1,9 +1,19 @@
 import sys
-# import time
-# from bunny_module import moveBunny
-sys.version
+import js
+#sys.version
 
 liikelista = []
+
+def input_with_js(prompt):
+    js.handleInput(prompt)
+
+def continue_execution():
+    global user_input
+    return user_input
+
+# Replace Python's input function with the custom one
+input = input_with_js
+    
 
 class Pelaaja:
     def __init__(self, nimi="pupu"):
@@ -18,8 +28,6 @@ class Pelaaja:
         liikelista = []
 
     def liiku(self, liike: str):
-        # time.sleep(1) # poista editor.js kommentti jos poistat nämä kommentit
-        # moveBunny(liike) # poista editor.js kommentti jos poistat nämä kommentit
         global liikelista
         if liike in self.liikkeet:
             liikelista.append(liike)

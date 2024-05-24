@@ -4,37 +4,43 @@
 //var pyodide;
 self.importScripts('https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js');
 
-self.onmessage = async function (e) {
-    // should print "Running inside a Web Worker"
-    if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
-        console.log("Running inside a Web Worker");
-    } else {
-        console.log("Running in the main thread");
+self.onmessage = async function (event) {
+    if (event.data.type === 'start') {
+        await initializePyodide(event.data);
+    } else if (event.data.type === 'input') {
+        const userInput = event.data.input;
+        pyodide.globals.set('user_input', userInput);
+        self.continuePythonExecution;
     }
-    initializePyodide(e);
 }
 
-async function initializePyodide(e) {
+async function initializePyodide(event) {
     pyodide = await loadPyodide();
-    pyodide.setStdin();
-    runPythonCode(pyodide, e.data);
+    runPythonCode(pyodide, event.data);
 }
 
+async function handleInput(input) {
+    await postMessage({type: 'prompt', data: input});
+}
 
-function runPythonCode(pyodide, codeString) {
+async function runPythonCode(pyodide, codeString) {
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
+
+    self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
-        pyodide.runPython(codeString);
+        await self.continuePythonExecution;
     } catch (error) {
         // Catch and display the error as an alert
         let errorDetails = extractErrorDetails(error.message);
         // Display the error type and line number as an alert
         //alert(`Voi ei! \n \n Virhe: \n ${errorDetails.type} \n \n Rivillä: \n ${errorDetails.line}`);
-        console.log(errorDetails); // alert ei toimi webworkereissa?
+        console.log(error); // alert ei toimi webworkereissa?
+
+        self.postMessage(errorDetails);
     }
     let lista = pyodide.globals.get("liikelista").toJs();
-    self.postMessage(lista);
+    self.postMessage({type: 'run', data: lista});
 }
 
 function GetPythonFile() {
