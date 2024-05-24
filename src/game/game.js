@@ -64,3 +64,6 @@ function processTurn () {
     }
 }
 
+export function rendererToggleGrid () {
+    renderer.toggleGrid();
+}
