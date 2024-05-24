@@ -12,7 +12,7 @@ let turnTimer = 0;
  * NOTE: This should take long enough for
  * the player character to be able to move.
  */
-const turnTimeSeconds = 0.5;
+const turnTimeSeconds = 1;
 let commands = [];
 var pupu;
 
