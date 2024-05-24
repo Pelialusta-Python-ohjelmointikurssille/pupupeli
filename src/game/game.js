@@ -6,7 +6,7 @@ import { getNewGridObject } from "./gridobject.js";
 
 let renderer;
 let turnTimer = 0;
-const turnTimeSeconds = 0.5;
+const turnTimeSeconds = 1;
 let commands = [];
 var pupu;
 
