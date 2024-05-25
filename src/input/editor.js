@@ -1,10 +1,7 @@
-// import { runPythonCode} from "./pyodide.js"
 import { runGameCommands } from "../index.js";
 
 //Lint cheese below
 /* global ace */
-//because below doesn't work
-//import * as ace from "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js";
 
 const ACE_LINK = "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js";
 var editor;
@@ -27,10 +24,7 @@ function initializeEditor() {
         autoScrollEditorIntoView: true,
         copyWithEmptySelection: true,
     });
-    //Create "run code" button
-    let buttonID = "editor-button";
-    //CreateButton(buttonID, "Suorita");
-    addEventToButton(buttonID);
+    addEventToButton("editor-button");
 }
 
 
@@ -39,22 +33,27 @@ function addEventToButton(id) {
     buttonInput.addEventListener("click", onClickCodeButton, false);
 }
 
-function onClickCodeButton () {
+function onClickCodeButton() {
     const worker = new Worker('src/input/pyodide.js');
 
     worker.onmessage = function (event) {
-        if (event.data.type === 'prompt') {
-            // Prompt the user for input
-            const userInput = prompt(event.data.data);
-            // Send the user input back to the worker
-            worker.postMessage({ type: 'input', input: userInput });
-        } else if (event.data.type === 'output') {
-            // Handle other types of output from the worker
-            console.log(event.data.output);
+        if (event.data.type === 'input') {
+            const sharedArray = new Uint16Array(event.data.sab, 4);
+            const syncArray = new Int32Array(event.data.sab, 0, 1);
+
+            const word = prompt(event.data.message);
+
+            for (let i = 0; i < word.length; i++) {
+                sharedArray[i] = word.charCodeAt(i);
+            }
+            sharedArray[word.length] = 0;
+
+            Atomics.store(syncArray, 0, 1);
+            Atomics.notify(syncArray, 0, 1);
         } else if (event.data.type === 'run') {
             runGameCommands(event.data.data);
         }
     }
 
-    worker.postMessage({type: 'start', data: editor.getValue()});
+    worker.postMessage({ type: 'start', data: editor.getValue() });
 }

@@ -1,19 +1,4 @@
-import sys
-import js
-#sys.version
-
 liikelista = []
-
-def input_with_js(prompt):
-    js.handleInput(prompt)
-
-def continue_execution():
-    global user_input
-    return user_input
-
-# Replace Python's input function with the custom one
-input = input_with_js
-    
 
 class Pelaaja:
     def __init__(self, nimi="pupu"):
