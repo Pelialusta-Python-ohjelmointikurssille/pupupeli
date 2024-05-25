@@ -11,27 +11,32 @@
 </head>
 
 <body>
-    <div id="app" class="container is-flex">
-        <div id="left-container" class="is-flex">
-            <div id="task-container">
-                <div>
-                    <h1>Tehtävä 1</h1>
-                    <p>Tehtävä 1:n esimerkkiteksti. At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                        blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
-                        excepturi
-                        sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia
-                        animi, id est laborum et dolorum fuga.</p>
+    <div id="app" class="is-flex">
+        <div id="app-container" class="is-flex">
+            <div id="left-container" class="is-flex">
+                <div id="task-container">
+                    <div>
+                        <h1>Tehtävä 1</h1>
+                        <button id="grid-toggle-button" type="button">Ruudukko</button>
+                        <p>Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:</p>
+                        <code>
+                            <p>pupu.liiku("ylös")</p>
+                            <p>pupu.liiku("oikea")</p>
+                            <p>pupu.liiku("alas")</p>
+                            <p>pupu.liiku("vasen")</p>
+                        </code>
+                        <p id="error"></p>
+                    </div>
                 </div>
-            </div>
-            <div id="editor-container" class="is-flex">
-                <div id="editor"></div>
+                <div id="editor-container" class="is-flex">
+                    <div id="editor"></div>
 
-                <div>
-                    <button id="editor-button" type="button">Suorita</button>
+                    <div>
+                        <button id="editor-button" type="button">Suorita</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="error"></div>
     </div>
 
     <script type="module" src="src/input/editor.js" type="text/javascript"></script>

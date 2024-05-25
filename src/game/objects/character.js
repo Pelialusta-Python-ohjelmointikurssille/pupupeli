@@ -18,12 +18,12 @@ export class Character {
         this.moveDirection = new Vector2(0, 0);
         this.oldPosition = new Vector2(this.screenPosition.x, this.screenPosition.y);
         this.isMoving = false;
-        this.moveSpeed = 6;
+        this.moveSpeed = 3;
         this.moveProgress = 0;
         this.scaledMoveDirection = this.moveDirection; 
         this.shadowGraphics = new PIXI.Graphics();
         this.shadowGraphics.ellipse(0, 0, 20, 10);
-        this.shadowGraphics.fill(0x000000, 0.35);
+        this.shadowGraphics.fill({color: 0x000000, alpha: 0.35});
         this.shadowGraphics.x = this.screenPosition.x;
         this.shadowGraphics.y = this.screenPosition.y+28;
         this.unmodifiedScreenPos = new Vector2(this.screenPosition.x, this.screenPosition.y);
