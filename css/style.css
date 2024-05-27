@@ -73,3 +73,7 @@ body {
     width: 32px;
     height: 32px;
 }
+
+#editor-buttons-container {
+    padding-left: 1rem;
+}
