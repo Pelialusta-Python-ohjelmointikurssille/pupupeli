@@ -36,7 +36,7 @@ Retrospektiivi
 - koodikatselmointi
 - systemaattinen sisäisen laadun parantaminen?
 - laittakaa Jasper tekee javascriptiä ja kritisoikaa sen koodia
-- Parittakaa ne jotka ovat jossain vahvoja niiden kanssa jotak kokevat olevansa siinä heikkoja
+- Parittakaa ne jotka ovat jossain vahvoja niiden kanssa jotka kokevat olevansa siinä heikkoja
 - alottakaa opettaa tommille openshiftiä 
 - taskit: yks harjoittelija ja yks osaaja, harjoittelija kirjoittaa (jos on tutkimista niin molemmat voi tutkia)
 
