@@ -27,3 +27,33 @@ Retrospektiivi
 
 ### LESS OF vähemmän
 - "Okei tää toimii, mennään sillä" (katso miten koodi toimii ja harkitaan onko hyvä projektille jatkossa)
+
+
+
+## Retro 2, 27.5.2024
+
+### START aloitetaan
+- koodikatselmointi
+- systemaattinen sisäisen laadun parantaminen?
+- laittakaa Jasper tekee javascriptiä ja kritisoikaa sen koodia
+- Parittakaa ne jotka ovat jossain vahvoja niiden kanssa jotak kokevat olevansa siinä heikkoja
+- alottakaa opettaa tommille openshiftiä 
+- taskit: yks harjoittelija ja yks osaaja, harjoittelija kirjoittaa (jos on tutkimista niin molemmat voi tutkia)
+
+### STOP lopetetaan
+- tekninen erkaantuminen
+
+### CONTINUE jatketaan
+- tapaamiset kampuksella
+- vastaava storyjen määrä
+- pidetään mainista huolta
+- kommunikointia
+
+### MORE OF lisää
+- enemmän läpinäkyvyyttä taskeissa (tai siinä mitä porukka tekee tarkalleen, missä tiedostossa/branchissa)
+- tehtävien jakaminen
+- enemmän dokumentaatiota koodiin
+- käänny ja tiedustele / opiskele mitä toinen tekee, koodivisiitti
+
+### LESS OF vähemmän
+- sooloilua
