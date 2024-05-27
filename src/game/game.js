@@ -13,7 +13,7 @@ let turnTimer = 0;
  * the player character to be able to move.
  */
 const turnTimeSeconds = 1;
-let commands = [];
+let command = null;
 var pupu;
 
 /**
@@ -56,16 +56,12 @@ async function getRenderer() {
 }
 
 /**
- * Used to set the list of commands for processing by the game.
- * @param {*} list List of commands to be processed.
- * @returns null
+ * Used to set the next command to run. 
+ * @param {*} command An object literal representing a command to run. Example: 
+ * command = {command: "move", parameters: "oikea"} 
  */
-export function setCommandList(list) {
-    if (list == null || renderer == null) {
-        return;
-    }
-    if (commands.length > 0) return;
-    commands = list;
+export function setGameCommand(command) {
+    self.command = command;
 }
 
 /**
@@ -87,13 +83,9 @@ function onUpdate(deltaTime) {
  * @returns null
  */
 function processTurn () {
-    if (commands == null) {
+    if (command == null) {
         return;
     }
-    if (commands.length <= 0) {
-        return;
-    }
-    let newCommand = commands.shift();
     if (tryMoveGridObjectToDir(pupu, commandDirs[newCommand])) {
         renderer.player.moveToDirection (commandDirs[newCommand]);
     }

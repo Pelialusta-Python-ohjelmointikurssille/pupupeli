@@ -30,9 +30,5 @@ function initializeEditor() {
 
 function addEventToButton(id) {
     let buttonInput = document.getElementById(id);
-    buttonInput.addEventListener("click", onClickCodeButton, false);
-}
-
-function onClickCodeButton() {
-    initializeWorker(editor);
+    buttonInput.addEventListener("click", initializeWorker(editor), false);
 }
