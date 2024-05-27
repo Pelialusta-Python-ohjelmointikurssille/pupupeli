@@ -1,4 +1,4 @@
-function extractErrorDetails(errorMessage) {
+export function extractErrorDetails(errorMessage) {
     const regex = /File .*?, line (\d+)/g;
     let match;
     let lastLineReference;
