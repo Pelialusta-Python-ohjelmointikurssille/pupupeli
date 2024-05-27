@@ -76,4 +76,9 @@ body {
 
 #editor-buttons-container {
     padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+#editor-stop-button {
+    float: right;
 }
