@@ -55,8 +55,25 @@ function addEventToButton(id, func) {
     buttonInput.addEventListener("click", func, false);
 }
 
+let play = false;
+
 function onRunButtonClick () {
-    console.log("RUN");
+    let button = document.getElementById("editor-run-pause-button");
+    let img = button.querySelector('img');
+    if (!img) {
+        img = document.createElement('img');
+        button.appendChild(img);
+    }
+    if (play === false) {
+        console.log("RUN");
+        play = true;
+        img.src = "src/static/game_assets/Jakoavain.png";
+    }
+    else {
+        console.log("PAUSE");
+        play = false;
+        img.src = "src/static/game_assets/Kivi3.png";
+    }
 }
 
 function onResetButtonClick () {
