@@ -30,7 +30,7 @@ function initializeEditor() {
     //addEventToButton(buttonID);
 
     // Toggle grid nappi, voi muuttaa missä annetaan event
-    document.getElementById("grid-toggle-button").addEventListener("click", toggleGrid, false);
+    //document.getElementById("grid-toggle-button").addEventListener("click", toggleGrid, false);
 }
 
 

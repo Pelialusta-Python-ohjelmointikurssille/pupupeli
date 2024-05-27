@@ -7,6 +7,8 @@ import { InitGame, setCommandList } from "./game/game.js"
 
 async function main() {
     await CreateGameWindow();
+    addEventToButton("editor-run-pause-button", onRunButtonClick);
+    addEventToButton("editor-stop-button", onResetButtonClick);
 }
 
 async function CreateGameWindow() {
@@ -46,6 +48,19 @@ export function initializeWorker(editor) {
     }
 
     worker.postMessage({ type: 'start', data: editor.getValue() });
+}
+
+function addEventToButton(id, func) {
+    let buttonInput = document.getElementById(id);
+    buttonInput.addEventListener("click", func, false);
+}
+
+function onRunButtonClick () {
+    console.log("RUN");
+}
+
+function onResetButtonClick () {
+    console.log("RESET")
 }
 
 await main();

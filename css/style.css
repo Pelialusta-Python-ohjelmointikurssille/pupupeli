@@ -67,3 +67,9 @@ body {
     min-height: 32px;
     min-width: 64px;
 }
+
+
+#run-icon {
+    width: 32px;
+    height: 32px;
+}
