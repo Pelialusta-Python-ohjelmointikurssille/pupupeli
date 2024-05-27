@@ -22,6 +22,7 @@ module.exports = {
     collectCoverageFrom: [
         "src/**/*.js",
         "!src/**/rendering.js", // Exclude specific file
+        "!src/input/pyodide.js", // Exclude specific file
         "!src/**/index.js",
         "!src/**/game.js",
         "!src/**/editor.js",
