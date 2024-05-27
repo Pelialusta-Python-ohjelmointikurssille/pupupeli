@@ -7,7 +7,7 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
         super().end_headers()
 
 if __name__ == '__main__':
-    server_address = ('', 8989)
+    server_address = ('', 8000)
     httpd = HTTPServer(server_address, CORSRequestHandler)
-    print("Serving on port 8989...")
+    print("Serving on port 8000...")
     httpd.serve_forever()
