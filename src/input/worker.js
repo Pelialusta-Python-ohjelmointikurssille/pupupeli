@@ -1,8 +1,10 @@
 
-/* global loadPyodide importScripts extractErrorDetails */
+/* global loadPyodide importScripts */
 
-var pyodide;
-importScripts('https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js', 'py_error_handling.js')
+let pyodide;
+let ctr = 0;
+let continuePythonExecution;
+importScripts('https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js')
 
 /**
  * The worker "message" event handler. This is executed when worker.postMessage(...) is called.
@@ -62,27 +64,35 @@ function handleInput(message) {
  * @param {string} command The command to execute. Examples: "move", "say", ...
  * @param {string} parameters The parameters for the command. Examples: "oikea", "vasen", 
  * "Onneksi olkoon! Voitit pelin!"
+ * eslint is disabled, since this function is only ran from the python code.
  */
+// eslint-disable-next-line no-unused-vars
 function runCommand(command, parameters) {
+    const sab = new SharedArrayBuffer(4);
+    const waitBuffer = new Int32Array(sab, 0, 1);
+
     switch (command) {
         case "move":
-            self.postMessage({ type: 'run', data: { command: command, parameters: parameters }})
+            self.postMessage({ type: 'run', data: { command: command, parameters: parameters }, sab: sab });
             break;
         case "say":
-            throw Error(`Command '${command}' not implemented yet.`);
+            postError(`Command '${command}' not implemented yet.`);
+            break;
         default:
-            throw Error(`Command '${command}' is not a valid command.`)
+            postError(`Command '${command}' is not a valid command.`);
     }
-    
+    Atomics.wait(waitBuffer, 0, 0);
+    ctr++;
+    console.log(ctr + " hyppyä");
+    continuePythonExecution;
 }
 
 /**
- * Runs python python code on pyodide.
+ * Runs python code on pyodide.
  * @param {object} pyodide The pyodide object initialized in initializePyodide().
  * @param {string} codeString The input from the editor on the website.
  */
 async function runPythonCode(pyodide, codeString) {
-
     let pythonFileStr = GetFileAsText("../python/pelaaja.py");
     pyodide.runPython(pythonFileStr);
 
@@ -90,7 +100,7 @@ async function runPythonCode(pyodide, codeString) {
     try {
         await self.continuePythonExecution;
     } catch (error) {
-        console.log(error);
+        postError(error.message);
     }
 }
 
@@ -102,12 +112,24 @@ async function runPythonCode(pyodide, codeString) {
  */
 function GetFileAsText(path) {
     let request = new XMLHttpRequest();
-    request.open('GET', filepath, false);
+    request.open('GET', path, false);
     request.send(null);
 
     if (request.status === 200) {
         return request.responseText;
     } else {
-        throw new Error(`Error fetching file: ${path}`);
+        postError(`Error fetching file: ${path}`)
+    }
+}
+
+/**
+ * Helper function to post error messages back to main thread for putting on the page.
+ * @param {*} error Either an error object, or a string.
+ */
+function postError(error) {
+    if (typeof (error) === "string") {
+        self.postMessage({ error: { message: error } })
+    } else {
+        self.postMessage({ error: error });
     }
 }

@@ -2,7 +2,7 @@ import { Renderer } from "./rendering.js";
 import { Direction } from "./direction.js";
 import { initGrid, addToGrid, moveGridObjectToDir as tryMoveGridObjectToDir } from "./gamegrid.js";
 import { getNewGridObject } from "./gridobject.js";
-
+import { passMessageToWorker } from "../event_handler.js";
 
 let renderer;
 let turnTimer = 0;
@@ -13,7 +13,7 @@ let turnTimer = 0;
  * the player character to be able to move.
  */
 const turnTimeSeconds = 1;
-let command = null;
+let currentCommand = null;
 var pupu;
 
 /**
@@ -61,7 +61,7 @@ async function getRenderer() {
  * command = {command: "move", parameters: "oikea"} 
  */
 export function setGameCommand(command) {
-    self.command = command;
+    currentCommand = command;
 }
 
 /**
@@ -69,7 +69,7 @@ export function setGameCommand(command) {
  * @param {*} deltaTime The time since last frame in seconds. Used to make framerate independent logic. 
  */
 function onUpdate(deltaTime) {
-    if (turnTimer < turnTimeSeconds && commands.length > 0) {
+    if (turnTimer < turnTimeSeconds && self.command !== null) {
         turnTimer += deltaTime;
     }
     if (turnTimer >= turnTimeSeconds) {
@@ -82,15 +82,18 @@ function onUpdate(deltaTime) {
  * Used for processing game logic.
  * @returns null
  */
-function processTurn () {
-    if (command == null) {
+function processTurn() {
+    if (currentCommand === null) {
         return;
     }
-    if (tryMoveGridObjectToDir(pupu, commandDirs[newCommand])) {
-        renderer.player.moveToDirection (commandDirs[newCommand]);
+    let newCommand = currentCommand.data;
+    if (tryMoveGridObjectToDir(pupu, commandDirs[newCommand.parameters])) {
+        renderer.player.moveToDirection(commandDirs[newCommand.parameters]);
     }
+    passMessageToWorker("return", "returning from game.js", currentCommand.sab)
+    currentCommand = null;
 }
 
-export function rendererToggleGrid () {
+export function rendererToggleGrid() {
     renderer.toggleGrid();
 }
