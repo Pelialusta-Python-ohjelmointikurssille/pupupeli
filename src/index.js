@@ -1,6 +1,6 @@
 import { InitGame } from "./game/game.js"
 
-import { initializeEventHandler } from "./event.js"
+import { initializeWorkerEventHandler } from "./eventhandler.js"
 
 // write doc for main
 /**
@@ -23,7 +23,7 @@ async function CreateGameWindow() {
 export function initializeWorker(editor) {
     const worker = new Worker('src/input/pyodide.js');
 
-    initializeEventHandler(worker);
+    initializeWorkerEventHandler(worker);
 
     worker.postMessage({ type: 'start', data: editor.getValue() });
 }
