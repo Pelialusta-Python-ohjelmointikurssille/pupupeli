@@ -24,7 +24,17 @@ function initializeEditor() {
         autoScrollEditorIntoView: true,
         copyWithEmptySelection: true,
     });
+<<<<<<< Updated upstream
     addEventToButton("editor-button");
+=======
+    //Create "run code" button
+    //let buttonID = "editor-button";
+    //CreateButton(buttonID, "Suorita");
+    //addEventToButton(buttonID);
+
+    // Toggle grid nappi, voi muuttaa missä annetaan event
+    document.getElementById("grid-toggle-button").addEventListener("click", toggleGrid, false);
+>>>>>>> Stashed changes
 }
 
 
