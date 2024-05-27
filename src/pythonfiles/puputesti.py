@@ -1,8 +1,3 @@
-import sys
-# import time
-# from bunny_module import moveBunny
-sys.version
-
 liikelista = []
 
 class Pelaaja:
@@ -18,8 +13,6 @@ class Pelaaja:
         liikelista = []
 
     def liiku(self, liike: str):
-        # time.sleep(1) # poista editor.js kommentti jos poistat nämä kommentit
-        # moveBunny(liike) # poista editor.js kommentti jos poistat nämä kommentit
         global liikelista
         if liike in self.liikkeet:
             liikelista.append(liike)

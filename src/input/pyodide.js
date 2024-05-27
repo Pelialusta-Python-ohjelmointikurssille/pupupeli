@@ -1,35 +1,60 @@
-import { extractErrorDetails } from "./py_error_handling.js"
 
-/* global loadPyodide */
+/* global loadPyodide importScripts extractErrorDetails */
 
 var pyodide;
+importScripts('https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js', 'py_error_handling.js')
 
-initializePyodide();
-
-async function initializePyodide() {
-    pyodide = await loadPyodide();
-    pyodide.setStdin();
+self.onmessage = async function (event) {
+    if (event.data.type === 'start') {
+        initializePyodide(event.data);
+    }
 }
 
+async function initializePyodide(event) {
+    pyodide = await loadPyodide();
 
-export function runPythonCode(codeString) {
+    pyodide.setStdin({ stdin: () => { 
+        return handleInput()
+    }});
+
+    runPythonCode(pyodide, event.data);
+}
+
+function handleInput(message) {
+    const sab = new SharedArrayBuffer(512 * 2 + 4);
+    const sharedArray = new Uint16Array(sab, 4);
+    const syncArray = new Int32Array(sab, 0, 1);
+
+    postMessage({type: 'input', data: message, sab: sab});
+    Atomics.wait(syncArray, 0, 0);
+
+    let word = '';
+    for (let i = 0; i < sharedArray.length; i++) {
+        if (sharedArray[i] === 0) break;
+        word += String.fromCharCode(sharedArray[i]);
+    }
+
+    return word
+}
+
+async function runPythonCode(pyodide, codeString) {
+
     let pythonFileStr = GetPythonFile();
     pyodide.runPython(pythonFileStr);
-    try {
-        pyodide.runPython(codeString);
-    } catch (error) {
-        // Catch and display the error as an alert
-        let errorDetails = extractErrorDetails(error.message);
 
-        // Display the error type and line number as an alert
-        document.getElementById("error").innerHTML = `Voi ei! \n \n Virhe: \n ${errorDetails.type} \n \n Rivillä: \n ${errorDetails.line}`
+    self.continuePythonExecution = pyodide.runPythonAsync(codeString);
+    try {
+        await self.continuePythonExecution;
+    } catch (error) {
+        console.log(extractErrorDetails(error));
     }
+
     let lista = pyodide.globals.get("liikelista").toJs();
-    return lista;
+    self.postMessage({type: 'run', data: lista});
 }
 
 function GetPythonFile() {
-    let path = "src/pythonfiles/puputesti.py";
+    let path = "../pythonfiles/puputesti.py";
     return GetFileAsText(path);
 }
 

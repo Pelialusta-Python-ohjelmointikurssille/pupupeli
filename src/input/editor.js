@@ -1,10 +1,7 @@
-import { runPythonCode} from "./pyodide.js"
-import { runGameCommands, toggleGrid } from "../index.js";
+import { initializeWorker } from "../index.js";
 
 //Lint cheese below
 /* global ace */
-//because below doesn't work
-//import * as ace from "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js";
 
 const ACE_LINK = "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js";
 var editor;
@@ -27,13 +24,7 @@ function initializeEditor() {
         autoScrollEditorIntoView: true,
         copyWithEmptySelection: true,
     });
-    //Create "run code" button
-    let buttonID = "editor-button";
-    //CreateButton(buttonID, "Suorita");
-    addEventToButton(buttonID);
-
-    // Toggle grid nappi, voi muuttaa missä annetaan event
-    document.getElementById("grid-toggle-button").addEventListener("click", toggleGrid, false);
+    addEventToButton("editor-button");
 }
 
 
@@ -42,7 +33,6 @@ function addEventToButton(id) {
     buttonInput.addEventListener("click", onClickCodeButton, false);
 }
 
-function onClickCodeButton () {
-    let value = runPythonCode(editor.getValue());
-    runGameCommands(value);
+function onClickCodeButton() {
+    initializeWorker(editor);
 }

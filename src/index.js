@@ -1,4 +1,4 @@
-import { InitGame, setCommandList, rendererToggleGrid } from "./game/game.js"
+import { InitGame, setCommandList } from "./game/game.js"
 
 // write doc for main
 /**
@@ -18,12 +18,34 @@ async function CreateGameWindow() {
     canvas.id = "game";
 }
 
-export function toggleGrid () {
-    rendererToggleGrid();
-}
-
 export function runGameCommands(list) {
     setCommandList(list);
     console.log("RUNNING COMMANDS FROM INDEX")
 }
+
+export function initializeWorker(editor) {
+    const worker = new Worker('src/input/pyodide.js');
+
+    worker.onmessage = function (event) {
+        if (event.data.type === 'input') {
+            const sharedArray = new Uint16Array(event.data.sab, 4);
+            const syncArray = new Int32Array(event.data.sab, 0, 1);
+
+            const word = prompt(event.data.message);
+
+            for (let i = 0; i < word.length; i++) {
+                sharedArray[i] = word.charCodeAt(i);
+            }
+            sharedArray[word.length] = 0;
+
+            Atomics.store(syncArray, 0, 1);
+            Atomics.notify(syncArray, 0, 1);
+        } else if (event.data.type === 'run') {
+            runGameCommands(event.data.data);
+        }
+    }
+
+    worker.postMessage({ type: 'start', data: editor.getValue() });
+}
+
 await main();
