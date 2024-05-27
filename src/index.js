@@ -1,6 +1,6 @@
 import { InitGame } from "./game/game.js"
 
-import { initializeWorkerEventHandler } from "./eventhandler.js"
+import { initializeWorkerEventHandler } from "./event_handler.js"
 
 // write doc for main
 /**
