@@ -1,7 +1,7 @@
 
-/* global loadPyodide */
+/* global loadPyodide importScripts extractErrorDetails */
 
-//var pyodide;
+var pyodide;
 importScripts('https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js', 'py_error_handling.js')
 
 self.onmessage = async function (event) {
