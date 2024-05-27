@@ -67,12 +67,12 @@ function onRunButtonClick () {
     if (play === false) {
         console.log("RUN");
         play = true;
-        img.src = "src/static/game_assets/Jakoavain.png";
+        img.src = "src/static/pausebutton.png";
     }
     else {
         console.log("PAUSE");
         play = false;
-        img.src = "src/static/game_assets/Kivi3.png";
+        img.src = "src/static/runbutton.png";
     }
 }
 
