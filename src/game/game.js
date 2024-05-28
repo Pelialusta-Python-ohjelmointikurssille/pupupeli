@@ -91,6 +91,12 @@ function processTurn() {
     let newCommand = currentCommand.data;
     if (tryMoveGridObjectToDir(pupu, commandDirs[newCommand.parameters])) {
         renderer.player.moveToDirection(commandDirs[newCommand.parameters]);
+    } else {
+        // Prevent bug that stops character movement completely if direction to move is invalid.
+        // This is because the character move anim never finishes, so never gives
+        // message to give another command.
+        // Could be better but works for now.
+        onEndMoveFunc();
     }
 }
 
