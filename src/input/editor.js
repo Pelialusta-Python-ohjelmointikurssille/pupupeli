@@ -24,16 +24,16 @@ function initializeEditor() {
         autoScrollEditorIntoView: true,
         copyWithEmptySelection: true,
     });
-    addEventToButton("editor-button");
+    //Create "run code" button
+    //let buttonID = "editor-button";
+    //CreateButton(buttonID, "Suorita");
+    //addEventToButton(buttonID);
+
+    // Toggle grid nappi, voi muuttaa missä annetaan event
+    //document.getElementById("grid-toggle-button").addEventListener("click", toggleGrid, false);
 }
 
-
-function addEventToButton(id) {
-    let buttonInput = document.getElementById(id);
-    buttonInput.addEventListener("click", startWorkerButtonEvent, false);
-}
-
-function startWorkerButtonEvent() {
+export function onClickCodeButton() {
     startWorker(editor);
 }
 

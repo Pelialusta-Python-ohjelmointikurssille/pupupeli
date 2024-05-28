@@ -1,10 +1,14 @@
 import { InitGame } from "./game/game.js"
+import { onClickCodeButton } from "./input/editor.js";
 import { initializeWorkerEventHandler } from "./event_handler.js"
 
 const worker = new Worker('src/input/worker.js');
 
 async function main() {
     await CreateGameWindow();
+    addEventToButton("editor-run-pause-button", onRunButtonClick);
+    addEventToButton("editor-stop-button", onResetButtonClick);
+    addEventToButton("editor-skip-button", onSkipButtonClick);
     initializeWorker()
 }
 
@@ -37,6 +41,59 @@ function initializeWorker() {
 
 export function startWorker(editor) {
     worker.postMessage({ type: 'start', data: editor.getValue() });
+}
+
+function addEventToButton(id, func) {
+    let buttonInput = document.getElementById(id);
+    buttonInput.addEventListener("click", func, false);
+}
+
+let play = false;
+let started = false;
+let runButtonText = null;
+
+function onRunButtonClick () {
+    let button = document.getElementById("editor-run-pause-button");
+    let img = button.querySelector('img');
+    runButtonText = button.querySelector('#runButtonText');
+    if (!img) {
+        img = document.createElement('img');
+        button.appendChild(img);
+    }
+    if (started === false) {
+        console.log("SUORITA");
+        started = true;
+        play = true;
+        img.src = "src/static/pausebutton.png";
+        runButtonText.textContent = 'Tauko';
+        onClickCodeButton();
+    }
+    else if (play === false) {
+        console.log("JATKA");
+        play = true;
+        img.src = "src/static/pausebutton.png";
+        runButtonText.textContent = 'Tauko';
+    }
+    else {
+        console.log("TAUKO");
+        play = false;
+        img.src = "src/static/runbutton.png";
+        runButtonText.textContent = 'Jatka';
+    }
+}
+
+function onResetButtonClick () {
+    let button = document.getElementById("editor-run-pause-button");
+    let img = button.querySelector('img');
+    img.src = "src/static/runbutton.png";
+    runButtonText.textContent = 'Suorita';
+    console.log("RESET")
+    play = false;
+    started = false;
+}
+
+function onSkipButtonClick () {
+    console.log("SKIP")
 }
 
 await main();
