@@ -17,6 +17,8 @@ export class Renderer {
         this.runnableFunc = [];
         this.isGridEnabled = false;
         this.grid = null;
+
+        this.onEndFunc = null;
     }
     /**
      * Initializes PixiJS.
@@ -102,6 +104,7 @@ export class Renderer {
         this.player = new Character(new Vector2(0, 0), bunnyTextures, new Vector2(64, 64));
         this.pixiApp.stage.addChild(this.player.shadowGraphics);
         this.pixiApp.stage.addChild(this.player.renderSprite);
+        this.player.setOnEndFunc(this.onEndFunc);
     }
 
     /**
@@ -136,6 +139,8 @@ export class Renderer {
             this.player.process((time.deltaTime / 60));
         });
     }
+
+    
 }
 
 /**
