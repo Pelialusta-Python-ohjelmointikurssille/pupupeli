@@ -63,6 +63,17 @@ export function unPauseMessageWorker() {
     passMessageToWorker(lastMessage.type, lastMessage.message, lastMessage.sab);
 }
 
+export function runSingleCommand() {
+    if (!isMessagePassingPaused) {
+        pauseMessageWorker();
+        return;
+    }
+
+    unPauseMessageWorker();
+    pauseMessageWorker();
+
+}
+
 function PostMessageToWorker(type, message, sab, value) {
     worker.postMessage({ type: type, message: message });
     const waitArray = new Int32Array(sab, 0, 1);
