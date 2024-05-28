@@ -51,7 +51,9 @@ export async function InitGame() {
  */
 async function getRenderer() {
     let renderer = new Renderer();
+    renderer.onEndFunc = onEndMoveFunc;
     await renderer.init();
+    
     return renderer;
 }
 
@@ -90,8 +92,12 @@ function processTurn() {
     if (tryMoveGridObjectToDir(pupu, commandDirs[newCommand.parameters])) {
         renderer.player.moveToDirection(commandDirs[newCommand.parameters]);
     }
+}
+
+function onEndMoveFunc () {
     passMessageToWorker("return", "returning from game.js", currentCommand.sab)
     currentCommand = null;
+    console.log("COMMAND");
 }
 
 export function rendererToggleGrid() {

@@ -27,6 +27,8 @@ export class Character {
         this.shadowGraphics.x = this.screenPosition.x;
         this.shadowGraphics.y = this.screenPosition.y+28;
         this.unmodifiedScreenPos = new Vector2(this.screenPosition.x, this.screenPosition.y);
+
+        this.onEndFunc = null;
     }
 
     getScreenPosition (position) {
@@ -82,11 +84,16 @@ export class Character {
                 this.isMoving = false;
                 this.screenPosition = this.getScreenPosition(this.gridPosition);
                 this.unmodifiedScreenPos = this.getScreenPosition(this.gridPosition);
+                this.onEndFunc();
             }
             this.renderSprite.x = this.screenPosition.x;
             this.renderSprite.y = this.screenPosition.y;
             this.shadowGraphics.x = this.screenPosition.x;
             this.shadowGraphics.y = this.unmodifiedScreenPos.y+28;
         }
+    }
+
+    setOnEndFunc (func) {
+        this.onEndFunc = func;
     }
 }
