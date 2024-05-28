@@ -1,4 +1,4 @@
-import { InitGame } from "./game/game.js"
+import { InitGame, resetGame } from "./game/game.js"
 import { onClickCodeButton } from "./input/editor.js";
 import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
 
@@ -92,6 +92,7 @@ function onResetButtonClick() {
     console.log("RESET")
     play = false;
     started = false;
+    resetGame();
 }
 
 function nextStepButtonClick () {

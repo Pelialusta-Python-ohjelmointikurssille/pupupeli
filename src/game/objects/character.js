@@ -9,7 +9,7 @@ export class Character {
         this.screenPosition = this.getScreenPosition(this.gridPosition);
         this.direction = Direction.Right;
         this.textures = textures;
-        this.renderSprite = new PIXI.Sprite(this.textures[0]);
+        this.renderSprite = new PIXI.Sprite(this.textures[this.direction]);
         this.renderSprite.anchor.set(0.5);
         this.renderSprite.width = size.x;
         this.renderSprite.height = size.y;
@@ -91,6 +91,20 @@ export class Character {
             this.shadowGraphics.x = this.screenPosition.x;
             this.shadowGraphics.y = this.unmodifiedScreenPos.y+28;
         }
+    }
+
+    reset() {
+        this.direction = Direction.Right;
+        this.gridPosition = new Vector2(0, 0);
+        this.screenPosition = this.getScreenPosition(this.gridPosition);
+        this.unmodifiedScreenPos = this.getScreenPosition(this.gridPosition);
+        this.renderSprite.x = this.screenPosition.x;
+        this.renderSprite.y = this.screenPosition.y;
+        this.shadowGraphics.x = this.screenPosition.x;
+        this.shadowGraphics.y = this.unmodifiedScreenPos.y+28;
+        this.moveProgress = 0;
+        this.isMoving = false;
+        this.renderSprite.texture = this.textures[this.direction];
     }
 
     setOnEndFunc (func) {
