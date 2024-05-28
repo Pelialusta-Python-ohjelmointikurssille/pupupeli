@@ -2,6 +2,9 @@ import { setGameCommand } from "./game/game.js"
 import { extractErrorDetails } from "./input/py_error_handling.js"
 
 let worker;
+//Pause variables
+let isMessagePassingPaused = false;
+var lastMessage;
 
 export function initializeWorkerEventHandler(webWorker) {
     worker = webWorker;
@@ -33,10 +36,36 @@ export function initializeWorkerEventHandler(webWorker) {
 }
 
 export function passMessageToWorker(type, message, sab) {
-    if (type === 'return') {
-        worker.postMessage({ type: type, message: message });
-        const waitArray = new Int32Array(sab, 0, 1);
-        Atomics.store(waitArray, 0, 1);
-        Atomics.notify(waitArray, 0, 1);
+    if (isMessagePassingPaused) {
+        saveLastMessage(type, message, sab);
+        return;
     }
+    if (type === 'return') {
+        //1 = continue the worker
+        PostMessageToWorker(type, message, sab, 1);
+    }
+}
+
+function saveLastMessage(type, message, sab) {
+    lastMessage = {
+        type: type,
+        message: message,
+        sab: sab
+    }
+}
+
+export function pauseMessageWorker() {
+    isMessagePassingPaused = true;
+}
+
+export function unPauseMessageWorker() {
+    isMessagePassingPaused = false;
+    passMessageToWorker(lastMessage.type, lastMessage.message, lastMessage.sab);
+}
+
+function PostMessageToWorker(type, message, sab, value) {
+    worker.postMessage({ type: type, message: message });
+    const waitArray = new Int32Array(sab, 0, 1);
+    Atomics.store(waitArray, 0, value);
+    Atomics.notify(waitArray, 0, value);
 }

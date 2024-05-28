@@ -1,6 +1,6 @@
 import { InitGame } from "./game/game.js"
 import { onClickCodeButton } from "./input/editor.js";
-import { initializeWorkerEventHandler } from "./event_handler.js"
+import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker } from "./event_handler.js"
 
 const worker = new Worker('src/input/worker.js');
 
@@ -73,12 +73,14 @@ function onRunButtonClick () {
         play = true;
         img.src = "src/static/pausebutton.png";
         runButtonText.textContent = 'Tauko';
+        unPauseMessageWorker();
     }
     else {
         console.log("TAUKO");
         play = false;
         img.src = "src/static/runbutton.png";
         runButtonText.textContent = 'Jatka';
+        pauseMessageWorker();
     }
 }
 
