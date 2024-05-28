@@ -1,6 +1,6 @@
 import { InitGame } from "./game/game.js"
 import { onClickCodeButton } from "./input/editor.js";
-import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker } from "./event_handler.js"
+import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand } from "./event_handler.js"
 
 const worker = new Worker('src/input/worker.js');
 
@@ -8,7 +8,7 @@ async function main() {
     await CreateGameWindow();
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
-    addEventToButton("editor-skip-button", onSkipButtonClick);
+    addEventToButton("editor-skip-button", nextStepButtonClick);
     initializeWorker()
 }
 
@@ -94,8 +94,16 @@ function onResetButtonClick () {
     started = false;
 }
 
-function onSkipButtonClick () {
-    console.log("SKIP")
+function nextStepButtonClick () {
+    if (started === false) {
+        onRunButtonClick();
+    }
+    runSingleCommand();
+    if (play === true) {
+        onRunButtonClick();
+    }
+
+
 }
 
 await main();
