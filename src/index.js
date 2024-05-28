@@ -116,15 +116,12 @@ export function getUserInput(is_init) {
     let inputBox = document.getElementById("input-box");
     if (is_init) {
         inputBox.classList.toggle("is-invisible");
-        inputBox.addEventListener("keydown", (event) => {
-            if (event.key === 'Enter') {
-                sendUserInputToWorker();
-            }
-        });
-
+        inputBox.addEventListener("keydown", sendUserInputToWorker);
     } else {
-        let inputValue = document.getElementById("input-box").value;
+        let inputValue = inputBox.value;
         inputBox.classList.toggle("is-invisible");
+        inputBox.value = "";
+        inputBox.removeEventListener("keydown", sendUserInputToWorker);
         return inputValue;
     }
 }
