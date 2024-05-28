@@ -1,5 +1,4 @@
 import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
-import { onClickCodeButton } from "./input/editor.js";
 import { getEditor } from "./input/editor.js";
 import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
 
