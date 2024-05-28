@@ -1,6 +1,6 @@
 import { InitGame } from "./game/game.js"
 import { getEditor } from "./input/editor.js";
-import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand } from "./event_handler.js"
+import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
 
 const worker = new Worker('src/input/worker.js');
 
@@ -49,8 +49,6 @@ function addEventToButton(id, func) {
 }
 
 let runButtonText = null;
-
-//Button states
 const defaultState = "defaultState";
 const runningState = "runningState";
 const pausedState = "pausedState";
@@ -111,6 +109,24 @@ function nextStepButtonClick() {
     onRunButtonClick();
     runSingleCommand();
     if (currentState === runningState) onRunButtonClick();
+
+}
+
+export function getUserInput(is_init) {
+    let inputBox = document.getElementById("input-box");
+    if (is_init) {
+        inputBox.classList.toggle("is-invisible");
+        inputBox.addEventListener("keydown", (event) => {
+            if (event.key === 'Enter') {
+                sendUserInputToWorker();
+            }
+        });
+
+    } else {
+        let inputValue = document.getElementById("input-box").value;
+        inputBox.classList.toggle("is-invisible");
+        return inputValue;
+    }
 }
 
 await main();
