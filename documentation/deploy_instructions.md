@@ -17,15 +17,13 @@ npm run lint
 
 ## Run locally
 
-Start a webserver from root folder.
-
-One way is to create it is by:
+Start a webserver from root folder using:
 
 ~~~
-python3 -m http.server
+python3 server.py
 ~~~
 
-Or using the VSCode Live Preview Extension
+This is done because of CORS policy requirements on the server side. Webworkers won't work properly otherwise.
 
 ## OpenShift deployment
 
