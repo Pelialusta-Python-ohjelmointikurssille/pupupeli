@@ -88,7 +88,7 @@ function runCommand(command, parameters) {
         default:
             postError(`Command '${command}' is not a valid command.`);
     }
-    Atomics.wait(waitArray, 0, 0);
+    Atomics.wait(waitArray, 0, 0); //as long as 0, I sleep
     ctr++;
     console.log(ctr + " hyppyä");
     continuePythonExecution;
