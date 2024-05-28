@@ -113,7 +113,6 @@ function onEndMoveFunc () {
 }
 
 export function resetGame () {
-    console.log("reset game")
     initGrid(8, 8);
     pupu = getNewGridObject("pupu");
     addToGrid(pupu, 0, 0);
