@@ -14,8 +14,21 @@ body {
     min-width: 640px;
 }
 
-.is-margin-1rem {
-    margin: 1rem;
+.is-margin-half-rem-x {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.is-flex-1 {
+    flex: 1;
+}
+
+.is-invisible {
+    visibility: hidden;;
+}
+
+.is-hidden {
+    display: none;
 }
 
 #app {
@@ -74,13 +87,17 @@ body {
     height: 32px;
 }
 
-#editor-buttons-container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-
 #editor-stop-button {
     float: right;
+}
+
+#input-box {
+    display: inline-flex;
+    position: relative;
+    height: 32px;
+    border: 1px solid black;
+    padding: 5px;
+    font-size: 16px;
 }
 
 #editor-run-pause-button, #editor-stop-button, #editor-skip-button {
