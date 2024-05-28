@@ -35,8 +35,8 @@ export function initializeWorkerEventHandler(webWorker) {
 export function passMessageToWorker(type, message, sab) {
     if (type === 'return') {
         worker.postMessage({ type: type, message: message });
-        const waitBuffer = new Int32Array(sab, 0, 1);
-        Atomics.store(waitBuffer, 0, 1);
-        Atomics.notify(waitBuffer, 0, 1);
+        const waitArray = new Int32Array(sab, 0, 1);
+        Atomics.store(waitArray, 0, 1);
+        Atomics.notify(waitArray, 0, 1);
     }
 }

@@ -2,9 +2,11 @@
 /* global loadPyodide importScripts */
 
 let pyodide;
-let ctr = 0;
+let pythonFileStr;
 let continuePythonExecution;
-importScripts('https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js')
+let ctr = 0;
+
+importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js')
 
 /**
  * The worker "message" event handler. This is executed when worker.postMessage(...) is called.
@@ -13,8 +15,11 @@ importScripts('https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js')
  * and the type of event in "event.data.type".
  */
 self.onmessage = async function (event) {
+    if (event.data.type === 'init') {
+        initializePyodide();
+    }
     if (event.data.type === 'start') {
-        initializePyodide(event.data.data);
+        runPythonCode(pyodide, event.data.data);
     }
 }
 
@@ -23,16 +28,18 @@ self.onmessage = async function (event) {
  * as a part of their python code.
  * @param {string} userInput The text that the user enters in the website editor.
  */
-async function initializePyodide(userInput) {
-    pyodide = await loadPyodide();
+async function initializePyodide() {
+    if (pyodide === undefined) {
+        pyodide = await loadPyodide();
 
-    pyodide.setStdin({
-        stdin: () => {
-            return handleInput()
-        }
-    });
+        pyodide.setStdin({
+            stdin: () => {
+                return handleInput()
+            }
+        });
 
-    runPythonCode(pyodide, userInput);
+        pythonFileStr = GetFileAsText("../python/pelaaja.py");
+    }
 }
 
 /**
@@ -69,7 +76,7 @@ function handleInput(message) {
 // eslint-disable-next-line no-unused-vars
 function runCommand(command, parameters) {
     const sab = new SharedArrayBuffer(4);
-    const waitBuffer = new Int32Array(sab, 0, 1);
+    const waitArray = new Int32Array(sab, 0, 1);
 
     switch (command) {
         case "move":
@@ -81,7 +88,7 @@ function runCommand(command, parameters) {
         default:
             postError(`Command '${command}' is not a valid command.`);
     }
-    Atomics.wait(waitBuffer, 0, 0);
+    Atomics.wait(waitArray, 0, 0);
     ctr++;
     console.log(ctr + " hyppyä");
     continuePythonExecution;
@@ -93,9 +100,7 @@ function runCommand(command, parameters) {
  * @param {string} codeString The input from the editor on the website.
  */
 async function runPythonCode(pyodide, codeString) {
-    let pythonFileStr = GetFileAsText("../python/pelaaja.py");
     pyodide.runPython(pythonFileStr);
-
     self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
         await self.continuePythonExecution;
