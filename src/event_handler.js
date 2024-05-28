@@ -15,6 +15,7 @@ export function initializeWorkerEventHandler(webWorker) {
 
     worker.onmessage = (event) => {
         if (event.data.type === 'input') {
+            console.log("asd");
             sharedArray = new Uint16Array(event.data.sab, 4);
             syncArray = new Int32Array(event.data.sab, 0, 1);
 
@@ -75,21 +76,22 @@ export function runSingleCommand() {
 
 function PostMessageToWorker(type, message, sab, value) {
     worker.postMessage({ type: type, message: message });
-    if (sab !== null ) {
+    if (sab !== null) {
         const waitArray = new Int32Array(sab, 0, 1);
         Atomics.store(waitArray, 0, value);
         Atomics.notify(waitArray, 0, value);
     }
 }
 
-export function sendUserInputToWorker() {
-    word = getUserInput(false);
-    for (let i = 0; i < word.length; i++) {
-        sharedArray[i] = word.charCodeAt(i);
+export function sendUserInputToWorker(event) {
+    if (event.key === 'Enter') {
+        word = getUserInput(false);
+        for (let i = 0; i < word.length; i++) {
+            sharedArray[i] = word.charCodeAt(i);
+        }
+        sharedArray[word.length] = 0;
+
+        Atomics.store(syncArray, 0, 1);
+        Atomics.notify(syncArray, 0, 1);
     }
-    sharedArray[word.length] = 0;
-
-    Atomics.store(syncArray, 0, 1);
-    Atomics.notify(syncArray, 0, 1);
-
 }
