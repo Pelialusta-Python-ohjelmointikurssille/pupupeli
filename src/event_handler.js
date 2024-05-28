@@ -20,8 +20,6 @@ export function initializeWorkerEventHandler(webWorker) {
 
             getUserInput(true);
         }
-        if (event.data.type === 'input2') {
-        }
         if (event.data.type === 'run') {
             setGameCommand({ data: event.data.data, sab: event.data.sab });
         }

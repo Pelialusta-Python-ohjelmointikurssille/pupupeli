@@ -1,6 +1,6 @@
 import { InitGame } from "./game/game.js"
 import { onClickCodeButton } from "./input/editor.js";
-import { initializeWorkerEventHandler, passMessageToWorker, pauseMessageWorker, unPauseMessageWorker, sendUserInputToWorker } from "./event_handler.js"
+import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, sendUserInputToWorker } from "./event_handler.js"
 
 const worker = new Worker('src/input/worker.js');
 
