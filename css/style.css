@@ -83,6 +83,19 @@ body {
     float: right;
 }
 
+#input-box {
+    display: inline-flex;
+    position: relative;
+    top: -11px;
+    height: 32px;
+    width: 20%;
+    border: 1px solid black;
+    padding: 5px;
+    font-size: 16px;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
 #editor-run-pause-button, #editor-stop-button, #editor-skip-button {
     display: inline-flex;
     align-items: center;
