@@ -1,4 +1,5 @@
 import { InitGame, setCommandList } from "./game/game.js"
+import { onClickCodeButton } from "./input/editor.js";
 
 // write doc for main
 /**
@@ -73,6 +74,7 @@ function onRunButtonClick () {
         play = true;
         img.src = "src/static/pausebutton.png";
         runButtonText.textContent = 'Tauko';
+        onClickCodeButton();
     }
     else if (play === false) {
         console.log("JATKA");

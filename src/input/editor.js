@@ -39,6 +39,6 @@ function addEventToButton(id) {
     buttonInput.addEventListener("click", onClickCodeButton, false);
 }
 
-function onClickCodeButton() {
+export function onClickCodeButton() {
     initializeWorker(editor);
 }
