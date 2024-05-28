@@ -94,3 +94,6 @@ body {
     border: 1px solid #000;
     background-color: #fff;
 }
+#editor-run-pause-button:hover, #editor-stop-button:hover, #editor-skip-button:hover {
+    background: rgb(231, 231, 231);
+}
