@@ -2,7 +2,7 @@ import { Renderer } from "./rendering.js";
 import { Direction } from "./direction.js";
 import { initGrid, addToGrid, moveGridObjectToDir as tryMoveGridObjectToDir } from "./gamegrid.js";
 import { getNewGridObject } from "./gridobject.js";
-
+import { passMessageToWorker } from "../event_handler.js";
 
 let renderer;
 let turnTimer = 0;
@@ -13,7 +13,7 @@ let turnTimer = 0;
  * the player character to be able to move.
  */
 const turnTimeSeconds = 1;
-let commands = [];
+let currentCommand = null;
 var pupu;
 
 /**
@@ -56,16 +56,12 @@ async function getRenderer() {
 }
 
 /**
- * Used to set the list of commands for processing by the game.
- * @param {*} list List of commands to be processed.
- * @returns null
+ * Used to set the next command to run. 
+ * @param {*} command An object literal representing a command to run. Example: 
+ * command = {command: "move", parameters: "oikea"} 
  */
-export function setCommandList(list) {
-    if (list == null || renderer == null) {
-        return;
-    }
-    if (commands.length > 0) return;
-    commands = list;
+export function setGameCommand(command) {
+    currentCommand = command;
 }
 
 /**
@@ -73,7 +69,7 @@ export function setCommandList(list) {
  * @param {*} deltaTime The time since last frame in seconds. Used to make framerate independent logic. 
  */
 function onUpdate(deltaTime) {
-    if (turnTimer < turnTimeSeconds && commands.length > 0) {
+    if (turnTimer < turnTimeSeconds && self.command !== null) {
         turnTimer += deltaTime;
     }
     if (turnTimer >= turnTimeSeconds) {
@@ -86,19 +82,18 @@ function onUpdate(deltaTime) {
  * Used for processing game logic.
  * @returns null
  */
-function processTurn () {
-    if (commands == null) {
+function processTurn() {
+    if (currentCommand === null) {
         return;
     }
-    if (commands.length <= 0) {
-        return;
+    let newCommand = currentCommand.data;
+    if (tryMoveGridObjectToDir(pupu, commandDirs[newCommand.parameters])) {
+        renderer.player.moveToDirection(commandDirs[newCommand.parameters]);
     }
-    let newCommand = commands.shift();
-    if (tryMoveGridObjectToDir(pupu, commandDirs[newCommand])) {
-        renderer.player.moveToDirection (commandDirs[newCommand]);
-    }
+    passMessageToWorker("return", "returning from game.js", currentCommand.sab)
+    currentCommand = null;
 }
 
-export function rendererToggleGrid () {
+export function rendererToggleGrid() {
     renderer.toggleGrid();
 }

@@ -1,10 +1,10 @@
-import { initializeWorker } from "../index.js";
+import { startWorker } from "../index.js";
 
 //Lint cheese below
 /* global ace */
 
-const ACE_LINK = "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js";
-var editor;
+const ACE_LINK = "https://cdnjs.cloudflare.com/ajax/libs/ace/1.34.2/ace.min.js";
+let editor;
 
 LoadAce();
 
@@ -36,9 +36,17 @@ function initializeEditor() {
 
 function addEventToButton(id) {
     let buttonInput = document.getElementById(id);
-    buttonInput.addEventListener("click", onClickCodeButton, false);
+    buttonInput.addEventListener("click", startWorkerButtonEvent, false);
 }
 
 export function onClickCodeButton() {
-    initializeWorker(editor);
+    startWorkerButtonEvent();
+}
+
+function startWorkerButtonEvent() {
+    startWorker(editor);
+}
+
+export function getEditor() {
+    return editor;
 }
