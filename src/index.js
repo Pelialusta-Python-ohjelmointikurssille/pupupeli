@@ -82,14 +82,12 @@ function onRunButtonClick() {
 }
 
 function setRunningStateVisual(img) {
-    console.log("SUORITA");
     img.src = "src/static/pausebutton.png";
     runButtonText.textContent = 'Tauko';
     currentState = runningState;
 }
 
 function setPausedStateVisual(img) {
-    console.log("TAUKO");
     img.src = "src/static/runbutton.png";
     runButtonText.textContent = 'Jatka';
     currentState = pausedState;
@@ -101,7 +99,6 @@ function onResetButtonClick() {
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
     runButtonText.textContent = 'Suorita';
-    console.log("RESET")
     currentState = defaultState;
 }
 
