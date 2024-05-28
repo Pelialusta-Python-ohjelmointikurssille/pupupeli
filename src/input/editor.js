@@ -1,5 +1,3 @@
-import { runPythonCommands } from "../index.js";
-
 //Lint cheese below
 /* global ace */
 
