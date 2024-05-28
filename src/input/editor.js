@@ -1,5 +1,3 @@
-import { startWorker } from "../index.js";
-
 //Lint cheese below
 /* global ace */
 
@@ -31,10 +29,6 @@ function initializeEditor() {
 
     // Toggle grid nappi, voi muuttaa missä annetaan event
     //document.getElementById("grid-toggle-button").addEventListener("click", toggleGrid, false);
-}
-
-export function onClickCodeButton() {
-    startWorker(editor);
 }
 
 export function getEditor() {

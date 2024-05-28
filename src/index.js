@@ -1,18 +1,18 @@
 import { InitGame } from "./game/game.js"
-import { onClickCodeButton } from "./input/editor.js";
+import { getEditor } from "./input/editor.js";
 import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
 
 const worker = new Worker('src/input/worker.js');
 
 async function main() {
-    await CreateGameWindow();
+    await createGameWindow();
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", nextStepButtonClick);
-    initializeWorker()
+    initializeWorker();
 }
 
-async function CreateGameWindow() {
+async function createGameWindow() {
     let app = await InitGame();
     let canvas = app.canvas;
 
@@ -39,8 +39,8 @@ function initializeWorker() {
     worker.postMessage({ type: 'init' });
 }
 
-export function startWorker(editor) {
-    worker.postMessage({ type: 'start', data: editor.getValue() });
+export function runPythonCommands() {
+    worker.postMessage({ type: 'start', data: getEditor().getValue() });
 }
 
 function addEventToButton(id, func) {
@@ -48,9 +48,12 @@ function addEventToButton(id, func) {
     buttonInput.addEventListener("click", func, false);
 }
 
-let play = false;
-let started = false;
 let runButtonText = null;
+const defaultState = "defaultState";
+const runningState = "runningState";
+const pausedState = "pausedState";
+let currentState;
+currentState = defaultState;
 
 function onRunButtonClick() {
     let button = document.getElementById("editor-run-pause-button");
@@ -60,48 +63,53 @@ function onRunButtonClick() {
         img = document.createElement('img');
         button.appendChild(img);
     }
-    if (started === false) {
-        console.log("SUORITA");
-        started = true;
-        play = true;
-        img.src = "src/static/pausebutton.png";
-        runButtonText.textContent = 'Tauko';
-        onClickCodeButton();
-    }
-    else if (play === false) {
-        console.log("JATKA");
-        play = true;
-        img.src = "src/static/pausebutton.png";
-        runButtonText.textContent = 'Tauko';
-        unPauseMessageWorker();
-    }
-    else {
-        console.log("TAUKO");
-        play = false;
-        img.src = "src/static/runbutton.png";
-        runButtonText.textContent = 'Jatka';
-        pauseMessageWorker();
+    //Set buttons state
+    console.log("Current state: " + currentState);
+    switch (currentState) {
+        case defaultState:
+            setRunningStateVisual(img);
+            runPythonCommands();
+            break;
+        case runningState:
+            setPausedStateVisual(img);
+            pauseMessageWorker();
+            break;
+        case pausedState:
+            setRunningStateVisual(img);
+            unPauseMessageWorker();
+            break;
     }
 }
 
+function setRunningStateVisual(img) {
+    console.log("SUORITA");
+    img.src = "src/static/pausebutton.png";
+    runButtonText.textContent = 'Tauko';
+    currentState = runningState;
+}
+
+function setPausedStateVisual(img) {
+    console.log("TAUKO");
+    img.src = "src/static/runbutton.png";
+    runButtonText.textContent = 'Jatka';
+    currentState = pausedState;
+}
+
 function onResetButtonClick() {
+    if (currentState === defaultState) return;
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
     runButtonText.textContent = 'Suorita';
     console.log("RESET")
-    play = false;
-    started = false;
+    currentState = defaultState;
 }
 
-function nextStepButtonClick () {
-    if (started === false) {
-        onRunButtonClick();
-    }
+function nextStepButtonClick() {
+    onRunButtonClick();
     runSingleCommand();
-    if (play === true) {
-        onRunButtonClick();
-    }
+    if (currentState === runningState) onRunButtonClick();
+
 }
 
 export function getUserInput(is_init) {
