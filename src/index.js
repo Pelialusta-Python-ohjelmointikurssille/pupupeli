@@ -115,8 +115,10 @@ export function getUserInput(is_init) {
         });
 
     } else {
-        let inputValue = document.getElementById("input-box").value;
+        let inputValue = inputBox.value;
         inputBox.classList.toggle("is-invisible");
+        inputBox.value = "";
+        inputBox.removeEventListener("keydown", (event) => {});
         return inputValue;
     }
 }

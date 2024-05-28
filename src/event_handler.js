@@ -6,8 +6,8 @@ let worker;
 //Pause variables
 let isMessagePassingPaused = false;
 var lastMessage;
-let sharedArray = new Uint16Array(new SharedArrayBuffer(4), 4);
-let syncArray = new Int32Array(new SharedArrayBuffer(4), 0, 1);
+let sharedArray;
+let syncArray;
 let word = "";
 
 export function initializeWorkerEventHandler(webWorker) {
@@ -91,4 +91,5 @@ export function sendUserInputToWorker() {
 
     Atomics.store(syncArray, 0, 1);
     Atomics.notify(syncArray, 0, 1);
+
 }
