@@ -1,4 +1,4 @@
-import { InitGame, resetGame } from "./game/game.js"
+import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
 import { onClickCodeButton } from "./input/editor.js";
 import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
 
@@ -9,6 +9,7 @@ async function main() {
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", nextStepButtonClick);
+    addEventToButton("grid-toggle-button", rendererToggleGrid)
     initializeWorker()
 }
 
