@@ -15,7 +15,6 @@ export function initializeWorkerEventHandler(webWorker) {
 
     worker.onmessage = (event) => {
         if (event.data.type === 'input') {
-            console.log("asd");
             sharedArray = new Uint16Array(event.data.sab, 4);
             syncArray = new Int32Array(event.data.sab, 0, 1);
 
