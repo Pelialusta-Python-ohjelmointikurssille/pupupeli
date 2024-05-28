@@ -109,7 +109,6 @@ function processTurn() {
 function onEndMoveFunc () {
     passMessageToWorker("return", "returning from game.js", currentCommand.sab)
     currentCommand = null;
-    console.log("COMMAND");
 }
 
 export function resetGame () {

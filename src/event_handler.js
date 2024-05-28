@@ -6,8 +6,8 @@ let worker;
 //Pause variables
 let isMessagePassingPaused = false;
 var lastMessage;
-let sharedArray = new Uint16Array(new SharedArrayBuffer(4), 4);
-let syncArray = new Int32Array(new SharedArrayBuffer(4), 0, 1);
+let sharedArray;
+let syncArray;
 let word = "";
 
 export function initializeWorkerEventHandler(webWorker) {
@@ -75,20 +75,22 @@ export function runSingleCommand() {
 
 function PostMessageToWorker(type, message, sab, value) {
     worker.postMessage({ type: type, message: message });
-    if (sab !== null ) {
+    if (sab !== null) {
         const waitArray = new Int32Array(sab, 0, 1);
         Atomics.store(waitArray, 0, value);
         Atomics.notify(waitArray, 0, value);
     }
 }
 
-export function sendUserInputToWorker() {
-    word = getUserInput(false);
-    for (let i = 0; i < word.length; i++) {
-        sharedArray[i] = word.charCodeAt(i);
-    }
-    sharedArray[word.length] = 0;
+export function sendUserInputToWorker(event) {
+    if (event.key === 'Enter') {
+        word = getUserInput(false);
+        for (let i = 0; i < word.length; i++) {
+            sharedArray[i] = word.charCodeAt(i);
+        }
+        sharedArray[word.length] = 0;
 
-    Atomics.store(syncArray, 0, 1);
-    Atomics.notify(syncArray, 0, 1);
+        Atomics.store(syncArray, 0, 1);
+        Atomics.notify(syncArray, 0, 1);
+    }
 }
