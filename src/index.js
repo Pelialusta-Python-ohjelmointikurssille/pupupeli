@@ -1,4 +1,4 @@
-import { InitGame } from "./game/game.js"
+import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
 import { getEditor } from "./input/editor.js";
 import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
 
@@ -9,6 +9,7 @@ async function main() {
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", nextStepButtonClick);
+    addEventToButton("grid-toggle-button", rendererToggleGrid)
     initializeWorker();
 }
 
@@ -99,6 +100,7 @@ function onResetButtonClick() {
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
     runButtonText.textContent = 'Suorita';
+    resetGame();
     currentState = defaultState;
 }
 

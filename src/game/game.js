@@ -6,6 +6,7 @@ import { passMessageToWorker } from "../event_handler.js";
 
 let renderer;
 let turnTimer = 0;
+let startedExecution = false;
 /**
  * How many seconds a turn should take.
  * Commands are processed every turn.
@@ -64,6 +65,11 @@ async function getRenderer() {
  */
 export function setGameCommand(command) {
     currentCommand = command;
+    console.log("set command")
+    if (startedExecution == false) {
+        startedExecution = true;
+        turnTimer += turnTimeSeconds + 1;
+    }
 }
 
 /**
@@ -71,7 +77,7 @@ export function setGameCommand(command) {
  * @param {*} deltaTime The time since last frame in seconds. Used to make framerate independent logic. 
  */
 function onUpdate(deltaTime) {
-    if (turnTimer < turnTimeSeconds && self.command !== null) {
+    if (turnTimer < turnTimeSeconds && currentCommand !== null) {
         turnTimer += deltaTime;
     }
     if (turnTimer >= turnTimeSeconds) {
@@ -103,6 +109,16 @@ function processTurn() {
 function onEndMoveFunc () {
     passMessageToWorker("return", "returning from game.js", currentCommand.sab)
     currentCommand = null;
+}
+
+export function resetGame () {
+    initGrid(8, 8);
+    pupu = getNewGridObject("pupu");
+    addToGrid(pupu, 0, 0);
+    turnTimer = 0;
+    currentCommand = null;
+    renderer.reset();
+    startedExecution = false;
 }
 
 export function rendererToggleGrid() {

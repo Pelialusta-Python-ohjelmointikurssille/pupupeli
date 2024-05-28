@@ -140,6 +140,9 @@ export class Renderer {
         });
     }
 
+    reset() {
+        this.player.reset();
+    }
     
 }
 
