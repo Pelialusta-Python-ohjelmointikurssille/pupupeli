@@ -33,17 +33,7 @@ function initializeEditor() {
     //document.getElementById("grid-toggle-button").addEventListener("click", toggleGrid, false);
 }
 
-
-function addEventToButton(id) {
-    let buttonInput = document.getElementById(id);
-    buttonInput.addEventListener("click", startWorkerButtonEvent, false);
-}
-
 export function onClickCodeButton() {
-    startWorkerButtonEvent();
-}
-
-function startWorkerButtonEvent() {
     startWorker(editor);
 }
 

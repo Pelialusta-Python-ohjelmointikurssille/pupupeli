@@ -1,4 +1,4 @@
-import { InitGame, setCommandList } from "./game/game.js"
+import { InitGame } from "./game/game.js"
 import { onClickCodeButton } from "./input/editor.js";
 import { initializeWorkerEventHandler } from "./event_handler.js"
 
@@ -50,11 +50,12 @@ function addEventToButton(id, func) {
 
 let play = false;
 let started = false;
+let runButtonText = null;
 
 function onRunButtonClick () {
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
-    let runButtonText = button.querySelector('#runButtonText');
+    runButtonText = button.querySelector('#runButtonText');
     if (!img) {
         img = document.createElement('img');
         button.appendChild(img);
