@@ -1,6 +1,6 @@
 import { InitGame } from "./game/game.js"
 import { onClickCodeButton } from "./input/editor.js";
-import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker } from "./event_handler.js"
+import { initializeWorkerEventHandler, passMessageToWorker, pauseMessageWorker, unPauseMessageWorker, sendUserInputToWorker } from "./event_handler.js"
 
 const worker = new Worker('src/input/worker.js');
 
@@ -52,7 +52,7 @@ let play = false;
 let started = false;
 let runButtonText = null;
 
-function onRunButtonClick () {
+function onRunButtonClick() {
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
     runButtonText = button.querySelector('#runButtonText');
@@ -84,7 +84,7 @@ function onRunButtonClick () {
     }
 }
 
-function onResetButtonClick () {
+function onResetButtonClick() {
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
@@ -94,8 +94,25 @@ function onResetButtonClick () {
     started = false;
 }
 
-function onSkipButtonClick () {
+function onSkipButtonClick() {
     console.log("SKIP")
+}
+
+export function getUserInput(is_init) {
+    let inputBox = document.getElementById("input-box");
+    if (is_init) {
+        inputBox.classList.toggle("is-invisible");
+        inputBox.addEventListener("keydown", (event) => {
+            if (event.key === 'Enter') {
+                sendUserInputToWorker();
+            }
+        });
+
+    } else {
+        let inputValue = document.getElementById("input-box").value;
+        inputBox.classList.toggle("is-invisible");
+        return inputValue;
+    }
 }
 
 await main();

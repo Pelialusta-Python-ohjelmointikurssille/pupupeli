@@ -14,8 +14,21 @@ body {
     min-width: 640px;
 }
 
-.is-margin-1rem {
-    margin: 1rem;
+.is-margin-half-rem-x {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.is-flex-1 {
+    flex: 1;
+}
+
+.is-invisible {
+    visibility: hidden;;
+}
+
+.is-hidden {
+    display: none;
 }
 
 #app {
@@ -75,8 +88,6 @@ body {
 }
 
 #editor-buttons-container {
-    padding-left: 1rem;
-    padding-right: 1rem;
 }
 
 #editor-stop-button {
@@ -86,14 +97,10 @@ body {
 #input-box {
     display: inline-flex;
     position: relative;
-    top: -11px;
     height: 32px;
-    width: 20%;
     border: 1px solid black;
     padding: 5px;
     font-size: 16px;
-    margin-left: 2rem;
-    margin-right: 2rem;
 }
 
 #editor-run-pause-button, #editor-stop-button, #editor-skip-button {

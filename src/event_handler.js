@@ -1,28 +1,26 @@
 import { setGameCommand } from "./game/game.js"
 import { extractErrorDetails } from "./input/py_error_handling.js"
+import { getUserInput } from "./index.js";
 
 let worker;
 //Pause variables
 let isMessagePassingPaused = false;
 var lastMessage;
+let sharedArray = new Uint16Array(new SharedArrayBuffer(4), 4);
+let syncArray = new Int32Array(new SharedArrayBuffer(4), 0, 1);
+let word = "";
 
 export function initializeWorkerEventHandler(webWorker) {
     worker = webWorker;
 
     worker.onmessage = (event) => {
         if (event.data.type === 'input') {
-            const sharedArray = new Uint16Array(event.data.sab, 4);
-            const syncArray = new Int32Array(event.data.sab, 0, 1);
+            sharedArray = new Uint16Array(event.data.sab, 4);
+            syncArray = new Int32Array(event.data.sab, 0, 1);
 
-            const word = prompt(event.data.message);
-
-            for (let i = 0; i < word.length; i++) {
-                sharedArray[i] = word.charCodeAt(i);
-            }
-            sharedArray[word.length] = 0;
-
-            Atomics.store(syncArray, 0, 1);
-            Atomics.notify(syncArray, 0, 1);
+            getUserInput(true);
+        }
+        if (event.data.type === 'input2') {
         }
         if (event.data.type === 'run') {
             setGameCommand({ data: event.data.data, sab: event.data.sab });
@@ -36,6 +34,9 @@ export function initializeWorkerEventHandler(webWorker) {
 }
 
 export function passMessageToWorker(type, message, sab) {
+    if (sab === null) {
+        PostMessageToWorker(type, message, null, 0);
+    }
     if (isMessagePassingPaused) {
         saveLastMessage(type, message, sab);
         return;
@@ -65,7 +66,20 @@ export function unPauseMessageWorker() {
 
 function PostMessageToWorker(type, message, sab, value) {
     worker.postMessage({ type: type, message: message });
-    const waitArray = new Int32Array(sab, 0, 1);
-    Atomics.store(waitArray, 0, value);
-    Atomics.notify(waitArray, 0, value);
+    if (sab !== null ) {
+        const waitArray = new Int32Array(sab, 0, 1);
+        Atomics.store(waitArray, 0, value);
+        Atomics.notify(waitArray, 0, value);
+    }
+}
+
+export function sendUserInputToWorker() {
+    word = getUserInput(false);
+    for (let i = 0; i < word.length; i++) {
+        sharedArray[i] = word.charCodeAt(i);
+    }
+    sharedArray[word.length] = 0;
+
+    Atomics.store(syncArray, 0, 1);
+    Atomics.notify(syncArray, 0, 1);
 }
