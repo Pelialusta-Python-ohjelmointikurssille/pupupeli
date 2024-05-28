@@ -9,6 +9,7 @@ async function main() {
     await CreateGameWindow();
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
+    addEventToButton("editor-skip-button", onSkipButtonClick);
 }
 
 async function CreateGameWindow() {
@@ -56,28 +57,49 @@ function addEventToButton(id, func) {
 }
 
 let play = false;
+let started = false;
 
 function onRunButtonClick () {
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
+    let runButtonText = button.querySelector('#runButtonText');
     if (!img) {
         img = document.createElement('img');
         button.appendChild(img);
     }
-    if (play === false) {
-        console.log("RUN");
+    if (started === false) {
+        console.log("SUORITA");
+        started = true;
         play = true;
         img.src = "src/static/pausebutton.png";
+        runButtonText.textContent = 'Tauko';
+    }
+    else if (play === false) {
+        console.log("JATKA");
+        play = true;
+        img.src = "src/static/pausebutton.png";
+        runButtonText.textContent = 'Tauko';
     }
     else {
-        console.log("PAUSE");
+        console.log("TAUKO");
         play = false;
         img.src = "src/static/runbutton.png";
+        runButtonText.textContent = 'Jatka';
     }
 }
 
 function onResetButtonClick () {
+    let button = document.getElementById("editor-run-pause-button");
+    let img = button.querySelector('img');
+    img.src = "src/static/runbutton.png";
+    runButtonText.textContent = 'Suorita';
     console.log("RESET")
+    play = false;
+    started = false;
+}
+
+function onSkipButtonClick () {
+    console.log("SKIP")
 }
 
 await main();

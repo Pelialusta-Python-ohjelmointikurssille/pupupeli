@@ -82,3 +82,14 @@ body {
 #editor-stop-button {
     float: right;
 }
+
+#editor-run-pause-button, #editor-stop-button, #editor-skip-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1px solid #000;
+    background-color: #fff;
+}
