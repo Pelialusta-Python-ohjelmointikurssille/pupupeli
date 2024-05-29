@@ -22,7 +22,7 @@ body {
 }
 
 #left-container {
-    min-width: var(--canvas-width);;
+    min-width: var(--canvas-width);
 }
 
 .is-margin-half-rem-x {
@@ -88,20 +88,6 @@ body {
     width: calc(100% - 2rem);
 }
 
-@media (max-width: calc((var(--canvas-width) * 2) + 3rem)) {
-    #app-container {
-        flex-direction: column;
-    }
-
-    #editor, #editor-button {
-        width: calc(100% - 2rem);
-    }
-
-    #game {
-        margin: auto;
-    }
-  }
-
 #grid-toggle-button {
     float: right;
     min-height: 32px;
@@ -138,6 +124,21 @@ body {
     border: 1px solid #000;
     background-color: #fff;
 }
+
 #editor-run-pause-button:hover, #editor-stop-button:hover, #editor-skip-button:hover {
     background: rgb(231, 231, 231);
 }
+
+@media (max-width: calc((640px * 2) + 3rem)) {
+    #app-container {
+        flex-direction: column;
+    }
+
+    #editor, #editor-button {
+        width: calc(100% - 2rem);
+    }
+
+    #game {
+        margin: auto;
+    }
+  }
