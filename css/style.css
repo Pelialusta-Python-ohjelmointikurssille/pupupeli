@@ -1,3 +1,8 @@
+:root {
+    --canvas-width: 640px;
+    --canvas-height: var(--canvas-width);
+}
+
 body {
     font-family: 'Courier New', Courier, monospace;
 }
@@ -6,12 +11,18 @@ body {
     margin: 1rem;
 }
 
+#game {
+    max-height: var(--canvas-width);
+    max-width: var(--canvas-height);
+    border: 1px solid black;
+}
+
 #left-container, #editor-container {
     flex-direction: column;
 }
 
 #left-container {
-    min-width: 640px;
+    min-width: var(--canvas-width);;
 }
 
 .is-margin-half-rem-x {
@@ -38,6 +49,7 @@ body {
 }
 
 #app-container {
+    max-width: calc(var(--canvas-width) * 2.5);
     background-color: #ddd;
     border-radius: 8px;
     border: 1px solid black;
@@ -76,13 +88,17 @@ body {
     width: calc(100% - 2rem);
 }
 
-@media (max-width: 1280px) {
+@media (max-width: calc((var(--canvas-width) * 2) + 3rem)) {
     #app-container {
         flex-direction: column;
     }
 
     #editor, #editor-button {
         width: calc(100% - 2rem);
+    }
+
+    #game {
+        margin: auto;
     }
   }
 
