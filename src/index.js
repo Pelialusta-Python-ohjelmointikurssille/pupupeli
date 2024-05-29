@@ -40,7 +40,7 @@ function initializeWorker() {
     initializeWorkerEventHandler(worker);
 
     let pythonFileStr;
-    let fileReadMessage = tryGetFileAsText();
+    let fileReadMessage = tryGetFileAsText("./src/python/pelaaja.py");
 
     if (fileReadMessage.isSuccess) {
         pythonFileStr = fileReadMessage.result;
