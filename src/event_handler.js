@@ -1,6 +1,5 @@
 import { setGameCommand, initGameEventHandler } from "./game/game.js"
-import { extractErrorDetails } from "./input/py_error_handling.js"
-import { getUserInput } from "./index.js";
+import { getUserInput, displayErrorMessage } from "./index.js";
 
 export class EventHandler {
     constructor(webWorker) {
@@ -9,22 +8,23 @@ export class EventHandler {
 
     initalize() {
 
+        // temporary? hack to initialize eventhandler in game.js after index.js
         initGameEventHandler();
 
+        // receives message events from worker.js
         this.worker.onmessage = (event) => {
-            if (event.data.type === 'input') {
-                this.sharedArray = new Uint16Array(event.data.sab, 4);
-                this.syncArray = new Int32Array(event.data.sab, 0, 1);
-
-                getUserInput(true);
-            }
-            if (event.data.type === 'run') {
-                setGameCommand({ data: event.data.data, sab: event.data.sab });
-            }
-            // message is error? show it to user. note: this could (should?) be 
-            // passed further instead of being handled at the eventhandler.
-            if (event.data.error) {
-                document.getElementById("error").innerHTML = extractErrorDetails(event.data.error.message).type;
+            switch (event.data.type) {
+                case "input":
+                    this.sharedArray = new Uint16Array(event.data.sab, 4);
+                    this.syncArray = new Int32Array(event.data.sab, 0, 1);
+                    getUserInput(true);
+                    break;
+                case "run":
+                    setGameCommand({ data: event.data.data, sab: event.data.sab });
+                    break;
+                case "error":
+                    displayErrorMessage(event.data.error);
+                    break;
             }
         }
     }
