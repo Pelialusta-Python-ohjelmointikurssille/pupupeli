@@ -61,12 +61,13 @@ export class EventHandler {
     }
 
     runSingleCommand() {
+        // without the line below, spamming "next step" right after resetting will 
+        // error and cause the button to stop working due to non-existed lastMessage
+        // there's probably a better way to fix this...
+        this.receiveMessage("foo", "bar", null);
+        
         if (!this.isMessagePassingPaused) {
             this.pauseMessageWorker();
-            // without the line below, spamming "next step" right after resetting will 
-            // error and cause the button to stop working due to non-existed lastMessage
-            // there's probably a better way to fix this...
-            this.receiveMessage("foo", "bar", null);
             return;
         }
 
