@@ -9,6 +9,12 @@ export function tryGetFileAsText(path) {
         isSuccess : false,
         result : ""
     }
+
+    if (path === undefined) {
+        fileReadMessage.result = `Error fetching file: ${path}`;
+        return fileReadMessage;
+    }
+
     let request = new XMLHttpRequest();
     request.open('GET', path, false);
     request.send(null);

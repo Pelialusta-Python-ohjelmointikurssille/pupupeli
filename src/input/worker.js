@@ -1,4 +1,3 @@
-import { tryGetFileAsText } from "../file_reader.js";
 /* global loadPyodide importScripts */
 
 let pyodide;
@@ -16,7 +15,7 @@ importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js')
  */
 self.onmessage = async function (event) {
     if (event.data.type === 'init') {
-        initializePyodide();
+        initializePyodide(event.data.data);
     }
     if (event.data.type === 'start') {
         runPythonCode(pyodide, event.data.data);
@@ -28,7 +27,7 @@ self.onmessage = async function (event) {
  * as a part of their python code.
  * @param {string} userInput The text that the user enters in the website editor.
  */
-async function initializePyodide() {
+async function initializePyodide(pythonCode) {
     if (pyodide === undefined) {
         pyodide = await loadPyodide();
 
@@ -37,12 +36,7 @@ async function initializePyodide() {
                 return handleInput()
             }
         });
-        fileReadMessage = tryGetFileAsText("../python/pelaaja.py");
-        if (fileReadMessage.isSuccess) {
-            pythonFileStr = fileReadMessage.result;
-        } else {
-            postError(fileReadMessage.result);
-        }
+        pythonFileStr = pythonCode;
     }
 }
 

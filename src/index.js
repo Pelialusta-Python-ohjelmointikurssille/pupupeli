@@ -1,7 +1,8 @@
 import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
 import { getEditor } from "./input/editor.js";
 import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
-
+import { tryGetFileAsText } from "./file_reader.js";
+import { extractErrorDetails } from "./input/py_error_handling.js"
 const worker = new Worker('src/input/worker.js');
 
 async function main() {
@@ -37,7 +38,16 @@ async function createGameWindow() {
  */
 function initializeWorker() {
     initializeWorkerEventHandler(worker);
-    worker.postMessage({ type: 'init' });
+
+    let fileReadMessage = tryGetFileAsText();
+    if (fileReadMessage.isSuccess) {
+        pythonFileStr = fileReadMessage.result;
+    } else {
+        document.getElementById("error").innerHTML = extractErrorDetails(fileReadMessage.result).type;
+        return;
+    }
+
+    worker.postMessage({ type: 'init', data: pythonFileStr });
 }
 
 export function runPythonCommands() {
