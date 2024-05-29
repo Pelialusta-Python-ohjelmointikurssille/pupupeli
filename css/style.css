@@ -139,6 +139,6 @@ body {
     }
 
     #game {
-        margin: auto;
+        margin: 1rem auto 1rem auto;
     }
   }
