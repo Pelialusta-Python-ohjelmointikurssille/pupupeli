@@ -114,8 +114,8 @@ async function runPythonCode(pyodide, codeString) {
  */
 function postError(error) {
     if (typeof (error) === "string") {
-        self.postMessage({ error: { message: error } })
+        self.postMessage({ type: "error", error: { message: error } })
     } else {
-        self.postMessage({ error: error });
+        self.postMessage({ type: "error", error: error });
     }
 }
