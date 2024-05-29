@@ -1,9 +1,11 @@
 import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
+import { EventHandler } from "./event_handler.js";
 import { getEditor } from "./input/editor.js";
-import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
 import { tryGetFileAsText } from "./file_reader.js";
 import { extractErrorDetails } from "./input/py_error_handling.js"
-const worker = new Worker('src/input/worker.js');
+
+let worker;
+let eventHandler;
 
 async function main() {
     await createGameWindow();
@@ -37,7 +39,8 @@ async function createGameWindow() {
  * The input is obtained using editor.getValue() and passed onto the worker.
  */
 function initializeWorker() {
-    initializeWorkerEventHandler(worker);
+    worker = new Worker('src/input/worker.js');
+    initializeEventHandler();
 
     let pythonFileStr;
     let fileReadMessage = tryGetFileAsText("./src/python/pelaaja.py");
@@ -49,6 +52,15 @@ function initializeWorker() {
         document.getElementById("error").innerHTML = extractErrorDetails(fileReadMessage.result).type;
         return;
     }
+}
+
+function initializeEventHandler() {
+    eventHandler = new EventHandler(worker);
+    eventHandler.initalize();
+}
+
+export function getEventHandler() {
+    return eventHandler;
 }
 
 export function runPythonCommands() {
@@ -84,11 +96,11 @@ function onRunButtonClick() {
             break;
         case runningState:
             setPausedStateVisual(img);
-            pauseMessageWorker();
+            eventHandler.pauseMessageWorker();
             break;
         case pausedState:
             setRunningStateVisual(img);
-            unPauseMessageWorker();
+            eventHandler.unPauseMessageWorker();
             break;
     }
 }
@@ -113,25 +125,30 @@ function onResetButtonClick() {
     runButtonText.textContent = 'Suorita';
     resetGame();
     currentState = defaultState;
+    initializeWorker();
 }
 
 function nextStepButtonClick() {
     onRunButtonClick();
-    runSingleCommand();
+    eventHandler.runSingleCommand();
     if (currentState === runningState) onRunButtonClick();
 
+}
+
+export function displayErrorMessage(error) {
+    document.getElementById("error").innerHTML = extractErrorDetails(error.message).text;
 }
 
 export function getUserInput(is_init) {
     let inputBox = document.getElementById("input-box");
     if (is_init) {
         inputBox.classList.toggle("is-invisible");
-        inputBox.addEventListener("keydown", sendUserInputToWorker);
+        inputBox.addEventListener("keydown", eventHandler.sendUserInputToWorker);
     } else {
         let inputValue = inputBox.value;
         inputBox.classList.toggle("is-invisible");
         inputBox.value = "";
-        inputBox.removeEventListener("keydown", sendUserInputToWorker);
+        inputBox.removeEventListener("keydown", eventHandler.sendUserInputToWorker);
         return inputValue;
     }
 }
