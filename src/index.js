@@ -1,6 +1,8 @@
 import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
-import { getEditor } from "./input/editor.js";
 import { EventHandler } from "./event_handler.js";
+import { getEditor } from "./input/editor.js";
+import { tryGetFileAsText } from "./file_reader.js";
+import { extractErrorDetails } from "./input/py_error_handling.js"
 
 let worker;
 let eventHandler;
@@ -39,7 +41,17 @@ async function createGameWindow() {
 function initializeWorker() {
     worker = new Worker('src/input/worker.js');
     initializeEventHandler();
-    worker.postMessage({ type: 'init' });
+
+    let pythonFileStr;
+    let fileReadMessage = tryGetFileAsText("./src/python/pelaaja.py");
+
+    if (fileReadMessage.isSuccess) {
+        pythonFileStr = fileReadMessage.result;
+        worker.postMessage({ type: 'init', data: pythonFileStr });
+    } else {
+        document.getElementById("error").innerHTML = extractErrorDetails(fileReadMessage.result).type;
+        return;
+    }
 }
 
 function initializeEventHandler() {
@@ -121,6 +133,10 @@ function nextStepButtonClick() {
     eventHandler.runSingleCommand();
     if (currentState === runningState) onRunButtonClick();
 
+}
+
+export function displayErrorMessage(error) {
+    document.getElementById("error").innerHTML = extractErrorDetails(error.message).text;
 }
 
 export function getUserInput(is_init) {
