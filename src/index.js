@@ -100,6 +100,7 @@ function onResetButtonClick() {
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
     runButtonText.textContent = 'Suorita';
+    document.getElementById("error").innerHTML = "";
     resetGame();
     currentState = defaultState;
 }

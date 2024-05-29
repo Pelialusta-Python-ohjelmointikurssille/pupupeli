@@ -9,6 +9,7 @@ var lastMessage;
 let sharedArray;
 let syncArray;
 let word = "";
+let gotError;
 
 export function initializeWorkerEventHandler(webWorker) {
     worker = webWorker;
@@ -26,7 +27,8 @@ export function initializeWorkerEventHandler(webWorker) {
 
         // message is error?
         if (event.data.error) {
-            document.getElementById("error").innerHTML = extractErrorDetails(event.data.error.message).type;
+            gotError = extractErrorDetails(event.data.error.message)
+            document.getElementById("error").innerHTML = '"' + gotError.type + '" Rivillä: ' + gotError.line;
         }
     }
 }
