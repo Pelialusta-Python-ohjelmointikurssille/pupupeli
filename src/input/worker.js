@@ -1,4 +1,4 @@
-
+import { tryGetFileAsText } from "../file_reader.js";
 /* global loadPyodide importScripts */
 
 let pyodide;
@@ -37,8 +37,12 @@ async function initializePyodide() {
                 return handleInput()
             }
         });
-
-        pythonFileStr = GetFileAsText("../python/pelaaja.py");
+        fileReadMessage = tryGetFileAsText("../python/pelaaja.py");
+        if (fileReadMessage.isSuccess) {
+            pythonFileStr = fileReadMessage.result;
+        } else {
+            postError(fileReadMessage.result);
+        }
     }
 }
 
@@ -109,23 +113,6 @@ async function runPythonCode(pyodide, codeString) {
     }
 }
 
-/**
- * Returns the contents of the file located at the given path as a string.
- * @param {string} path The relative or absolute path of the file to look for.
- * @returns {string} The contents of the file at "path". If no file is found, 
- * throws an Error.
- */
-function GetFileAsText(path) {
-    let request = new XMLHttpRequest();
-    request.open('GET', path, false);
-    request.send(null);
-
-    if (request.status === 200) {
-        return request.responseText;
-    } else {
-        postError(`Error fetching file: ${path}`)
-    }
-}
 
 /**
  * Helper function to post error messages back to main thread for putting on the page.
