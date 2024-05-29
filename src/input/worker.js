@@ -1,4 +1,3 @@
-
 /* global loadPyodide importScripts */
 
 let pyodide;
@@ -16,7 +15,7 @@ importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js')
  */
 self.onmessage = async function (event) {
     if (event.data.type === 'init') {
-        initializePyodide();
+        initializePyodide(event.data.data);
     }
     if (event.data.type === 'start') {
         runPythonCode(pyodide, event.data.data);
@@ -28,7 +27,7 @@ self.onmessage = async function (event) {
  * as a part of their python code.
  * @param {string} userInput The text that the user enters in the website editor.
  */
-async function initializePyodide() {
+async function initializePyodide(pythonCode) {
     if (pyodide === undefined) {
         pyodide = await loadPyodide();
 
@@ -37,8 +36,7 @@ async function initializePyodide() {
                 return handleInput()
             }
         });
-
-        pythonFileStr = GetFileAsText("../python/pelaaja.py");
+        pythonFileStr = pythonCode;
     }
 }
 
@@ -109,23 +107,6 @@ async function runPythonCode(pyodide, codeString) {
     }
 }
 
-/**
- * Returns the contents of the file located at the given path as a string.
- * @param {string} path The relative or absolute path of the file to look for.
- * @returns {string} The contents of the file at "path". If no file is found, 
- * throws an Error.
- */
-function GetFileAsText(path) {
-    let request = new XMLHttpRequest();
-    request.open('GET', path, false);
-    request.send(null);
-
-    if (request.status === 200) {
-        return request.responseText;
-    } else {
-        postError(`Error fetching file: ${path}`)
-    }
-}
 
 /**
  * Helper function to post error messages back to main thread for putting on the page.
