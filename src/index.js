@@ -6,6 +6,7 @@ import { extractErrorDetails } from "./input/py_error_handling.js"
 
 let worker;
 let eventHandler;
+let gotError;
 
 async function main() {
     await createGameWindow();
@@ -123,6 +124,7 @@ function onResetButtonClick() {
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
     runButtonText.textContent = 'Suorita';
+    document.getElementById("error").innerHTML = "";
     resetGame();
     currentState = defaultState;
     initializeWorker();
@@ -136,7 +138,8 @@ function nextStepButtonClick() {
 }
 
 export function displayErrorMessage(error) {
-    document.getElementById("error").innerHTML = extractErrorDetails(error.message).text;
+    gotError = extractErrorDetails(error.message)
+    document.getElementById("error").innerHTML = '"' + gotError.text + '" Rivillä: ' + gotError.line;
 }
 
 export function getUserInput(is_init) {
