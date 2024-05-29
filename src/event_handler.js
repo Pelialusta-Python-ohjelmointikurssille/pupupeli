@@ -2,14 +2,6 @@ import { setGameCommand, initGameEventHandler } from "./game/game.js"
 import { extractErrorDetails } from "./input/py_error_handling.js"
 import { getUserInput } from "./index.js";
 
-let worker;
-//Pause variables
-let isMessagePassingPaused = false;
-let lastMessage;
-let sharedArray;
-let syncArray;
-let word = "";
-
 export class EventHandler {
     constructor(webWorker) {
         this.worker = webWorker;
