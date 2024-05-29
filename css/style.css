@@ -54,10 +54,21 @@ body {
 
 #editor {
     border-radius: 5px;
+    margin-bottom: 0.2rem;
     font-size: 15px;
     width: calc(100% - 2rem);
-    height: 300px;
+    height: 274px;
     border: 1px solid black;
+}
+
+#error-box {
+    margin-left: 1rem;
+    min-height: 45px;
+}
+
+#error {
+    word-wrap: break-word;
+    color: red;
 }
 
 #editor-button {
