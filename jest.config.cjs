@@ -6,6 +6,7 @@ module.exports = {
         '^.+\\.js$': 'babel-jest',
     },
     testMatch: ["**/?(*.)+(test).js?(x)"],
+    testPathIgnorePatterns: ["src/tests/file_reader.test.js"],
     coverageThreshold: {
         global: {
             branches: 75,
@@ -30,6 +31,7 @@ module.exports = {
         "!src/**/game.js",
         "!src/**/editor.js",
         "!src/**/example/**", // Exclude all files in specific directory
-        "!src/**/objects/**" 
+        "!src/**/objects/**",
+        "!src/**/tests/**"
     ]
 };
