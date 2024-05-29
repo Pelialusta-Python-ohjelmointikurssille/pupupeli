@@ -2,7 +2,7 @@ import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
 import { getEditor } from "./input/editor.js";
 import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
 
-const worker = new Worker('src/input/worker.js');
+let worker;
 
 async function main() {
     await createGameWindow();
@@ -36,6 +36,7 @@ async function createGameWindow() {
  * The input is obtained using editor.getValue() and passed onto the worker.
  */
 function initializeWorker() {
+    worker = new Worker('src/input/worker.js');
     initializeWorkerEventHandler(worker);
     worker.postMessage({ type: 'init' });
 }
@@ -102,6 +103,7 @@ function onResetButtonClick() {
     runButtonText.textContent = 'Suorita';
     resetGame();
     currentState = defaultState;
+    initializeWorker();
 }
 
 function nextStepButtonClick() {
