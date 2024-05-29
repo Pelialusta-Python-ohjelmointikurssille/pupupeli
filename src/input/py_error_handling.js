@@ -12,8 +12,8 @@ export function extractErrorDetails(errorMessage) {
     const errorTypeMatch = lines[lines.length - 2];
 
     if (errorTypeMatch && lineNumberMatch) {
-        return { type: errorTypeMatch, line: lineNumberMatch };
+        return { text: errorTypeMatch, line: lineNumberMatch };
     } else {
-        return { type: "Unknown Error", line: "Unknown Line" };
+        return { text: "Unknown Error", line: "Unknown Line" };
     }
 }
