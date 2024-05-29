@@ -39,15 +39,16 @@ async function createGameWindow() {
 function initializeWorker() {
     initializeWorkerEventHandler(worker);
 
+    let pythonFileStr;
     let fileReadMessage = tryGetFileAsText();
+
     if (fileReadMessage.isSuccess) {
         pythonFileStr = fileReadMessage.result;
+        worker.postMessage({ type: 'init', data: pythonFileStr });
     } else {
         document.getElementById("error").innerHTML = extractErrorDetails(fileReadMessage.result).type;
         return;
     }
-
-    worker.postMessage({ type: 'init', data: pythonFileStr });
 }
 
 export function runPythonCommands() {
