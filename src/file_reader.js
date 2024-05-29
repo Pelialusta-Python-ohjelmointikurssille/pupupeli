@@ -11,7 +11,7 @@ export function tryGetFileAsText(path) {
     }
 
     if (path === undefined) {
-        fileReadMessage.result = `Error fetching file: ${path}`;
+        fileReadMessage.result = `No file path given`;
         return fileReadMessage;
     }
 
