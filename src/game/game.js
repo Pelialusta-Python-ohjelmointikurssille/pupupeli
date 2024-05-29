@@ -2,11 +2,13 @@ import { Renderer } from "./rendering.js";
 import { Direction } from "./direction.js";
 import { initGrid, addToGrid, moveGridObjectToDir as tryMoveGridObjectToDir } from "./gamegrid.js";
 import { getNewGridObject } from "./gridobject.js";
-import { passMessageToWorker } from "../event_handler.js";
+import { getEventHandler } from "../index.js";
 
 let renderer;
 let turnTimer = 0;
 let startedExecution = false;
+let eventHandler;
+
 /**
  * How many seconds a turn should take.
  * Commands are processed every turn.
@@ -43,6 +45,10 @@ export async function InitGame() {
     await renderer.init();
     renderer.addFunctionToLoop(onUpdate);
     return renderer.pixiApp;
+}
+
+export function initGameEventHandler() {
+    eventHandler = getEventHandler();
 }
 
 /**
@@ -107,7 +113,7 @@ function processTurn() {
 }
 
 function onEndMoveFunc () {
-    passMessageToWorker("return", "returning from game.js", currentCommand.sab)
+    eventHandler.passMessageToWorker("return", "returning from game.js", currentCommand.sab)
     currentCommand = null;
 }
 

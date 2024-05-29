@@ -1,8 +1,10 @@
 import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
 import { getEditor } from "./input/editor.js";
-import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
+//import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
+import { EventHandler } from "./event_handler.js";
 
 let worker;
+let eventHandler;
 
 async function main() {
     await createGameWindow();
@@ -37,8 +39,17 @@ async function createGameWindow() {
  */
 function initializeWorker() {
     worker = new Worker('src/input/worker.js');
-    initializeWorkerEventHandler(worker);
+    initializeEventHandler(worker);
     worker.postMessage({ type: 'init' });
+}
+
+function initializeEventHandler(worker) {
+    eventHandler = new EventHandler(worker);
+    eventHandler.initializeWorkerEventHandler();
+}
+
+export function getEventHandler() {
+    return eventHandler;
 }
 
 export function runPythonCommands() {
@@ -74,11 +85,11 @@ function onRunButtonClick() {
             break;
         case runningState:
             setPausedStateVisual(img);
-            pauseMessageWorker();
+            eventHandler.pauseMessageWorker();
             break;
         case pausedState:
             setRunningStateVisual(img);
-            unPauseMessageWorker();
+            eventHandler.unPauseMessageWorker();
             break;
     }
 }
@@ -108,7 +119,7 @@ function onResetButtonClick() {
 
 function nextStepButtonClick() {
     onRunButtonClick();
-    runSingleCommand();
+    eventHandler.runSingleCommand();
     if (currentState === runningState) onRunButtonClick();
 
 }
@@ -117,12 +128,12 @@ export function getUserInput(is_init) {
     let inputBox = document.getElementById("input-box");
     if (is_init) {
         inputBox.classList.toggle("is-invisible");
-        inputBox.addEventListener("keydown", sendUserInputToWorker);
+        inputBox.addEventListener("keydown", eventHandler.sendUserInputToWorker);
     } else {
         let inputValue = inputBox.value;
         inputBox.classList.toggle("is-invisible");
         inputBox.value = "";
-        inputBox.removeEventListener("keydown", sendUserInputToWorker);
+        inputBox.removeEventListener("keydown", eventHandler.sendUserInputToWorker);
         return inputValue;
     }
 }
