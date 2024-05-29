@@ -1,6 +1,5 @@
 import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
 import { getEditor } from "./input/editor.js";
-//import { initializeWorkerEventHandler, pauseMessageWorker, unPauseMessageWorker, runSingleCommand, sendUserInputToWorker } from "./event_handler.js"
 import { EventHandler } from "./event_handler.js";
 
 let worker;
@@ -39,13 +38,13 @@ async function createGameWindow() {
  */
 function initializeWorker() {
     worker = new Worker('src/input/worker.js');
-    initializeEventHandler(worker);
+    initializeEventHandler();
     worker.postMessage({ type: 'init' });
 }
 
-function initializeEventHandler(worker) {
+function initializeEventHandler() {
     eventHandler = new EventHandler(worker);
-    eventHandler.initializeWorkerEventHandler();
+    eventHandler.initalize();
 }
 
 export function getEventHandler() {

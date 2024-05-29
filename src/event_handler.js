@@ -7,7 +7,7 @@ export class EventHandler {
         this.worker = webWorker;
     }
 
-    initializeWorkerEventHandler() {
+    initalize() {
 
         initGameEventHandler();
 
@@ -21,15 +21,15 @@ export class EventHandler {
             if (event.data.type === 'run') {
                 setGameCommand({ data: event.data.data, sab: event.data.sab });
             }
-
-            // message is error?
+            // message is error? show it to user. note: this could (should?) be 
+            // passed further instead of being handled at the eventhandler.
             if (event.data.error) {
                 document.getElementById("error").innerHTML = extractErrorDetails(event.data.error.message).type;
             }
         }
     }
 
-    passMessageToWorker(type, message, sab) {
+    receiveMessage(type, message, sab) {
         if (sab === null) {
             this.PostMessageToWorker(type, message, null, 0);
         }
@@ -57,7 +57,7 @@ export class EventHandler {
 
     unPauseMessageWorker() {
         this.isMessagePassingPaused = false;
-        this.passMessageToWorker(this.lastMessage.type, this.lastMessage.message, this.lastMessage.sab);
+        this.receiveMessage(this.lastMessage.type, this.lastMessage.message, this.lastMessage.sab);
     }
 
     runSingleCommand() {

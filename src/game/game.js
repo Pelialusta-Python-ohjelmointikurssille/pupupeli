@@ -113,7 +113,7 @@ function processTurn() {
 }
 
 function onEndMoveFunc () {
-    eventHandler.passMessageToWorker("return", "returning from game.js", currentCommand.sab)
+    eventHandler.receiveMessage("return", "returning from game.js", currentCommand.sab)
     currentCommand = null;
 }
 
