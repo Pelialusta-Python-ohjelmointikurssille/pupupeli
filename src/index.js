@@ -11,7 +11,7 @@ async function main() {
     await createGameWindow();
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
-    addEventToButton("editor-skip-button", onnextStepButtonClick);
+    addEventToButton("editor-skip-button", onNextStepButtonClick);
     addEventToButton("grid-toggle-button", rendererToggleGrid);
     initializeWorker();
 }
