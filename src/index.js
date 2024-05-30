@@ -43,7 +43,8 @@ function initializeWorker() {
         worker.terminate();
     }
     worker = new Worker('src/input/worker.js');
-    initializeEventHandler();
+    eventHandler = new EventHandler(worker);
+    eventHandler.initalize();
 
     let pythonFileStr;
     let fileReadMessage = tryGetFileAsText("./src/python/pelaaja.py");
@@ -55,11 +56,6 @@ function initializeWorker() {
         displayErrorMessage(fileReadMessage.result);
         return;
     }
-}
-
-function initializeEventHandler() {
-    eventHandler = new EventHandler(worker);
-    eventHandler.initalize();
 }
 
 export function getEventHandler() {
@@ -93,10 +89,10 @@ function onRunButtonClick() {
             runPythonCommands();
             break;
         case "running":
-            eventHandler.pauseMessageWorker();
+            eventHandler.setMessagePassingState({ paused: true });
             break;
         case "paused":
-            eventHandler.unPauseMessageWorker();
+            eventHandler.setMessagePassingState({ paused: false });
             break;
 
     }
@@ -157,9 +153,9 @@ export function displayErrorMessage(error) {
     onRunButtonClick();
 }
 
-export function getUserInput(is_init) {
+export function promptUserInput(inputBoxState) {
     let inputBox = document.getElementById("input-box");
-    if (is_init) {
+    if (inputBoxState.inputBoxHidden === true) {
         inputBox.classList.toggle("is-invisible");
         inputBox.addEventListener("keydown", eventHandler.sendUserInputToWorker);
     } else {
