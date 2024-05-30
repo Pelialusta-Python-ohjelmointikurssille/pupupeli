@@ -7,32 +7,35 @@ export class GraphicsHandler {
         this.gridWidth = width;
         this.gridHeight = height;
         this.renderer = null;
-        this.graphicsEntitySystem = null;
+        this.graphicsEntityHandler = null;
         this.isReady = true;
     }
 
     async initialize() {
         this.renderer = new PixiRenderer();
-        await this.renderer.initialize({ screenHeight: 640, screenWidth: 640, maxFPS: 60, antialias: true });
-        this.graphicsEntitySystem = new GraphicsEntitySystem(
+        await this.renderer.initialize({ screenHeight: 1024, screenWidth: 1024, maxFPS: 60, antialias: true });
+        this.graphicsEntityHandler = new GraphicsEntitySystem(
             this.renderer.builtinAssets,
             this.renderer
         );
-        this.graphicsEntitySystem.initialize();
-        this.renderer.addFunctionToRenderLoop(this.graphicsEntitySystem.updateAllObjects, this.graphicsEntitySystem);
-        this.createEntity("gridenttest", new Vector2(this.gridWidth, this.gridHeight));
+        this.renderer.addFunctionToRenderLoop(this.graphicsEntityHandler.updateAllObjects, this.graphicsEntityHandler);
+        this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
+
+
+        this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
+        this.createEntity("test2", "player");
     }
 
     doAction(entityId, actionId, actionData) {
-        this.graphicsEntitySystem.getGraphicsEntity(entityId).doAnimation(actionId, actionData);
+        this.graphicsEntityHandler.getGraphicsEntity(entityId).doAnimation(actionId, actionData);
     }
 
-    createEntity(entityId, size) {
-        this.graphicsEntitySystem.createGraphicsEntity(entityId, size);
+    createEntity(entityId, type, data) {
+        this.graphicsEntityHandler.createGraphicsEntity(entityId, type, data);
     }
 
     destroyEntity(entityId) {
-        this.graphicsEntitySystem.destroyGraphicsEntity(entityId);
+        this.graphicsEntityHandler.destroyGraphicsEntity(entityId);
     }
 
     getCanvas() {

@@ -7,7 +7,6 @@ export class PixiRenderer {
         this.renderLoopFunctions = [];
         // multiplication factor based on 640x640,
         // so if res is 1280x1280, the value is Vector2(2, 2) and so on
-        this.renderScale = null;
         this.builtinAssets = null;
         this.cameraWorldContainer = null;
     }
@@ -26,7 +25,6 @@ export class PixiRenderer {
         {  
             this.renderLoop(time);
         });
-        this.renderScale = new Vector2(renderOptions.screenWidth / 640, renderOptions.screenHeight / 640);
         this.cameraWorldContainer = new PIXI.Container();
         this.pixiApp.stage.addChild(this.cameraWorldContainer);
     }
@@ -54,11 +52,11 @@ export class PixiRenderer {
         this.renderLoopFunctions.push({f: func, o: object});
     }
 
-    addSprite(sprite) {
+    addToStage(sprite) {
         this.cameraWorldContainer.addChild(sprite);
     }
 
-    destroySprite(sprite) {
+    removeFromStage(sprite) {
         this.cameraWorldContainer.removeChild(sprite);
     }
 }

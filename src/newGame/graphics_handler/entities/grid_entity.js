@@ -1,12 +1,10 @@
-import { Vector2 } from "../../game/vector.js";
+import { GraphicsEntity } from "./graphics_entity.js";
+import { Vector2 } from "../../../game/vector.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
-export class GraphicsEntity {
+export class GridEntity extends GraphicsEntity {
     constructor(entityId, entityHandler, container, sprite, size) {
-        this.entityId = entityId;
-        this.entityHandler = entityHandler;
-        this.container = container;
-        this.sprite = sprite;
+        super(entityId, entityHandler, container, sprite, size);
 
         this.sizeOnScreen = new Vector2(640, 640)
         this.lineGraphicsList =  [];
@@ -17,22 +15,10 @@ export class GraphicsEntity {
         this.gridSize = size;
     }
 
+    
     onCreate() {
-        this.sprite.width = 64;
-        this.sprite.height = 64;
+        super.onCreate();
         this.createLines();
-    }
-
-    onDestroy() {
-
-    }
-
-    onUpdate() {
-        
-    }
-
-    doAnimation() {
-
     }
 
     createLines () {
