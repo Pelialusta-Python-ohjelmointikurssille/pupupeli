@@ -3,6 +3,7 @@ import { EventHandler } from "./event_handler.js";
 import { getEditor } from "./input/editor.js";
 import { tryGetFileAsText } from "./file_reader.js";
 import { extractErrorDetails } from "./input/py_error_handling.js"
+import { initGameInput } from "./newGame/game_input.js";
 
 let worker;
 let eventHandler;
@@ -15,6 +16,11 @@ async function main() {
     addEventToButton("editor-skip-button", nextStepButtonClick);
     addEventToButton("grid-toggle-button", rendererToggleGrid)
     initializeWorker();
+    await initNewGame();
+}
+
+function initNewGame() {
+    initGameInput();
 }
 
 async function createGameWindow() {
