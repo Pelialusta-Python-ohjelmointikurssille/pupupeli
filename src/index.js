@@ -40,7 +40,7 @@ async function createGameWindow() {
  * The input is obtained using editor.getValue() and passed onto the worker.
  */
 function initializeWorker() {
-    if (typeof worker == Worker) {
+    if (String(typeof worker) === "object") {
         worker.terminate();
     }
     worker = new Worker('src/input/worker.js');
