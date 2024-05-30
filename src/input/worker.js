@@ -5,7 +5,7 @@ let pythonFileStr;
 let continuePythonExecution;
 let ctr = 0;
 
-importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js')
+importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js');
 
 /**
  * The worker "message" event handler. This is executed when worker.postMessage(...) is called.
@@ -102,6 +102,8 @@ async function runPythonCode(pyodide, codeString) {
     self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
         await self.continuePythonExecution;
+        // no more python left to run; let the event handler know
+        postMessage({ type: 'finish' });
     } catch (error) {
         postError(error.message);
     }
@@ -114,8 +116,8 @@ async function runPythonCode(pyodide, codeString) {
  */
 function postError(error) {
     if (typeof (error) === "string") {
-        self.postMessage({ type: "error", error: { message: error } })
+        self.postMessage({ type: 'error', error: { message: error } })
     } else {
-        self.postMessage({ type: "error", error: error });
+        self.postMessage({ type: 'error', error: error });
     }
 }

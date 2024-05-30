@@ -14,6 +14,6 @@ export function extractErrorDetails(errorMessage) {
     if (errorTypeMatch && lineNumberMatch) {
         return { text: errorTypeMatch, line: lineNumberMatch };
     } else {
-        return { text: "Unknown Error", line: "Unknown Line" };
+        return { text: errorMessage, line: "Unknown Line" };
     }
 }

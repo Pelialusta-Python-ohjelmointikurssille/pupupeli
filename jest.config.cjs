@@ -24,6 +24,7 @@ module.exports = {
     collectCoverageFrom: [
         "src/**/*.js",
         "!src/**/rendering.js", // Exclude specific file
+        "!src/util/version_strings.js",
         "!src/input/worker.js",
         "!src/event_handler.js",
         "!src/file_reader.js",

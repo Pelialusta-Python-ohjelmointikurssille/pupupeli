@@ -1,9 +1,11 @@
 import { setGameCommand, initGameEventHandler } from "./game/game.js"
-import { getUserInput, displayErrorMessage } from "./index.js";
+import { getUserInput, displayErrorMessage, onFinishLastCommand } from "./index.js";
 
 export class EventHandler {
     constructor(webWorker) {
         this.worker = webWorker;
+        this.lastMessage = {type: "foo", message: "bar", sab: "baz"};
+        this.sendUserInputToWorker = this.sendUserInputToWorker.bind(this);
     }
 
     initalize() {
@@ -21,6 +23,9 @@ export class EventHandler {
                     break;
                 case "run":
                     setGameCommand({ data: event.data.data, sab: event.data.sab });
+                    break;
+                case "finish":
+                    onFinishLastCommand();
                     break;
                 case "error":
                     displayErrorMessage(event.data.error);
