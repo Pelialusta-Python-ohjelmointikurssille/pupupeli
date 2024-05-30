@@ -5,7 +5,7 @@ let pythonFileStr;
 let continuePythonExecution;
 let ctr = 0;
 
-importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js')
+importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js');
 
 /**
  * The worker "message" event handler. This is executed when worker.postMessage(...) is called.
