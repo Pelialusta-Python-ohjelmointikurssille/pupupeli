@@ -52,11 +52,11 @@ export class PixiRenderer {
         this.renderLoopFunctions.push({f: func, o: object});
     }
 
-    addSprite(sprite) {
+    addToStage(sprite) {
         this.cameraWorldContainer.addChild(sprite);
     }
 
-    destroySprite(sprite) {
+    removeFromStage(sprite) {
         this.cameraWorldContainer.removeChild(sprite);
     }
 }
