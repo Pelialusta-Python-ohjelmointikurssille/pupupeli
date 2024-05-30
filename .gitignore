@@ -3,3 +3,5 @@ coverage
 dist
 html-report/
 __pycache__
+cert.pem
+key.pem
