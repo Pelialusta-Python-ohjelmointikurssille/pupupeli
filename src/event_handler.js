@@ -1,4 +1,3 @@
-import { setGameCommand, initGameEventHandler } from "./game/game.js";
 import { getUserInput, displayErrorMessage } from "./index.js";
 import { giveCommand } from "./newGame/game_controller.js";
 
@@ -11,7 +10,6 @@ export class EventHandler {
     initalize() {
 
         // temporary? hack to initialize eventhandler in game.js after index.js
-        initGameEventHandler();
 
         // receives message events from worker.js
         this.worker.onmessage = (event) => {
@@ -23,7 +21,6 @@ export class EventHandler {
                     break;
                 case "run":
                     let command =  { data: event.data.data, sab: event.data.sab };
-                    setGameCommand(command);
                     giveCommand(command);
                     break;
                 case "error":

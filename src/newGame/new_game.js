@@ -15,7 +15,13 @@ export class Game {
         return this.gh.getCanvas();
     }
 
-    receiveInput(input) {
-        console.log(input);
+    receiveInput(commandName, commandParameter) {
+        if (commandName === "move") {
+            MakeMoveCommand(commandParameter);
+        }
+    }
+
+    MakeMoveCommand(commandParameter) {
+        console.log("here I will make a new command object that moves pupu to the " + commandParameter);
     }
 }

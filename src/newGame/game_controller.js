@@ -19,10 +19,9 @@ export async function initNewGame() {
 //Receives the command, expects a object of type 
 // "{ data: data, sab: sab })" 
 // where data is ? and sab is an SharedArrayBuffer.
-export function giveCommand(command) {
-    game.receiveInput(command.data);
-    currentCommand = command;
-    console.log(command);
+export function giveCommand(dirtyCommand) {
+    game.receiveInput(dirtyCommand.data.command, dirtyCommand.data.parameters);
+    currentCommand = dirtyCommand;
     commandsDone();
 }
 
