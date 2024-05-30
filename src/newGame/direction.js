@@ -35,3 +35,16 @@ export class Direction {
         return 3;
     }
 }
+
+export function translatePythonMoveStringToDirection(pythonCommandDir) {
+    switch (pythonCommandDir) {
+        case "oikea":
+            return Direction.Right;
+        case "vasen":
+            return Direction.Left;
+        case "ylös":
+            return Direction.Up;
+        case "alas":
+            return Direction.Down;
+    }
+}

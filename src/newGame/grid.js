@@ -1,10 +1,12 @@
+import { Vector2 } from "./vector";
+
 export class Grid {
-    constructor(width, height) {
+    constructor(player, width, height) {
         this.doubleArray = this.CreateDoubleArray(width, height);
         this.objects = [];
         this.width = width;
         this.height = height;
-
+        this.player = player;
     };
 
     addToGrid(gridObject, x, y) {
