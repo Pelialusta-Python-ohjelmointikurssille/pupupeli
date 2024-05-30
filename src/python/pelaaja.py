@@ -10,6 +10,6 @@ class Pelaaja:
             print("oikea suunta")
             js.runCommand("move", direction)
         else:
-            raise ValueError("Väärä suunta")
+            raise ValueError("Virheellinen suunta")
 
 pupu = Pelaaja()

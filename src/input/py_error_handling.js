@@ -12,8 +12,8 @@ export function extractErrorDetails(errorMessage) {
         lastToLastLineReference = lastLineReference;
         lastLineReference = match[1];
     }
-    
-    if (errorTypeMatch === "ValueError: Väärä suunta") {
+
+    if (errorTypeMatch === "ValueError: Virheellinen suunta") {
         lineNumberMatch = lastToLastLineReference;
     } else {
         lineNumberMatch = lastLineReference;
