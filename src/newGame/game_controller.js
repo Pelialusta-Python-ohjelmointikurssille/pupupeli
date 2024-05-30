@@ -1,13 +1,15 @@
 import { getEventHandler } from "../index.js";
 import { Game } from "./new_game.js";
 
+//This file controls game. 
+// - Creates new game instances (both logic and rendering)
+// - receives commands and output with the game
+
 var game;
 var currentCommand;
 var eventHandler;
 
-export function initGameInput() {
-    //DO NOT INIT NEWGAME HERE, but do it for now.
-    //IMO, when you make a new new game, give this file the reference
+export function initNewGame() {
     game = new Game();
     eventHandler = getEventHandler();
 }

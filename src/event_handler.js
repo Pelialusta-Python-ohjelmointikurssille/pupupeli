@@ -1,5 +1,6 @@
-import { setGameCommand, initGameEventHandler } from "./game/game.js"
+import { setGameCommand, initGameEventHandler } from "./game/game.js";
 import { getUserInput, displayErrorMessage } from "./index.js";
+import { giveCommand } from "./newGame/game_controller.js";
 
 export class EventHandler {
     constructor(webWorker) {
@@ -20,7 +21,9 @@ export class EventHandler {
                     getUserInput(true);
                     break;
                 case "run":
-                    setGameCommand({ data: event.data.data, sab: event.data.sab });
+                    let command =  { data: event.data.data, sab: event.data.sab };
+                    setGameCommand(command);
+                    giveCommand(command);
                     break;
                 case "error":
                     displayErrorMessage(event.data.error);
