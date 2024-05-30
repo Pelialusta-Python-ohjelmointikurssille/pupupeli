@@ -148,11 +148,11 @@ export function onFinishLastCommand() {
     // do something after finishing last command. should probably
     // figure out if the player has achieved the victory conditions
     // at this point?
-    disablePlayButtonOnFinish() // change button from "play" to "pause"
+    disablePlayButtonsOnFinish() // change button from "play" to "pause"
     console.log("Last command finished. Called from index.js.")
 }
 
-function disablePlayButtonOnFinish() {
+function disablePlayButtonsOnFinish(cause = null) {
     let button = document.getElementById("editor-run-pause-button");
     let buttonNext = document.getElementById("editor-skip-button");
     let img = button.querySelector('img');
@@ -162,7 +162,11 @@ function disablePlayButtonOnFinish() {
         button.appendChild(img);
     }
     img.src = "src/static/resetbutton.png";
+    if (cause === "error") {
+        runButtonText.textContent = 'Virhe';
+    } else {
     runButtonText.textContent = 'Loppu';
+    }
     state.current = "ended";
     buttonNext.disabled = true;
     button.disabled = true;
@@ -173,7 +177,7 @@ export function displayErrorMessage(error) {
     let errorContainer = document.getElementById("error-box");
     errorContainer.classList.toggle("show-error");
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
-    onRunButtonClick();
+    disablePlayButtonsOnFinish("error");
 }
 
 export function promptUserInput(inputBoxState) {
