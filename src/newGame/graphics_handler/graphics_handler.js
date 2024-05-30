@@ -18,8 +18,7 @@ export class GraphicsHandler {
             this.renderer
         );
         this.graphicsEntitySystem.initialize();
-        this.renderer.addFunctionToRenderLoop(this.graphicsEntitySystem.updateAllObjects);
-        this.createEntity("testent");
+        this.renderer.addFunctionToRenderLoop(this.graphicsEntitySystem.updateAllObjects, this.graphicsEntitySystem);
     }
 
     doAction(entityId, actionId, actionData) {

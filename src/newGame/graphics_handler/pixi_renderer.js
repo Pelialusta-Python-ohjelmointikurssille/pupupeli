@@ -42,13 +42,13 @@ export class PixiRenderer {
 
     renderLoop(time) {
         if (this.renderLoopFunctions == null || this.renderLoopFunctions.length <= 0) return;
-        this.renderLoopFunctions.forEach(func => {
-            func(time.deltaMS/1000);
+        this.renderLoopFunctions.forEach(loopObject => {
+            loopObject.f.call(loopObject.o, time.deltaMS/1000);
         });
     }
 
-    addFunctionToRenderLoop(func) {
-        this.renderLoopFunctions.push(func);
+    addFunctionToRenderLoop(func, object) {
+        this.renderLoopFunctions.push({f: func, o: object});
     }
 
     addSprite(sprite) {
