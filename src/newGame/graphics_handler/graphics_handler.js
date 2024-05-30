@@ -13,7 +13,7 @@ export class GraphicsHandler {
 
     async initialize() {
         this.renderer = new PixiRenderer();
-        await this.renderer.initialize({ screenHeight: 640, screenWidth: 640, maxFPS: 60, antialias: true });
+        await this.renderer.initialize({ screenHeight: 1024, screenWidth: 1024, maxFPS: 60, antialias: true });
         this.graphicsEntityHandler = new GraphicsEntitySystem(
             this.renderer.builtinAssets,
             this.renderer
@@ -23,7 +23,7 @@ export class GraphicsHandler {
 
 
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
-        this.createEntity("test2", "test");
+        this.createEntity("test2", "player");
     }
 
     doAction(entityId, actionId, actionData) {
