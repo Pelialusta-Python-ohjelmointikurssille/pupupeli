@@ -10,15 +10,14 @@ export class GraphicsHandler {
 
     async initialize() {
         this.renderer = new PixiRenderer();
-        let n = await this.renderer.initialize({screenHeight: 640, screenWidth: 640, maxFPS: 60, antialias: true});
+        await this.renderer.initialize({screenHeight: 640, screenWidth: 640, maxFPS: 60, antialias: true});
         this.graphicsEntitySystem = new GraphicsEntitySystem(
             this.renderer.builtinAssets,
-            this.renderer.addSprite,
-            this.renderer.destroySprite
+            this.renderer
         );
         this.graphicsEntitySystem.initialize();
         this.renderer.addFunctionToRenderLoop(this.graphicsEntitySystem.updateAllObjects);
-        //this.createEntity("testent");
+        this.createEntity("testent");
     }
 
     doAction(entityId, actionId, actionData) {
@@ -34,7 +33,6 @@ export class GraphicsHandler {
     }
     
     getCanvas () {
-        console.log(this.renderer.pixiApp.canvas)
         return this.renderer.pixiApp.canvas;
     }
 }

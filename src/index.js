@@ -20,7 +20,6 @@ async function main() {
 
 async function initGame() {
     let canvas = await initNewGame();
-    console.log(canvas);
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";

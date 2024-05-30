@@ -9,11 +9,10 @@ const entityTypeDict = {
 }
 
 export class GraphicsEntitySystem {
-    constructor(builtinAssets, addSpriteFunc, destroySpriteFunc) {
+    constructor(builtinAssets, renderer) {
         this.builtinAssets = builtinAssets;
         this.entityDict = {}
-        this.addSpriteFunc = addSpriteFunc;
-        this.destroySpriteFunc = destroySpriteFunc;
+        this.renderer = renderer;
     }
 
     initialize() {
@@ -28,7 +27,7 @@ export class GraphicsEntitySystem {
         let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
         let entity = new GraphicsEntity(entityId, new Vector2(20, 20), sprite);
         this.entityDict[entityId] = entity;
-        this.addSpriteFunc(sprite);
+        this.renderer.addSprite(sprite);
         entity.onCreate();
     }
 
