@@ -1,13 +1,11 @@
 import { setGameCommand, initGameEventHandler } from "./game/game.js"
 import { getUserInput, displayErrorMessage } from "./index.js";
 
-let sharedArray;
-let syncArray;
-
 export class EventHandler {
     constructor(webWorker) {
         this.worker = webWorker;
         this.lastMessage = {type: "foo", message: "bar", sab: "baz"};
+        this.sendUserInputToWorker = this.sendUserInputToWorker.bind(this);
     }
 
     initalize() {
@@ -19,8 +17,8 @@ export class EventHandler {
         this.worker.onmessage = (event) => {
             switch (event.data.type) {
                 case "input":
-                    sharedArray = new Uint16Array(event.data.sab, 4);
-                    syncArray = new Int32Array(event.data.sab, 0, 1);
+                    this.sharedArray = new Uint16Array(event.data.sab, 4);
+                    this.syncArray = new Int32Array(event.data.sab, 0, 1);
                     getUserInput(true);
                     break;
                 case "run":
@@ -88,12 +86,12 @@ export class EventHandler {
         if (event.key === 'Enter') {
             this.word = getUserInput(false);
             for (let i = 0; i < this.word.length; i++) {
-                sharedArray[i] = this.word.charCodeAt(i);
+                this.sharedArray[i] = this.word.charCodeAt(i);
             }
-            sharedArray[this.word.length] = 0;
+            this.sharedArray[this.word.length] = 0;
 
-            Atomics.store(syncArray, 0, 1);
-            Atomics.notify(syncArray, 0, 1);
+            Atomics.store(this.syncArray, 0, 1);
+            Atomics.notify(this.syncArray, 0, 1);
         }
     }
 }
