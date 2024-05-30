@@ -125,10 +125,8 @@ function onResetButtonClick() {
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
     button.querySelector('#runButtonText').textContent = 'Suorita';
-    console.log("document.getElementById('error').innerHTML: " + document.getElementById("error").innerHTML);
     if (document.getElementById("error").innerHTML !== "") {
         let errorContainer = document.getElementById("error-box");
-        console.log("resetting error");
         errorContainer.classList.toggle("show-error");
         errorContainer.children[0].textContent = "";
     }
