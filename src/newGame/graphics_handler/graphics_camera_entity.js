@@ -9,17 +9,17 @@ export class GraphicsCameraEntity {
         this.screenCenter = new Vector2(pixiScreen.width / 2, pixiScreen.height / 2)
         this.zoomScale = 1;
         this.rotation = 0;
-        this.totalRenderScale = this.getTotalRenderScale();
-        //this.container.pivot.x = this.screenCenter.x;
-        //this.container.pivot.y = this.screenCenter.y;
+        this.container.pivot.x = this.screenCenter.x;
+        this.container.pivot.y = this.screenCenter.y;
         this.updateContainerValues();
     }
 
     updateContainerValues() {
-        this.container.position.x = this.position.x;
-        this.container.position.y = this.position.y;
+        this.container.position.x = this.position.x + this.screenCenter.x;
+        this.container.position.y = this.position.y + this.screenCenter.y;
         this.container.rotation = this.rotation;
-        this.container.scale = this.totalRenderScale;
+        this.container.scale = this.getTotalRenderScale();
+        this.container.rotation = this.rotation;
     }
 
     getTotalRenderScale() {
