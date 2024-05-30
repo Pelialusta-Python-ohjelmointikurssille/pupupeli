@@ -5,6 +5,7 @@ import { giveCommand } from "./newGame/game_controller.js";
 export class EventHandler {
     constructor(webWorker) {
         this.worker = webWorker;
+        this.lastMessage = {type: "foo", message: "bar", sab: "baz"};
     }
 
     initalize() {

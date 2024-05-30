@@ -142,7 +142,6 @@ function nextStepButtonClick() {
     onRunButtonClick();
     eventHandler.runSingleCommand();
     if (currentState === runningState) onRunButtonClick();
-
 }
 
 export function displayErrorMessage(error) {
