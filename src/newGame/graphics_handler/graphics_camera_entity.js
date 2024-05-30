@@ -1,6 +1,6 @@
-import { Vector2 } from "../../game/vector";
+import { Vector2 } from "../../game/vector.js";
 
-class GraphicsCameraEntity {
+export class GraphicsCameraEntity {
     constructor(container, pixiScreen, startPosition) {
         this.container = container;
         this.pixiScreen = pixiScreen;
@@ -9,9 +9,9 @@ class GraphicsCameraEntity {
         this.screenCenter = new Vector2(pixiScreen.width / 2, pixiScreen.height / 2)
         this.zoomScale = 1;
         this.rotation = 0;
-        this.totalRenderScale = getTotalRenderScale();
-        this.container.pivot.x = this.screenCenter.x;
-        this.container.pivot.y = this.screenCenter.y;
+        this.totalRenderScale = this.getTotalRenderScale();
+        //this.container.pivot.x = this.screenCenter.x;
+        //this.container.pivot.y = this.screenCenter.y;
         this.updateContainerValues();
     }
 
@@ -23,7 +23,7 @@ class GraphicsCameraEntity {
     }
 
     getTotalRenderScale() {
-        return this.renderScale * this.zoomScale;
+        return this.renderScale.x * this.zoomScale;
     }
 
     onCreate() {
@@ -34,7 +34,7 @@ class GraphicsCameraEntity {
 
     }
 
-    onUpdate() {
-        
+    onUpdate(deltaTime) {
+        this.updateContainerValues();
     }
 }

@@ -1,5 +1,6 @@
 import { GraphicsEntity } from "./graphics_entity.js";
 import { Vector2 } from "../../game/vector.js";
+import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 const entityTypeDict = {
@@ -14,6 +15,7 @@ export class GraphicsEntitySystem {
         this.entityDict = new Map();
         this.spriteDict = new Map();
         this.renderer = renderer;
+        this.camera = null;
     }
 
     initialize() {
@@ -21,25 +23,29 @@ export class GraphicsEntitySystem {
     }
 
     updateAllObjects(deltaTime) {
+        this.camera.onUpdate(deltaTime);
         this.entityDict.forEach((value, key, map) => {
             value.onUpdate(deltaTime);
         });
     }
 
+    createCamera(screen, container) {
+        this.camera = new GraphicsCameraEntity(container, screen, new Vector2(0, 0));
+    }
+
     createGraphicsEntity(entityId, size) {
         let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
-        let container = new PIXI.Container();
         let entity = new GraphicsEntity(
             entityId,
             this,
-            container,
+            new PIXI.Container(),
             sprite,
             size
         );
         this.entityDict.set(entityId, entity);
         this.spriteDict.set(entityId, sprite);
-        container.addChild(sprite);
-        this.renderer.addSprite(container);
+        entity.container.addChild(sprite);
+        this.renderer.addSprite(entity.container);
         entity.onCreate();
     }
 

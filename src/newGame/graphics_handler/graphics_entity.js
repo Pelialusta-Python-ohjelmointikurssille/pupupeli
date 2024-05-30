@@ -27,7 +27,7 @@ export class GraphicsEntity {
 
     }
 
-    onUpdate() {
+    onUpdate(deltaTime) {
         
     }
 

@@ -21,6 +21,7 @@ export class GraphicsHandler {
         this.graphicsEntitySystem.initialize();
         this.renderer.addFunctionToRenderLoop(this.graphicsEntitySystem.updateAllObjects, this.graphicsEntitySystem);
         this.createEntity("gridenttest", new Vector2(this.gridWidth, this.gridHeight));
+        this.graphicsEntitySystem.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
     }
 
     doAction(entityId, actionId, actionData) {
