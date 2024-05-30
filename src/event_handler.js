@@ -4,6 +4,7 @@ import { getUserInput, displayErrorMessage } from "./index.js";
 export class EventHandler {
     constructor(webWorker) {
         this.worker = webWorker;
+        this.lastMessage = {type: "foo", message: "bar", sab: "baz"};
     }
 
     initalize() {
