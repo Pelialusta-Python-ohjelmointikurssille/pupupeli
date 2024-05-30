@@ -138,6 +138,14 @@ function onNextStepButtonClick() {
     if (state.current === "running") onRunButtonClick();
 }
 
+export function onFinishLastCommand() {
+    // do something after finishing last command. should probably
+    // figure out if the player has achieved the victory conditions
+    // at this point?
+    onRunButtonClick() // change button from "play" to "pause"
+    console.log("Last command finished. Called from index.js.")
+}
+
 export function displayErrorMessage(error) {
     let errorDetails = extractErrorDetails(error.message);
     let errorContainer = document.getElementById("error-box");
