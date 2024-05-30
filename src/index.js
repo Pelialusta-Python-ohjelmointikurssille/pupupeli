@@ -121,10 +121,13 @@ function onRunButtonClick() {
 
 function onResetButtonClick() {
     if (state.current === "initial") return;
+    let buttonNext = document.getElementById("editor-skip-button");
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
     button.querySelector('#runButtonText').textContent = 'Suorita';
+    buttonNext.disabled = false;
+    button.disabled = false;
     if (document.getElementById("error").innerHTML !== "") {
         let errorContainer = document.getElementById("error-box");
         errorContainer.classList.toggle("show-error");
@@ -145,8 +148,24 @@ export function onFinishLastCommand() {
     // do something after finishing last command. should probably
     // figure out if the player has achieved the victory conditions
     // at this point?
-    onRunButtonClick() // change button from "play" to "pause"
+    disablePlayButtonOnFinish() // change button from "play" to "pause"
     console.log("Last command finished. Called from index.js.")
+}
+
+function disablePlayButtonOnFinish() {
+    let button = document.getElementById("editor-run-pause-button");
+    let buttonNext = document.getElementById("editor-skip-button");
+    let img = button.querySelector('img');
+    let runButtonText = button.querySelector('#runButtonText');
+    if (!img) {
+        img = document.createElement('img');
+        button.appendChild(img);
+    }
+    img.src = "src/static/resetbutton.png";
+    runButtonText.textContent = 'Loppu';
+    state.current = "ended";
+    buttonNext.disabled = true;
+    button.disabled = true;
 }
 
 export function displayErrorMessage(error) {
