@@ -2,7 +2,9 @@ import { PixiRenderer } from "./pixi_renderer.js";
 import { GraphicsEntitySystem } from "./graphics_entity_handler.js";
 
 export class GraphicsHandler {
-    constructor() {
+    constructor(width, height) {
+        this.gridWidth = width;
+        this.height = height;
         this.renderer = null;
         this.graphicsEntitySystem = null;
         this.isReady = true;
@@ -10,7 +12,7 @@ export class GraphicsHandler {
 
     async initialize() {
         this.renderer = new PixiRenderer();
-        await this.renderer.initialize({screenHeight: 640, screenWidth: 640, maxFPS: 60, antialias: true});
+        await this.renderer.initialize({ screenHeight: 640, screenWidth: 640, maxFPS: 60, antialias: true });
         this.graphicsEntitySystem = new GraphicsEntitySystem(
             this.renderer.builtinAssets,
             this.renderer
@@ -31,8 +33,8 @@ export class GraphicsHandler {
     destroyEntity(entityId) {
         this.graphicsEntitySystem.destroyGraphicsEntity(entityId);
     }
-    
-    getCanvas () {
+
+    getCanvas() {
         return this.renderer.pixiApp.canvas;
     }
 }

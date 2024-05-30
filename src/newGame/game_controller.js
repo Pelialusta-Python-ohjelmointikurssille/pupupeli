@@ -21,9 +21,8 @@ export async function initNewGame() {
 // where data is ? and sab is an SharedArrayBuffer.
 export function giveCommand(command) {
     currentCommand = command;
-    if (!game)  game = new Game();
     console.log(command);
-    commandsDone()
+    commandsDone();
 }
 
 export function commandsDone() {

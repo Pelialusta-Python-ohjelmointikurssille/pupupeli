@@ -1,8 +1,11 @@
 import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
+import { getNewGameGrid } from "./gridfactory.js";
 
 export class Game {
     constructor() {
-        this.gh = new GraphicsHandler();
+        //give filemame tp create grid from here?
+        this.grid = getNewGameGrid();
+        this.gh = new GraphicsHandler(this.grid.getWidth(), this.grid.getHeight());
     }
 
     async init() {

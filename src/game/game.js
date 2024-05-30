@@ -38,6 +38,7 @@ let commandDirs = {
  * @returns PixiJS app object
  */
 export async function InitGame() {
+    let grid = getnwa;
     initGrid(8, 8);
     pupu = getNewGridObject("pupu");
     addToGrid(pupu, 0, 0);
