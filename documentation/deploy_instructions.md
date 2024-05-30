@@ -17,6 +17,16 @@ npm run lint
 
 ## Run locally
 
+Start a webserver from root folder using:
+
+~~~
+python3 server.py
+~~~
+
+This is done because of CORS policy requirements on the server side. Webworkers won't work properly otherwise.
+
+## Run locally with HTTPS
+
 First, run the following in the git root to generate a self-signed certificate (for https):
 
 ~~~
@@ -26,10 +36,9 @@ openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -node
 Then, start a webserver from root folder using:
 
 ~~~
-python3 server.py
+python3 server_https.py
 ~~~
 
-This is done because of CORS policy requirements on the server side. Webworkers won't work properly otherwise.
 Since it uses a self-signed certificate, the browser will warn you before you enter the page.
 
 ## OpenShift deployment
