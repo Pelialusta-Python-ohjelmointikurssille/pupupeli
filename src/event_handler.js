@@ -1,5 +1,5 @@
 import { setGameCommand, initGameEventHandler } from "./game/game.js"
-import { getUserInput, displayErrorMessage, onFinishLastCommand } from "./index.js";
+import { promptUserInput, displayErrorMessage, onFinishLastCommand } from "./index.js";
 
 export class EventHandler {
     constructor(webWorker) {
@@ -19,7 +19,7 @@ export class EventHandler {
                 case "input":
                     this.sharedArray = new Uint16Array(event.data.sab, 4);
                     this.syncArray = new Int32Array(event.data.sab, 0, 1);
-                    getUserInput(true);
+                    promptUserInput({ inputBoxHidden: true });
                     break;
                 case "run":
                     setGameCommand({ data: event.data.data, sab: event.data.sab });
@@ -36,7 +36,7 @@ export class EventHandler {
 
     receiveMessage(type, message, sab) {
         if (sab === null) {
-            this.PostMessageToWorker(type, message, null, 0);
+            this.postMessageToWorker(type, message, null, 0);
         }
         if (this.isMessagePassingPaused) {
             this.saveLastMessage(type, message, sab);
@@ -44,7 +44,7 @@ export class EventHandler {
         }
         if (type === 'return') {
             //1 = continue the worker
-            this.PostMessageToWorker(type, message, sab, 1);
+            this.postMessageToWorker(type, message, sab, 1);
         }
     }
 
@@ -56,27 +56,26 @@ export class EventHandler {
         }
     }
 
-    pauseMessageWorker() {
-        this.isMessagePassingPaused = true;
-    }
-
-    unPauseMessageWorker() {
-        this.isMessagePassingPaused = false;
-        this.receiveMessage(this.lastMessage.type, this.lastMessage.message, this.lastMessage.sab);
+    setMessagePassingState(state) {
+        this.isMessagePassingPaused = state.paused;
+        if (!this.isMessagePassingPaused) {
+            this.receiveMessage(this.lastMessage.type, this.lastMessage.message, this.lastMessage.sab);
+        }
     }
 
     runSingleCommand() {
         if (!this.isMessagePassingPaused) {
-            this.pauseMessageWorker();
+            this.setMessagePassingState({ paused: true });
+
             return;
         }
 
-        this.unPauseMessageWorker();
-        this.pauseMessageWorker();
+        this.setMessagePassingState({ paused: false });
+        this.setMessagePassingState({ paused: true });
 
     }
 
-    PostMessageToWorker(type, message, sab, value) {
+    postMessageToWorker(type, message, sab, value) {
         this.worker.postMessage({ type: type, message: message });
         if (sab !== null) {
             const waitArray = new Int32Array(sab, 0, 1);
@@ -87,7 +86,7 @@ export class EventHandler {
 
     sendUserInputToWorker(event) {
         if (event.key === 'Enter') {
-            this.word = getUserInput(false);
+            this.word = promptUserInput({ inputBoxHidden: false });
             for (let i = 0; i < this.word.length; i++) {
                 this.sharedArray[i] = this.word.charCodeAt(i);
             }
