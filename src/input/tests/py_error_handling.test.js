@@ -63,4 +63,9 @@ TypeError: Another error occurred`;
       const result = extractErrorDetails(errorMessage);
       expect(result).toEqual({ text: 'NameError: name \'a\' is not defined', line: '1' });
   });
+  test('should return corrrect line if error is virheellinen suunta', () => {
+      const errorMessage = 'File "<stdin>", line 1\n File "<stdin>", line 2\n File "<stdin>", line 3\n print(a)\nValueError: Virheellinen suunta\n' ;
+      const result = extractErrorDetails(errorMessage);
+      expect(result).toEqual({ text: 'ValueError: Virheellinen suunta', line: '2' });
+  });
 });

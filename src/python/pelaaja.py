@@ -8,5 +8,7 @@ class Pelaaja:
     def liiku(self, direction: str):
         if direction in self.__directions:
             js.runCommand("move", direction)
+        else:
+            raise ValueError("Virheellinen suunta")
 
 pupu = Pelaaja()
