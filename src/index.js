@@ -13,7 +13,7 @@ async function main() {
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", nextStepButtonClick);
-    addEventToButton("grid-toggle-button", rendererToggleGrid)
+    addEventToButton("grid-toggle-button", rendererToggleGrid);
     initializeWorker();
 }
 
@@ -40,6 +40,9 @@ async function createGameWindow() {
  * The input is obtained using editor.getValue() and passed onto the worker.
  */
 function initializeWorker() {
+    if (typeof worker == Worker) {
+        worker.terminate();
+    }
     worker = new Worker('src/input/worker.js');
     initializeEventHandler();
 
