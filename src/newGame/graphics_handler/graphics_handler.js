@@ -4,7 +4,7 @@ import { GraphicsEntitySystem } from "./graphics_entity_handler.js";
 export class GraphicsHandler {
     constructor(width, height) {
         this.gridWidth = width;
-        this.height = height;
+        this.gridHeight = height;
         this.renderer = null;
         this.graphicsEntitySystem = null;
         this.isReady = true;
@@ -19,6 +19,7 @@ export class GraphicsHandler {
         );
         this.graphicsEntitySystem.initialize();
         this.renderer.addFunctionToRenderLoop(this.graphicsEntitySystem.updateAllObjects, this.graphicsEntitySystem);
+        this.createEntity("gridenttest");
     }
 
     doAction(entityId, actionId, actionData) {

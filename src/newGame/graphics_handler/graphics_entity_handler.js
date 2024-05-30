@@ -22,30 +22,23 @@ export class GraphicsEntitySystem {
 
     updateAllObjects(deltaTime) {
         this.entityDict.forEach((value, key, map) => {
-            let entity = value;
-            let sprite = this.spriteDict.get(key);
-            sprite.x = entity.position.x * this.renderer.renderScale.x;
-            sprite.y = entity.position.y * this.renderer.renderScale.x;
-            sprite.width = entity.width * this.renderer.renderScale.x;
-            sprite.height = entity.height * this.renderer.renderScale.x;
-            sprite.rotation = entity.rotation;
+            value.onUpdate(deltaTime);
         });
     }
 
     createGraphicsEntity(entityId) {
         let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
-        let width = 100;
-        let height = 100;
+        let container = new PIXI.Container();
         let entity = new GraphicsEntity(
             entityId,
             this,
-            new Vector2(0, 0),
-            new Vector2(width, height),
-            0
+            container,
+            sprite
         );
         this.entityDict.set(entityId, entity);
         this.spriteDict.set(entityId, sprite);
-        this.renderer.addSprite(sprite);
+        container.addChild(sprite);
+        this.renderer.addSprite(container);
         entity.onCreate();
     }
 

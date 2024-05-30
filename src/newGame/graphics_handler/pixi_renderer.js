@@ -9,6 +9,7 @@ export class PixiRenderer {
         // so if res is 1280x1280, the value is Vector2(2, 2) and so on
         this.renderScale = null;
         this.builtinAssets = null;
+        this.cameraWorldContainer = null;
     }
 
     async initialize(renderOptions) {
@@ -26,6 +27,8 @@ export class PixiRenderer {
             this.renderLoop(time);
         });
         this.renderScale = new Vector2(renderOptions.screenWidth / 640, renderOptions.screenHeight / 640);
+        this.cameraWorldContainer = new PIXI.Container();
+        this.pixiApp.stage.addChild(this.cameraWorldContainer);
     }
 
     async loadAssetBuiltinBundles() {
@@ -52,11 +55,11 @@ export class PixiRenderer {
     }
 
     addSprite(sprite) {
-        this.pixiApp.stage.addChild(sprite);
+        this.cameraWorldContainer.addChild(sprite);
     }
 
     destroySprite(sprite) {
-        this.pixiApp.stage.removeChild(sprite);
+        this.cameraWorldContainer.removeChild(sprite);
     }
 }
 
