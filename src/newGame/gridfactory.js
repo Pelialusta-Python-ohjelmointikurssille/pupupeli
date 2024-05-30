@@ -1,5 +1,6 @@
 import { getNewGridObject } from "./gridobject.js";
 import { Grid } from "./grid.js";
+import { Cell } from "./cell.js";
 
 export function getNewGameGrid() {
     let newGrid = new Grid(CreateDoubleArray(8, 8));
@@ -17,11 +18,14 @@ export function getNewGameGrid() {
  * @param {number} height - The height of the array
  * @returns {Array} - The double array
  */
-function CreateDoubleArray(width, height) {
+function CreateDoubleArray(widht, height) {
     //js doesn't have double arrays T:Tommi
     let newGrid = [];
-    for (let x = 0; x < width; x++) {
-        newGrid[x] = new Array(height);
+    for (let x = 0; x < widht; x++) {
+        newGrid[x] = [];
+        for (let y = 0; y < height; y++) {
+            newGrid[x][y] = new Cell(x, y);
+        }
     }
     return newGrid;
 }

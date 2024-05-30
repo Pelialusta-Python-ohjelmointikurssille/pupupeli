@@ -2,8 +2,8 @@ import { getEventHandler } from "../index.js";
 import { Game } from "./new_game.js";
 
 //This file controls game. 
-// - Creates new game instances (both logic and rendering)
-// - receives commands and output with the game
+// - Creates new game instances (Game contains both logic and rendering)
+// - handles game command input and output
 
 var game;
 var currentCommand;
@@ -20,6 +20,7 @@ export async function initNewGame() {
 // "{ data: data, sab: sab })" 
 // where data is ? and sab is an SharedArrayBuffer.
 export function giveCommand(command) {
+    game.receiveInput(command.data);
     currentCommand = command;
     console.log(command);
     commandsDone();

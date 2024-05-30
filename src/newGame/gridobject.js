@@ -12,6 +12,7 @@
 class GridObject {
     constructor(name) {
         this.name = name;
+        this.cell = null;
     }
 
     toString() {

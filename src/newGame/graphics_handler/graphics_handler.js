@@ -4,7 +4,7 @@ import { GraphicsEntitySystem } from "./graphics_entity_handler.js";
 export class GraphicsHandler {
     constructor(width, height) {
         this.gridWidth = width;
-        this.height = height;
+        this.gridHeight = height;
         this.renderer = null;
         this.graphicsEntitySystem = null;
         this.isReady = true;

@@ -14,4 +14,8 @@ export class Game {
     getCanvas() {
         return this.gh.getCanvas();
     }
+
+    receiveInput(input) {
+        console.log(input);
+    }
 }
