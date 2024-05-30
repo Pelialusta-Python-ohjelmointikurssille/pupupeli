@@ -6,7 +6,7 @@ module.exports = {
         '^.+\\.js$': 'babel-jest',
     },
     testMatch: ["**/?(*.)+(test).js?(x)"],
-    testPathIgnorePatterns: ["src/tests/file_reader.test.js"],
+    testPathIgnorePatterns: [],
     coverageThreshold: {
         global: {
             branches: 75,
@@ -27,7 +27,6 @@ module.exports = {
         "!src/util/version_strings.js",
         "!src/input/worker.js",
         "!src/event_handler.js",
-        "!src/file_reader.js",
         "!src/**/index.js",
         "!src/**/game.js",
         "!src/**/editor.js",
