@@ -2,7 +2,7 @@ import { Vector2 } from "../../game/vector.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 export class GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite) {
+    constructor(entityId, entityHandler, container, sprite, size) {
         this.entityId = entityId;
         this.entityHandler = entityHandler;
         this.container = container;
@@ -14,7 +14,7 @@ export class GraphicsEntity {
         this.lineWidth = 2;
         this.lineGraphics = new PIXI.Graphics()
         this.font = "Roboto";
-        this.gridSize = new Vector2(8, 8)
+        this.gridSize = size;
     }
 
     onCreate() {

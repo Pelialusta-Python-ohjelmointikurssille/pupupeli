@@ -26,14 +26,15 @@ export class GraphicsEntitySystem {
         });
     }
 
-    createGraphicsEntity(entityId) {
+    createGraphicsEntity(entityId, size) {
         let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
         let container = new PIXI.Container();
         let entity = new GraphicsEntity(
             entityId,
             this,
             container,
-            sprite
+            sprite,
+            size
         );
         this.entityDict.set(entityId, entity);
         this.spriteDict.set(entityId, sprite);

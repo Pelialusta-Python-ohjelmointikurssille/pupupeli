@@ -1,5 +1,6 @@
 import { PixiRenderer } from "./pixi_renderer.js";
 import { GraphicsEntitySystem } from "./graphics_entity_handler.js";
+import { Vector2 } from "../../game/vector.js";
 
 export class GraphicsHandler {
     constructor(width, height) {
@@ -19,15 +20,15 @@ export class GraphicsHandler {
         );
         this.graphicsEntitySystem.initialize();
         this.renderer.addFunctionToRenderLoop(this.graphicsEntitySystem.updateAllObjects, this.graphicsEntitySystem);
-        this.createEntity("gridenttest");
+        this.createEntity("gridenttest", new Vector2(this.gridWidth, this.gridHeight));
     }
 
     doAction(entityId, actionId, actionData) {
         this.graphicsEntitySystem.getGraphicsEntity(entityId).doAnimation(actionId, actionData);
     }
 
-    createEntity(entityId) {
-        this.graphicsEntitySystem.createGraphicsEntity(entityId);
+    createEntity(entityId, size) {
+        this.graphicsEntitySystem.createGraphicsEntity(entityId, size);
     }
 
     destroyEntity(entityId) {
