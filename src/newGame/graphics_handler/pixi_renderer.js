@@ -5,7 +5,9 @@ export class PixiRenderer {
     constructor() {
         this.pixiApp = null;
         this.renderLoopFunctions = [];
-        this.renderScale = new Vector2(1, 1);  // multiplication factor of 640x640, ie if res is 1280x1280, the value is (2, 2) and so on
+        // multiplication factor based on 640x640,
+        // so if res is 1280x1280, the value is Vector2(2, 2) and so on
+        this.renderScale = null;
         this.builtinAssets = null;
     }
 
@@ -18,7 +20,7 @@ export class PixiRenderer {
             antialias: renderOptions.antialias,
         })
         this.pixiApp.ticker.maxFPS = renderOptions.maxFPS;
-        await this.loadAssetBundles();
+        await this.loadAssetBuiltinBundles();
         this.pixiApp.ticker.add((time) =>
         {  
             this.renderLoop(time);
@@ -26,9 +28,16 @@ export class PixiRenderer {
         this.renderScale = new Vector2(renderOptions.screenWidth / 640, renderOptions.screenHeight / 640);
     }
 
-    async loadAssetBundles() {
-        await PIXI.Assets.init({ manifest: builtinAssetManifest});
-        this.builtinAssets = await PIXI.Assets.loadBundle(["builtin_characters", "builtin_backgrounds", "builtin_fonts"]);
+    async loadAssetBuiltinBundles() {
+        await PIXI.Assets.init({ manifest: builtinAssetManifest });
+        this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts"]);
+    }
+
+    // used to potentially load assets from other sources than builtin assets
+    // that are loaded at init
+    // does nothing right now
+    async loadAssetBundle() {
+
     }
 
     renderLoop(time) {
@@ -41,6 +50,14 @@ export class PixiRenderer {
     addFunctionToRenderLoop(func) {
         this.renderLoopFunctions.push(func);
     }
+
+    addSprite(sprite) {
+        this.pixiApp.stage.addChild(sprite);
+    }
+
+    destroySprite(sprite) {
+        this.pixiApp.stage.removeChild(sprite);
+    }
 }
 
 
@@ -52,7 +69,7 @@ export class PixiRenderer {
 const builtinAssetManifest = {
     bundles : [
         {
-            name: "builtin_characters",
+            name: "characters",
             assets: [
                 {
                     alias: "bunny_down",
@@ -73,7 +90,7 @@ const builtinAssetManifest = {
             ]
         },
         {
-            name: "builtin_backgrounds",
+            name: "backgrounds",
             assets: [
                 {
                     alias: "background_grass",
@@ -82,7 +99,7 @@ const builtinAssetManifest = {
             ]
         },
         {
-            name: "builtin_fonts",
+            name: "fonts",
             assets : [
                 {
                     /*
