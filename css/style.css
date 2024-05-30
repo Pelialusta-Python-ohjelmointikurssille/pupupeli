@@ -76,6 +76,7 @@ body {
 }
 
 #error-box {
+    transition: 0.5s all ease-in-out;
     padding: 0rem;
     max-height: 1rem;
     min-height: 1rem;
