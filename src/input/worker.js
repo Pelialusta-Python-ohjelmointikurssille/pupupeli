@@ -102,6 +102,8 @@ async function runPythonCode(pyodide, codeString) {
     self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
         await self.continuePythonExecution;
+        // no more python left to run; let the event handler know
+        postMessage({ type: 'finish' });
     } catch (error) {
         postError(error.message);
     }
@@ -114,8 +116,8 @@ async function runPythonCode(pyodide, codeString) {
  */
 function postError(error) {
     if (typeof (error) === "string") {
-        self.postMessage({ type: "error", error: { message: error } })
+        self.postMessage({ type: 'error', error: { message: error } })
     } else {
-        self.postMessage({ type: "error", error: error });
+        self.postMessage({ type: 'error', error: error });
     }
 }

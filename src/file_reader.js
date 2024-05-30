@@ -5,7 +5,7 @@
  * throws an Error.
  */
 export function tryGetFileAsText(path) {
-    var fileReadMessage = {
+    let fileReadMessage = {
         isSuccess : false,
         result : ""
     }
@@ -23,7 +23,7 @@ export function tryGetFileAsText(path) {
         fileReadMessage.isSuccess = true;
         fileReadMessage.result = request.responseText;
     } else {
-        fileReadMessage.result = `Error fetching file: ${path}`;
+        fileReadMessage.result = new Error(`Error fetching file: ${path}`);
     }
     return fileReadMessage
 }

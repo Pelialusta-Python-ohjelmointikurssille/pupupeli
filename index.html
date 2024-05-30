@@ -16,16 +16,20 @@
         <div id="app-container" class="is-flex">
             <div id="left-container" class="is-flex">
                 <div id="task-container">
-                    <div>
-                        <h1>Tehtävä 1</h1>
-                        <button id="grid-toggle-button" type="button">Ruudukko</button>
-                        <p>Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:</p>
-                        <code>
-                            <p>pupu.liiku("ylös")</p>
-                            <p>pupu.liiku("oikea")</p>
-                            <p>pupu.liiku("alas")</p>
-                            <p>pupu.liiku("vasen")</p>
-                        </code>
+                    <div id="task">
+                        <div id="task-title-container" class="is-flex">
+                            <h1 id="task-title">Tehtävä 1</h1>
+                            <button id="grid-toggle-button" type="button">Ruudukko</button>
+                        </div>
+                        <div id="task-description">
+                            <p>Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:</p>
+                            <code>
+                                <div>pupu.liiku("oikea")</div>
+                                <div>pupu.liiku("alas")</div>
+                                <div>pupu.liiku("vasen")</div>
+                                <div>pupu.liiku("ylös")</div>
+                            </code>
+                        </div>
                     </div>
                 </div>
                 <div id="editor-container" class="is-flex">

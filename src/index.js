@@ -6,13 +6,12 @@ import { extractErrorDetails } from "./input/py_error_handling.js"
 
 let worker;
 let eventHandler;
-let gotError;
 
 async function main() {
     await createGameWindow();
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
-    addEventToButton("editor-skip-button", nextStepButtonClick);
+    addEventToButton("editor-skip-button", onNextStepButtonClick);
     addEventToButton("grid-toggle-button", rendererToggleGrid)
     initializeWorker();
 }
@@ -50,7 +49,7 @@ function initializeWorker() {
         pythonFileStr = fileReadMessage.result;
         worker.postMessage({ type: 'init', data: pythonFileStr });
     } else {
-        document.getElementById("error").innerHTML = extractErrorDetails(fileReadMessage.result).type;
+        displayErrorMessage(fileReadMessage.result);
         return;
     }
 }
@@ -73,72 +72,86 @@ function addEventToButton(id, func) {
     buttonInput.addEventListener("click", func, false);
 }
 
-let runButtonText = null;
-const defaultState = "defaultState";
-const runningState = "runningState";
-const pausedState = "pausedState";
-let currentState;
-currentState = defaultState;
+let state = { current: "initial" };
 
 function onRunButtonClick() {
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
-    runButtonText = button.querySelector('#runButtonText');
+    let runButtonText = button.querySelector('#runButtonText');
     if (!img) {
         img = document.createElement('img');
         button.appendChild(img);
     }
-    //Set buttons state
-    console.log("Current state: " + currentState);
-    switch (currentState) {
-        case defaultState:
-            setRunningStateVisual(img);
+
+    // set button state
+    console.log("Current state: " + state.current);
+    switch (state.current) {
+        case "initial":
             runPythonCommands();
             break;
-        case runningState:
-            setPausedStateVisual(img);
+        case "running":
             eventHandler.pauseMessageWorker();
             break;
-        case pausedState:
-            setRunningStateVisual(img);
+        case "paused":
             eventHandler.unPauseMessageWorker();
             break;
+
+    }
+    setButtonState(img, state, runButtonText);
+
+    function setButtonState(img, state, runButtonText) {
+        switch (state.current) {
+            case "initial":
+                img.src = "src/static/pausebutton.png";
+                runButtonText.textContent = 'Tauko';
+                state.current = "running"
+                break;
+            case "paused":
+                img.src = "src/static/pausebutton.png";
+                runButtonText.textContent = 'Tauko';
+                state.current = "running"
+                break;
+            case "running":
+                img.src = "src/static/runbutton.png";
+                runButtonText.textContent = 'Jatka';
+                state.current = "paused"
+                break;
+        }
     }
 }
 
-function setRunningStateVisual(img) {
-    img.src = "src/static/pausebutton.png";
-    runButtonText.textContent = 'Tauko';
-    currentState = runningState;
-}
-
-function setPausedStateVisual(img) {
-    img.src = "src/static/runbutton.png";
-    runButtonText.textContent = 'Jatka';
-    currentState = pausedState;
-}
-
 function onResetButtonClick() {
-    if (currentState === defaultState) return;
+    if (state.current === "initial") return;
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
-    runButtonText.textContent = 'Suorita';
+    button.querySelector('#runButtonText').textContent = 'Suorita';
     document.getElementById("error").innerHTML = "";
     resetGame();
-    currentState = defaultState;
+    state.current = "initial";
     initializeWorker();
 }
 
-function nextStepButtonClick() {
+function onNextStepButtonClick() {
     onRunButtonClick();
     eventHandler.runSingleCommand();
-    if (currentState === runningState) onRunButtonClick();
+    if (state.current === "running") onRunButtonClick();
+}
+
+export function onFinishLastCommand() {
+    // do something after finishing last command. should probably
+    // figure out if the player has achieved the victory conditions
+    // at this point?
+    onRunButtonClick() // change button from "play" to "pause"
+    console.log("Last command finished. Called from index.js.")
 }
 
 export function displayErrorMessage(error) {
-    gotError = extractErrorDetails(error.message)
-    document.getElementById("error").innerHTML = '"' + gotError.text + '" Rivillä: ' + gotError.line;
+    let errorDetails = extractErrorDetails(error.message);
+    let errorContainer = document.getElementById("error-box");
+    errorContainer.classList.toggle("show-error");
+    errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
+    onRunButtonClick();
 }
 
 export function getUserInput(is_init) {
