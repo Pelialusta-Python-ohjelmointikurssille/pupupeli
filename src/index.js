@@ -125,7 +125,11 @@ function onResetButtonClick() {
     let img = button.querySelector('img');
     img.src = "src/static/runbutton.png";
     button.querySelector('#runButtonText').textContent = 'Suorita';
-    document.getElementById("error").innerHTML = "";
+    if (document.getElementById("error").innerHTML !== "") {
+        let errorContainer = document.getElementById("error-box");
+        errorContainer.classList.toggle("show-error");
+        errorContainer.children[0].textContent = "";
+    }
     resetGame();
     state.current = "initial";
     initializeWorker();
