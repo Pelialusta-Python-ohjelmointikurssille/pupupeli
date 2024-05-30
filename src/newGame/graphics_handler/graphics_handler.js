@@ -14,5 +14,10 @@ export class GraphicsHandler {
         this.graphicsEntitySystem.initialize();
         this.renderer.addFunctionToRenderLoop(this.graphicsEntitySystem.updateAllObjects);
     }
+    
+    getCanvas () {
+        console.log(this.renderer.pixiApp.canvas)
+        return this.renderer.pixiApp.canvas;
+    }
 }
 

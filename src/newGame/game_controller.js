@@ -9,9 +9,11 @@ var game;
 var currentCommand;
 var eventHandler;
 
-export function initNewGame() {
+export async function initNewGame() {
     game = new Game();
+    await game.init();
     eventHandler = getEventHandler();
+    return game.getCanvas();
 }
 
 //Receives the command, expects a object of type 
@@ -26,4 +28,9 @@ export function giveCommand(command) {
 
 export function commandsDone() {
     eventHandler.receiveMessage("return", "returning from game.js", currentCommand.sab);
+}
+
+export function getCanvas(){
+    console.log(game.getCanvas())
+    game.getCanvas();
 }

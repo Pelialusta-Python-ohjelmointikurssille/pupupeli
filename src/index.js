@@ -10,17 +10,20 @@ let eventHandler;
 let gotError;
 
 async function main() {
-    await createGameWindow();
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", nextStepButtonClick);
     addEventToButton("grid-toggle-button", rendererToggleGrid)
     initializeWorker();
-    await initNewGame();
+    await initGame();
 }
 
-function initNewGame() {
-    initNewGame();
+async function initGame() {
+    let canvas = await initNewGame();
+    console.log(canvas);
+    document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
+    canvas.classList.add("is-flex");
+    canvas.id = "game";
 }
 
 async function createGameWindow() {
