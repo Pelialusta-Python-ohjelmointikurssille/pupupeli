@@ -1,6 +1,6 @@
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 import { GridEntity } from "./entities/grid_entity.js";
-import { GraphicsEntity } from "./graphics_entity.js";
+import { GraphicsEntity } from "./entities/graphics_entity.js";
 
 
 
