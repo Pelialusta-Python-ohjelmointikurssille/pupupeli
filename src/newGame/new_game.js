@@ -7,7 +7,7 @@ export class Game {
     constructor() {
         //give filemame tp create grid from here?
         this.grid = getNewGameGrid();
-        this.gh = new GraphicsHandler(this.grid.getWidth(), this.grid.getHeight());
+        this.gh = new GraphicsHandler(this.grid.width, this.grid.height);
     }
 
     async init() {
@@ -19,14 +19,16 @@ export class Game {
 
     receiveInput(commandName, commandParameter) {
         if (commandName === "move") {
-            MakeMoveCommand(commandParameter);
+            this.MakeMoveCommand(commandParameter);
         }
     }
 
     MakeMoveCommand(commandParameter) {
         let dir = translatePythonMoveStringToDirection(commandParameter);
-        moveCommand = new MoveCommand(grid, dir);
+        let moveCommand = new MoveCommand(this.grid, this.grid.player, dir);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
+        //debug
+        this.grid.consoleDebug();
     }
 }
