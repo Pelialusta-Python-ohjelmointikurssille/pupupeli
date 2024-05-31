@@ -15,6 +15,7 @@ export class GridEntity extends GraphicsEntity {
         this.font = "Roboto";
         this.gridSize = data.gridSize;
         this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
+        this.type = "grid";
     }
 
     

@@ -35,6 +35,7 @@ export class GraphicsHandler {
     }
 
     createEntity(entityId, type, data) {
+        console.log("CREATE ENT " + type)
         this.graphicsEntityHandler.createGraphicsEntity(entityId, type, data);
     }
 
@@ -44,6 +45,14 @@ export class GraphicsHandler {
 
     getCanvas() {
         return this.renderer.pixiApp.canvas;
+    }
+
+    destroyAllEntities() {
+
+    }
+
+    resetAllGridObjects() {
+        this.graphicsEntityHandler.resetGridObjects();
     }
 
     onEntitiesNotReady() {

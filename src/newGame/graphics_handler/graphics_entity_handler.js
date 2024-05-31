@@ -77,4 +77,14 @@ export class GraphicsEntitySystem {
         //console.log("NOW READY");
         this.graphicsHandler.onEntitiesReady();
     }
+
+    resetGridObjects() {
+        console.log("RESETTING ENTS")
+        this.entityDict.forEach((value, key, map) => {
+            if (value.type === "player") {
+                console.log("RESET ENT player " + value.entityId);
+                value.reset();
+            }
+        });
+    }
 }

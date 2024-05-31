@@ -10,11 +10,13 @@ export class GridObjectEntity extends GraphicsEntity {
         this.gridCellPosition = new Vector2(0, 0);
         this.sizeWithinCellMultiplier = 0.9;
         this.animations = new Map();
+        this.type = "grid_object";
         if (data !== null) {
             if (data.position !== null) {
                 this.gridCellPosition = data.position;
             }
         }
+        this.startPosition = new Vector2(this.gridCellPosition.x, this.gridCellPosition.y);
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
     }
 
@@ -41,5 +43,10 @@ export class GridObjectEntity extends GraphicsEntity {
     }
 
     doAction(actionId, actionData) {
+    }
+
+    reset() {
+        this.gridCellPosition = this.startPosition;
+        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
     }
 }

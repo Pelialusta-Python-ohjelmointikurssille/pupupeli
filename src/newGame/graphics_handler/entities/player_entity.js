@@ -10,6 +10,7 @@ export class PlayerEntity extends GridObjectEntity {
         this.moveDirection = new Vector2(0, 0);
         this.animations.set("move", new AnimationProgress(0.5, this.onStartAnimation, this.onFinishAnimation, this, "move"));
         this.animations.set("failmove", new AnimationProgress(0.5, this.onStartAnimation, this.onFinishAnimation, this, "failmove"));
+        this.type = "player";
     }
 
     onCreate() {
