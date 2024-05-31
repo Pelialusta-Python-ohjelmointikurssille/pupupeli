@@ -15,7 +15,7 @@ export class AnimationProgress {
     }
 
     increment(delta) {
-        if (this.value < 1 && this.inProgress === true) {
+        if (this.value <= 1 && this.inProgress === true) {
             this.value += delta / this.time;
         } else if (this.value > 1) {
             this.stop();

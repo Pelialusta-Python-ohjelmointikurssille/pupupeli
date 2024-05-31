@@ -30,7 +30,6 @@ export class GraphicsHandler {
     }
 
     doAction(entityId, actionId, actionData) {
-        console.log("DO")
         this.graphicsEntityHandler.getGraphicsEntity(entityId).doAction(actionId, actionData);
     }
 
