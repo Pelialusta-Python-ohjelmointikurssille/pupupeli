@@ -19,7 +19,6 @@ export class Game {
 
     createGridEntitiesForRendering(gridObject) {
         let data = { position: gridObject.getVector2Position() };
-        console.log(this.gh);
         this.gh.createEntity(gridObject.id, gridObject.type, data);
     }
 

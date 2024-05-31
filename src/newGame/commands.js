@@ -11,7 +11,6 @@ export class MoveCommand {
     }
 
     execute() {
-        console.log("command executing!");
         this.grid.moveGridObjectToDir(this.gridObject, this.dir);
     }
 
