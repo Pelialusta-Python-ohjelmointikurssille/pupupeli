@@ -48,5 +48,7 @@ export class GridObjectEntity extends GraphicsEntity {
     reset() {
         this.gridCellPosition = this.startPosition;
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
+        this.container.x = (this.screenPosition.x);
+        this.container.y = (this.screenPosition.y);
     }
 }

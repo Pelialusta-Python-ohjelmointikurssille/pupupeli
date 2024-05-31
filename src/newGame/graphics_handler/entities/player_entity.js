@@ -8,8 +8,8 @@ export class PlayerEntity extends GridObjectEntity {
     constructor(entityId, entityHandler, container, sprite, data) {
         super(entityId, entityHandler, container, sprite, data);
         this.moveDirection = new Vector2(0, 0);
-        this.animations.set("move", new AnimationProgress(0.5, this.onStartAnimation, this.onFinishAnimation, this, "move"));
-        this.animations.set("failmove", new AnimationProgress(0.5, this.onStartAnimation, this.onFinishAnimation, this, "failmove"));
+        this.animations.set("move", new AnimationProgress(2.5, this.onStartAnimation, this.onFinishAnimation, this, "move"));
+        this.animations.set("failmove", new AnimationProgress(2.5, this.onStartAnimation, this.onFinishAnimation, this, "failmove"));
         this.type = "player";
     }
 
@@ -25,6 +25,8 @@ export class PlayerEntity extends GridObjectEntity {
     }
 
     onFinishAnimation(name) {
+        console.log(this.container)
+        console.log(this.sprite)
         super.onFinishAnimation(name);
         if (name === "move") {
             this.gridCellPosition.x += this.moveDirection.x;
@@ -39,6 +41,7 @@ export class PlayerEntity extends GridObjectEntity {
     onUpdate(deltaTime) {
         super.onUpdate(deltaTime);
         if (this.animations.get("move").inProgress === true) {
+            
             this.container.x = (this.screenPosition.x) + (this.animations.get("move").value * this.moveDirection.x * this.gridReference.gridScale);
             this.container.y = (this.screenPosition.y) + this.getJumpHeight(this.animations.get("move").value) + (this.animations.get("move").value * this.moveDirection.y * this.gridReference.gridScale);
         }
