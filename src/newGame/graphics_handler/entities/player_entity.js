@@ -24,8 +24,8 @@ export class PlayerEntity extends GridObjectEntity {
         // TODO: Get proper grid to screen coordinate conversions
         super.onUpdate(deltaTime);
         if (this.animProgress.value <= 1 && this.animProgress.inProgress === true) {
-            this.container.x = (this.gridCellPosition.x ) + (this.animProgress.value * this.moveDirection.x);
-            this.container.y = (this.gridCellPosition.y) + this.getJumpHeigh(this.animProgress.value) + (this.animProgress.value * this.moveDirection.y);
+            this.container.x = (this.screenPosition.x) + (this.animProgress.value * this.moveDirection.x * this.gridReference.gridScale);
+            this.container.y = (this.screenPosition.y) + this.getJumpHeigh(this.animProgress.value) + (this.animProgress.value * this.moveDirection.y * this.gridReference.gridScale);
         }
     }
 
@@ -43,13 +43,13 @@ export class PlayerEntity extends GridObjectEntity {
             if (actionData.direction === "up") {
                 this.moveDirection = new Vector2(0, -1)
             }
-            //this.animProgress.start();
-            //this.isReady = false;
+            this.animProgress.start();
+            this.isReady = false;
         }
     }
 
     getJumpHeigh(progress) {
-        return -(Math.sin(Math.PI * progress)**0.75) * 80 * 0.5;
+        return -(Math.sin(Math.PI * progress)**0.75) * this.gridReference.gridScale * 0.5;
     }
 
     startMove(dir) {
