@@ -8,7 +8,7 @@ import { GraphicsEntityFactory } from "./graphics_entity_factory.js";
 
 
 export class GraphicsEntitySystem {
-    constructor(builtinAssets, renderer) {
+    constructor(builtinAssets, renderer, graphicsHandler) {
         this.builtinAssets = builtinAssets;
         this.entityDict = new Map();
         this.spriteDict = new Map();
@@ -17,6 +17,7 @@ export class GraphicsEntitySystem {
         this.camera = null;
         this.entityFactory = new GraphicsEntityFactory(this, this.builtinAssets);
         this.isReady = true;
+        this.graphicsHandler = graphicsHandler;
     }
 
     updateAllObjects(deltaTime) {
@@ -68,10 +69,12 @@ export class GraphicsEntitySystem {
     }
 
     onEntitiesNotReady() {
-        console.log("NOT READY");
+        //console.log("NOT READY");
+        this.graphicsHandler.onEntitiesNotReady();
     }
 
     onEntitiesReady() {
-        console.log("NOW READY");
+        //console.log("NOW READY");
+        this.graphicsHandler.onEntitiesReady();
     }
 }

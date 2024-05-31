@@ -22,7 +22,6 @@ export async function initNewGame() {
 export function giveCommand(dirtyCommand) {
     game.receiveInput(dirtyCommand.data.command, dirtyCommand.data.parameters);
     currentCommand = dirtyCommand;
-    commandsDone();
 }
 
 export function commandsDone() {

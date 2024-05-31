@@ -2,12 +2,14 @@ import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getNewGameGrid } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand } from "./commands.js";
+import { commandsDone } from "./game_controller.js";
 
 export class Game {
     constructor() {
         //give filemame tp create grid from here?
         this.grid = getNewGameGrid();
-        this.gh = new GraphicsHandler(this.grid.width, this.grid.height);
+        this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
+        this.canDoNextMove = true;
     }
 
     async init() {
@@ -27,9 +29,14 @@ export class Game {
     }
 
     receiveInput(commandName, commandParameter) {
+        
         if (commandName === "move") {
             this.MakeMoveCommand(commandParameter);
         }
+    }
+
+    onAnimsReady() {
+        commandsDone();
     }
 
     MakeMoveCommand(commandParameter) {
