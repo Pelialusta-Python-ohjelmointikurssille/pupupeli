@@ -13,6 +13,11 @@
             --button-darker: rgba(0, 0, 0, 0.1)
         }
 
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
         td {
             /* 640px (canvas size)/8 (grid size) = 80px (cell size) */
             /* 1rem = 16px -> 5rem = 80px */
@@ -48,10 +53,22 @@
         }
 
         #app {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem;
+            padding: 0;
+        }
+
+        @media (max-width:1280px) {
+            #app {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        #app-container {
+            margin: 1rem;
         }
 
         #grid-input-submit-container {
@@ -87,14 +104,12 @@
         }
 
         #options-container {
-            width: 100%;
             max-width: calc(var(--canvas-width)* 1.5);
         }
 
         #output-field {
-            max-width: calc(var(--canvas-width) * 1.5);
             width: 100%;
-            margin: 1rem;
+            height: calc(100% - 2px);
         }
 
         #maxLinesInput {
@@ -106,6 +121,13 @@
             border-radius: 5px;
             margin: 0 0.5rem 0 0.5rem;
             text-align: center;
+            height: 2rem;
+        }
+
+        @media screen and (max-width: 1860px) {
+            .checkbox-container {
+                height: unset;
+            }
         }
 
         .checkbox-label {
@@ -146,12 +168,13 @@
         }
 
         #add-multiple-choice-button {
-            margin: 0.5rem;
+            margin: 0;
         }
 
         textarea {
             margin: unset;
             padding: unset;
+            border: 1px solid black;
         }
 
         .multiple-choice {
@@ -166,67 +189,81 @@
         .multiple-choice-input {
             margin-top: 0.5rem;
         }
+
+        #left-side {
+            min-height: calc(100vh - 2rem - 2px);
+            border: 1px solid black;
+        }
+
+        #right-side {
+            min-height: calc(100vh - 2rem - 2px);
+            height: 100%;
+        }
     </style>
 </head>
 
 <body>
-    <div id="app" class="is-flex">
-        <h1 class="is-flex" style="text-align: center;padding:1rem;">PupuEditor</h1>
-        <div id="options-top" class="is-flex is-flex-1 is-flex-center">
-            <div id="options" class="is-flex">
-                <div class="grid-input-container">
-                    <span class="grid-width-input-text">Ruudukon leveys:</span>
-                    <input id="grid-width-input" type="text" placeholder="8" value="8">
+    <div id="app">
+        <div id="left-side" class="is-flex is-flex-column is-flex-center">
+            <h1 class="is-flex" style="text-align: center;padding:1rem;">PupuEditor</h1>
+            <div id="options-top" class="is-flex is-flex-1 is-flex-center">
+                <div id="options" class="is-flex">
+                    <div class="grid-input-container">
+                        <span class="grid-width-input-text">Ruudukon leveys:</span>
+                        <input id="grid-width-input" type="text" placeholder="8" value="8">
+                    </div>
+                    <div class="grid-input-container">
+                        <span class="grid-width-input-text">Ruudukon korkeus:</span>
+                        <input id="grid-height-input" type="text" placeholder="8" value="8">
+                    </div>
                 </div>
-                <div class="grid-input-container">
-                    <span class="grid-width-input-text">Ruudukon korkeus:</span>
-                    <input id="grid-height-input" type="text" placeholder="8" value="8">
+                <div id="grid-input-submit-container" class="is-flex">
+                    <button class="grid-input-submit" type="submit" value="Submit" onclick="createTable()">Luo ruudukko</button>
+                    <button class="grid-input-submit" type="submit" value="Generate" onclick="generateTaskOutput()">Tulosta taso</button>
+                    <button id="save-button" class="grid-input-submit is-hidden" type="submit" value="Save" onclick="downloadOutput()">Tallenna</button>
                 </div>
             </div>
-            <div id="grid-input-submit-container" class="is-flex">
-                <button class="grid-input-submit" type="submit" value="Submit" onclick="createTable()">Luo ruudukko</button>
-                <button class="grid-input-submit" type="submit" value="Generate" onclick="generateTaskOutput()">Tulosta taso</button>
-                <button id="save-button" class="grid-input-submit is-hidden" type="submit" value="Save" onclick="downloadOutput()">Tallenna</button>
+            <div id="options-container" class="is-flex is-flex-column">
+                <div id="options-conditions" class="is-flex is-flex-1 is-flex-center">
+                    <div class="checkbox-container is-flex is-flex-center">
+                        <input type="checkbox" id="condition1" class="checkbox" name="condition1" value="conditionUsedWhile" onclick="clickConditionBox(this)">
+                        <label class="checkbox-label" for="condition1">käytä while-silmukkaa</label><br>
+                    </div>
+                    <div class="checkbox-container is-flex is-flex-center">
+                        <input type="checkbox" id="condition2" class="checkbox" name="condition2" value="conditionUsedFor" onclick="clickConditionBox(this)">
+                        <label class="checkbox-label" for="condition2">käytä for-silmukkaa</label><br>
+                    </div>
+                    <div class="checkbox-container is-flex is-flex-center">
+                        <input type="checkbox" id="condition3" class="checkbox" name="condition3" value="conditionUsedInput" onclick="clickConditionBox(this)">
+                        <label class="checkbox-label" for="condition3">käytä input()</label><br>
+                    </div>
+                    <div class="checkbox-container is-flex is-flex-center">
+                        <input type="checkbox" id="condition4" class="checkbox" name="condition4" value="conditionMaxLines" onclick="clickConditionBox(this)">
+                        <label class="checkbox-label" for="condition4">vastaus enintään <input id="maxLinesInput" type="text" placeholder="0" value="0" style="text-align:center;"> riviä</label><br>
+                    </div>
+                </div>
+                <div id="options-input" class="is-flex is-flex-1 is-flex-column">
+                    <div id="options-input-buttons-container">
+                        <button class="options-input-buttons" value="inputDescription" onclick="inputButtonsToggler(event)">Tehtävän kuvaus</button>
+                        <button class="options-input-buttons" value="inputEditorCode" onclick="inputButtonsToggler(event)">Editorin koodi</button>
+                        <button class="options-input-buttons" value="inputMultipleChoice" onclick="inputButtonsToggler(event)">Monivalintatehtävät</button>
+                        <button id="add-multiple-choice-button" class="is-hidden" onclick="addMultipleChoiceQuestion()">+</button>
+                    </div>
+                    <textarea rows="3" name="task-input" id="task-input" value="" placeholder="Lisää tehtävän kuvaus"></textarea>
+                    <textarea rows="3" name="editor-input" id="editor-input" class="is-hidden" value="" placeholder="Lisää tehtävän tekstieditoriin etukäteen asetettu koodi"></textarea>
+                    <div id="multiple-choice-container" class="is-hidden">
+                    </div>
+                </div>
+            </div>
+            <div id="app-container" class="is-flex">
+                <div id="editor-container">
+                    <table id="editor-table"></table>
+                </div>
             </div>
         </div>
-        <div id="options-container" class="is-flex is-flex-column">
-            <div id="options-conditions" class="is-flex is-flex-1 is-flex-center">
-                <div class="checkbox-container is-flex is-flex-center">
-                    <input type="checkbox" id="condition1" class="checkbox" name="condition1" value="conditionUsedWhile" onclick="clickConditionBox(this)">
-                    <label class="checkbox-label" for="condition1">käytä while-silmukkaa</label><br>
-                </div>
-                <div class="checkbox-container is-flex is-flex-center">
-                    <input type="checkbox" id="condition2" class="checkbox" name="condition2" value="conditionUsedFor" onclick="clickConditionBox(this)">
-                    <label class="checkbox-label" for="condition2">käytä for-silmukkaa</label><br>
-                </div>
-                <div class="checkbox-container is-flex is-flex-center">
-                    <input type="checkbox" id="condition3" class="checkbox" name="condition3" value="conditionUsedInput" onclick="clickConditionBox(this)">
-                    <label class="checkbox-label" for="condition3">käytä input()</label><br>
-                </div>
-                <div class="checkbox-container is-flex is-flex-center">
-                    <input type="checkbox" id="condition4" class="checkbox" name="condition4" value="conditionMaxLines" onclick="clickConditionBox(this)">
-                    <label class="checkbox-label" for="condition4">vastaus enintään <input id="maxLinesInput" type="text" placeholder="0" value="0" style="text-align:center;"> riviä</label><br>
-                </div>
-            </div>
-            <div id="options-input" class="is-flex is-flex-1 is-flex-column">
-                <div id="options-input-buttons-container">
-                    <button class="options-input-buttons" value="inputDescription" onclick="inputButtonsToggler(event)">Tehtävän kuvaus</button>
-                    <button class="options-input-buttons" value="inputEditorCode" onclick="inputButtonsToggler(event)">Editorin koodi</button>
-                    <button class="options-input-buttons" value="inputMultipleChoice" onclick="inputButtonsToggler(event)">Monivalintatehtävät</button>
-                    <button id="add-multiple-choice-button" class="is-hidden" onclick="addMultipleChoiceQuestion()">+</button>
-                </div>
-                <textarea rows="3" name="task-input" id="task-input" value="" placeholder="Lisää tehtävän kuvaus"></textarea>
-                <textarea rows="3" name="editor-input" id="editor-input" class="is-hidden" value="" placeholder="Lisää tehtävän tekstieditoriin etukäteen asetettu koodi"></textarea>
-                <div id="multiple-choice-container" class="is-hidden">
-                </div>
-            </div>
+        <div id="right-side" class="">
+            <textarea id="output-field" rows="3" placeholder="..."></textarea>
         </div>
-        <div id="app-container" class="is-flex">
-            <div id="editor-container">
-                <table id="editor-table"></table>
-            </div>
-        </div>
-        <textarea id="output-field" rows="3"></textarea>
     </div>
 
     <script>
@@ -337,8 +374,8 @@
             let multipleChoices = document.getElementById("multiple-choice-container").childNodes;
             let multipleChoiceArray = []
 
-            for (i=1; i<multipleChoices.length; i++) {
-                multipleChoiceArray.push({question: multipleChoices[i].childNodes[0].value, isCorrectAnswer: multipleChoices[i].childNodes[1].childNodes[0].checked});
+            for (i = 1; i < multipleChoices.length; i++) {
+                multipleChoiceArray.push({ question: multipleChoices[i].childNodes[0].value, isCorrectAnswer: multipleChoices[i].childNodes[1].childNodes[0].checked });
             }
 
             return multipleChoiceArray;
@@ -364,7 +401,7 @@
             let outputField = document.getElementById("output-field");
             outputField.value = customJSONStringify(output);
             // need to fire input event to resize output field
-            outputField.dispatchEvent(new Event("input"));
+            // outputField.dispatchEvent(new Event("input"));
 
             // show save button after generating task output
             const save_button = document.getElementById("save-button");
@@ -441,7 +478,7 @@
             let multipleChoiceContainer = document.getElementById("multiple-choice-container");
             let multipleChoiceElement = document.createElement("div");
             multipleChoiceElement.classList.add("multiple-choice", "is-flex", "is-flex-column");
-            multipleChoiceElement.innerHTML = `<input type='text'><div class='multiple-choice-input'><input name='multipleChoice${multipleChoiceContainer.childNodes.length - 1}' type='checkbox'><label for='multipleChoice${multipleChoiceContainer.childNodes.length - 1} style="line-height: 20px;'>Oikea vastaus?</label></div>`;
+            multipleChoiceElement.innerHTML = `<input type='text' placeholder='Lisää kysymys'><div class='multiple-choice-input'><input name='multipleChoice${multipleChoiceContainer.childNodes.length - 1}' type='checkbox'><label for='multipleChoice${multipleChoiceContainer.childNodes.length - 1} style="line-height: 20px;'>Oikea vastaus?</label></div>`;
 
             multipleChoiceContainer.insertAdjacentElement("beforeend", multipleChoiceElement);
         }
@@ -461,7 +498,7 @@
         }
 
         // autoresize for textareas
-        const tx = document.getElementsByTagName("textarea");
+        const tx = document.querySelectorAll("textarea:not(#output-field)");
         for (let i = 0; i < tx.length; i++) {
             tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
             tx[i].addEventListener("input", OnInput, false);
