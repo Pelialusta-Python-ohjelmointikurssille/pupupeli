@@ -18,6 +18,7 @@ export class PlayerEntity extends GridObjectEntity {
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
         this.container.x = (this.screenPosition.x);
         this.container.y = (this.screenPosition.y);
+        this.sprite.y -= this.gridReference.gridScale * 0.1;
     }
 
     onStartAnimation(name) {
@@ -46,12 +47,12 @@ export class PlayerEntity extends GridObjectEntity {
         }
         if (this.animations.get("failmove").inProgress === true) {
             if (this.animations.get("failmove").value < 0.5) {
-                this.container.x = (this.screenPosition.x) + (this.animations.get("failmove").value * this.moveDirection.x * this.gridReference.gridScale);
-                this.container.y = (this.screenPosition.y) + this.getJumpHeight(this.animations.get("failmove").value) + (this.animations.get("failmove").value * this.moveDirection.y * this.gridReference.gridScale);   
+                this.container.x = (this.screenPosition.x) + (this.animations.get("failmove").value * 0.5 * this.moveDirection.x * this.gridReference.gridScale);
+                this.container.y = (this.screenPosition.y) + (this.getJumpHeight(this.animations.get("failmove").value)) + (this.animations.get("failmove").value*  0.5 * this.moveDirection.y * this.gridReference.gridScale);   
             }
             if (this.animations.get("failmove").value > 0.5 && this.animations.get("failmove").value < 1) {
-                this.container.x = (this.screenPosition.x) + ((1 - this.animations.get("failmove").value) * this.moveDirection.x * this.gridReference.gridScale);
-                this.container.y = (this.screenPosition.y) + this.getJumpHeight(this.animations.get("failmove").value) + ((1 - this.animations.get("failmove").value) * this.moveDirection.y * this.gridReference.gridScale);   
+                this.container.x = (this.screenPosition.x) + ((1 - this.animations.get("failmove").value)* 0.5 * this.moveDirection.x * this.gridReference.gridScale);
+                this.container.y = (this.screenPosition.y) + (this.getJumpHeight(this.animations.get("failmove").value)) + ((1 - this.animations.get("failmove").value) * 0.5 * this.moveDirection.y * this.gridReference.gridScale);   
             }
         }
     }
@@ -96,7 +97,8 @@ export class PlayerEntity extends GridObjectEntity {
     }
 
     getJumpHeight(progress) {
-        return -(Math.sin(Math.PI * progress)) * this.gridReference.gridScale * 0.5;
+        if (progress >= 1) progress = 1;
+        return -(Math.sin(Math.PI * progress)**0.75) * this.gridReference.gridScale * 0.5;
     }
 
     startMove(dir) {
