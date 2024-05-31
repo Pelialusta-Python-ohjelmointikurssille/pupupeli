@@ -29,21 +29,17 @@
             left: 0;
         }
 
+        .is-flex-center {
+            justify-content: center;
+            align-items: center;
+        }
+
         #app {
             display: flex;
             justify-content: center;
             align-items: center;
             height: calc(100vh - 2rem);
             flex-direction: column;
-        }
-
-        .grid-input-container {
-            margin-top: 1rem;
-        }
-
-        #grid-input-submit {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
         }
 
         #grid-input-submit-container {
@@ -56,11 +52,34 @@
             float: right;
         }
 
-        #options,
-        .foo {
+        #options-top {
+            display: contents;
+        }
+
+        #options-left {
+            padding: 1rem;
+        }
+
+        #options {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+        }
+
+        #options-container {
+            width: 100%;
+            max-width: calc(var(--canvas-width)* 1.5);
+        }
+
+        #output-field {
+            max-width: calc(var(--canvas-width) * 1.5);
+            width: 100%;
+            height: 300px;
+            margin: 1rem;
+        }
+
+        .checkbox {
+            margin-right: 1rem;
         }
     </style>
 </head>
@@ -68,98 +87,144 @@
 <body>
     <div id="app" class="is-flex">
         <h1 class="is-flex" style="text-align: center;padding:1rem;">PupuEditor</h1>
-        <div id="options" class="is-flex">
-            <!--<select>
-                <option>Some Option</option>
-            </select>-->
-            <div class="grid-input-container">
-                <span class="grid-width-input-text">Ruudukon leveys:</span>
-                <input id="grid-width-input" type="text" placeholder="8" value="8"></input>
+        <div id="options-top" class="is-flex is-flex-1 is-flex-center">
+            <div id="options" class="is-flex">
+                <select id="theme">
+                    <option value="pupu">Pupu</option>
+                    <option value="robo">Robo</option>
+                </select>
+                <div class="grid-input-container">
+                    <span class="grid-width-input-text">Ruudukon leveys:</span>
+                    <input id="grid-width-input" type="text" placeholder="8" value="8"></input>
+                </div>
+                <div class="grid-input-container">
+                    <span class="grid-width-input-text">Ruudukon korkeus:</span>
+                    <input id="grid-height-input" type="text" placeholder="8" value="8"></input>
+                </div>
             </div>
-            <div class="grid-input-container">
-                <span class="grid-width-input-text">Ruudukon korkeus:</span>
-                <input id="grid-height-input" type="text" placeholder="8" value="8"></input>
+            <div id="grid-input-submit-container is-flex">
+                <input id="grid-input-submit" type="submit" value="Submit" onclick="createTable()"></input>
+                <input id="grid-input-submit" type="submit" value="Generate" onclick="generateTaskOutput()"></input>
             </div>
         </div>
-        <div id="grid-input-submit-container is-flex">
-            <input id="grid-input-submit" type="submit" value="Submit" onclick="createTable()"></input>
-            <input id="grid-input-submit" type="submit" value="Generate" onclick="storeMatrix()"></input>
+        <div id="options-container" class="is-flex">
+            <div id="options-left" class="is-flex is-flex-1">
+                <textarea name="task-input" id="task-input" class="is-flex-1" value="" contenteditable></textarea>
+            </div>
+            <div id="options-middle" class="is-flex is-flex-1 is-flex-center">
+                <input type="checkbox" id="condition1" class="checkbox" name="condition1" value="conditionUsedWhile" onclick="this.classList.toggle('checked')">
+                <label for="condition1">käytä while-silmukkaa</label><br>
+                <input type="checkbox" id="condition2" class="checkbox" name="condition2" value="conditionUsedFor" onclick="this.classList.toggle('checked')">
+                <label for="condition2">käytä for-silmukkaa</label><br>
+                <input type="checkbox" id="condition3" class="checkbox" name="condition3" value="conditionUsedInput" onclick="this.classList.toggle('checked')">
+                <label for="condition3">käytä input()</label><br>
+            </div>
         </div>
         <div id="app-container" class="is-flex">
             <div id="editor-container">
                 <table id="editor-table"></table>
             </div>
-
-            <script>
-                function createTable() {
-
-                    let width = document.getElementById("grid-width-input").value;
-                    let height = document.getElementById("grid-height-input").value;
-                    let table = document.getElementById("editor-table");
-                    let cell;
-
-                    table.innerHTML = '';
-
-                    for (x = 0; x < height; x++) {
-                        table.appendChild(document.createElement("tr"));
-                        for (y = 0; y < width; y++) {
-                            cell = table.children[x].appendChild(document.createElement("td"));
-                            cell.dataset.value = "0";
-                            cell.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
-
-
-                            cell.addEventListener('click', function () {
-                                switch (this.dataset.value) {
-                                    case '0':
-                                        this.dataset.value = '1';
-                                        this.innerHTML = '<img src="/src/static/game_assets/porkkana_lapinakyva.png"></img>'
-                                        break;
-                                    case '1':
-                                        this.dataset.value = '2';
-                                        this.innerHTML = '<img src="/src/static/game_assets/Kivi3.png"></img>'
-                                        break;
-                                    case '2':
-                                        this.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
-                                        this.dataset.value = '0';
-                                        break;
-                                }
-
-                            });
-
-                        }
-                    }
-                }
-
-                function createMatrixFromTable() {
-                    const table = document.getElementById('editor-table');
-                    const rows = table.rows;
-                    const matrix = [];
-
-                    for (let i = 0; i < rows.length; i++) {
-                        const cells = rows[i].cells;
-                        const rowArray = [];
-
-                        for (let j = 0; j < cells.length; j++) {
-                            rowArray.push(cells[j].dataset.value);
-                        }
-
-                        matrix.push(rowArray);
-                    }
-
-                    return matrix;
-                }
-
-                function storeMatrix() {
-                    const matrix = createMatrixFromTable();
-                    console.log(matrix); 
-                }
-
-                window.onload = createTable;
-
-            </script>
         </div>
+        <textarea id="output-field"></textarea>
     </div>
 
+    <script>
+        function createTable() {
+
+            let width = document.getElementById("grid-width-input").value;
+            let height = document.getElementById("grid-height-input").value;
+            let table = document.getElementById("editor-table");
+            let cell;
+
+            table.innerHTML = '';
+
+            for (x = 0; x < height; x++) {
+                table.appendChild(document.createElement("tr"));
+                for (y = 0; y < width; y++) {
+                    cell = table.children[x].appendChild(document.createElement("td"));
+                    cell.dataset.value = "0";
+                    cell.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+
+
+                    cell.addEventListener('click', function () {
+                        switch (this.dataset.value) {
+                            case '0':
+                                this.dataset.value = '1';
+                                this.innerHTML = '<img src="/src/static/game_assets/porkkana_lapinakyva.png"></img>'
+                                break;
+                            case '1':
+                                this.dataset.value = '2';
+                                this.innerHTML = '<img src="/src/static/game_assets/Kivi3.png"></img>'
+                                break;
+                            case '2':
+                                this.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+                                this.dataset.value = '0';
+                                break;
+                        }
+
+                    });
+
+                }
+            }
+        }
+
+        function createGridFromTable() {
+            const table = document.getElementById('editor-table');
+            const rows = table.rows;
+            const grid = [];
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].cells;
+                const rowArray = [];
+
+                for (let j = 0; j < cells.length; j++) {
+                    rowArray.push(cells[j].dataset.value);
+                }
+
+                grid.push(rowArray);
+            }
+
+            return grid;
+        }
+
+        function getGrid() {
+            const grid = createGridFromTable();
+            let grid_formatted = "";
+            for (x = 0; x < grid.length; x++) {
+                grid_formatted += "[" + grid[x] + "]";
+                if (x < grid.length - 1) grid_formatted += ",\n";
+            };
+            return grid_formatted;
+        }
+
+        function getConditions() {
+            let conditions = "";
+            let conditionElements = document.getElementsByClassName("checked");
+            for (x = 0; x < conditionElements.length; x++) {
+                if (conditionElements[x].checked) {
+                    conditions += conditionElements[x].value;
+                    if (x < conditionElements.length - 1) {
+                        conditions += ", ";
+                    }
+                }
+            }
+            return conditions;
+        }
+
+        function generateTaskOutput() {
+            const taskDescription = document.getElementById("task-input").value;
+            const taskGameGrid = getGrid();
+            const theme = document.getElementById("theme").value;
+            const conditions = getConditions();
+
+            const output = "theme:{" + theme + "}" + "\ndescription:{" + taskDescription + "}" + "\ngrid:{" + taskGameGrid + "}" + "\n" + "conditions:{" + conditions + "}";
+
+            document.getElementById("output-field").value = output;
+        }
+
+        window.onload = createTable;
+
+    </script>
 </body>
 
 </html>
