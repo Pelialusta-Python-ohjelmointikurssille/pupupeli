@@ -25,6 +25,13 @@ export class GraphicsHandler {
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
 
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
+        if (this.gridWidth > this.gridHeight) {
+            this.graphicsEntityHandler.camera.zoomScale = 8 / (this.gridWidth * 1.15);
+        }
+        else {
+            this.graphicsEntityHandler.camera.zoomScale = 8 / (this.gridHeight * 1.15);
+        }
+        
         //this.createEntity("test2", "player", { position: new Vector2(2, 2) });
         //this.doAction("test2", "move", { direction: "right" });
     }

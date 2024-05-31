@@ -39,7 +39,7 @@ export class GraphicsEntitySystem {
     }
 
     createCamera(screen, container) {
-        this.camera = new GraphicsCameraEntity(container, screen, new Vector2(120, 120));
+        this.camera = new GraphicsCameraEntity(container, screen, new Vector2(30, 30));
     }
 
     createGraphicsEntity(entityId, type, data) {
