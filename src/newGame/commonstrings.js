@@ -8,6 +8,7 @@ const UP_STR = "up";
 const DOWN_STR = "down";
 const LEFT_STR = "left";
 const RIGHT_STR = "right";
+const TEST_STR = "test";
 
 export class Constants {
 
@@ -34,6 +35,9 @@ export class Constants {
     }
     static get RIGHT_STR() {
         return RIGHT_STR;
+    }
+    static get TEST_STR() {
+        return TEST_STR;
     }
 }
 
