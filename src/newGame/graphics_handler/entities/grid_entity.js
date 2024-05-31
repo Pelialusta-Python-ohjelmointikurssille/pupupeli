@@ -7,7 +7,7 @@ export class GridEntity extends GraphicsEntity {
     constructor(entityId, entityHandler, container, sprite, data) {
         super(entityId, entityHandler, container, sprite, data);
         this.gridSize = data.gridSize;
-        this.sizeOnScreen = new Vector2(this.gridSize.x * 80, this.gridSize.y * 80)
+        this.sizeOnScreen = new Vector2(this.gridSize.x * 128, this.gridSize.y * 128)
         this.lineGraphicsList =  [];
         this.lineColor = 0x000000;
         this.lineWidth = 2;
