@@ -24,10 +24,11 @@ export class GraphicsHandler {
 
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
         this.createEntity("test2", "player");
+        this.doAction("test2", "move", null);
     }
 
     doAction(entityId, actionId, actionData) {
-        this.graphicsEntityHandler.getGraphicsEntity(entityId).doAnimation(actionId, actionData);
+        this.graphicsEntityHandler.getGraphicsEntity(entityId).doAction(actionId, actionData);
     }
 
     createEntity(entityId, type, data) {

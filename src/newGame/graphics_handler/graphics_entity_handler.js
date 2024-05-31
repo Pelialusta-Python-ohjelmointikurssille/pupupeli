@@ -12,6 +12,7 @@ export class GraphicsEntitySystem {
         this.builtinAssets = builtinAssets;
         this.entityDict = new Map();
         this.spriteDict = new Map();
+        this.gridObject = null;
         this.renderer = renderer;
         this.camera = null;
         this.entityFactory = new GraphicsEntityFactory(this, this.builtinAssets);
@@ -30,6 +31,12 @@ export class GraphicsEntitySystem {
 
     createGraphicsEntity(entityId, type, data) {
         let entity = this.entityFactory.createEntity(entityId, type, data);
+        if (type == "grid") {
+            this.gridObject = entity;
+            this.renderer.addToStage(entity.container);
+            entity.onCreate();
+            return;
+        }
         this.entityDict.set(entityId, entity);
         this.renderer.addToStage(entity.container);
         entity.onCreate();
@@ -38,5 +45,13 @@ export class GraphicsEntitySystem {
     destroyGraphicsEntity(entityId) {
         this.renderer.removeFromStage(this.entityDict.get(entityId).container);
         this.entityDict.delete(entityId);
+    }
+
+    getGraphicsEntity(entityId) {
+        return this.entityDict.get(entityId);
+    }
+
+    getGridObject() {
+        return this.gridObject;
     }
 }

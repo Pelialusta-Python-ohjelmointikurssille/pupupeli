@@ -21,6 +21,6 @@ export class GraphicsEntity {
     onUpdate(deltaTime) {
     }
 
-    doAnimation() {
+    doAction() {
     }
 }

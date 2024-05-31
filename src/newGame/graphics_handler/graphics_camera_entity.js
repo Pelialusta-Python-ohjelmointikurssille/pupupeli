@@ -15,10 +15,10 @@ export class GraphicsCameraEntity {
         this.container.pivot.x = this.screenCenter.x;
         this.container.pivot.y = this.screenCenter.y;
         this.totalRenderScale = this.getTotalRenderScale();
-        this.updateContainerValues();
+        this.updatePosition();
     }
 
-    updateContainerValues() {
+    updatePosition() {
         this.totalRenderScale = this.getTotalRenderScale();
         this.container.position.x = (this.position.x + this.screenCenter.x) * (this.getTotalRenderScale());
         this.container.position.y = (this.position.y + this.screenCenter.y) * (this.getTotalRenderScale());
@@ -40,6 +40,6 @@ export class GraphicsCameraEntity {
     }
 
     onUpdate(deltaTime) {
-        this.updateContainerValues();
+        this.updatePosition();
     }
 }
