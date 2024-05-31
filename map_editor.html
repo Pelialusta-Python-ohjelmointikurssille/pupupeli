@@ -148,6 +148,14 @@
     </div>
 
     <script>
+        class Level {
+            constructor(description, grid, conditions) {
+                this.description = description;
+                this.grid = grid;
+                this.conditions = conditions;
+            }
+        }
+
         function createTable() {
 
             let width = document.getElementById("grid-width-input").value;
@@ -206,53 +214,79 @@
             return grid;
         }
 
-        function getGrid() {
-            const grid = createGridFromTable();
-            let grid_formatted = "";
-            for (x = 0; x < grid.length; x++) {
-                grid_formatted += "[" + grid[x] + "]";
-                if (x < grid.length - 1) grid_formatted += ",\n";
-            };
-            return grid_formatted;
-        }
-
         function getConditions() {
-            let conditions = "";
-            let conditionElements = document.getElementsByClassName("checked");
+            let conditions = [];
+            let conditionElements = document.getElementsByClassName("checkbox");
             for (x = 0; x < conditionElements.length; x++) {
-                if (conditionElements[x].checked) {
-                    conditions += conditionElements[x].value;
-                    if (x < conditionElements.length - 1) {
-                        conditions += ", ";
-                    }
+                if (conditionElements[x].value === "conditionMaxLines") {
+                    let maxLinesValue = conditionElements[x].checked ? conditionElements[x].nextElementSibling.children[0].value : false;
+                    conditions.push({ condition: conditionElements[x].value, parameter: maxLinesValue });
+                } else {
+                    conditions.push({ condition: conditionElements[x].value, parameter: conditionElements[x].checked });
                 }
             }
             return conditions;
         }
 
         function generateTaskOutput() {
-            const taskDescription = document.getElementById("task-input").value;
-            const taskGameGrid = getGrid();
-            const theme = document.getElementById("theme").value;
+
+            const taskDescriptionLines = [];
+            document.getElementById("task-input").value.split("\n").forEach((line) => {
+                taskDescriptionLines.push(line);
+            })
+            const taskGameGrid = createGridFromTable();
             const conditions = getConditions();
+
+            // use Level class to get json output
+            let output = new Level(taskDescriptionLines, taskGameGrid, conditions);
+            let outputField = document.getElementById("output-field");
+            outputField.value = customJSONStringify(output);
+            // need to fire input event to resize output field
+            outputField.dispatchEvent(new Event("input"));
+
+            // show save button after generating task output
             const save_button = document.getElementById("save-button");
-
-            const output = "theme:{" + theme + "}" + "\ndescription:{" + taskDescription + "}" + "\ngrid:{" + taskGameGrid + "}" + "\n" + "conditions:{" + conditions + "}";
-
-            document.getElementById("output-field").value = output;
             if (save_button.classList.contains("is-hidden")) save_button.classList.toggle("is-hidden");
+
+            // check if array consists of single characters only (relevant for printing our grid nicely)
+            function isSingleCharArray(array) {
+                return Array.isArray(array) && array.every(item => typeof item === 'string' && item.length === 1);
+            }
+
+            // replacer function for JSON.stringify
+            function stringifyReplacer(key, value) {
+                if (isSingleCharArray(value)) {
+                    return `[${value.join(',')}]`;
+                }
+                return value;
+            }
+
+            // remove extra quotes around the single-character arrays
+            function customJSONStringify(obj) {
+                return JSON.stringify(obj, (key, value) => {
+                    let replacedValue = stringifyReplacer(key, value);
+                    if (typeof replacedValue === 'string' && replacedValue.startsWith('[')) {
+                        return replacedValue;
+                    }
+                    return value;
+                }, 2).replace(/"(\[.*?\])"/g, '$1');
+            }
         }
 
+        function clickConditionBox(div) {
+            div.classList.toggle('checked');
+            div.parentNode.classList.toggle('active');
+        }
+
+        // creates a downloadable file from the text in the output field
         function downloadOutput() {
             let text = document.getElementById("output-field").value;
-            // text = text.replace(/\n/g, "\r\n"); // retain line breaks
             let blob = new Blob([text], { type: "text/plain" });
             let anchor = document.createElement("a");
-            anchor.download = "output.txt";
+            anchor.download = "output.json";
             anchor.href = window.URL.createObjectURL(blob);
             anchor.target = "_blank";
             anchor.style.display = "none";
-            console.log(text)
             document.body.appendChild(anchor);
             anchor.click();
             document.body.removeChild(anchor);
