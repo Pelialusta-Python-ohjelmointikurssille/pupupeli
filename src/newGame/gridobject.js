@@ -9,14 +9,27 @@
  * @returns {GridObject} - A grid object
  */
 
+import { Vector2 } from "./vector.js";
+
 class GridObject {
     constructor(type) {
         this.type = type;
         this.cell = null;
+        this.id = this.#generateUniqueID();
+        console.log(this.id);
+    }
+
+    #generateUniqueID() {
+        return crypto.randomUUID().toString();
     }
 
     toString() {
         return this.type;
+    }
+
+    getVector2Position() {
+        if (this.cell === null | this.cell === undefined) return new Vector2(0, 0);
+        return new Vector2(this.cell.x, this.cell.y);
     }
 }
 

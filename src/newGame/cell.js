@@ -20,6 +20,7 @@ export class Cell {
         this.y = y;
         this.entities = [];
     }
+
     toString() {
         if (this.entities.length > 0) {
             return this.entities.toString();
