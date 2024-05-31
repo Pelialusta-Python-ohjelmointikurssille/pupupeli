@@ -8,14 +8,6 @@ export class PlayerEntity extends GridObjectEntity {
     constructor(entityId, entityHandler, container, sprite, data) {
         super(entityId, entityHandler, container, sprite, data);
         this.moveDirection = new Vector2(0, 0);
-        this.gridCellPosition = new Vector2(0, 0);
-        if (data == null) {
-            return;
-        }
-        if (data.position == null) {
-            return;
-        }
-        this.gridCellPosition = data.position;
     }
 
     onCreate() {
@@ -32,12 +24,8 @@ export class PlayerEntity extends GridObjectEntity {
         // TODO: Get proper grid to screen coordinate conversions
         super.onUpdate(deltaTime);
         if (this.animProgress.value <= 1 && this.animProgress.inProgress === true) {
-            this.container.x = (this.gridCellPosition.x * 80) + (this.animProgress.value * 80 * this.moveDirection.x);
-            this.container.y = (this.gridCellPosition.y * 80) + this.getJumpHeigh(this.animProgress.value) + (this.animProgress.value * 80 * this.moveDirection.y);
-        }
-        if (this.animProgress.inProgress === false) {
-            this.container.x = this.gridCellPosition.x * 80;
-            this.container.y = this.gridCellPosition.y * 80;
+            this.container.x = (this.gridCellPosition.x ) + (this.animProgress.value * this.moveDirection.x);
+            this.container.y = (this.gridCellPosition.y) + this.getJumpHeigh(this.animProgress.value) + (this.animProgress.value * this.moveDirection.y);
         }
     }
 
@@ -55,8 +43,8 @@ export class PlayerEntity extends GridObjectEntity {
             if (actionData.direction === "up") {
                 this.moveDirection = new Vector2(0, -1)
             }
-            this.animProgress.start();
-            this.isReady = false;
+            //this.animProgress.start();
+            //this.isReady = false;
         }
     }
 

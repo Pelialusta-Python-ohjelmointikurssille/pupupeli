@@ -1,5 +1,6 @@
 import { GraphicsEntity } from "./graphics_entity.js";
 import { Vector2 } from "../../../game/vector.js";
+import { GridVectorToScreenVector } from "../coord_helper.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 export class GridEntity extends GraphicsEntity {
@@ -13,6 +14,7 @@ export class GridEntity extends GraphicsEntity {
         this.lineGraphics = new PIXI.Graphics()
         this.font = "Roboto";
         this.gridSize = data.gridSize;
+        this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
     }
 
     
@@ -54,5 +56,12 @@ export class GridEntity extends GraphicsEntity {
     removeLines () {
         this.lineGraphics.clear();
         this.container.removeChildren();
+    }
+
+    gridToScreenCoordinates(gridCellPosition) {
+        let screenPos = GridVectorToScreenVector(gridCellPosition, this.sizeOnScreen, this.gridSize, new Vector2(this.container.x, this.container.y));
+        //screenPos.x += this.gridScale / 2;
+        //screenPos.y += this.gridScale / 2;
+        return screenPos;
     }
 }
