@@ -14,6 +14,9 @@ export class PlayerEntity extends GridObjectEntity {
 
     onCreate() {
         super.onCreate();
+        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
+        this.container.x = (this.screenPosition.x);
+        this.container.y = (this.screenPosition.y);
     }
 
     onStartAnimation(name) {
@@ -27,6 +30,9 @@ export class PlayerEntity extends GridObjectEntity {
             this.gridCellPosition.y += this.moveDirection.y;
         }
         this.isReady = true;
+        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
+        this.container.x = (this.screenPosition.x);
+        this.container.y = (this.screenPosition.y);
     }
 
     onUpdate(deltaTime) {
@@ -44,11 +50,6 @@ export class PlayerEntity extends GridObjectEntity {
                 this.container.x = (this.screenPosition.x) + ((1 - this.animations.get("failmove").value) * this.moveDirection.x * this.gridReference.gridScale);
                 this.container.y = (this.screenPosition.y) + this.getJumpHeight(this.animations.get("failmove").value) + ((1 - this.animations.get("failmove").value) * this.moveDirection.y * this.gridReference.gridScale);   
             }
-        }
-        if (this.isReady === true) {
-            this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
-            this.container.x = (this.screenPosition.x);
-            this.container.y = (this.screenPosition.y);
         }
     }
 
