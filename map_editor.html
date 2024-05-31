@@ -135,8 +135,7 @@
                 </div>
             </div>
             <div id="options-left" class="is-flex is-flex-1">
-                <textarea rows="7" name="task-input" id="task-input" class="is-flex-1" value=""
-                    contenteditable></textarea>
+                <textarea rows="3" name="task-input" id="task-input" class="is-flex-1" value="" contenteditable></textarea>
             </div>
         </div>
         <div id="app-container" class="is-flex">
@@ -144,7 +143,7 @@
                 <table id="editor-table"></table>
             </div>
         </div>
-        <textarea id="output-field" rows="7"></textarea>
+        <textarea id="output-field" rows="3"></textarea>
     </div>
 
     <script>
@@ -290,6 +289,18 @@
             document.body.appendChild(anchor);
             anchor.click();
             document.body.removeChild(anchor);
+        }
+
+        // autoresize for textareas
+        const tx = document.getElementsByTagName("textarea");
+        for (let i = 0; i < tx.length; i++) {
+            tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+            tx[i].addEventListener("input", OnInput, false);
+        }
+
+        function OnInput() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + "px";
         }
 
         window.onload = createTable;
