@@ -19,19 +19,17 @@ export class Grid {
     }
 
     resetGrid() {
-        console.log("RESET!");
         this.doubleArray = this.CreateDoubleArray(this.width, this.height);
-        for (let [gridobject, vector2] of  this.resetPosMap.entries()) {
+        for (let [gridobject, vector2] of this.resetPosMap.entries()) {
             this.addToGrid(gridobject, vector2.x, vector2.y);
         }
-        this.consoleDebug();
     }
 
     addToGrid(gridObject, x, y) {
         if (this.gridObjects.includes(gridObject) === false) {
             this.gridObjects.push(gridObject);
         }
-        
+
         this.doubleArray[x][y].entities.push(gridObject);
         gridObject.cell = this.doubleArray[x][y];
     }
@@ -39,8 +37,6 @@ export class Grid {
     //If GO unable to move to dir, returns fail.
     //Returns true if move was succesful.
     moveGridObjectToDir(gridObject, direction) {
-        console.log("MOVE!");
-        this.consoleDebug();
         if (gridObject == null) return false;
         let dirVector = Vector2.FromDirection(direction);
         let newX = gridObject.cell.x + dirVector.x;

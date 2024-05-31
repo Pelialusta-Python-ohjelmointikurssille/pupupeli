@@ -23,8 +23,6 @@ export function getNewGameGrid() {
     let newGrid = new Grid(player, gridWitdh, gridHeight);
 
     newGrid.addToGrid(player, xPupu, yPupu);
-    console.log(newGrid)
-
     newGrid.saveCurrentStateForReset(); //Important!
     return newGrid;
 };
