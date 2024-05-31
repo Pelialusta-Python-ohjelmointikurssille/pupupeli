@@ -9,6 +9,7 @@ export class PlayerEntity extends GridObjectEntity {
         super(entityId, entityHandler, container, sprite, data);
         this.moveDirection = new Vector2(0, 0);
         this.animations.set("move", new AnimationProgress(0.5, this.onStartAnimation, this.onFinishAnimation, this, "move"));
+        this.animations.set("failmove", new AnimationProgress(0.5, this.onStartAnimation, this.onFinishAnimation, this, "failmove"));
     }
 
     onCreate() {
@@ -21,8 +22,10 @@ export class PlayerEntity extends GridObjectEntity {
 
     onFinishAnimation(name) {
         super.onFinishAnimation(name);
-        this.gridCellPosition.x += this.moveDirection.x;
-        this.gridCellPosition.y += this.moveDirection.y;
+        if (name === "move") {
+            this.gridCellPosition.x += this.moveDirection.x;
+            this.gridCellPosition.y += this.moveDirection.y;
+        }
         this.isReady = true;
     }
 
@@ -32,29 +35,59 @@ export class PlayerEntity extends GridObjectEntity {
             this.container.x = (this.screenPosition.x) + (this.animations.get("move").value * this.moveDirection.x * this.gridReference.gridScale);
             this.container.y = (this.screenPosition.y) + this.getJumpHeight(this.animations.get("move").value) + (this.animations.get("move").value * this.moveDirection.y * this.gridReference.gridScale);
         }
-        if (this.animations.get("move").inProgress === false) {
+        if (this.animations.get("failmove").inProgress === true) {
+            if (this.animations.get("failmove").value < 0.5) {
+                this.container.x = (this.screenPosition.x) + (this.animations.get("failmove").value * this.moveDirection.x * this.gridReference.gridScale);
+                this.container.y = (this.screenPosition.y) + this.getJumpHeight(this.animations.get("failmove").value) + (this.animations.get("failmove").value * this.moveDirection.y * this.gridReference.gridScale);   
+            }
+            if (this.animations.get("failmove").value > 0.5) {
+                this.container.x = (this.screenPosition.x) + ((1 - this.animations.get("failmove").value) * this.moveDirection.x * this.gridReference.gridScale);
+                this.container.y = (this.screenPosition.y) + this.getJumpHeight(this.animations.get("failmove").value) + ((1 - this.animations.get("failmove").value) * this.moveDirection.y * this.gridReference.gridScale);   
+            }
+        }
+        if (this.isReady === true) {
             this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
-            this.container.position.x = this.screenPosition.x;
-            this.container.position.y = this.screenPosition.y;
+            this.container.x = (this.screenPosition.x);
+            this.container.y = (this.screenPosition.y);
         }
     }
 
     doAction(actionId, actionData) {
+        if(this.isReady === false) {
+            return;
+        }
         if (actionId === "move") {
-            if (actionData.direction === "down") {
-                this.moveDirection = new Vector2(0, 1)
+            if (actionData.isSuccess === true) {
+                if (actionData.direction === "down") {
+                    this.moveDirection = new Vector2(0, 1)
+                }
+                if (actionData.direction === "left") {
+                    this.moveDirection = new Vector2(-1, 0)
+                }
+                if (actionData.direction === "right") {
+                    this.moveDirection = new Vector2(1, 0)
+                }
+                if (actionData.direction === "up") {
+                    this.moveDirection = new Vector2(0, -1)
+                }
+                this.animations.get("move").start();
+                this.isReady = false;
+            } else {
+                if (actionData.direction === "down") {
+                    this.moveDirection = new Vector2(0, 1)
+                }
+                if (actionData.direction === "left") {
+                    this.moveDirection = new Vector2(-1, 0)
+                }
+                if (actionData.direction === "right") {
+                    this.moveDirection = new Vector2(1, 0)
+                }
+                if (actionData.direction === "up") {
+                    this.moveDirection = new Vector2(0, -1)
+                }
+                this.animations.get("failmove").start();
+                this.isReady = false;
             }
-            if (actionData.direction === "left") {
-                this.moveDirection = new Vector2(-1, 0)
-            }
-            if (actionData.direction === "right") {
-                this.moveDirection = new Vector2(1, 0)
-            }
-            if (actionData.direction === "up") {
-                this.moveDirection = new Vector2(0, -1)
-            }
-            this.animations.get("move").start();
-            this.isReady = false;
         }
     }
 
