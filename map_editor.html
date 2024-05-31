@@ -8,9 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
     <style>
+        :root {
+            --cell-side: 5rem;
+            --button-darker: rgba(0, 0, 0, 0.1)
+        }
+
         td {
-            width: 4rem;
-            height: 4rem;
+            /* 640px (canvas size)/8 (grid size) = 80px (cell size) */
+            /* 1rem = 16px -> 5rem = 80px */
+            width: var(--cell-side);
+            height: var(--cell-side);
             border: 1px solid black;
             text-align: center;
             cursor: pointer;
@@ -66,7 +73,7 @@
         }
 
         #options-middle {
-            margin: 1rem auto 0rem auto;
+            margin: 0.5rem auto 0rem auto;
         }
 
         #options {
@@ -86,8 +93,33 @@
             margin: 1rem;
         }
 
+        #maxLinesInput {
+            width: 1rem;
+        }
+
+        .checkbox-container {
+            border: 1px solid black;
+            border-radius: 5px;
+            margin: 0 0.5rem 0 0.5rem;
+            text-align: center;
+        }
+
+        .checkbox-label {
+            padding: 0.5rem;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .checkbox-container:hover {
+            background-color: var(--button-darker);
+        }
+
+        .active {
+            background-color: var(--button-darker);
+        }
+
         .checkbox {
-            margin-left: 1rem;
+            display: none;
         }
     </style>
 </head>
@@ -97,10 +129,6 @@
         <h1 class="is-flex" style="text-align: center;padding:1rem;">PupuEditor</h1>
         <div id="options-top" class="is-flex is-flex-1 is-flex-center">
             <div id="options" class="is-flex">
-                <select id="theme">
-                    <option value="pupu">Pupu</option>
-                    <option value="robo">Robo</option>
-                </select>
                 <div class="grid-input-container">
                     <span class="grid-width-input-text">Ruudukon leveys:</span>
                     <input id="grid-width-input" type="text" placeholder="8" value="8"></input>
@@ -111,27 +139,28 @@
                 </div>
             </div>
             <div id="grid-input-submit-container" class="is-flex">
-                <button class="grid-input-submit" type="submit" value="Submit" onclick="createTable()">Submit</button>
-                <button class="grid-input-submit" type="submit" value="Generate" onclick="generateTaskOutput()">Generate</button>
-                <button id="save-button" class="grid-input-submit is-hidden" type="submit" value="Save" onclick="downloadOutput()">Save</button>
+                <button class="grid-input-submit" type="submit" value="Submit" onclick="createTable()">Luo ruudukko</button>
+                <button class="grid-input-submit" type="submit" value="Generate" onclick="generateTaskOutput()">Tulosta taso</button>
+                <button id="save-button" class="grid-input-submit is-hidden" type="submit" value="Save" onclick="downloadOutput()">Tallenna</button>
             </div>
         </div>
         <div id="options-container" class="is-flex is-flex-column">
             <div id="options-middle" class="is-flex is-flex-1 is-flex-center">
                 <div class="checkbox-container is-flex is-flex-center">
-                    <input type="checkbox" id="condition1" class="checkbox" name="condition1" value="usedWhile"
-                        onclick="this.classList.toggle('checked')">
-                    <label for="condition1">käytä while-silmukkaa</label><br>
+                    <input type="checkbox" id="condition1" class="checkbox" name="condition1" value="conditionUsedWhile" onclick="clickConditionBox(this)">
+                    <label class="checkbox-label" for="condition1">käytä while-silmukkaa</label><br>
                 </div>
                 <div class="checkbox-container is-flex is-flex-center">
-                    <input type="checkbox" id="condition2" class="checkbox" name="condition2" value="usedFor"
-                        onclick="this.classList.toggle('checked')">
-                    <label for="condition2">käytä for-silmukkaa</label><br>
+                    <input type="checkbox" id="condition2" class="checkbox" name="condition2" value="conditionUsedFor" onclick="clickConditionBox(this)">
+                    <label class="checkbox-label" for="condition2">käytä for-silmukkaa</label><br>
                 </div>
                 <div class="checkbox-container is-flex is-flex-center">
-                    <input type="checkbox" id="condition3" class="checkbox" name="condition3" value="usedInput"
-                        onclick="this.classList.toggle('checked')">
-                    <label for="condition3">käytä input()</label><br>
+                    <input type="checkbox" id="condition3" class="checkbox" name="condition3" value="conditionUsedInput" onclick="clickConditionBox(this)">
+                    <label class="checkbox-label" for="condition3">käytä input()</label><br>
+                </div>
+                <div class="checkbox-container is-flex is-flex-center">
+                    <input type="checkbox" id="condition4" class="checkbox" name="condition4" value="conditionMaxLines" onclick="clickConditionBox(this)">
+                    <label class="checkbox-label" for="condition4">vastaus enintään <input id="maxLinesInput" type="text" placeholder="0" value="0" style="text-align:center;"></input> riviä</label><br>
                 </div>
             </div>
             <div id="options-left" class="is-flex is-flex-1">
@@ -157,41 +186,63 @@
 
         function createTable() {
 
-            let width = document.getElementById("grid-width-input").value;
-            let height = document.getElementById("grid-height-input").value;
-            let table = document.getElementById("editor-table");
-            let cell;
+            const gridDimensions = {
+                width: document.getElementById("grid-width-input").value,
+                height: document.getElementById("grid-height-input").value
+            };
+            const table = document.getElementById("editor-table");
 
+            // empty the table in case user generates multiple times without reloading page
             table.innerHTML = '';
 
-            for (x = 0; x < height; x++) {
+            for (x = 0; x < gridDimensions.height; x++) {
                 table.appendChild(document.createElement("tr"));
-                for (y = 0; y < width; y++) {
-                    cell = table.children[x].appendChild(document.createElement("td"));
-                    cell.dataset.value = "0";
+                for (y = 0; y < gridDimensions.width; y++) {
+                    let cell = table.children[x].appendChild(document.createElement("td"));
+                    cell.dataset.value = "1";
                     cell.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
 
 
                     cell.addEventListener('click', function () {
+                        console.log(this);
                         switch (this.dataset.value) {
-                            case '0':
-                                this.dataset.value = '1';
-                                this.innerHTML = '<img src="/src/static/game_assets/porkkana_lapinakyva.png"></img>'
-                                break;
                             case '1':
                                 this.dataset.value = '2';
-                                this.innerHTML = '<img src="/src/static/game_assets/Kivi3.png"></img>'
+                                this.innerHTML = '<img src="/src/static/game_assets/porkkana_lapinakyva.png"></img>'
                                 break;
                             case '2':
+                                this.dataset.value = '3';
+                                this.innerHTML = '<img src="/src/static/game_assets/Kivi3.png"></img>'
+                                break;
+                            case '3':
                                 this.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
-                                this.dataset.value = '0';
+                                this.dataset.value = '1';
                                 break;
                         }
 
                     });
 
+
+
                 }
             }
+
+            let cells = table.getElementsByTagName("td");
+
+            Array.from(cells).forEach(cell => {
+                cell.addEventListener("contextmenu", function (event) {
+                    event.preventDefault();
+                    Array.from(cells).forEach(c => {
+                        if (c.dataset.value === "0") {
+                            c.dataset.value = "1";
+                            c.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+                        }
+                    });
+
+                    this.dataset.value = "0";
+                    this.innerHTML = '<img src="/src/static/game_assets/bunny_right.png"></img>';
+                });
+            });
         }
 
         function createGridFromTable() {
