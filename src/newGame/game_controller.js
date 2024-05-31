@@ -31,3 +31,7 @@ export function commandsDone() {
 export function getCanvas(){
     game.getCanvas();
 }
+
+export function resetGame() {
+    game.resetGame();
+}

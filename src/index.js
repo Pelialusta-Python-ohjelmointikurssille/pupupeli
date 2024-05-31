@@ -1,9 +1,8 @@
-import { InitGame, resetGame, rendererToggleGrid } from "./game/game.js"
 import { EventHandler } from "./event_handler.js";
 import { getEditor } from "./input/editor.js";
 import { tryGetFileAsText } from "./file_reader.js";
 import { extractErrorDetails } from "./input/py_error_handling.js"
-import { initNewGame } from "./newGame/game_controller.js";
+import { initNewGame, resetGame } from "./newGame/game_controller.js";
 
 let worker;
 let eventHandler;
@@ -13,22 +12,13 @@ async function main() {
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", nextStepButtonClick);
-    addEventToButton("grid-toggle-button", rendererToggleGrid)
+    //addEventToButton("grid-toggle-button", rendererToggleGrid)
     initializeWorker();
     await initGame();
 }
 
 async function initGame() {
     let canvas = await initNewGame();
-    document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
-    canvas.classList.add("is-flex");
-    canvas.id = "game";
-}
-
-async function createGameWindow() {
-    let app = await InitGame();
-    let canvas = app.canvas;
-
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";

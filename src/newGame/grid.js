@@ -8,7 +8,24 @@ export class Grid {
         this.width = width;
         this.height = height;
         this.player = player;
+        this.resetPosMap = new Map();
     };
+
+    saveCurrentStateForReset() {
+        for (let i = 0; i < this.gridObjects.length; i++) {
+            let go = this.gridObjects[i];
+            this.resetPosMap.set(go, go.getVector2Position());
+        }
+    }
+
+    resetGrid() {
+        console.log("RESET!");
+        this.doubleArray = this.CreateDoubleArray(this.width, this.height);
+        for (let [gridobject, vector2] of  this.resetPosMap.entries()) {
+            this.addToGrid(gridobject, vector2.x, vector2.y);
+        }
+        this.consoleDebug();
+    }
 
     addToGrid(gridObject, x, y) {
         if (this.gridObjects.includes(gridObject) === false) {
@@ -22,6 +39,8 @@ export class Grid {
     //If GO unable to move to dir, returns fail.
     //Returns true if move was succesful.
     moveGridObjectToDir(gridObject, direction) {
+        console.log("MOVE!");
+        this.consoleDebug();
         if (gridObject == null) return false;
         let dirVector = Vector2.FromDirection(direction);
         let newX = gridObject.cell.x + dirVector.x;

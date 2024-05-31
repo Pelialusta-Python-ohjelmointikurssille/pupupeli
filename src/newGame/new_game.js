@@ -46,4 +46,9 @@ export class Game {
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
     }
+
+    resetGame() {
+        this.grid.resetGrid();
+        this.gh.resetAllGridObjects();
+    }
 }

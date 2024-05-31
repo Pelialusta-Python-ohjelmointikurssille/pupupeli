@@ -25,5 +25,6 @@ export function getNewGameGrid() {
     newGrid.addToGrid(player, xPupu, yPupu);
     console.log(newGrid)
 
+    newGrid.saveCurrentStateForReset(); //Important!
     return newGrid;
 };
