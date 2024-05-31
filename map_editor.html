@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>Pupupeli Level Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        td {
+            width: 4rem;
+            height: 4rem;
+            border: 1px solid black;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Ensures the image covers the td while maintaining aspect ratio */
+            position: absolute;
+            /* Ensure the image covers the entire td */
+            top: 0;
+            left: 0;
+        }
+
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 2rem);
+            flex-direction: column;
+        }
+
+        .grid-input-container {
+            margin-top: 1rem;
+        }
+
+        #grid-input-submit {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        #grid-input-submit-container {
+            flex-direction: row;
+        }
+
+        #grid-width-input,
+        #grid-height-input {
+            width: 1rem;
+            float: right;
+        }
+
+        #options,
+        .foo {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="is-flex">
+        <h1 class="is-flex" style="text-align: center;padding:1rem;">PupuEditor</h1>
+        <div id="options" class="is-flex">
+            <!--<select>
+                <option>Some Option</option>
+            </select>-->
+            <div class="grid-input-container">
+                <span class="grid-width-input-text">Ruudukon leveys:</span>
+                <input id="grid-width-input" type="text" placeholder="8" value="8"></input>
+            </div>
+            <div class="grid-input-container">
+                <span class="grid-width-input-text">Ruudukon korkeus:</span>
+                <input id="grid-height-input" type="text" placeholder="8" value="8"></input>
+            </div>
+        </div>
+        <div id="grid-input-submit-container is-flex">
+            <input id="grid-input-submit" type="submit" value="Submit" onclick="createTable()"></input>
+            <input id="grid-input-submit" type="submit" value="Generate" onclick="storeMatrix()"></input>
+        </div>
+        <div id="app-container" class="is-flex">
+            <div id="editor-container">
+                <table id="editor-table"></table>
+            </div>
+
+            <script>
+                function createTable() {
+
+                    let width = document.getElementById("grid-width-input").value;
+                    let height = document.getElementById("grid-height-input").value;
+                    let table = document.getElementById("editor-table");
+                    let cell;
+
+                    table.innerHTML = '';
+
+                    for (x = 0; x < height; x++) {
+                        table.appendChild(document.createElement("tr"));
+                        for (y = 0; y < width; y++) {
+                            cell = table.children[x].appendChild(document.createElement("td"));
+                            cell.dataset.value = "0";
+                            cell.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+
+
+                            cell.addEventListener('click', function () {
+                                switch (this.dataset.value) {
+                                    case '0':
+                                        this.dataset.value = '1';
+                                        this.innerHTML = '<img src="/src/static/game_assets/porkkana_lapinakyva.png"></img>'
+                                        break;
+                                    case '1':
+                                        this.dataset.value = '2';
+                                        this.innerHTML = '<img src="/src/static/game_assets/Kivi3.png"></img>'
+                                        break;
+                                    case '2':
+                                        this.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+                                        this.dataset.value = '0';
+                                        break;
+                                }
+
+                            });
+
+                        }
+                    }
+                }
+
+                function createMatrixFromTable() {
+                    const table = document.getElementById('editor-table');
+                    const rows = table.rows;
+                    const matrix = [];
+
+                    for (let i = 0; i < rows.length; i++) {
+                        const cells = rows[i].cells;
+                        const rowArray = [];
+
+                        for (let j = 0; j < cells.length; j++) {
+                            rowArray.push(cells[j].dataset.value);
+                        }
+
+                        matrix.push(rowArray);
+                    }
+
+                    return matrix;
+                }
+
+                function storeMatrix() {
+                    const matrix = createMatrixFromTable();
+                    console.log(matrix); 
+                }
+
+                window.onload = createTable;
+
+            </script>
+        </div>
+    </div>
+
+</body>
+
+</html>
