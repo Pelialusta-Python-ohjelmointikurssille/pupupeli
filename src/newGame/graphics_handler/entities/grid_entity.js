@@ -6,14 +6,14 @@ import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi
 export class GridEntity extends GraphicsEntity {
     constructor(entityId, entityHandler, container, sprite, data) {
         super(entityId, entityHandler, container, sprite, data);
-
-        this.sizeOnScreen = new Vector2(640, 640)
+        this.gridSize = data.gridSize;
+        this.sizeOnScreen = new Vector2(this.gridSize.x * 80, this.gridSize.y * 80)
         this.lineGraphicsList =  [];
         this.lineColor = 0x000000;
         this.lineWidth = 2;
         this.lineGraphics = new PIXI.Graphics()
         this.font = "Roboto";
-        this.gridSize = data.gridSize;
+        
         this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
         this.type = "grid";
     }
