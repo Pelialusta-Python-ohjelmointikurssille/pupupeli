@@ -11,6 +11,7 @@ export class Grid {
     };
 
     addToGrid(gridObject, x, y) {
+        if (this.objects.includes) this.objects.push(gridObject);
         this.doubleArray[x][y].entities.push(gridObject);
         gridObject.cell = this.doubleArray[x][y];
     }

@@ -10,13 +10,13 @@
  */
 
 class GridObject {
-    constructor(name) {
-        this.name = name;
+    constructor(type) {
+        this.type = type;
         this.cell = null;
     }
 
     toString() {
-        return this.name;
+        return this.type;
     }
 }
 

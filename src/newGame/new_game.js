@@ -12,6 +12,11 @@ export class Game {
 
     async init() {
         await this.gh.initialize();
+        let gObjects = this.grid.gridObjects;
+        //TODO init objects here
+        //for (let i = 0; i > gObjects.length; i++) {
+        //    this.gh.createEntity(gObjects[1]);
+        //}
     }
     getCanvas() {
         return this.gh.getCanvas();
