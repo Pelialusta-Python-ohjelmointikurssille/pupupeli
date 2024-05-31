@@ -1,5 +1,6 @@
 import { getNewGridObject } from "./gridobject.js";
 import { Grid } from "./grid.js";
+import { Constants } from "./commonstrings.js";
 
 //Types for gridobjects
 //TODO: make these local so everyone no need to manually type types.
@@ -12,3 +13,4 @@ export function getNewGameGrid() {
     newGrid.addToGrid(player, 0, 0);
     return newGrid;
 };
+console.log(Constants.PLAYER_STR);
