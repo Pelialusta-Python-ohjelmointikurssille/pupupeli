@@ -7,38 +7,33 @@ import { GridObjectEntity } from "./grid_object_entity.js";
 export class PlayerEntity extends GridObjectEntity {
     constructor(entityId, entityHandler, container, sprite, data) {
         super(entityId, entityHandler, container, sprite, data);
-        this.mvtween = new MoveTween(0.8, this.onFinishTween, this);
-        this.gridReference = entityHandler.getGridObject();
         this.moveDirection = new Vector2(0, 0);
+        this.gridCellPosition = new Vector2(0, 0);
+        if (data == null) {
+            return;
+        }
+        if (data.position == null) {
+            return;
+        }
         this.gridCellPosition = data.position;
-    }
-
-    getJumpHeigh(progress) {
-        return -(Math.sin(Math.PI * progress)**0.75) * 80 * 0.5;
     }
 
     onCreate() {
         super.onCreate();
-        this.sprite.anchor.set(0.5);
-        this.sprite.height = 64;
-        this.sprite.width = 64;
-        this.sprite.x += 40;
-        this.sprite.y += 40;
     }
 
-    onFinishTween() {
+    onFinishAnimation() {
         this.gridCellPosition.x += this.moveDirection.x;
         this.gridCellPosition.y += this.moveDirection.y;
     }
 
     onUpdate(deltaTime) {
         super.onUpdate(deltaTime);
-        this.mvtween.increment(deltaTime);
-        if (this.mvtween.value <= 1 && this.mvtween.inProgress === true) {
-            this.container.x = (this.gridCellPosition.x * 80) + (this.mvtween.value * 80 * this.moveDirection.x);
-            this.container.y = (this.gridCellPosition.y * 80) + this.getJumpHeigh(this.mvtween.value) + (this.mvtween.value * 80 * this.moveDirection.y);
+        if (this.animProgress.value <= 1 && this.animProgress.inProgress === true) {
+            this.container.x = (this.gridCellPosition.x * 80) + (this.animProgress.value * 80 * this.moveDirection.x);
+            this.container.y = (this.gridCellPosition.y * 80) + this.getJumpHeigh(this.animProgress.value) + (this.animProgress.value * 80 * this.moveDirection.y);
         }
-        if (this.mvtween.inProgress == false) {
+        if (this.animProgress.inProgress == false) {
             this.container.x = this.gridCellPosition.x * 80;
             this.container.y = this.gridCellPosition.y * 80;
         }
@@ -58,8 +53,12 @@ export class PlayerEntity extends GridObjectEntity {
             if (actionData.direction == "up") {
                 this.moveDirection = new Vector2(0, -1)
             }
-            this.mvtween.start();
+            this.animProgress.start();
         }
+    }
+
+    getJumpHeigh(progress) {
+        return -(Math.sin(Math.PI * progress)**0.75) * 80 * 0.5;
     }
 
     startMove(dir) {

@@ -21,6 +21,6 @@ export class GraphicsEntity {
     onUpdate(deltaTime) {
     }
 
-    doAction() {
+    doAction(actionId, actionData) {
     }
 }
