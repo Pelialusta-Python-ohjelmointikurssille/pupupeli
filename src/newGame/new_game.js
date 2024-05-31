@@ -3,6 +3,7 @@ import { getNewGameGrid } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand } from "./commands.js";
 import { commandsDone } from "./game_controller.js";
+import { Constants } from "./commonstrings.js";
 
 export class Game {
     constructor() {
@@ -15,7 +16,7 @@ export class Game {
     async init() {
         await this.gh.initialize();
         this.grid.gridObjects.forEach(item => {
-            this.createGridEntitiesForRendering(item); 
+            this.createGridEntitiesForRendering(item);
         });
     }
 
@@ -29,8 +30,8 @@ export class Game {
     }
 
     receiveInput(commandName, commandParameter) {
-        
-        if (commandName === "move") {
+
+        if (commandName === Constants.MOVE_STR) {
             this.MakeMoveCommand(commandParameter);
         }
     }
@@ -44,7 +45,5 @@ export class Game {
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
-        //debug
-        this.grid.consoleDebug();
     }
 }
