@@ -34,6 +34,10 @@
             left: 0;
         }
 
+        .is-hidden {
+            display: none !important;
+        }
+
         .is-flex-center {
             justify-content: center;
             align-items: center;
@@ -68,11 +72,11 @@
             display: contents;
         }
 
-        #options-left {
+        #options-input {
             padding: 1rem;
         }
 
-        #options-middle {
+        #options-conditions {
             margin: 0.5rem auto 0rem auto;
         }
 
@@ -121,6 +125,47 @@
         .checkbox {
             display: none;
         }
+
+        #task-input,
+        #editor-input,
+        #multiple-choice-container {
+            width: 100%;
+            max-width: calc(var(--canvas-width)* 1.5);
+            min-height: 3rem;
+        }
+
+        .options-input-buttons {
+            margin-bottom: 0.25rem;
+        }
+
+        #multiple-choice-container {
+            border: 1px solid black;
+            border-radius: 5px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        #add-multiple-choice-button {
+            margin: 0.5rem;
+        }
+
+        textarea {
+            margin: unset;
+            padding: unset;
+        }
+
+        .multiple-choice {
+            flex-direction: column;
+            text-align: center;
+            margin: 0.5rem;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 0.5rem;
+        }
+
+        .multiple-choice-input {
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 
@@ -131,11 +176,11 @@
             <div id="options" class="is-flex">
                 <div class="grid-input-container">
                     <span class="grid-width-input-text">Ruudukon leveys:</span>
-                    <input id="grid-width-input" type="text" placeholder="8" value="8"></input>
+                    <input id="grid-width-input" type="text" placeholder="8" value="8">
                 </div>
                 <div class="grid-input-container">
                     <span class="grid-width-input-text">Ruudukon korkeus:</span>
-                    <input id="grid-height-input" type="text" placeholder="8" value="8"></input>
+                    <input id="grid-height-input" type="text" placeholder="8" value="8">
                 </div>
             </div>
             <div id="grid-input-submit-container" class="is-flex">
@@ -145,7 +190,7 @@
             </div>
         </div>
         <div id="options-container" class="is-flex is-flex-column">
-            <div id="options-middle" class="is-flex is-flex-1 is-flex-center">
+            <div id="options-conditions" class="is-flex is-flex-1 is-flex-center">
                 <div class="checkbox-container is-flex is-flex-center">
                     <input type="checkbox" id="condition1" class="checkbox" name="condition1" value="conditionUsedWhile" onclick="clickConditionBox(this)">
                     <label class="checkbox-label" for="condition1">käytä while-silmukkaa</label><br>
@@ -160,11 +205,20 @@
                 </div>
                 <div class="checkbox-container is-flex is-flex-center">
                     <input type="checkbox" id="condition4" class="checkbox" name="condition4" value="conditionMaxLines" onclick="clickConditionBox(this)">
-                    <label class="checkbox-label" for="condition4">vastaus enintään <input id="maxLinesInput" type="text" placeholder="0" value="0" style="text-align:center;"></input> riviä</label><br>
+                    <label class="checkbox-label" for="condition4">vastaus enintään <input id="maxLinesInput" type="text" placeholder="0" value="0" style="text-align:center;"> riviä</label><br>
                 </div>
             </div>
-            <div id="options-left" class="is-flex is-flex-1">
-                <textarea rows="3" name="task-input" id="task-input" class="is-flex-1" value="" contenteditable></textarea>
+            <div id="options-input" class="is-flex is-flex-1 is-flex-column">
+                <div id="options-input-buttons-container">
+                    <button class="options-input-buttons" value="inputDescription" onclick="inputButtonsToggler(event)">Tehtävän kuvaus</button>
+                    <button class="options-input-buttons" value="inputEditorCode" onclick="inputButtonsToggler(event)">Editorin koodi</button>
+                    <button class="options-input-buttons" value="inputMultipleChoice" onclick="inputButtonsToggler(event)">Monivalintatehtävät</button>
+                    <button id="add-multiple-choice-button" class="is-hidden" onclick="addMultipleChoiceQuestion()">+</button>
+                </div>
+                <textarea rows="3" name="task-input" id="task-input" value="" placeholder="Lisää tehtävän kuvaus"></textarea>
+                <textarea rows="3" name="editor-input" id="editor-input" class="is-hidden" value="" placeholder="Lisää tehtävän tekstieditoriin etukäteen asetettu koodi"></textarea>
+                <div id="multiple-choice-container" class="is-hidden">
+                </div>
             </div>
         </div>
         <div id="app-container" class="is-flex">
@@ -177,8 +231,10 @@
 
     <script>
         class Level {
-            constructor(description, grid, conditions) {
+            constructor(description, editorCode, multipleChoiceQuestions, grid, conditions) {
                 this.description = description;
+                this.editorCode = editorCode;
+                this.multipleChoiceQuestions = multipleChoiceQuestions;
                 this.grid = grid;
                 this.conditions = conditions;
             }
@@ -204,7 +260,6 @@
 
 
                     cell.addEventListener('click', function () {
-                        console.log(this);
                         switch (this.dataset.value) {
                             case '1':
                                 this.dataset.value = '2';
@@ -278,17 +333,34 @@
             return conditions;
         }
 
+        function getMultipleChoices() {
+            let multipleChoices = document.getElementById("multiple-choice-container").childNodes;
+            let multipleChoiceArray = []
+
+            for (i=1; i<multipleChoices.length; i++) {
+                multipleChoiceArray.push({question: multipleChoices[i].childNodes[0].value, isCorrectAnswer: multipleChoices[i].childNodes[1].childNodes[0].checked});
+            }
+
+            return multipleChoiceArray;
+        }
+
+        function getEditorCode() {
+            const editorCodeLines = [];
+            document.getElementById("editor-input").value.split("\n").forEach((line) => {
+                editorCodeLines.push(line);
+            });
+            return editorCodeLines;
+        }
+
         function generateTaskOutput() {
 
             const taskDescriptionLines = [];
             document.getElementById("task-input").value.split("\n").forEach((line) => {
                 taskDescriptionLines.push(line);
-            })
-            const taskGameGrid = createGridFromTable();
-            const conditions = getConditions();
+            });
 
             // use Level class to get json output
-            let output = new Level(taskDescriptionLines, taskGameGrid, conditions);
+            let output = new Level(taskDescriptionLines, getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
             let outputField = document.getElementById("output-field");
             outputField.value = customJSONStringify(output);
             // need to fire input event to resize output field
@@ -323,9 +395,55 @@
             }
         }
 
-        function clickConditionBox(div) {
-            div.classList.toggle('checked');
-            div.parentNode.classList.toggle('active');
+        function clickConditionBox(event) {
+            event.classList.toggle('checked');
+            event.parentNode.classList.toggle('active');
+        }
+
+        function inputButtonsToggler(event) {
+            let taskInput = document.getElementById("task-input");
+            let editorInput = document.getElementById("editor-input");
+            let multipleChoiceContainer = document.getElementById("multiple-choice-container");
+            let multipleChoiceAddButton = document.getElementById("add-multiple-choice-button");
+
+            switch (event.target.value) {
+                case "inputDescription":
+                    if (taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
+                    if (!editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
+                    if (!multipleChoiceContainer.classList.contains("is-hidden")) {
+                        multipleChoiceContainer.classList.toggle("is-hidden");
+                        multipleChoiceAddButton.classList.toggle("is-hidden");
+                        multipleChoiceContainer.classList.toggle("is-flex");
+                    }
+                    break;
+                case "inputEditorCode":
+                    if (!taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
+                    if (editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
+                    if (!multipleChoiceContainer.classList.contains("is-hidden")) {
+                        multipleChoiceContainer.classList.toggle("is-hidden");
+                        multipleChoiceAddButton.classList.toggle("is-hidden");
+                        multipleChoiceContainer.classList.toggle("is-flex");
+                    }
+                    break;
+                case "inputMultipleChoice":
+                    if (!taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
+                    if (!editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
+                    if (multipleChoiceContainer.classList.contains("is-hidden")) {
+                        multipleChoiceContainer.classList.toggle("is-hidden");
+                        multipleChoiceAddButton.classList.toggle("is-hidden");
+                        multipleChoiceContainer.classList.toggle("is-flex");
+                    }
+                    break;
+            }
+        }
+
+        function addMultipleChoiceQuestion() {
+            let multipleChoiceContainer = document.getElementById("multiple-choice-container");
+            let multipleChoiceElement = document.createElement("div");
+            multipleChoiceElement.classList.add("multiple-choice", "is-flex", "is-flex-column");
+            multipleChoiceElement.innerHTML = `<input type='text'><div class='multiple-choice-input'><input name='multipleChoice${multipleChoiceContainer.childNodes.length - 1}' type='checkbox'><label for='multipleChoice${multipleChoiceContainer.childNodes.length - 1} style="line-height: 20px;'>Oikea vastaus?</label></div>`;
+
+            multipleChoiceContainer.insertAdjacentElement("beforeend", multipleChoiceElement);
         }
 
         // creates a downloadable file from the text in the output field
