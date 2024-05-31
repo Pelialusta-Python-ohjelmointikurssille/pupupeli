@@ -1,0 +1,15 @@
+{
+    "otsikko": "Tehtävä 1",
+    "kuvaus": "Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:\n<code>\npupu.liiku(\"ylös\")\n\npupu.liiku(\"oikea\")\n\npupu.liiku(\"alas\")\n\npupu.liiku(\"vasen\")</code>",
+    "tyyppi": "porkkana",
+    "vaatimukset": ["for"],
+    "monivalinnat": ["kolmio", "neliö", "ympyrä", "suunnikas"],
+    "koko": [8, 8],
+    "objektit": [
+      { "objekti": "pupu", "koordinaatit": [1, 1] },
+      { "objekti": "porkkana", "koordinaatit": [0, 1] },
+      { "objekti": "porkkana", "koordinaatit": [0, 2] },
+      { "objekti": "porkkana", "koordinaatit": [0, 3] }
+    ]
+  }
+  
