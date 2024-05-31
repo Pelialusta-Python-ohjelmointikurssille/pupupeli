@@ -28,6 +28,12 @@ export class GraphicsEntitySystem {
                 maybeReady = false;
             }
         });
+        if (this.isReady === true && maybeReady === false) {
+            this.onEntitiesNotReady();
+        } 
+        if (this.isReady === false && maybeReady === true) {
+            this.onEntitiesReady();
+        } 
         this.isReady = maybeReady;
     }
 
@@ -59,5 +65,13 @@ export class GraphicsEntitySystem {
 
     getGridObject() {
         return this.gridObject;
+    }
+
+    onEntitiesNotReady() {
+        console.log("NOT READY");
+    }
+
+    onEntitiesReady() {
+        console.log("NOW READY");
     }
 }
