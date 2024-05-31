@@ -18,7 +18,7 @@ export class GraphicsEntityFactory {
             return this.createGrid(entityId, data.gridSize);
         }
         if (type == "player") {
-            return this.createPlayer(entityId);
+            return this.createPlayer(entityId, data);
         }
     }
 
@@ -34,14 +34,14 @@ export class GraphicsEntityFactory {
         return entity;
     }
 
-    createPlayer(entityId) {
+    createPlayer(entityId, data) {
         let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
         let entity = new PlayerEntity(
             entityId,
             this.graphicsEntityHandler,
             new PIXI.Container(),
             sprite,
-            null
+            data
         );
         return entity;
     }

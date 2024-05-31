@@ -23,8 +23,8 @@ export class GraphicsHandler {
 
 
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
-        this.createEntity("test2", "player");
-        this.doAction("test2", "move", null);
+        this.createEntity("test2", "player", { position: new Vector2(2, 2)});
+        this.doAction("test2", "move", { direction: "right" });
     }
 
     doAction(entityId, actionId, actionData) {
