@@ -16,13 +16,19 @@ export class GraphicsEntitySystem {
         this.renderer = renderer;
         this.camera = null;
         this.entityFactory = new GraphicsEntityFactory(this, this.builtinAssets);
+        this.isReady = true;
     }
 
     updateAllObjects(deltaTime) {
         this.camera.onUpdate(deltaTime);
+        let maybeReady = true;
         this.entityDict.forEach((value, key, map) => {
             value.onUpdate(deltaTime);
+            if (value.isReady === false) {
+                maybeReady = false;
+            }
         });
+        this.isReady = maybeReady;
     }
 
     createCamera(screen, container) {

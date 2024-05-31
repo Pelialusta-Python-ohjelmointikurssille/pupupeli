@@ -1,14 +1,17 @@
-export class MoveTween {
-    constructor(time, finishfunc, context) {
+export class AnimationProgress {
+    constructor(time, startfunc, finishfunc, context, name) {
         this.value = 0;
         this.time = time;
         this.inProgress = false;
         this.finishfunc = finishfunc;
         this.context = context;
+        this.startfunc = startfunc;
+        this.name = name;
     }
 
     start() {
         this.inProgress = true;
+        this.startfunc.call(this.context, this.name);
     }
 
     increment(delta) {
@@ -16,7 +19,7 @@ export class MoveTween {
             this.value += delta / this.time;
         } else if (this.value > 1) {
             this.stop();
-            this.finishfunc.call(this.context);
+            this.finishfunc.call(this.context, this.name);
         }
     }
 
