@@ -7,6 +7,7 @@ export class GraphicsEntity {
         this.entityHandler = entityHandler;
         this.container = container;
         this.sprite = sprite;
+        this.isReady = true;
         if (this.sprite !== null) {
             this.container.addChild(this.sprite);
         }

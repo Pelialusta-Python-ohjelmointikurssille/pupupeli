@@ -17,7 +17,7 @@ export class GraphicsEntityFactory {
         if (type === "grid") {
             return this.createGrid(entityId, data);
         }
-        if (type == "player") {
+        if (type === "player") {
             return this.createPlayer(entityId, data);
         }
     }

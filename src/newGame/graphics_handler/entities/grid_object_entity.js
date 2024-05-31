@@ -13,6 +13,7 @@ export class GridObjectEntity extends GraphicsEntity {
 
     onCreate() {
         super.onCreate();
+        // Maybe have these not hardcoded?
         this.sprite.anchor.set(0.5);
         this.sprite.height = 64;
         this.sprite.width = 64;

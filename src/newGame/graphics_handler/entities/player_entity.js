@@ -25,35 +25,38 @@ export class PlayerEntity extends GridObjectEntity {
     onFinishAnimation() {
         this.gridCellPosition.x += this.moveDirection.x;
         this.gridCellPosition.y += this.moveDirection.y;
+        this.isReady = true;
     }
 
     onUpdate(deltaTime) {
+        // TODO: Get proper grid to screen coordinate conversions
         super.onUpdate(deltaTime);
         if (this.animProgress.value <= 1 && this.animProgress.inProgress === true) {
             this.container.x = (this.gridCellPosition.x * 80) + (this.animProgress.value * 80 * this.moveDirection.x);
             this.container.y = (this.gridCellPosition.y * 80) + this.getJumpHeigh(this.animProgress.value) + (this.animProgress.value * 80 * this.moveDirection.y);
         }
-        if (this.animProgress.inProgress == false) {
+        if (this.animProgress.inProgress === false) {
             this.container.x = this.gridCellPosition.x * 80;
             this.container.y = this.gridCellPosition.y * 80;
         }
     }
 
     doAction(actionId, actionData) {
-        if (actionId == "move") {
-            if (actionData.direction == "down") {
+        if (actionId === "move") {
+            if (actionData.direction === "down") {
                 this.moveDirection = new Vector2(0, 1)
             }
-            if (actionData.direction == "left") {
+            if (actionData.direction === "left") {
                 this.moveDirection = new Vector2(-1, 0)
             }
-            if (actionData.direction == "right") {
+            if (actionData.direction === "right") {
                 this.moveDirection = new Vector2(1, 0)
             }
-            if (actionData.direction == "up") {
+            if (actionData.direction === "up") {
                 this.moveDirection = new Vector2(0, -1)
             }
             this.animProgress.start();
+            this.isReady = false;
         }
     }
 

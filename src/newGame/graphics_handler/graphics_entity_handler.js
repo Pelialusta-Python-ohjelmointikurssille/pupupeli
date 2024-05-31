@@ -31,7 +31,7 @@ export class GraphicsEntitySystem {
 
     createGraphicsEntity(entityId, type, data) {
         let entity = this.entityFactory.createEntity(entityId, type, data);
-        if (type == "grid") {
+        if (type === "grid") {
             this.gridObject = entity;
             this.renderer.addToStage(entity.container);
             entity.onCreate();

@@ -20,6 +20,8 @@ export class GraphicsCameraEntity {
 
     updatePosition() {
         this.totalRenderScale = this.getTotalRenderScale();
+        // TODO: Solve this mess and how to properly make correct resolution scaling
+        // Works for resolutions that are multiples of 640x640
         this.container.position.x = (this.position.x + this.screenCenter.x) * (this.getTotalRenderScale());
         this.container.position.y = (this.position.y + this.screenCenter.y) * (this.getTotalRenderScale());
         this.container.rotation = this.rotation;

@@ -21,10 +21,9 @@ export class GraphicsHandler {
         this.renderer.addFunctionToRenderLoop(this.graphicsEntityHandler.updateAllObjects, this.graphicsEntityHandler);
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
 
-
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
         this.createEntity("test2", "player", { position: new Vector2(2, 2) });
-        this.doAction("test2", "move", { direction: "right" });
+        this.doAction("test2", "move", { direction: "left" });
     }
 
     doAction(entityId, actionId, actionData) {
