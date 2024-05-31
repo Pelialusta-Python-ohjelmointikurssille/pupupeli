@@ -35,7 +35,7 @@ export class Game {
 
     MakeMoveCommand(commandParameter) {
         let dir = translatePythonMoveStringToDirection(commandParameter);
-        let moveCommand = new MoveCommand(this.grid, this.grid.player, dir);
+        let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
         //debug

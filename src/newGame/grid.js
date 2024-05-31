@@ -21,6 +21,7 @@ export class Grid {
     }
 
     //If GO unable to move to dir, returns fail.
+    //Returns true if move was succesful.
     moveGridObjectToDir(gridObject, direction) {
         if (gridObject == null) return false;
         let dirVector = Vector2.FromDirection(direction);

@@ -1,4 +1,4 @@
-import { Direction } from "./direction";
+import { Direction } from "./direction.js";
 
 const PLAYER_STR = "player";
 const TYPE_STR = "type";
