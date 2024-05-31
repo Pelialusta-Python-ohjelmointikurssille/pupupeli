@@ -11,7 +11,6 @@ export class Grid {
     };
 
     addToGrid(gridObject, x, y) {
-        console.log("AAAAAAAAAAAAAAAAAAAAA");
         if (this.gridObjects.includes(gridObject) === false) {
             this.gridObjects.push(gridObject);
         }

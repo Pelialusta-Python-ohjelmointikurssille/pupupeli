@@ -30,6 +30,5 @@ export function commandsDone() {
 }
 
 export function getCanvas(){
-    console.log(game.getCanvas())
     game.getCanvas();
 }

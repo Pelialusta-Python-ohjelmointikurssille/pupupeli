@@ -16,7 +16,6 @@ class GridObject {
         this.type = type;
         this.cell = null;
         this.id = this.#generateUniqueID();
-        console.log(this.id);
     }
 
     #generateUniqueID() {

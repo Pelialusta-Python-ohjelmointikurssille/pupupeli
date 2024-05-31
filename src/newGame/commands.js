@@ -11,8 +11,8 @@ export class MoveCommand {
     }
 
     execute() {
-        console.log("command executing!");
         if (this.grid.moveGridObjectToDir(this.gridObject, this.dir)) {
+            console.log("executing command move to dir " + this.dir);
             //this.doAction("test2", "move", { direction: "left" });
             let dirObj = { Direction: GetDirectionAsString(this.dir) };
             this.graphicsHandler.doAction(this.gridObject.id, Constants.MOVE_STR, dirObj);
