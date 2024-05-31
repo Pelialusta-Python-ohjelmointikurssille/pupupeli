@@ -1,8 +1,12 @@
 import { getNewGridObject } from "./gridobject.js";
 import { Grid } from "./grid.js";
+import { Constants } from "./commonstrings.js";
+<<<<<<< HEAD
 import { tryGetFileAsJson } from "../file_reader.js";
 
 export function getNewGameGrid() {
+    let player = getNewGridObject(Constants.PLAYER_STR);
+
     let task = 1;
     const path = `../../tasks/${task}.json`;
 
@@ -18,9 +22,13 @@ export function getNewGameGrid() {
     let yPupu = pupucoords[1];
 
     let pelaaja = getNewGridObject("pupu");
-    let newGrid = new Grid(pelaaja, gridWitdh, gridHeight);
-    
-    newGrid.addToGrid(pelaaja, xPupu, yPupu);
+    let newGrid = new Grid(player, gridWitdh, gridHeight);
+
+    newGrid.addToGrid(player, xPupu, yPupu);
     console.log(newGrid)
+=======
+
+
+>>>>>>> newGameLogic
     return newGrid;
 };

@@ -8,20 +8,34 @@ import { GraphicsEntityFactory } from "./graphics_entity_factory.js";
 
 
 export class GraphicsEntitySystem {
-    constructor(builtinAssets, renderer) {
+    constructor(builtinAssets, renderer, graphicsHandler) {
         this.builtinAssets = builtinAssets;
         this.entityDict = new Map();
         this.spriteDict = new Map();
+        this.gridObject = null;
         this.renderer = renderer;
         this.camera = null;
         this.entityFactory = new GraphicsEntityFactory(this, this.builtinAssets);
+        this.isReady = true;
+        this.graphicsHandler = graphicsHandler;
     }
 
     updateAllObjects(deltaTime) {
         this.camera.onUpdate(deltaTime);
+        let maybeReady = true;
         this.entityDict.forEach((value, key, map) => {
             value.onUpdate(deltaTime);
+            if (value.isReady === false) {
+                maybeReady = false;
+            }
         });
+        if (this.isReady === true && maybeReady === false) {
+            this.onEntitiesNotReady();
+        } 
+        if (this.isReady === false && maybeReady === true) {
+            this.onEntitiesReady();
+        } 
+        this.isReady = maybeReady;
     }
 
     createCamera(screen, container) {
@@ -30,6 +44,12 @@ export class GraphicsEntitySystem {
 
     createGraphicsEntity(entityId, type, data) {
         let entity = this.entityFactory.createEntity(entityId, type, data);
+        if (type === "grid") {
+            this.gridObject = entity;
+            this.renderer.addToStage(entity.container);
+            entity.onCreate();
+            return;
+        }
         this.entityDict.set(entityId, entity);
         this.renderer.addToStage(entity.container);
         entity.onCreate();
@@ -38,5 +58,23 @@ export class GraphicsEntitySystem {
     destroyGraphicsEntity(entityId) {
         this.renderer.removeFromStage(this.entityDict.get(entityId).container);
         this.entityDict.delete(entityId);
+    }
+
+    getGraphicsEntity(entityId) {
+        return this.entityDict.get(entityId);
+    }
+
+    getGridObject() {
+        return this.gridObject;
+    }
+
+    onEntitiesNotReady() {
+        //console.log("NOT READY");
+        this.graphicsHandler.onEntitiesNotReady();
+    }
+
+    onEntitiesReady() {
+        //console.log("NOW READY");
+        this.graphicsHandler.onEntitiesReady();
     }
 }

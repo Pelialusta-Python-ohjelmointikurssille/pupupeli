@@ -4,18 +4,23 @@ import { Cell } from "../game/cell.js";
 export class Grid {
     constructor(player, width, height) {
         this.doubleArray = this.CreateDoubleArray(width, height);
-        this.objects = [];
+        this.gridObjects = [];
         this.width = width;
         this.height = height;
         this.player = player;
     };
 
     addToGrid(gridObject, x, y) {
+        if (this.gridObjects.includes(gridObject) === false) {
+            this.gridObjects.push(gridObject);
+        }
+        
         this.doubleArray[x][y].entities.push(gridObject);
         gridObject.cell = this.doubleArray[x][y];
     }
 
     //If GO unable to move to dir, returns fail.
+    //Returns true if move was succesful.
     moveGridObjectToDir(gridObject, direction) {
         if (gridObject == null) return false;
         let dirVector = Vector2.FromDirection(direction);
@@ -32,10 +37,7 @@ export class Grid {
         if (y < 0 | y >= this.doubleArray[0].length) return false;
         return true;
     }
-    addToGrid(gridObject, x, y) {
-        this.doubleArray[x][y].entities.push(gridObject);
-        gridObject.cell = this.doubleArray[x][y];
-    }
+
     removeFromGrid(gridObject) {
         let x = gridObject.cell.x;
         let y = gridObject.cell.y;

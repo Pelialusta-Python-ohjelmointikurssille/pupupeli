@@ -15,10 +15,10 @@ export class GraphicsEntityFactory {
             return this.createBasicEntity(entityId);
         }
         if (type === "grid") {
-            return this.createGrid(entityId, data.gridSize);
+            return this.createGrid(entityId, data);
         }
-        if (type == "player") {
-            return this.createPlayer(entityId);
+        if (type === "player") {
+            return this.createPlayer(entityId, data);
         }
     }
 
@@ -34,25 +34,25 @@ export class GraphicsEntityFactory {
         return entity;
     }
 
-    createPlayer(entityId) {
+    createPlayer(entityId, data) {
         let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
         let entity = new PlayerEntity(
             entityId,
             this.graphicsEntityHandler,
             new PIXI.Container(),
             sprite,
-            null
+            data
         );
         return entity;
     }
 
-    createGrid(entityId, size) {
+    createGrid(entityId, data) {
         let entity = new GridEntity(
             entityId,
             this.graphicsEntityHandler,
             new PIXI.Container(),
             null,
-            size
+            data
         );
         return entity;
     }

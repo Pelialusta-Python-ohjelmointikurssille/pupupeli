@@ -15,11 +15,13 @@ export class GraphicsCameraEntity {
         this.container.pivot.x = this.screenCenter.x;
         this.container.pivot.y = this.screenCenter.y;
         this.totalRenderScale = this.getTotalRenderScale();
-        this.updateContainerValues();
+        this.updatePosition();
     }
 
-    updateContainerValues() {
+    updatePosition() {
         this.totalRenderScale = this.getTotalRenderScale();
+        // TODO: Solve this mess and how to properly make correct resolution scaling
+        // Works for resolutions that are multiples of 640x640
         this.container.position.x = (this.position.x + this.screenCenter.x) * (this.getTotalRenderScale());
         this.container.position.y = (this.position.y + this.screenCenter.y) * (this.getTotalRenderScale());
         this.container.rotation = this.rotation;
@@ -40,6 +42,6 @@ export class GraphicsCameraEntity {
     }
 
     onUpdate(deltaTime) {
-        this.updateContainerValues();
+        this.updatePosition();
     }
 }
