@@ -5,8 +5,6 @@ import { tryGetFileAsJson } from "../file_reader.js";
 export function getNewGameGrid() {
     let task = 1;
     const path = `../../tasks/${task}.json`;
-    // const fileReadMessage = tryGetFileAsText(path);
-    // const text = fileReadMessage.result;
 
     let result = tryGetFileAsJson(path);
 
