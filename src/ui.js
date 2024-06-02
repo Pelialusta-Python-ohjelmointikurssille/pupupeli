@@ -1,3 +1,4 @@
+import * as globals from "./util/globals.js";
 import * as game from "./newGame/game_controller.js";
 import * as fileReader from "./file_reader.js";
 import * as editor from "./input/editor.js";
@@ -9,6 +10,7 @@ let state = { current: "initial" };
 
 async function main() {
     initialize();
+    initPage()
     addButtonEvents();
     await initGame();
 }
@@ -30,6 +32,31 @@ async function initGame() {
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
+}
+
+async function initPage() {
+    // set task identifier
+    document.getElementById("task-id").innerHTML = globals.taskIdentifier;
+
+    // set description
+    globals.task.getDescription().forEach((line) => {
+        line = line === "" ? "<br>" : line;
+        document.getElementById("task-description").insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
+    });
+
+    // set multiple choice questions
+    let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
+    if (globals.task.getMultipleChoiceQuestions().length > 0) {
+        multipleChoiceContainer.classList.remove("is-hidden");
+        globals.task.getMultipleChoiceQuestions().forEach((question) => {
+            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question'>${question.question}</div>`);
+        });
+    }
+    // set editor code
+    window.addEventListener('load', function () {
+        editor.getEditor().setValue(globals.task.getEditorCode());
+    });
+
 }
 
 function addButtonEvents() {

@@ -16,15 +16,12 @@
             <div id="left-container" class="is-flex">
                 <div id="task-container">
                     <div>
-                        <h1>Tehtävä 1</h1>
+                        <h1><a href="/?task=1" style="text-decoration:none;">< </a>Tehtävä <span id="task-id"></span><a href="/?task=2" style="text-decoration:none;"> ></a></h1>
                         <button id="grid-toggle-button" type="button">Ruudukko</button>
-                        <p>Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:</p>
-                        <code>
-                            <p>pupu.liiku("ylös")</p>
-                            <p>pupu.liiku("oikea")</p>
-                            <p>pupu.liiku("alas")</p>
-                            <p>pupu.liiku("vasen")</p>
-                        </code>
+                        <div id="task-description">
+                        </div>
+                        <div id="multiple-choice-questions" class="is-hidden">
+                        </div>
                     </div>
                 </div>
                 <div id="editor-container" class="is-flex">
@@ -46,7 +43,7 @@
                             <image id="run-icon" src="src/static/resetbutton2.png"></image>
                             <span id="buttonText">Resetoi</span>
                         </button>
-                        
+
                     </div>
                 </div>
             </div>
