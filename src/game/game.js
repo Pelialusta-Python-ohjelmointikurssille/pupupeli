@@ -2,7 +2,7 @@ import { Renderer } from "./rendering.js";
 import { Direction } from "./direction.js";
 import { initGrid, addToGrid, moveGridObjectToDir as tryMoveGridObjectToDir } from "./gamegrid.js";
 import { getNewGridObject } from "./gridobject.js";
-import { getEventHandler } from "../index.js";
+import { getEventHandler } from "../ui.js";
 
 let renderer;
 let turnTimer = 0;
@@ -45,11 +45,8 @@ export async function InitGame() {
     renderer = await getRenderer();
     await renderer.init();
     renderer.addFunctionToLoop(onUpdate);
-    return renderer.pixiApp;
-}
-
-export function initGameEventHandler() {
     eventHandler = getEventHandler();
+    return renderer.pixiApp;
 }
 
 /**
@@ -61,18 +58,17 @@ async function getRenderer() {
     let renderer = new Renderer();
     renderer.onEndFunc = onEndMoveFunc;
     await renderer.init();
-    
+
     return renderer;
 }
 
 /**
  * Used to set the next command to run. 
  * @param {*} command An object literal representing a command to run. Example: 
- * command = {command: "move", parameters: "oikea"} 
+ * command = { data: { command: "move", parameters: "oikea" }, sab: SharedArrayBuffer } 
  */
 export function setGameCommand(command) {
     currentCommand = command;
-    console.log("set command")
     if (startedExecution == false) {
         startedExecution = true;
         turnTimer += turnTimeSeconds + 1;
@@ -113,12 +109,12 @@ function processTurn() {
     }
 }
 
-function onEndMoveFunc () {
-    eventHandler.receiveMessage("return", "returning from game.js", currentCommand.sab)
+function onEndMoveFunc() {
+    eventHandler.postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
     currentCommand = null;
 }
 
-export function resetGame () {
+export function resetGame() {
     initGrid(8, 8);
     pupu = getNewGridObject("pupu");
     addToGrid(pupu, 0, 0);
@@ -126,6 +122,7 @@ export function resetGame () {
     currentCommand = null;
     renderer.reset();
     startedExecution = false;
+    eventHandler = getEventHandler();
 }
 
 export function rendererToggleGrid() {

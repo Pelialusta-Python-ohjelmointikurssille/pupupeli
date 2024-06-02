@@ -1,89 +1,72 @@
-import { getUserInput, displayErrorMessage } from "./index.js";
-import { giveCommand } from "./newGame/game_controller.js";
+import * as gameController from './newGame/game_controller.js';
+import * as ui from './ui.js'
 
 export class EventHandler {
-    constructor(webWorker) {
-        this.worker = webWorker;
-        this.lastMessage = {type: "foo", message: "bar", sab: "baz"};
-    }
+    constructor() {
+        this.worker = new Worker('src/input/worker.js');
+        this.lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
+        this.sendUserInputToWorker = this.sendUserInputToWorker.bind(this);
 
-    initalize() {
-
-        // temporary? hack to initialize eventhandler in game.js after index.js
-
-        // receives message events from worker.js
-        this.worker.onmessage = (event) => {
-            switch (event.data.type) {
+        // receives messages from worker
+        this.worker.onmessage = (message) => {
+            message = message.data;
+            switch (message.type) {
                 case "input":
-                    this.sharedArray = new Uint16Array(event.data.sab, 4);
-                    this.syncArray = new Int32Array(event.data.sab, 0, 1);
-                    getUserInput(true);
+                    this.sharedArray = new Uint16Array(message.sab, 4);
+                    this.syncArray = new Int32Array(message.sab, 0, 1);
+                    ui.promptUserInput({ inputBoxHidden: true });
                     break;
                 case "run":
-                    let command =  { data: event.data.data, sab: event.data.sab };
-                    giveCommand(command);
+                    gameController.giveCommand({ data: message.details, sab: message.sab });
+                    break;
+                case "finish":
+                    ui.onFinishLastCommand();
                     break;
                 case "error":
-                    displayErrorMessage(event.data.error);
+                    ui.displayErrorMessage(message.error);
                     break;
             }
         }
     }
 
-    receiveMessage(type, message, sab) {
-        if (sab === null) {
-            this.PostMessageToWorker(type, message, null, 0);
+    terminateWorker() {
+        this.worker.terminate();
+    }
+
+    postMessage(message) {
+        if (message.sab === null || message.sab === undefined) {
+            this.#postMessageToWorker({ type: message.type, details: message.details, sab: null, value: 0 });
         }
         if (this.isMessagePassingPaused) {
-            this.saveLastMessage(type, message, sab);
+            this.#saveLastMessage({ type: message.type, details: message.details, sab: message.sab });
             return;
         }
-        if (type === 'return') {
-            //1 = continue the worker
-            this.PostMessageToWorker(type, message, sab, 1);
+        if (message.type === 'return') {
+            this.#postMessageToWorker({ type: message.type, details: message.details, sab: message.sab, value: 1 });
         }
     }
 
-    saveLastMessage(type, message, sab) {
-        this.lastMessage = {
-            type: type,
-            message: message,
-            sab: sab
+    setMessagePassingState(state) {
+        this.isMessagePassingPaused = state.paused;
+        if (!this.isMessagePassingPaused) {
+            this.postMessage({ type: this.lastMessage.type, details: this.lastMessage.message, sab: this.lastMessage.sab });
         }
-    }
-
-    pauseMessageWorker() {
-        this.isMessagePassingPaused = true;
-    }
-
-    unPauseMessageWorker() {
-        this.isMessagePassingPaused = false;
-        this.receiveMessage(this.lastMessage.type, this.lastMessage.message, this.lastMessage.sab);
     }
 
     runSingleCommand() {
         if (!this.isMessagePassingPaused) {
-            this.pauseMessageWorker();
+            this.setMessagePassingState({ paused: true });
             return;
         }
 
-        this.unPauseMessageWorker();
-        this.pauseMessageWorker();
+        this.setMessagePassingState({ paused: false });
+        this.setMessagePassingState({ paused: true });
 
-    }
-
-    PostMessageToWorker(type, message, sab, value) {
-        this.worker.postMessage({ type: type, message: message });
-        if (sab !== null) {
-            const waitArray = new Int32Array(sab, 0, 1);
-            Atomics.store(waitArray, 0, value);
-            Atomics.notify(waitArray, 0, value);
-        }
     }
 
     sendUserInputToWorker(event) {
         if (event.key === 'Enter') {
-            this.word = getUserInput(false);
+            this.word = ui.promptUserInput({ inputBoxHidden: false });
             for (let i = 0; i < this.word.length; i++) {
                 this.sharedArray[i] = this.word.charCodeAt(i);
             }
@@ -92,5 +75,18 @@ export class EventHandler {
             Atomics.store(this.syncArray, 0, 1);
             Atomics.notify(this.syncArray, 0, 1);
         }
+    }
+
+    #postMessageToWorker(message) {
+        this.worker.postMessage({ type: message.type, details: message.details });
+        if (message.sab !== null) {
+            const waitArray = new Int32Array(message.sab, 0, 1);
+            Atomics.store(waitArray, 0, message.value);
+            Atomics.notify(waitArray, 0, message.value);
+        }
+    }
+
+    #saveLastMessage(message) {
+        this.lastMessage = message;
     }
 }
