@@ -3,6 +3,8 @@ import { Task } from "../util/task.js";
 
 export const taskIdentifier = (function () {
     const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.size === 0) return 1;
+
     const taskIdentifier = parseInt(searchParams.get("task"));
     return taskIdentifier;
 })();
