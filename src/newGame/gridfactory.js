@@ -1,28 +1,19 @@
 import { getNewGridObject } from "./gridobject.js";
 import { Grid } from "./grid.js";
 import { Constants } from "./commonstrings.js";
-import { tryGetFileAsJson } from "../file_reader.js";
+import * as globals from "../util/globals.js";
 
 export function getNewGameGrid() {
     let player = getNewGridObject(Constants.PLAYER_STR);
+    const task = globals.task;
+    const playerStartPosition = task.getPlayerStartPosition();
 
-    let task = 1;
-    const path = `../../tasks/${task}.json`;
+    const gridWidth = task.getGridDimensions().width;
+    const gridHeight = task.getGridDimensions().height;
 
-    let result = tryGetFileAsJson(path);
+    let newGrid = new Grid(player, gridWidth, gridHeight);
 
-    const pupucoords = result.objektit[0].koordinaatit;
-    const gridSize = result.koko;
-
-    let gridWitdh = gridSize[0];
-    let gridHeight = gridSize[1];
-
-    let xPupu = pupucoords[0];
-    let yPupu = pupucoords[1];
-
-    let newGrid = new Grid(player, gridWitdh, gridHeight);
-
-    newGrid.addToGrid(player, xPupu, yPupu);
+    newGrid.addToGrid(player, playerStartPosition.x, playerStartPosition.y);
     newGrid.saveCurrentStateForReset(); //Important!
     return newGrid;
 };
