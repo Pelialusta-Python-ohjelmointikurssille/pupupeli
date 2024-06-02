@@ -1,4 +1,4 @@
-import { getEventHandler } from "../index.js";
+import { getEventHandler } from "../ui.js";
 import { Game } from "./new_game.js";
 
 //This file controls game. 
@@ -25,7 +25,8 @@ export function giveCommand(dirtyCommand) {
 }
 
 export function commandsDone() {
-    eventHandler.receiveMessage("return", "returning from game.js", currentCommand.sab);
+    eventHandler.postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
+
 }
 
 export function getCanvas(){
@@ -34,4 +35,5 @@ export function getCanvas(){
 
 export function resetGame() {
     game.resetGame();
+    eventHandler = getEventHandler();
 }
