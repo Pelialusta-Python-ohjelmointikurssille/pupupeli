@@ -1,5 +1,6 @@
 import * as gameController from './newGame/game_controller.js';
 import * as ui from './ui.js'
+import * as globals from './util/globals.js';
 
 export class EventHandler {
     constructor() {
@@ -18,6 +19,9 @@ export class EventHandler {
                     break;
                 case "run":
                     gameController.giveCommand({ data: message.details, sab: message.sab });
+                    break;
+                case "conditionCleared":
+                    globals.addClearedCondition(message.details);
                     break;
                 case "finish":
                     ui.onFinishLastCommand();
