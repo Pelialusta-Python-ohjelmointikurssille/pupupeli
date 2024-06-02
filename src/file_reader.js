@@ -20,11 +20,16 @@ export function tryGetFileAsText(path) {
     } else {
         throw new Error(`Error fetching file: ${path}`);
     }
+
     return fileAsString
 }
 
 export function tryGetFileAsJson(path) {
     let response;
+
+    if (path === undefined) {
+        throw new Error("No file path given");
+    }
 
     let request = new XMLHttpRequest();
     request.open('GET', path, false);
@@ -33,11 +38,9 @@ export function tryGetFileAsJson(path) {
     if (request.status === 200) {
         response = request.responseText;
     } else {
-        // error handling can be added
-        // console.log(`Error fetching file: ${path}`)
+        throw new Error(`Error fetching file: ${path}`);
     }
 
     const result = JSON.parse(response);
-
     return result;
 }
