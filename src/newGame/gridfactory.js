@@ -13,11 +13,23 @@ export function getNewGameGrid() {
     const gridWidth = task.getGridDimensions().width;
     const gridHeight = task.getGridDimensions().height;
 
+    let grid = globals.task.getGrid();
     let newGrid = new Grid(player, gridWidth, gridHeight);
 
     newGrid.addToGrid(player, playerStartPosition.x, playerStartPosition.y);
-    newGrid.addToGrid(collectible, Math.round(newGrid.width / 2), Math.round(newGrid.height / 2));
-    newGrid.addToGrid(obstacle, 3, 3);
+
+    for (let y = 0; y < gridHeight; y++) {
+        for (let x = 0; x < gridWidth; x++) {
+            if (grid[y][x] === 2) {
+                collectible = getNewGridObject(Constants.COLLECTIBLE);
+                newGrid.addToGrid(collectible, x, y);
+            } else if (grid[y][x] === 3) {
+                obstacle = getNewGridObject(Constants.OBSTACLE);
+                newGrid.addToGrid(obstacle, x, y);
+            }
+        }
+    }
+
     newGrid.saveCurrentStateForReset(); //Important!
     return newGrid;
 };
