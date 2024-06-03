@@ -17,6 +17,7 @@ export class AnimationFactory {
             return new FailMoveAnimation(gridObject, animationId, data);
         }
         if(animationId === "hide") {
+            console.log("CREATE HIDE ANIM")
             return new HideAnimation(gridObject, animationId, data);
         }
         if(animationId === "unhide") {

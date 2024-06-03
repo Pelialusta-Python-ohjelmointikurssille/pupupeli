@@ -12,6 +12,7 @@ export class HideAnimation {
 
     start() {
         this.progress.start();
+        console.log("START ANIM")
         this.inProgress = true;
         this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridCellPosition);
         this.gridObject.container.x = this.gridObject.screenPosition.x + this.gridObject.fakeZPosition;
@@ -21,8 +22,8 @@ export class HideAnimation {
     increment(deltaTime) {
         if (this.inProgress === false) return;
         this.progress.increment(deltaTime);
-        if (this.progress > 0.7) {
-            this.gridObject.container.rotation += 1 * deltaTime;
+        if (this.progress.value > 0.7) {
+            this.gridObject.container.rotation += 20 * deltaTime;
         }
     }
 
@@ -39,6 +40,7 @@ export class HideAnimation {
     }
 
     onFinish() {
+        console.log("END ANIM")
         this.gridObject.container.alpha = 0;
         this.inProgress = false;
         this.gridObject.onFinishAnimation(this.name);
