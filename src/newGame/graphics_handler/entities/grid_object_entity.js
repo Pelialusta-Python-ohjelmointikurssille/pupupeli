@@ -36,11 +36,9 @@ export class GridObjectEntity extends GraphicsEntity {
     }
 
     onStartAnimation(name) {
-        //console.log(this.entityId + " started animation: " + name);
     }
 
     onFinishAnimation(name) {
-        //console.log(this.entityId + " finished animation: " + name);
     }
 
     doAction(actionId, actionData) {

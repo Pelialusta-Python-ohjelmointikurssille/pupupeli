@@ -77,12 +77,11 @@ export class GraphicsEntitySystem {
     }
 
     resetGridObjects() {
-        console.log("RESETTING ENTS")
         this.entityDict.forEach((value, key, map) => {
             if (value.type === "player") {
-                console.log("RESET ENT player " + value.entityId);
                 value.reset();
             }
         });
+        console.log("Graphics were reset");
     }
 }
