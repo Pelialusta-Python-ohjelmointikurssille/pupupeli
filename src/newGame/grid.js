@@ -1,5 +1,5 @@
 import { Vector2 } from "./vector.js";
-import { Cell } from "../game/cell.js";
+import { Cell } from "../newGame/cell.js";
 
 export class Grid {
     constructor(player, width, height) {

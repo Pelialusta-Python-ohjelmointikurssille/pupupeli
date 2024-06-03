@@ -1,6 +1,6 @@
 import { PixiRenderer } from "./pixi_renderer.js";
 import { GraphicsEntitySystem } from "./graphics_entity_handler.js";
-import { Vector2 } from "../../game/vector.js";
+import { Vector2 } from "../../newGame/vector.js";
 
 export class GraphicsHandler {
     constructor(width, height, onReadyFunc, onReadyFuncContext) {
@@ -58,11 +58,9 @@ export class GraphicsHandler {
     }
 
     onEntitiesNotReady() {
-        console.log("NOT READY");
     }
 
     onEntitiesReady() {
-        console.log("NOW READY");
         if (this.onReadyFunc == null || this.onReadyFuncContext == null) return;
         this.onReadyFunc.call(this.onReadyFuncContext);
     }

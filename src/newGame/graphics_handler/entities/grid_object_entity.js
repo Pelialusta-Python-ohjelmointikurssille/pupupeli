@@ -1,4 +1,4 @@
-import { Vector2 } from "../../../game/vector.js";
+import { Vector2 } from "../../../newGame/vector.js";
 import { GraphicsEntity } from "./graphics_entity.js";
 import { AnimationProgress } from "../move_tween.js";
 
@@ -36,11 +36,9 @@ export class GridObjectEntity extends GraphicsEntity {
     }
 
     onStartAnimation(name) {
-        //console.log(this.entityId + " started animation: " + name);
     }
 
     onFinishAnimation(name) {
-        //console.log(this.entityId + " finished animation: " + name);
     }
 
     doAction(actionId, actionData) {
@@ -51,5 +49,9 @@ export class GridObjectEntity extends GraphicsEntity {
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
         this.container.x = this.screenPosition.x;
         this.container.y = this.screenPosition.y;
+        this.animations.forEach((value, key, map) => {
+            value.stop();
+        })
+        this.isReady = true;
     }
 }

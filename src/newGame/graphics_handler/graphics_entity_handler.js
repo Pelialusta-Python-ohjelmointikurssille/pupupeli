@@ -1,5 +1,5 @@
 import { GraphicsEntity } from "./entities/graphics_entity.js";
-import { Vector2 } from "../../game/vector.js";
+import { Vector2 } from "../../newGame/vector.js";
 import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 import { GridEntity } from "./entities/grid_entity.js";
@@ -69,22 +69,19 @@ export class GraphicsEntitySystem {
     }
 
     onEntitiesNotReady() {
-        //console.log("NOT READY");
         this.graphicsHandler.onEntitiesNotReady();
     }
 
     onEntitiesReady() {
-        //console.log("NOW READY");
         this.graphicsHandler.onEntitiesReady();
     }
 
     resetGridObjects() {
-        console.log("RESETTING ENTS")
         this.entityDict.forEach((value, key, map) => {
             if (value.type === "player") {
-                console.log("RESET ENT player " + value.entityId);
                 value.reset();
             }
         });
+        console.log("Graphics were reset");
     }
 }

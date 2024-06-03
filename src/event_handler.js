@@ -53,10 +53,10 @@ export class EventHandler {
     setMessagePassingState(state) {
         this.isMessagePassingPaused = state.paused;
         if (!this.isMessagePassingPaused) {
-            this.receiveMessage(this.lastMessage.type, this.lastMessage.message, this.lastMessage.sab);
+            this.postMessage({ type: this.lastMessage.type, details: this.lastMessage.message, sab: this.lastMessage.sab });
         }
     }
-
+    
     runSingleCommand() {
         if (!this.isMessagePassingPaused) {
             this.setMessagePassingState({ paused: true });
