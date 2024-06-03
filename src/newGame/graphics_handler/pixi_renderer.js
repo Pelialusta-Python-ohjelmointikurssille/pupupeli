@@ -119,6 +119,15 @@ const builtinAssetManifest = {
 
                 }
             ]
-        }
+        },
+        {
+            name: "collectibles",
+            assets: [
+                {
+                    alias: "carrot",
+                    src: "src/static/game_assets/carrot.png"
+                }
+            ]
+        },
     ]
 }

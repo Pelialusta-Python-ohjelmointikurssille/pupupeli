@@ -77,7 +77,7 @@ export class GraphicsEntityFactory {
     }
 
     createCollectible(entityId, data) {
-        let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
+        let sprite = new PIXI.Sprite(this.builtinAssets.collectibles.carrot);
         let entity = new GraphicsEntity(
             entityId,
             this.graphicsEntityHandler,
