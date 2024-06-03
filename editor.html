@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>Pupupeli Level Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --cell-side: 5rem;
+            --button-darker: rgba(0, 0, 0, 0.1)
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        td {
+            /* 640px (canvas size)/8 (grid size) = 80px (cell size) */
+            /* 1rem = 16px -> 5rem = 80px */
+            width: var(--cell-side);
+            height: var(--cell-side);
+            border: 1px solid black;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .is-hidden {
+            display: none !important;
+        }
+
+        .is-flex-center {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .is-flex-column {
+            flex-direction: column;
+        }
+
+        #app {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem;
+            padding: 0;
+        }
+
+        @media (max-width:1280px) {
+            #app {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        #app-container {
+            margin: 1rem;
+        }
+
+        #grid-input-submit-container {
+            flex-direction: row;
+        }
+
+        .grid-input-submit {
+            margin: 0.5rem;
+        }
+
+        #grid-width-input,
+        #grid-height-input {
+            width: 1rem;
+            float: right;
+        }
+
+        #options-top {
+            display: contents;
+        }
+
+        #options-input {
+            padding: 1rem;
+        }
+
+        #options-conditions {
+            margin: 0.5rem auto 0rem auto;
+        }
+
+        #options {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #options-container {
+            max-width: calc(var(--canvas-width)* 1.5);
+        }
+
+        #output-field {
+            width: 100%;
+            height: calc(100% - 2px);
+        }
+
+        #maxLinesInput {
+            width: 1rem;
+        }
+
+        .checkbox-container {
+            border: 1px solid black;
+            border-radius: 5px;
+            margin: 0 0.5rem 0 0.5rem;
+            text-align: center;
+            height: 2rem;
+        }
+
+        @media screen and (max-width: 1860px) {
+            .checkbox-container {
+                height: unset;
+            }
+        }
+
+        .checkbox-label {
+            padding: 0.5rem;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .checkbox-container:hover {
+            background-color: var(--button-darker);
+        }
+
+        .active {
+            background-color: var(--button-darker);
+        }
+
+        .checkbox {
+            display: none;
+        }
+
+        #task-input,
+        #editor-input,
+        #multiple-choice-container {
+            width: 100%;
+            max-width: calc(var(--canvas-width)* 1.5);
+            min-height: 3rem;
+        }
+
+        .options-input-buttons {
+            margin-bottom: 0.25rem;
+        }
+
+        #multiple-choice-container {
+            border: 1px solid black;
+            border-radius: 5px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        #add-multiple-choice-button {
+            margin: 0;
+        }
+
+        textarea {
+            margin: unset;
+            padding: unset;
+            border: 1px solid black;
+        }
+
+        .multiple-choice {
+            flex-direction: column;
+            text-align: center;
+            margin: 0.5rem;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 0.5rem;
+        }
+
+        .multiple-choice-input {
+            margin-top: 0.5rem;
+        }
+
+        #left-side {
+            min-height: calc(100vh - 2rem - 2px);
+            border: 1px solid black;
+        }
+
+        #right-side {
+            min-height: calc(100vh - 2rem - 2px);
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="left-side" class="is-flex is-flex-column is-flex-center">
+            <h1 class="is-flex" style="text-align: center;padding:1rem;">PupuEditor</h1>
+            <div id="options-top" class="is-flex is-flex-1 is-flex-center">
+                <div id="options" class="is-flex">
+                    <div class="grid-input-container">
+                        <span class="grid-width-input-text">Ruudukon leveys:</span>
+                        <input id="grid-width-input" type="text" placeholder="8" value="8">
+                    </div>
+                    <div class="grid-input-container">
+                        <span class="grid-width-input-text">Ruudukon korkeus:</span>
+                        <input id="grid-height-input" type="text" placeholder="8" value="8">
+                    </div>
+                </div>
+                <div id="grid-input-submit-container" class="is-flex">
+                    <button class="grid-input-submit" type="submit" value="Submit" onclick="createTable()">Luo ruudukko</button>
+                    <button class="grid-input-submit" type="submit" value="Generate" onclick="generateTaskOutput()">Tulosta taso</button>
+                    <button id="save-button" class="grid-input-submit is-hidden" type="submit" value="Save" onclick="downloadOutput()">Tallenna</button>
+                </div>
+            </div>
+            <div id="options-container" class="is-flex is-flex-column">
+                <div id="options-conditions" class="is-flex is-flex-1 is-flex-center">
+                    <div class="checkbox-container is-flex is-flex-center">
+                        <input type="checkbox" id="condition1" class="checkbox" name="condition1" value="conditionUsedWhile" onclick="clickConditionBox(this)">
+                        <label class="checkbox-label" for="condition1">käytä while-silmukkaa</label><br>
+                    </div>
+                    <div class="checkbox-container is-flex is-flex-center">
+                        <input type="checkbox" id="condition2" class="checkbox" name="condition2" value="conditionUsedFor" onclick="clickConditionBox(this)">
+                        <label class="checkbox-label" for="condition2">käytä for-silmukkaa</label><br>
+                    </div>
+                    <div class="checkbox-container is-flex is-flex-center">
+                        <input type="checkbox" id="condition3" class="checkbox" name="condition3" value="conditionUsedInput" onclick="clickConditionBox(this)">
+                        <label class="checkbox-label" for="condition3">käytä input()</label><br>
+                    </div>
+                    <div class="checkbox-container is-flex is-flex-center">
+                        <input type="checkbox" id="condition4" class="checkbox" name="condition4" value="conditionMaxLines" onclick="clickConditionBox(this)">
+                        <label class="checkbox-label" for="condition4">vastaus enintään <input id="maxLinesInput" type="text" placeholder="0" value="0" style="text-align:center;"> riviä</label><br>
+                    </div>
+                </div>
+                <div id="options-input" class="is-flex is-flex-1 is-flex-column">
+                    <div id="options-input-buttons-container">
+                        <button class="options-input-buttons" value="inputDescription" onclick="inputButtonsToggler(event)">Tehtävän kuvaus</button>
+                        <button class="options-input-buttons" value="inputEditorCode" onclick="inputButtonsToggler(event)">Editorin koodi</button>
+                        <button class="options-input-buttons" value="inputMultipleChoice" onclick="inputButtonsToggler(event)">Monivalintatehtävät</button>
+                        <button id="add-multiple-choice-button" class="is-hidden" onclick="addMultipleChoiceQuestion()">+</button>
+                    </div>
+                    <textarea rows="3" name="task-input" id="task-input" value="" placeholder="Lisää tehtävän kuvaus"></textarea>
+                    <textarea rows="3" name="editor-input" id="editor-input" class="is-hidden" value="" placeholder="Lisää tehtävän tekstieditoriin etukäteen asetettu koodi"></textarea>
+                    <div id="multiple-choice-container" class="is-hidden">
+                    </div>
+                </div>
+            </div>
+            <div id="app-container" class="is-flex">
+                <div id="editor-container">
+                    <table id="editor-table"></table>
+                </div>
+            </div>
+        </div>
+        <div id="right-side" class="">
+            <textarea id="output-field" rows="3" placeholder="..."></textarea>
+        </div>
+    </div>
+
+    <script>
+        class Level {
+            constructor(description, editorCode, multipleChoiceQuestions, grid, conditions) {
+                this.description = description;
+                this.editorCode = editorCode;
+                this.multipleChoiceQuestions = multipleChoiceQuestions;
+                this.grid = grid;
+                this.conditions = conditions;
+            }
+        }
+
+        function createTable() {
+
+            const gridDimensions = {
+                width: document.getElementById("grid-width-input").value,
+                height: document.getElementById("grid-height-input").value
+            };
+            const table = document.getElementById("editor-table");
+
+            // empty the table in case user generates multiple times without reloading page
+            table.innerHTML = '';
+
+            for (x = 0; x < gridDimensions.height; x++) {
+                table.appendChild(document.createElement("tr"));
+                for (y = 0; y < gridDimensions.width; y++) {
+                    let cell = table.children[x].appendChild(document.createElement("td"));
+                    cell.dataset.value = "1";
+                    cell.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+
+
+                    cell.addEventListener('click', function () {
+                        switch (this.dataset.value) {
+                            case '1':
+                                this.dataset.value = '2';
+                                this.innerHTML = '<img src="/src/static/game_assets/porkkana_lapinakyva.png"></img>'
+                                break;
+                            case '2':
+                                this.dataset.value = '3';
+                                this.innerHTML = '<img src="/src/static/game_assets/Kivi3.png"></img>'
+                                break;
+                            case '3':
+                                this.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+                                this.dataset.value = '1';
+                                break;
+                        }
+
+                    });
+
+
+
+                }
+            }
+
+            let cells = table.getElementsByTagName("td");
+
+            Array.from(cells).forEach(cell => {
+                cell.addEventListener("contextmenu", function (event) {
+                    event.preventDefault();
+                    Array.from(cells).forEach(c => {
+                        if (c.dataset.value === "0") {
+                            c.dataset.value = "1";
+                            c.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+                        }
+                    });
+
+                    this.dataset.value = "0";
+                    this.innerHTML = '<img src="/src/static/game_assets/bunny_right.png"></img>';
+                });
+            });
+        }
+
+        function createGridFromTable() {
+            const table = document.getElementById('editor-table');
+            const rows = table.rows;
+            const grid = [];
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].cells;
+                const rowArray = [];
+
+                for (let j = 0; j < cells.length; j++) {
+                    rowArray.push(cells[j].dataset.value);
+                }
+
+                grid.push(rowArray);
+            }
+
+            return grid;
+        }
+
+        function getConditions() {
+            let conditions = [];
+            let conditionElements = document.getElementsByClassName("checkbox");
+            for (x = 0; x < conditionElements.length; x++) {
+                if (conditionElements[x].value === "conditionMaxLines") {
+                    let maxLinesValue = conditionElements[x].checked ? conditionElements[x].nextElementSibling.children[0].value : false;
+                    conditions.push({ condition: conditionElements[x].value, parameter: maxLinesValue });
+                } else {
+                    conditions.push({ condition: conditionElements[x].value, parameter: conditionElements[x].checked });
+                }
+            }
+            return conditions;
+        }
+
+        function getMultipleChoices() {
+            let multipleChoices = document.getElementById("multiple-choice-container").childNodes;
+            let multipleChoiceArray = []
+
+            for (i = 1; i < multipleChoices.length; i++) {
+                multipleChoiceArray.push({ question: multipleChoices[i].childNodes[0].value, isCorrectAnswer: multipleChoices[i].childNodes[1].childNodes[0].checked });
+            }
+
+            return multipleChoiceArray;
+        }
+
+        function getEditorCode() {
+            const editorCodeLines = [];
+            document.getElementById("editor-input").value.split("\n").forEach((line) => {
+                editorCodeLines.push(line);
+            });
+            return editorCodeLines;
+        }
+
+        function generateTaskOutput() {
+
+            const taskDescriptionLines = [];
+            document.getElementById("task-input").value.split("\n").forEach((line) => {
+                taskDescriptionLines.push(line);
+            });
+
+            // use Level class to get json output
+            let output = new Level(taskDescriptionLines, getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
+            let outputField = document.getElementById("output-field");
+            outputField.value = customJSONStringify(output);
+            // need to fire input event to resize output field
+            // outputField.dispatchEvent(new Event("input"));
+
+            // show save button after generating task output
+            const save_button = document.getElementById("save-button");
+            if (save_button.classList.contains("is-hidden")) save_button.classList.toggle("is-hidden");
+
+            // check if array consists of single characters only (relevant for printing our grid nicely)
+            function isSingleCharArray(array) {
+                return Array.isArray(array) && array.every(item => typeof item === 'string' && item.length === 1);
+            }
+
+            // replacer function for JSON.stringify
+            function stringifyReplacer(key, value) {
+                if (isSingleCharArray(value)) {
+                    return `[${value.join(',')}]`;
+                }
+                return value;
+            }
+
+            // remove extra quotes around the single-character arrays
+            function customJSONStringify(obj) {
+                return JSON.stringify(obj, (key, value) => {
+                    let replacedValue = stringifyReplacer(key, value);
+                    if (typeof replacedValue === 'string' && replacedValue.startsWith('[')) {
+                        return replacedValue;
+                    }
+                    return value;
+                }, 2).replace(/"(\[.*?\])"/g, '$1');
+            }
+        }
+
+        function clickConditionBox(event) {
+            event.classList.toggle('checked');
+            event.parentNode.classList.toggle('active');
+        }
+
+        function inputButtonsToggler(event) {
+            let taskInput = document.getElementById("task-input");
+            let editorInput = document.getElementById("editor-input");
+            let multipleChoiceContainer = document.getElementById("multiple-choice-container");
+            let multipleChoiceAddButton = document.getElementById("add-multiple-choice-button");
+
+            switch (event.target.value) {
+                case "inputDescription":
+                    if (taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
+                    if (!editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
+                    if (!multipleChoiceContainer.classList.contains("is-hidden")) {
+                        multipleChoiceContainer.classList.toggle("is-hidden");
+                        multipleChoiceAddButton.classList.toggle("is-hidden");
+                        multipleChoiceContainer.classList.toggle("is-flex");
+                    }
+                    break;
+                case "inputEditorCode":
+                    if (!taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
+                    if (editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
+                    if (!multipleChoiceContainer.classList.contains("is-hidden")) {
+                        multipleChoiceContainer.classList.toggle("is-hidden");
+                        multipleChoiceAddButton.classList.toggle("is-hidden");
+                        multipleChoiceContainer.classList.toggle("is-flex");
+                    }
+                    break;
+                case "inputMultipleChoice":
+                    if (!taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
+                    if (!editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
+                    if (multipleChoiceContainer.classList.contains("is-hidden")) {
+                        multipleChoiceContainer.classList.toggle("is-hidden");
+                        multipleChoiceAddButton.classList.toggle("is-hidden");
+                        multipleChoiceContainer.classList.toggle("is-flex");
+                    }
+                    break;
+            }
+        }
+
+        function addMultipleChoiceQuestion() {
+            let multipleChoiceContainer = document.getElementById("multiple-choice-container");
+            let multipleChoiceElement = document.createElement("div");
+            multipleChoiceElement.classList.add("multiple-choice", "is-flex", "is-flex-column");
+            multipleChoiceElement.innerHTML = `<input type='text' placeholder='Lisää kysymys'><div class='multiple-choice-input'><input name='multipleChoice${multipleChoiceContainer.childNodes.length - 1}' type='checkbox'><label for='multipleChoice${multipleChoiceContainer.childNodes.length - 1} style="line-height: 20px;'>Oikea vastaus?</label></div>`;
+
+            multipleChoiceContainer.insertAdjacentElement("beforeend", multipleChoiceElement);
+        }
+
+        // creates a downloadable file from the text in the output field
+        function downloadOutput() {
+            let text = document.getElementById("output-field").value;
+            let blob = new Blob([text], { type: "text/plain" });
+            let anchor = document.createElement("a");
+            anchor.download = "output.json";
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.target = "_blank";
+            anchor.style.display = "none";
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+        }
+
+        // autoresize for textareas
+        const tx = document.querySelectorAll("textarea:not(#output-field)");
+        for (let i = 0; i < tx.length; i++) {
+            tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+            tx[i].addEventListener("input", OnInput, false);
+        }
+
+        function OnInput() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + "px";
+        }
+
+        window.onload = createTable;
+
+    </script>
+</body>
+
+</html>
