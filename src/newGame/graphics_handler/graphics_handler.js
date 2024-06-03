@@ -37,7 +37,11 @@ export class GraphicsHandler {
     }
 
     doAction(entityId, actionId, actionData) {
-        this.graphicsEntityHandler.getGraphicsEntity(entityId).doAction(actionId, actionData);
+        console.log(entityId);
+        console.log(actionId);
+        console.log(actionData);
+        //this.graphicsEntityHandler.getGraphicsEntity(entityId).doAction(actionId, actionData);
+        this.graphicsEntityHandler.doAction(entityId, actionId, actionData);
     }
 
     createEntity(entityId, type, data) {

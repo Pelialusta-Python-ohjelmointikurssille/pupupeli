@@ -48,7 +48,7 @@ export class GraphicsEntityFactory {
 
     createPlayer(entityId, data) {
         let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
-        let entity = new PlayerEntity(
+        let entity = new GridObjectEntity(
             entityId,
             this.graphicsEntityHandler,
             new PIXI.Container(),

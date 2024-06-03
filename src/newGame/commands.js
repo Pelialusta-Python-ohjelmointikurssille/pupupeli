@@ -14,8 +14,12 @@ export class MoveCommand {
     execute() {
         let isSuccess = this.grid.moveGridObjectToDir(this.gridObject, this.dir);
         if (isSuccess) this.checkForObjects();
-        let dirObj = { isSuccess: isSuccess, direction: GetDirectionAsString(this.dir) };
-        this.graphicsHandler.doAction(this.gridObject.id, Constants.MOVE_STR, dirObj);
+        let dirObj = { direction: GetDirectionAsString(this.dir), time: 0.6};
+        if (isSuccess) {
+            this.graphicsHandler.doAction(this.gridObject.id, Constants.MOVE_STR, dirObj);
+        } else {
+            this.graphicsHandler.doAction(this.gridObject.id, "failmove", dirObj);
+        }
 
     }
 

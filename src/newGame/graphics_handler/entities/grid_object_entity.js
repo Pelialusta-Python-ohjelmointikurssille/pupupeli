@@ -1,6 +1,5 @@
 import { Vector2 } from "../../../newGame/vector.js";
 import { GraphicsEntity } from "./graphics_entity.js";
-import { AnimationProgress } from "../move_tween.js";
 
 
 export class GridObjectEntity extends GraphicsEntity {
@@ -10,7 +9,7 @@ export class GridObjectEntity extends GraphicsEntity {
         this.gridCellPosition = new Vector2(0, 0);
         this.sizeWithinCellMultiplier = 0.9;
         this.fakeZPosition = 0;
-        this.animations = new Map();
+        this.currentAnimation = null;;
         this.type = "grid_object";
         if (data !== null) {
             if (data.position !== null) {
@@ -33,28 +32,37 @@ export class GridObjectEntity extends GraphicsEntity {
 
     onUpdate(deltaTime) {
         super.onUpdate(deltaTime);
-        this.animations.forEach((value, key, map) => {
-            value.increment(deltaTime);
-        })
+        if(this.currentAnimation != null) {
+            this.currentAnimation.increment(deltaTime);
+        }
     }
 
     onStartAnimation(name) {
+        this.isReady = false;
     }
 
     onFinishAnimation(name) {
+        this.isReady = true;
     }
 
-    doAction(actionId, actionData) {
+    doGridAnimation(animation) {
+        this.currentAnimation = animation;
+        this.currentAnimation.start();
     }
 
     reset() {
+        console.log("RESET ");
+        if(this.currentAnimation != null) {
+            this.currentAnimation.stop();
+        }
+        this.currentAnimation = null;
         this.gridCellPosition = new Vector2(this.startPosition.x, this.startPosition.y);
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
         this.container.x = this.screenPosition.x;
         this.container.y = this.screenPosition.y;
-        this.animations.forEach((value, key, map) => {
-            value.stop();
-        })
+        this.container.rotation = 0;
+        this.container.alpha = 1;
         this.isReady = true;
+        
     }
 }

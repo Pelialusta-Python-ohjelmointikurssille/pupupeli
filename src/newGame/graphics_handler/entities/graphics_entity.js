@@ -20,7 +20,4 @@ export class GraphicsEntity {
 
     onUpdate(deltaTime) {
     }
-
-    doAction(actionId, actionData) {
-    }
 }
