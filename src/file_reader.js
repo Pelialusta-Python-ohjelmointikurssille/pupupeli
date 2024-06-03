@@ -5,14 +5,10 @@
  * throws an Error.
  */
 export function tryGetFileAsText(path) {
-    var fileReadMessage = {
-        isSuccess : false,
-        result : ""
-    }
+    let fileAsString;
 
     if (path === undefined) {
-        fileReadMessage.result = `No file path given`;
-        return fileReadMessage;
+        throw new Error("No file path given");
     }
 
     let request = new XMLHttpRequest();
@@ -20,16 +16,20 @@ export function tryGetFileAsText(path) {
     request.send(null);
 
     if (request.status === 200) {
-        fileReadMessage.isSuccess = true;
-        fileReadMessage.result = request.responseText;
+        fileAsString = request.responseText;
     } else {
-        fileReadMessage.result = `Error fetching file: ${path}`;
+        throw new Error(`Error fetching file: ${path}`);
     }
-    return fileReadMessage;
+
+    return fileAsString
 }
 
 export function tryGetFileAsJson(path) {
     let response;
+
+    if (path === undefined) {
+        throw new Error("No file path given");
+    }
 
     let request = new XMLHttpRequest();
     request.open('GET', path, false);
@@ -38,11 +38,9 @@ export function tryGetFileAsJson(path) {
     if (request.status === 200) {
         response = request.responseText;
     } else {
-        // error handling can be added
-        // console.log(`Error fetching file: ${path}`)
+        throw new Error(`Error fetching file: ${path}`);
     }
 
     const result = JSON.parse(response);
-
     return result;
 }
