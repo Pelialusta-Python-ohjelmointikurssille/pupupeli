@@ -39,13 +39,16 @@ export class GridObjectEntity extends GraphicsEntity {
 
     onStartAnimation(name) {
         this.isReady = false;
+        console.log("START ANIM " + name)
     }
 
     onFinishAnimation(name) {
         this.isReady = true;
+        console.log("FINISH ANIM " + name)
     }
 
     doGridAnimation(animation) {
+        console.log(animation.name)
         this.currentAnimation = animation;
         this.currentAnimation.start();
     }

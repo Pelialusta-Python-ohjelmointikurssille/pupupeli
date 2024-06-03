@@ -30,7 +30,7 @@ export class MoveCommand {
         let gridobjects = this.grid.getAdjacentObjectsAtDir(this.moveStartPos.x, this.moveStartPos.y, this.dir);
         for (let i = 0; i < gridobjects.length; i++) {
             if (gridobjects[i].type === Constants.COLLECTIBLE) {
-                this.graphicsHandler.doAction(gridobjects[i].id, "hide", {time : 0.3});
+                this.graphicsHandler.doAction(gridobjects[i].id, "hide", {time : 0.6});
                 this.grid.removeFromGrid(gridobjects[i]);
             }
         }

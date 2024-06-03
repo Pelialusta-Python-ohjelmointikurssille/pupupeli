@@ -55,6 +55,7 @@ export class GraphicsEntityFactory {
             sprite,
             data
         );
+        entity.container.zIndex = 1;
         return entity;
     }
 
@@ -90,6 +91,7 @@ export class GraphicsEntityFactory {
             sprite,
             data
         );
+        entity.container.zIndex = 3;
         return entity;
     }
 
