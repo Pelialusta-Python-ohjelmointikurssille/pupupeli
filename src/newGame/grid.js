@@ -47,6 +47,18 @@ export class Grid {
         return true;
     }
 
+    getObjectsAtGridPosition(x, y) {
+        return this.doubleArray[x][y].entities;
+    }
+
+    //Direction means direction class at direction.js
+    getAdjacentObjectsAtDir(posX, posY, direction) {
+        let dirVector = Vector2.FromDirection(direction);
+        posX += dirVector.x;
+        posY += dirVector.y;
+        return getObjectsAtGridPosition(posX, posY);
+    }
+
     boundaryCheck(x, y) {
         if (x < 0 | x >= this.doubleArray.length) return false;
         if (y < 0 | y >= this.doubleArray[0].length) return false;
