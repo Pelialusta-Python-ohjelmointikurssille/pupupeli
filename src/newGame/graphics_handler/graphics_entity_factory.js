@@ -2,6 +2,7 @@ import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi
 import { GridEntity } from "./entities/grid_entity.js";
 import { GraphicsEntity } from "./entities/graphics_entity.js";
 import { PlayerEntity } from "./entities/player_entity.js";
+import { BackgroundEntity } from "./entities/background_entity.js";
 
 
 export class GraphicsEntityFactory {
@@ -19,6 +20,12 @@ export class GraphicsEntityFactory {
         }
         if (type === "player") {
             return this.createPlayer(entityId, data);
+        }
+        if (type === "background") {
+            return this.createBackground(entityId, data);
+        }
+        if (type === "collectible") {
+            return this.createCollectible(entityId, data);
         }
     }
 
@@ -56,4 +63,29 @@ export class GraphicsEntityFactory {
         );
         return entity;
     }
+
+    createBackground(entityId, data) {
+        let sprite = new PIXI.Sprite(this.builtinAssets.backgrounds.background_grass);
+        let entity = new BackgroundEntity(
+            entityId,
+            this.graphicsEntityHandler,
+            new PIXI.Container(),
+            sprite,
+            data
+        );
+        return entity;
+    }
+
+    createCollectible(entityId, data) {
+        let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
+        let entity = new GraphicsEntity(
+            entityId,
+            this.graphicsEntityHandler,
+            new PIXI.Container(),
+            sprite,
+            null
+        );
+        return entity;
+    }
+
 }

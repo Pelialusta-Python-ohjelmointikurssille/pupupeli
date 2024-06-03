@@ -24,6 +24,7 @@ export class PixiRenderer {
             this.renderLoop(time);
         });
         this.cameraWorldContainer = new PIXI.Container();
+        this.cameraWorldContainer.sortDirty = true;
         this.pixiApp.stage.addChild(this.cameraWorldContainer);
     }
 

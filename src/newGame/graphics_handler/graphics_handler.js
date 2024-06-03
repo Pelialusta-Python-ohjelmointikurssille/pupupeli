@@ -29,6 +29,8 @@ export class GraphicsHandler {
 
         this.createGrid();
 
+        this.createEntity("bgtest", "background", { bgWidth: 1024, bgHeight: 1024});
+
         let t2 = new Date().getTime();
         console.log(`Loading graphics engine took ${t2-t1}ms`);
     }
