@@ -1,30 +1,28 @@
-import{ tryGetFileAsText } from "../file_reader.js"
+import { tryGetFileAsText } from "../file_reader.js"
+import XMLHttpRequestMock from "./mocks/XMLHttpRequestMock.js";
+
+const fs = require('fs');
+const path = require('path');
 
 describe('tryGetFileAsText', () => {
+
+    beforeAll(() => {
+        global.XMLHttpRequest = XMLHttpRequestMock;
+    });
+
     test('should return pelaaja.py string', () => {
-        const expectedOutput = `import js
+        const expectedOutput = fs.readFileSync(path.resolve(__dirname, '../python/pelaaja.py'), 'utf8');
 
-class Pelaaja:
-    def __init__(self, name="pupu"):
-        self.__name = name
-        self.__directions =  ["oikea", "vasen", "ylös", "alas"]
-
-    def liiku(self, direction: str):
-        if direction in self.__directions:
-            js.runCommand("move", direction)
-
-pupu = Pelaaja()`;
-
-        let fileReadMessage = tryGetFileAsText('../python/pelaaja.py');
+        let fileReadMessage = tryGetFileAsText(path.resolve(__dirname, '../python/pelaaja.py'), 'utf8');
 
         expect(fileReadMessage.isSuccess).toEqual(true);
         expect(fileReadMessage.result).toEqual(expectedOutput);
     });
 
     test('should return error fetching file', () => {
-        const expectedOutput = `Error fetching file: a.py`;
+        const expectedOutput = new Error(`Error fetching file: ${path.resolve(__dirname, '../python/a.py')}`, 'utf8');
 
-        let fileReadMessage = tryGetFileAsText('../python/a.py');
+        let fileReadMessage = tryGetFileAsText(path.resolve(__dirname, '../python/a.py'), 'utf8');
 
         expect(fileReadMessage.isSuccess).toEqual(false);
         expect(fileReadMessage.result).toEqual(expectedOutput);

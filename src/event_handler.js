@@ -53,7 +53,7 @@ export class EventHandler {
     setMessagePassingState(state) {
         this.isMessagePassingPaused = state.paused;
         if (!this.isMessagePassingPaused) {
-            this.postMessage({ type: this.lastMessage.type, details: this.lastMessage.message, sab: this.lastMessage.sab });
+            this.receiveMessage(this.lastMessage.type, this.lastMessage.message, this.lastMessage.sab);
         }
     }
 
@@ -68,9 +68,18 @@ export class EventHandler {
 
     }
 
+    postMessageToWorker(type, message, sab, value) {
+        this.worker.postMessage({ type: type, message: message });
+        if (sab !== null) {
+            const waitArray = new Int32Array(sab, 0, 1);
+            Atomics.store(waitArray, 0, value);
+            Atomics.notify(waitArray, 0, value);
+        }
+    }
+
     sendUserInputToWorker(event) {
         if (event.key === 'Enter') {
-            this.word = ui.promptUserInput({ inputBoxHidden: false });
+            this.word = promptUserInput({ inputBoxHidden: false });
             for (let i = 0; i < this.word.length; i++) {
                 this.sharedArray[i] = this.word.charCodeAt(i);
             }

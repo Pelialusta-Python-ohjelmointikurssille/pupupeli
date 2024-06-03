@@ -7,14 +7,20 @@ body {
     font-family: 'Courier New', Courier, monospace;
 }
 
-#app, #game, #editor, #editor-button, #task, #task-container {
+#task-container, #editor {
+    margin: 1rem 0.5rem 1rem 1rem;
+}
+
+#app, #game, #editor-button {
     margin: 1rem;
 }
 
 #game {
+    margin: 1rem 1rem 1rem 0.5rem;
     max-height: var(--canvas-width);
     max-width: var(--canvas-height);
     border: 1px solid black;
+    border-radius: 5px;
 }
 
 #left-container, #editor-container {
@@ -23,6 +29,7 @@ body {
 
 #left-container {
     min-width: var(--canvas-width);
+    justify-content: space-between;
 }
 
 .is-margin-half-rem-x {
@@ -59,11 +66,6 @@ body {
     display: flex;
 }
 
-#task {
-    width: calc(100% - 2rem);
-    text-align: justify;
-}
-
 #editor {
     border-radius: 5px;
     margin-bottom: 0.2rem;
@@ -74,13 +76,22 @@ body {
 }
 
 #error-box {
-    margin-left: 1rem;
-    min-height: 45px;
+    transition: 0.5s all ease-in-out;
+    padding: 0rem;
+    max-height: 1rem;
+    min-height: 1rem;
 }
 
 #error {
     word-wrap: break-word;
     color: red;
+    text-align: center;
+}
+
+.show-error {
+    transition: 0.5s all ease-in-out;
+    padding: 1rem !important;
+    max-height: unset !important;
 }
 
 #editor-button {
@@ -92,12 +103,27 @@ body {
     float: right;
     min-height: 32px;
     min-width: 64px;
+    margin: 0;
 }
 
+#task-title {
+    flex: 1;
+/*    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-right: 1rem;
+    padding: calc(0.25rem + 4px) 0.75rem 0.25rem 0.75rem;
+    line-height: 1.75rem;*/
+}
+
+#task-description {
+    padding: 0rem 1rem 0rem 1rem;
+}
 
 #run-icon {
     width: 32px;
     height: 32px;
+    margin-left: -6px;
 }
 
 #editor-stop-button {
@@ -113,19 +139,23 @@ body {
     font-size: 16px;
 }
 
-#editor-run-pause-button, #editor-stop-button, #editor-skip-button {
+h1 {
+    margin: unset;
+}
+
+button {
     display: inline-flex;
     align-items: center;
     padding: 5px 10px;
-    margin-bottom: 20px;
-    min-width: 110px;
-    font-size: 16px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
     cursor: pointer;
     border: 1px solid #000;
+    border-radius: 5px;
     background-color: #fff;
 }
 
-#editor-run-pause-button:hover, #editor-stop-button:hover, #editor-skip-button:hover {
+button:hover {
     background: rgb(231, 231, 231);
 }
 
@@ -159,5 +189,9 @@ body {
 
     #game {
         margin: 1rem auto 1rem auto;
+    }
+
+    #task-container, #editor {
+        margin: 1rem;
     }
   }
