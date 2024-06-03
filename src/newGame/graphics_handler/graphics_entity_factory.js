@@ -4,6 +4,7 @@ import { GraphicsEntity } from "./entities/graphics_entity.js";
 import { PlayerEntity } from "./entities/player_entity.js";
 import { BackgroundEntity } from "./entities/background_entity.js";
 import { GridObjectEntity } from "./entities/grid_object_entity.js";
+import { Constants } from "../commonstrings.js";
 
 
 export class GraphicsEntityFactory {
@@ -27,6 +28,9 @@ export class GraphicsEntityFactory {
         }
         if (type === "collectible") {
             return this.createCollectible(entityId, data);
+        }
+        if (type === Constants.OBSTACLE) {
+            return this.createObstacle(entityId, data);
         }
     }
 
@@ -79,6 +83,18 @@ export class GraphicsEntityFactory {
 
     createCollectible(entityId, data) {
         let sprite = new PIXI.Sprite(this.builtinAssets.collectibles.carrot);
+        let entity = new GridObjectEntity(
+            entityId,
+            this.graphicsEntityHandler,
+            new PIXI.Container(),
+            sprite,
+            data
+        );
+        return entity;
+    }
+
+    createObstacle(entityId, data) {
+        let sprite = new PIXI.Sprite(this.builtinAssets.obstacles.rock);
         let entity = new GridObjectEntity(
             entityId,
             this.graphicsEntityHandler,
