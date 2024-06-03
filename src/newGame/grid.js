@@ -74,7 +74,7 @@ export class Grid {
             }
         } 
         return true; 
-    }
+    }    
 
     removeFromGrid(gridObject) {
         let x = gridObject.cell.x;
