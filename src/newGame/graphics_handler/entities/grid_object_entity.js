@@ -51,5 +51,9 @@ export class GridObjectEntity extends GraphicsEntity {
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
         this.container.x = this.screenPosition.x;
         this.container.y = this.screenPosition.y;
+        this.animations.forEach((value, key, map) => {
+            value.stop();
+        })
+        this.isReady = true;
     }
 }
