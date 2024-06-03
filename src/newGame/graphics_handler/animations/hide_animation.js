@@ -23,7 +23,6 @@ export class HideAnimation {
         this.progress.increment(deltaTime);
         if (this.progress.value > 0.5) {
             this.gridObject.container.rotation += 10 * deltaTime;
-            this.gridObject.container.alpha = 1 - ((this.progress.value - 0.5) * 2);
             this.gridObject.container.scale = 1 - ((this.progress.value - 0.5) * 2);
         }
     }
