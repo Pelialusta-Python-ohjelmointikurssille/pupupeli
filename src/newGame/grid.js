@@ -1,5 +1,6 @@
 import { Vector2 } from "./vector.js";
 import { Cell } from "../newGame/cell.js";
+import { Constants } from "./commonstrings.js";
 
 export class Grid {
     constructor(player, width, height) {
@@ -72,9 +73,9 @@ export class Grid {
             if (this.doubleArray[x][y].entities.type === Constants.OBSTACLE) {
                 return false;
             }
-        } 
-        return true; 
-    }    
+        }
+        return true;
+    }
 
     removeFromGrid(gridObject) {
         let x = gridObject.cell.x;
