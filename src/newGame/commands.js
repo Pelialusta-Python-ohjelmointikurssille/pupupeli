@@ -31,6 +31,7 @@ export class MoveCommand {
         for (let i = 0; i < gridobjects.length; i++) {
             if (gridobjects[i].type === Constants.COLLECTIBLE) {
                 this.grid.removeFromGrid(gridobjects[i]);
+                this.graphicsHandler.doAction(gridobjects[i].id, "hide", {time : 0.3});
             }
         }
     }
