@@ -68,9 +68,8 @@ export class Grid {
     }
 
     obstacleCheck(x, y) {
-
         for (let i = 0; i < this.doubleArray[x][y].entities.length; i++) {
-            if (this.doubleArray[x][y].entities.type === Constants.OBSTACLE) {
+            if (this.doubleArray[x][y].entities[i].type === Constants.OBSTACLE) {
                 return false;
             }
         }
