@@ -36,12 +36,12 @@ export class FailMoveAnimation {
         this.progress.increment(deltaTime);
         this.gridObject.fakeZPosition = this.getJumpHeight(this.progress.value);
         if (this.progress.value < 0.5) {
-            this.gridObject.container.x = this.gridObject.screenPosition.x + (this.progress.value * 0.5 * this.moveDirection.x * this.gridObject.gridReference.gridScale);
-            this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition + (this.progress.value*  0.5 * this.moveDirection.y * this.gridObject.gridReference.gridScale);   
+            this.gridObject.container.x = this.gridObject.screenPosition.x + (this.progress.value * 0.75 * this.moveDirection.x * this.gridObject.gridReference.gridScale);
+            this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition + (this.progress.value * 0.75 * this.moveDirection.y * this.gridObject.gridReference.gridScale);   
         }
         if (this.progress.value > 0.5 && this.progress.value < 1) {
-            this.gridObject.container.x = this.gridObject.screenPosition.x + ((1 - this.progress.value)* 0.5 * this.moveDirection.x * this.gridObject.gridReference.gridScale);
-            this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition + ((1 - this.progress.value) * 0.5 * this.moveDirection.y * this.gridObject.gridReference.gridScale);   
+            this.gridObject.container.x = this.gridObject.screenPosition.x + ((1 - this.progress.value) * 0.75 * this.moveDirection.x * this.gridObject.gridReference.gridScale);
+            this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition + ((1 - this.progress.value) * 0.75 * this.moveDirection.y * this.gridObject.gridReference.gridScale);   
         }
     }
 
@@ -64,7 +64,7 @@ export class FailMoveAnimation {
 
     getJumpHeight(progress) {
         if (progress >= 1) progress = 1;
-        return -(Math.sin(Math.PI * progress)**0.75) * this.gridObject.gridReference.gridScale * 0.5;
+        return -(Math.sin(Math.PI * progress)**0.75) * this.gridObject.gridReference.gridScale * 0.3;
     }
     
 }
