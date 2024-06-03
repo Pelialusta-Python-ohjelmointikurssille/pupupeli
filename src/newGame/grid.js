@@ -1,5 +1,5 @@
 import { Vector2 } from "./vector.js";
-import { Cell } from "../game/cell.js";
+import { Cell } from "../newGame/cell.js";
 
 export class Grid {
     constructor(player, width, height) {
@@ -42,6 +42,7 @@ export class Grid {
         let newX = gridObject.cell.x + dirVector.x;
         let newY = gridObject.cell.y + dirVector.y;
         if (this.boundaryCheck(newX, newY) == false) return false;
+        if (this.obstacleCheck(newX, newY) == false) return false;
         this.removeFromGrid(gridObject);
         this.addToGrid(gridObject, newX, newY);
         return true;
@@ -63,6 +64,16 @@ export class Grid {
         if (x < 0 | x >= this.doubleArray.length) return false;
         if (y < 0 | y >= this.doubleArray[0].length) return false;
         return true;
+    }
+
+    obstacleCheck(x, y) {
+
+        for (let i = 0; i < this.doubleArray[x][y].entities.length; i++) {
+            if (this.doubleArray[x][y].entities.type === Constants.OBSTACLE) {
+                return false;
+            }
+        } 
+        return true; 
     }
 
     removeFromGrid(gridObject) {
