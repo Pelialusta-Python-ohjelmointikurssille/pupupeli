@@ -30,6 +30,7 @@ export class GraphicsHandler {
         this.createGrid();
 
         this.createEntity("bgtest", "background", { bgWidth: 1024, bgHeight: 1024});
+        //this.createEntity("carrottest", "collectible", { position: new Vector2(1, 2) });
 
         let t2 = new Date().getTime();
         console.log(`Loading graphics engine took ${t2-t1}ms`);

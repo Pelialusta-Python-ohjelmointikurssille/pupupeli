@@ -26,6 +26,9 @@ export class GridObjectEntity extends GraphicsEntity {
         this.sprite.anchor.set(0.5);
         this.sprite.height = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
         this.sprite.width = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
+        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
+        this.container.x = this.screenPosition.x;
+        this.container.y = this.screenPosition.y;
     }
 
     onUpdate(deltaTime) {
