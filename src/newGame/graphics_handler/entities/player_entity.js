@@ -16,8 +16,8 @@ export class PlayerEntity extends GridObjectEntity {
     onCreate() {
         super.onCreate();
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
-        this.container.x = (this.screenPosition.x);
-        this.container.y = (this.screenPosition.y);
+        this.container.x = this.screenPosition.x + this.fakeZPosition;
+        this.container.y = this.screenPosition.y + this.fakeZPosition;
         this.sprite.y -= this.gridReference.gridScale * 0.1;
     }
 
@@ -26,8 +26,6 @@ export class PlayerEntity extends GridObjectEntity {
     }
 
     onFinishAnimation(name) {
-        console.log(this.container)
-        console.log(this.sprite)
         super.onFinishAnimation(name);
         if (name === "move") {
             this.gridCellPosition.x += this.moveDirection.x;
@@ -42,17 +40,19 @@ export class PlayerEntity extends GridObjectEntity {
     onUpdate(deltaTime) {
         super.onUpdate(deltaTime);
         if (this.animations.get("move").inProgress === true) {
-            this.container.x = (this.screenPosition.x) + (this.animations.get("move").value * this.moveDirection.x * this.gridReference.gridScale);
-            this.container.y = (this.screenPosition.y) + this.getJumpHeight(this.animations.get("move").value) + (this.animations.get("move").value * this.moveDirection.y * this.gridReference.gridScale);
+            this.fakeZPosition = this.getJumpHeight(this.animations.get("move").value);
+            this.container.x = this.screenPosition.x + (this.animations.get("move").value * this.moveDirection.x * this.gridReference.gridScale);
+            this.container.y = this.screenPosition.y + this.fakeZPosition + (this.animations.get("move").value * this.moveDirection.y * this.gridReference.gridScale);
         }
         if (this.animations.get("failmove").inProgress === true) {
+            this.fakeZPosition = this.getJumpHeight(this.animations.get("failmove").value);
             if (this.animations.get("failmove").value < 0.5) {
-                this.container.x = (this.screenPosition.x) + (this.animations.get("failmove").value * 0.5 * this.moveDirection.x * this.gridReference.gridScale);
-                this.container.y = (this.screenPosition.y) + (this.getJumpHeight(this.animations.get("failmove").value)) + (this.animations.get("failmove").value*  0.5 * this.moveDirection.y * this.gridReference.gridScale);   
+                this.container.x = this.screenPosition.x + (this.animations.get("failmove").value * 0.5 * this.moveDirection.x * this.gridReference.gridScale);
+                this.container.y = this.screenPosition.y + this.fakeZPosition + (this.animations.get("failmove").value*  0.5 * this.moveDirection.y * this.gridReference.gridScale);   
             }
             if (this.animations.get("failmove").value > 0.5 && this.animations.get("failmove").value < 1) {
-                this.container.x = (this.screenPosition.x) + ((1 - this.animations.get("failmove").value)* 0.5 * this.moveDirection.x * this.gridReference.gridScale);
-                this.container.y = (this.screenPosition.y) + (this.getJumpHeight(this.animations.get("failmove").value)) + ((1 - this.animations.get("failmove").value) * 0.5 * this.moveDirection.y * this.gridReference.gridScale);   
+                this.container.x = this.screenPosition.x + ((1 - this.animations.get("failmove").value)* 0.5 * this.moveDirection.x * this.gridReference.gridScale);
+                this.container.y = this.screenPosition.y + this.fakeZPosition + ((1 - this.animations.get("failmove").value) * 0.5 * this.moveDirection.y * this.gridReference.gridScale);   
             }
         }
     }

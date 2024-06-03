@@ -9,6 +9,7 @@ export class GridObjectEntity extends GraphicsEntity {
         this.gridReference = entityHandler.getGridObject();
         this.gridCellPosition = new Vector2(0, 0);
         this.sizeWithinCellMultiplier = 0.9;
+        this.fakeZPosition = 0;
         this.animations = new Map();
         this.type = "grid_object";
         if (data !== null) {
@@ -35,11 +36,11 @@ export class GridObjectEntity extends GraphicsEntity {
     }
 
     onStartAnimation(name) {
-        console.log(this.entityId + " started animation: " + name);
+        //console.log(this.entityId + " started animation: " + name);
     }
 
     onFinishAnimation(name) {
-        console.log(this.entityId + " finished animation: " + name);
+        //console.log(this.entityId + " finished animation: " + name);
     }
 
     doAction(actionId, actionData) {
@@ -48,7 +49,7 @@ export class GridObjectEntity extends GraphicsEntity {
     reset() {
         this.gridCellPosition = new Vector2(this.startPosition.x, this.startPosition.y);
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
-        this.container.x = (this.screenPosition.x);
-        this.container.y = (this.screenPosition.y);
+        this.container.x = this.screenPosition.x;
+        this.container.y = this.screenPosition.y;
     }
 }

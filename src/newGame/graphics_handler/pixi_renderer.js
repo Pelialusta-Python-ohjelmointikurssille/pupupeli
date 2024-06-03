@@ -5,8 +5,6 @@ export class PixiRenderer {
     constructor() {
         this.pixiApp = null;
         this.renderLoopFunctions = [];
-        // multiplication factor based on 640x640,
-        // so if res is 1280x1280, the value is Vector2(2, 2) and so on
         this.builtinAssets = null;
         this.cameraWorldContainer = null;
     }
@@ -30,8 +28,13 @@ export class PixiRenderer {
     }
 
     async loadAssetBuiltinBundles() {
+        let t1 = new Date().getTime();
+
         await PIXI.Assets.init({ manifest: builtinAssetManifest });
         this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts"]);
+
+        let t2 = new Date().getTime();
+        console.log(`Loading assets took ${t2-t1}ms`);
     }
 
     // used to potentially load assets from other sources than builtin assets
@@ -46,7 +49,7 @@ export class PixiRenderer {
         this.renderLoopFunctions.forEach(loopObject => {
             loopObject.f.call(loopObject.o, time.deltaMS/1000);
         });
-    }
+    }        
 
     addFunctionToRenderLoop(func, object) {
         this.renderLoopFunctions.push({f: func, o: object});

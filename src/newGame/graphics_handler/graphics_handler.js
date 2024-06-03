@@ -14,6 +14,9 @@ export class GraphicsHandler {
     }
 
     async initialize() {
+        console.log("Loading graphics engine...");
+        let t1 = new Date().getTime();
+
         this.renderer = new PixiRenderer();
         await this.renderer.initialize({ screenHeight: 1024, screenWidth: 1024, maxFPS: 60, antialias: true });
         this.graphicsEntityHandler = new GraphicsEntitySystem(
@@ -24,16 +27,10 @@ export class GraphicsHandler {
         this.renderer.addFunctionToRenderLoop(this.graphicsEntityHandler.updateAllObjects, this.graphicsEntityHandler);
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
 
-        this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
-        if (this.gridWidth > this.gridHeight) {
-            this.graphicsEntityHandler.camera.zoomScale = 8 / (this.gridWidth * 1.15);
-        }
-        else {
-            this.graphicsEntityHandler.camera.zoomScale = 8 / (this.gridHeight * 1.15);
-        }
-        
-        //this.createEntity("test2", "player", { position: new Vector2(2, 2) });
-        //this.doAction("test2", "move", { direction: "right" });
+        this.createGrid();
+
+        let t2 = new Date().getTime();
+        console.log(`Loading graphics engine took ${t2-t1}ms`);
     }
 
     doAction(entityId, actionId, actionData) {
@@ -41,7 +38,6 @@ export class GraphicsHandler {
     }
 
     createEntity(entityId, type, data) {
-        console.log("CREATE ENT " + type)
         this.graphicsEntityHandler.createGraphicsEntity(entityId, type, data);
     }
 
@@ -69,6 +65,16 @@ export class GraphicsHandler {
         console.log("NOW READY");
         if (this.onReadyFunc == null || this.onReadyFuncContext == null) return;
         this.onReadyFunc.call(this.onReadyFuncContext);
+    }
+
+    createGrid() {
+        this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
+        if (this.gridWidth > this.gridHeight) {
+            this.graphicsEntityHandler.camera.zoomScale = 8 / (this.gridWidth * 1.15);
+        }
+        else {
+            this.graphicsEntityHandler.camera.zoomScale = 8 / (this.gridHeight * 1.15);
+        }
     }
 }
 
