@@ -29,7 +29,7 @@ export class GraphicsHandler {
 
         this.createGrid();
 
-        this.createEntity("bgtest", "background", { bgWidth: 1024, bgHeight: 1024});
+        this.createEntity("bgtest", "background", { bgWidth: this.gridHeight * 128, bgHeight: this.gridWidth * 128});
         //this.createEntity("carrottest", "collectible", { position: new Vector2(1, 2) });
 
         let t2 = new Date().getTime();
