@@ -56,7 +56,7 @@ export class Grid {
         let dirVector = Vector2.FromDirection(direction);
         posX += dirVector.x;
         posY += dirVector.y;
-        return getObjectsAtGridPosition(posX, posY);
+        return this.getObjectsAtGridPosition(posX, posY);
     }
 
     boundaryCheck(x, y) {
@@ -73,6 +73,7 @@ export class Grid {
         cell.entities.splice(index, 1);
         gridObject.cell = null;
     }
+
     CreateDoubleArray(width, height) {
         //js doesn't have double arrays T:Tommi
         let newDoubleArray = [];
@@ -98,4 +99,5 @@ export class Grid {
             console.log(row + "\n");
         }
     }
+
 };
