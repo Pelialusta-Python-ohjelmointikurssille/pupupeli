@@ -58,11 +58,9 @@ export class GraphicsHandler {
     }
 
     onEntitiesNotReady() {
-        console.log("NOT READY");
     }
 
     onEntitiesReady() {
-        console.log("NOW READY");
         if (this.onReadyFunc == null || this.onReadyFuncContext == null) return;
         this.onReadyFunc.call(this.onReadyFuncContext);
     }

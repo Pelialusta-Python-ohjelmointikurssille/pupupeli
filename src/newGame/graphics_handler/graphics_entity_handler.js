@@ -69,12 +69,10 @@ export class GraphicsEntitySystem {
     }
 
     onEntitiesNotReady() {
-        //console.log("NOT READY");
         this.graphicsHandler.onEntitiesNotReady();
     }
 
     onEntitiesReady() {
-        //console.log("NOW READY");
         this.graphicsHandler.onEntitiesReady();
     }
 
