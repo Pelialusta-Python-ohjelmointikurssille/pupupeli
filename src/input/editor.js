@@ -1,6 +1,4 @@
 import { ace_version } from "../util/version_strings.js";
-//Lint cheese below
-/* global ace */
 
 let editor;
 
@@ -22,10 +20,12 @@ aceEditorScript.onload = () => {
     document.head.appendChild(pythonSnippetsScript);
 
     languageToolsScript.onload = () => {
+        // eslint-disable-next-line no-undef
         editor = ace.edit("editor");
         editor.session.setMode("ace/mode/python");
         editor.setTheme("ace/theme/dawn");
 
+        // eslint-disable-next-line no-undef
         ace.require("ace/ext/language_tools");
         editor.setOptions({
             enableBasicAutocompletion: true,

@@ -46,7 +46,7 @@ body {
 }
 
 .is-hidden {
-    display: none;
+    display: none !important;
 }
 
 #app {
@@ -157,6 +157,25 @@ button {
 
 button:hover {
     background: rgb(231, 231, 231);
+}
+
+#multiple-choice-questions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 2.5rem 1rem 1rem 1rem;
+    padding: 0;
+}
+
+.multiple-choice-question {
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 0.5rem;
+}
+
+.multiple-choice-question:hover {
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 @media (max-width: calc((640px * 2) + 3rem)) {

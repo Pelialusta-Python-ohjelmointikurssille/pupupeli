@@ -1,34 +1,35 @@
-/* global loadPyodide importScripts */
-
 let pyodide;
 let pythonFileStr;
 let continuePythonExecution;
 let ctr = 0;
 
-importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js');
+// eslint-disable-next-line no-undef
+importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
 
 /**
  * The worker "message" event handler. This is executed when worker.postMessage(...) is called.
  * @param {object} event The event object received from the worker.postMessage(...) call.
- * Contains the python code that the user inputs in the website editor in "event.data.data", 
+ * Contains the python code that the user inputs in the website editor in "event.data.details", 
  * and the type of event in "event.data.type".
  */
 self.onmessage = async function (event) {
-    if (event.data.type === 'init') {
-        initializePyodide(event.data.data);
+    let message = event.data
+    if (message.type === 'init') {
+        initializePyodide(message.details);
     }
-    if (event.data.type === 'start') {
-        runPythonCode(pyodide, event.data.data);
+    if (message.type === 'start') {
+        runPythonCode(pyodide, message.details);
     }
 }
 
 /**
  * Initializes pyodide and handles what happens when the user puts input()
  * as a part of their python code.
- * @param {string} userInput The text that the user enters in the website editor.
+ * @param {string} pythonCode The text that the user enters in the website editor.
  */
 async function initializePyodide(pythonCode) {
     if (pyodide === undefined) {
+        // eslint-disable-next-line no-undef
         pyodide = await loadPyodide();
 
         pyodide.setStdin({
@@ -42,16 +43,14 @@ async function initializePyodide(pythonCode) {
 
 /**
  * This function determines what happens when user uses input() in their python code in the website.
- * @param {string} message The string from inside the brackets in input().
- * In case of input("hello"), message should be "hello".
  * @returns {string} A string containing the user input.
  */
-function handleInput(message) {
+function handleInput() {
     const sab = new SharedArrayBuffer(512 * 2 + 4);
     const sharedArray = new Uint16Array(sab, 4);
     const syncArray = new Int32Array(sab, 0, 1);
 
-    postMessage({ type: 'input', data: message, sab: sab });
+    postMessage({ type: 'input', details: "", sab: sab });
     Atomics.wait(syncArray, 0, 0);
 
     let word = '';
@@ -69,7 +68,7 @@ function handleInput(message) {
  * @param {string} command The command to execute. Examples: "move", "say", ...
  * @param {string} parameters The parameters for the command. Examples: "oikea", "vasen", 
  * "Onneksi olkoon! Voitit pelin!"
- * eslint is disabled, since this function is only ran from the python code.
+ * lint is disabled, since this function is only ran from the python code.
  */
 // eslint-disable-next-line no-unused-vars
 function runCommand(command, parameters) {
@@ -78,7 +77,7 @@ function runCommand(command, parameters) {
 
     switch (command) {
         case "move":
-            self.postMessage({ type: 'run', data: { command: command, parameters: parameters }, sab: sab });
+            self.postMessage({ type: 'run', details: { command: command, parameters: parameters }, sab: sab });
             break;
         case "say":
             postError(`Command '${command}' not implemented yet.`);
