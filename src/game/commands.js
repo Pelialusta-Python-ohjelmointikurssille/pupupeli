@@ -7,7 +7,9 @@ import { Constants, GetDirectionAsString } from "./commonstrings.js";
 
 /**
  * The interface for commands
+ * disabling lint here
  */
+// eslint-disable-next-line no-unused-vars
 const Command = {
     execute: function () { },
     //undo: function () { }, maybe someday
