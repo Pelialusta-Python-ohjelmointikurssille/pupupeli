@@ -2,6 +2,19 @@ import { Vector2 } from "./vector.js";
 import { Cell } from "./cell.js";
 import { Constants } from "./commonstrings.js";
 
+
+/**
+ * Represents the game grid
+ * @class
+ * @classdesc Represents the game grid
+ * @property {string} doublearray - game grid as a double array
+ * @property {array} gridObjects - array where grid objects get pushed when addToGrid is called
+ * @property {number} width - width of grid
+ * @property {number} height - height of grid
+ * @property {GridObject} player - grid object of type "player" with position data in cell
+ * @property {Map} resetPosMap - map of starting positions of grid objects (player, collectibles, obstacles...)
+ * @returns {Grid} - A grid of given width and height with player gridObject placed
+ */
 export class Grid {
     constructor(player, width, height) {
         this.doubleArray = this.CreateDoubleArray(width, height);
