@@ -1,5 +1,6 @@
 import { Vector2 } from "./vector.js";
 import { Cell } from "../newGame/cell.js";
+import { Constants } from "./commonstrings.js";
 
 export class Grid {
     constructor(player, width, height) {
@@ -42,14 +43,36 @@ export class Grid {
         let newX = gridObject.cell.x + dirVector.x;
         let newY = gridObject.cell.y + dirVector.y;
         if (this.boundaryCheck(newX, newY) == false) return false;
+        if (this.obstacleCheck(newX, newY) == false) return false;
         this.removeFromGrid(gridObject);
         this.addToGrid(gridObject, newX, newY);
         return true;
     }
 
+    getObjectsAtGridPosition(x, y) {
+        return this.doubleArray[x][y].entities;
+    }
+
+    //Direction means direction class at direction.js
+    getAdjacentObjectsAtDir(posX, posY, direction) {
+        let dirVector = Vector2.FromDirection(direction);
+        posX += dirVector.x;
+        posY += dirVector.y;
+        return this.getObjectsAtGridPosition(posX, posY);
+    }
+
     boundaryCheck(x, y) {
         if (x < 0 | x >= this.doubleArray.length) return false;
         if (y < 0 | y >= this.doubleArray[0].length) return false;
+        return true;
+    }
+
+    obstacleCheck(x, y) {
+        for (let i = 0; i < this.doubleArray[x][y].entities.length; i++) {
+            if (this.doubleArray[x][y].entities[i].type === Constants.OBSTACLE) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -61,6 +84,7 @@ export class Grid {
         cell.entities.splice(index, 1);
         gridObject.cell = null;
     }
+
     CreateDoubleArray(width, height) {
         //js doesn't have double arrays T:Tommi
         let newDoubleArray = [];
@@ -86,4 +110,5 @@ export class Grid {
             console.log(row + "\n");
         }
     }
+
 };

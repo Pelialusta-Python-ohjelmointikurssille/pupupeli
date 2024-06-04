@@ -45,6 +45,7 @@ export class Game {
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
+        this.grid.consoleDebug();
     }
 
     resetGame() {

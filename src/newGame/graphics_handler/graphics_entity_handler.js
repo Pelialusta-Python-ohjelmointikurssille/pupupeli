@@ -4,6 +4,7 @@ import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 import { GridEntity } from "./entities/grid_entity.js";
 import { GraphicsEntityFactory } from "./graphics_entity_factory.js";
+import { AnimationFactory } from "./animations/animation_factory.js";
 
 
 
@@ -18,6 +19,7 @@ export class GraphicsEntitySystem {
         this.entityFactory = new GraphicsEntityFactory(this, this.builtinAssets);
         this.isReady = true;
         this.graphicsHandler = graphicsHandler;
+        this.animationFactory = new AnimationFactory();
     }
 
     updateAllObjects(deltaTime) {
@@ -60,6 +62,12 @@ export class GraphicsEntitySystem {
         this.entityDict.delete(entityId);
     }
 
+    doAction(entityId, animationId, animationData) {
+        let entity = this.getGraphicsEntity(entityId);
+        let animation = this.animationFactory.getAnimation(animationId, entity, animationData);
+        entity.doGridAnimation(animation);
+    }
+
     getGraphicsEntity(entityId) {
         return this.entityDict.get(entityId);
     }
@@ -78,7 +86,7 @@ export class GraphicsEntitySystem {
 
     resetGridObjects() {
         this.entityDict.forEach((value, key, map) => {
-            if (value.type === "player") {
+            if (value.type === "grid_object") {
                 value.reset();
             }
         });

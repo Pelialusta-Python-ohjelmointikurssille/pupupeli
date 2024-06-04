@@ -8,13 +8,32 @@ export class MoveCommand {
         this.gridObject = gridObject;
         this.dir = dir;
         this.graphicsHandler = graphicsHandler;
+        this.moveStartPos = this.gridObject.getVector2Position();
     }
 
     execute() {
         let isSuccess = this.grid.moveGridObjectToDir(this.gridObject, this.dir);
-        let dirObj = { isSuccess: isSuccess, direction: GetDirectionAsString(this.dir) };
-        this.graphicsHandler.doAction(this.gridObject.id, Constants.MOVE_STR, dirObj);
+        if (isSuccess) this.checkForObjects();
+        let dirObj = { direction: GetDirectionAsString(this.dir), time: 0.6};
+        if (isSuccess) {
+            this.graphicsHandler.doAction(this.gridObject.id, Constants.MOVE_STR, dirObj);
+        } else {
+            this.graphicsHandler.doAction(this.gridObject.id, "failmove", dirObj);
+        }
 
+    }
+
+    /**
+     * Used to check the cell we are entering to see if anything happens.
+     */
+    checkForObjects() {
+        let gridobjects = this.grid.getAdjacentObjectsAtDir(this.moveStartPos.x, this.moveStartPos.y, this.dir);
+        for (let i = 0; i < gridobjects.length; i++) {
+            if (gridobjects[i].type === Constants.COLLECTIBLE) {
+                this.graphicsHandler.doAction(gridobjects[i].id, "hide", {time : 0.6});
+                this.grid.removeFromGrid(gridobjects[i]);
+            }
+        }
     }
 
 }

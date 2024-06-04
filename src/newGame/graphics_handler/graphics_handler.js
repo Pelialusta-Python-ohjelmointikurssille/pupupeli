@@ -29,12 +29,13 @@ export class GraphicsHandler {
 
         this.createGrid();
 
+        this.createEntity("bgtest", "background", { bgWidth: this.gridHeight * 128, bgHeight: this.gridWidth * 128});
         let t2 = new Date().getTime();
         console.log(`Loading graphics engine took ${t2-t1}ms`);
     }
 
     doAction(entityId, actionId, actionData) {
-        this.graphicsEntityHandler.getGraphicsEntity(entityId).doAction(actionId, actionData);
+        this.graphicsEntityHandler.doAction(entityId, actionId, actionData);
     }
 
     createEntity(entityId, type, data) {

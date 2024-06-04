@@ -11,6 +11,8 @@ const RIGHT_STR = "right";
 const TEST_STR = "test";
 
 export class Constants {
+    static COLLECTIBLE = "collectible";
+    static OBSTACLE = "obstacle";
 
     static get PLAYER_STR() {
         return PLAYER_STR;
