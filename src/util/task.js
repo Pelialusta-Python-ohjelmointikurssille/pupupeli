@@ -9,7 +9,7 @@ export class Task {
 
     fromJSON(json) {
         for (let key in json) {
-            if (json.hasOwnProperty(key) && this.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(json, key) && Object.prototype.hasOwnProperty.call(this, key)) {
                 this[key] = json[key];
             }
         }
