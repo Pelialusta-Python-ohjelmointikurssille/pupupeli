@@ -25,6 +25,9 @@ export class Grid {
         this.resetPosMap = new Map();
     };
 
+    /**
+     * Saves the starting positions of grid objects
+     */
     saveCurrentStateForReset() {
         for (let i = 0; i < this.gridObjects.length; i++) {
             let go = this.gridObjects[i];
@@ -32,6 +35,9 @@ export class Grid {
         }
     }
 
+    /**
+     * Resets grid objects to starting positions by creating a new double array
+     */
     resetGrid() {
         this.doubleArray = this.CreateDoubleArray(this.width, this.height);
         for (let [gridobject, vector2] of this.resetPosMap.entries()) {
@@ -39,6 +45,9 @@ export class Grid {
         }
     }
 
+    /**
+     * 
+     */
     addToGrid(gridObject, x, y) {
         if (this.gridObjects.includes(gridObject) === false) {
             this.gridObjects.push(gridObject);
@@ -48,8 +57,12 @@ export class Grid {
         gridObject.cell = this.doubleArray[x][y];
     }
 
-    //If GO unable to move to dir, returns fail.
-    //Returns true if move was succesful.
+    /**
+     * Checks if player can move to given direction
+     * @param {GridObject} gridObject 
+     * @param {Direction} direction enum in direction.js
+     * @returns {boolean} true if can move, false if cannot
+     */
     moveGridObjectToDir(gridObject, direction) {
         if (gridObject == null) return false;
         let dirVector = Vector2.FromDirection(direction);
@@ -62,11 +75,23 @@ export class Grid {
         return true;
     }
 
+    /**
+     * returns array of entities of the Cell at x, y position in grid
+     * @param {number} x 
+     * @param {number} y 
+     * @returns {array} Cell.entities
+     */
     getObjectsAtGridPosition(x, y) {
         return this.doubleArray[x][y].entities;
     }
 
-    //Direction means direction class at direction.js
+    /**
+     * Returns array of entities of adjacent Cell in given direction 
+     * @param {number} posX 
+     * @param {number} posY 
+     * @param {Direction} direction enum in direction.js
+     * @returns {array} Cell.entities
+     */
     getAdjacentObjectsAtDir(posX, posY, direction) {
         let dirVector = Vector2.FromDirection(direction);
         posX += dirVector.x;
@@ -74,12 +99,24 @@ export class Grid {
         return this.getObjectsAtGridPosition(posX, posY);
     }
 
+    /**
+     * Checks if given coordinate is within grid
+     * @param {number} x 
+     * @param {number} y 
+     * @returns {boolean} true if in grid, false if outside
+     */
     boundaryCheck(x, y) {
         if (x < 0 | x >= this.doubleArray.length) return false;
         if (y < 0 | y >= this.doubleArray[0].length) return false;
         return true;
     }
 
+    /**
+     * Checks if given coordinate has an obstacle
+     * @param {number} x 
+     * @param {number} y 
+     * @returns {boolean} true if has obstacle, false if doesn't
+     */
     obstacleCheck(x, y) {
         for (let i = 0; i < this.doubleArray[x][y].entities.length; i++) {
             if (this.doubleArray[x][y].entities[i].type === Constants.OBSTACLE) {
@@ -89,6 +126,10 @@ export class Grid {
         return true;
     }
 
+    /**
+     * Removes given grid object from grid. Double array value at coord changed to 1 (empty cell).
+     * @param {GridObject} gridObject 
+     */
     removeFromGrid(gridObject) {
         let x = gridObject.cell.x;
         let y = gridObject.cell.y;
@@ -98,6 +139,12 @@ export class Grid {
         gridObject.cell = null;
     }
 
+    /**
+     * Creates double array which represents game grid
+     * @param {number} width 
+     * @param {number} height 
+     * @returns {array} newDoubleArray
+     */
     CreateDoubleArray(width, height) {
         //js doesn't have double arrays T:Tommi
         let newDoubleArray = [];
