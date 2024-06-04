@@ -7,10 +7,10 @@ import { Vector2 } from "../vector.js";
  */
 export class GraphicsHandler {
     /**
-     * @param {*} width 
-     * @param {*} height 
-     * @param {*} onReadyFunc 
-     * @param {*} onReadyFuncContext 
+     * @param {number} width 
+     * @param {number} height 
+     * @param {object} onReadyFunc 
+     * @param {object} onReadyFuncContext 
      */
     constructor(width, height, onReadyFunc, onReadyFuncContext) {
         this.gridWidth = width;
@@ -24,9 +24,12 @@ export class GraphicsHandler {
 
     /**
      * Asynchronous initialization of different parts of the graphics.
+     * 
      * PixiJS is initialized and renderer created.
+     * 
      * Update function added to render loop.
-     * Creates base entities, like camera, background and grid. These should be initialized outside ideally.
+     * 
+     * Creates base entities, like camera, background and grid. 
      */
     async initialize() {
         console.log("Loading graphics engine...");
@@ -114,6 +117,8 @@ export class GraphicsHandler {
     }
 
     /**
+     * @private 
+     * 
      * Creates the grid object.
      */
     createGrid() {
