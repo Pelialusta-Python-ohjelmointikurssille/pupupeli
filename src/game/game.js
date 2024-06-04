@@ -33,6 +33,9 @@ export class Game {
 
         if (commandName === Constants.MOVE_STR) {
             this.MakeMoveCommand(commandParameter);
+        } else if (commandName === Constants.SAY_STR) {
+            console.log(commandName, commandParameter);
+            throw new Error("not implemented yet (game.js)");
         }
     }
 
