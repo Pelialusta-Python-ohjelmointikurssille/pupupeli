@@ -41,6 +41,8 @@ export class GraphicsCameraEntity {
 
     }
 
+    // deltaTime is used to sychronize the camera with the game loop
+    // eslint-disable-next-line no-unused-vars
     onUpdate(deltaTime) {
         this.updatePosition();
     }
