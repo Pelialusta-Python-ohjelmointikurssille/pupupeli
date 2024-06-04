@@ -11,7 +11,7 @@
 
 import { Vector2 } from "./vector.js";
 
-class GridObject {
+export class GridObject {
     constructor(type) {
         this.type = type;
         this.cell = null;
