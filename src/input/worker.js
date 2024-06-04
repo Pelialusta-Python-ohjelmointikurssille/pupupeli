@@ -7,7 +7,6 @@ let resetFlag = false;
 
 // eslint-disable-next-line no-undef
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
-//import "https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js";
 
 /**
  * The worker "message" event handler. This is executed when worker.postMessage(...) is called.
@@ -17,18 +16,15 @@ importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
  */
 self.onmessage = async function (event) {
     let message = event.data
-    //console.log("ASDFG", message.type, event, message)
     if (message.type === 'init') {
         initializePyodide(message.details);
     }
     if (message.type === 'start') {
+        setResetFlag(false);
         runPythonCode(pyodide, message.details);
     }
-    if (message.type === 'restart') {
-        console.log("restart state")
-        //console.log(pyodide.pyodide_py._state);
-        //pyodide.runPythonAsync('globals().clear()');
-        //pyodide.pyodide_py._state.restore_state(state);
+    if (message.type === 'reset') {
+        setResetFlag(true);
     }
 }
 
@@ -100,18 +96,19 @@ function runCommand(command, parameters) {
     ctr++;
     console.log(ctr + " hyppyä");
 
-    console.log(waitArray[1] === 0);
-    
     if (waitArray[1] === 0) {
-        console.log(pyodide.globals.get("reset_flag"), "12345");
-        continuePythonExecution;
-        console.log("67890");
+        try {
+            continuePythonExecution;
+        } catch (error) {
+            postError(error.message);
+        }
     } else {
-        resetFlag = true;
-        pyodide.globals.set("reset_flag", resetFlag);
-        console.log(pyodide.globals.get("reset_flag"), "13579");
-        console.log(">>>>>>>>>restart<<<<<<<<<<")
-        continuePythonExecution;
+        try {
+            setResetFlag(true);
+            continuePythonExecution;
+        } catch (error) {
+            postError(error.message);
+        }
     }
 }
 
@@ -127,21 +124,33 @@ async function runPythonCode(pyodide, codeString) {
     try {
         await self.continuePythonExecution;
         await pyodide.runPythonAsync(`print(check_while_usage("""${codeString}"""))`);
+
+        try {
+            // reset pyodide state to where we saved it earlier after we're done
+            // for some reason, this will currently throw an error
+            pyodide.pyodide_py._state.restore_state(state);
+        } catch (error) {
+            postError(error.message);
+        }
+
         // no more python left to run; let the event handler know
-        pyodide.runPythonAsync('globals().clear()');
-        pyodide.pyodide_py._state.restore_state(state);
         postMessage({ type: 'finish' });
     } catch (error) {
         postError(error.message);
     }
 }
 
+function setResetFlag(value) {
+    resetFlag = value;
+    pyodide.globals.set("reset_flag", resetFlag);
+}
 
 /**
  * Helper function to post error messages back to main thread for putting on the page.
  * @param {*} error Either an error object, or a string.
  */
 function postError(error) {
+    if (error.includes("Interpreter was reset")) return;
     if (typeof (error) === "string") {
         self.postMessage({ type: 'error', error: { message: error } })
     } else {

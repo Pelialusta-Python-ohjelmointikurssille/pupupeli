@@ -31,9 +31,7 @@ function initialize() {
             displayErrorMessage(error);
         }
     } else {
-        //let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
-        //eventHandler.postMessage({ type: 'restart' });
-        eventHandler.restartWorker()
+        eventHandler.resetWorker()
     }
 }
 
