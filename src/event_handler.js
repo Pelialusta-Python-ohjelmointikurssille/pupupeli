@@ -63,10 +63,8 @@ export class EventHandler {
             this.setMessagePassingState({ paused: true });
             return;
         }
-
         this.setMessagePassingState({ paused: false });
         this.setMessagePassingState({ paused: true });
-
     }
 
     sendUserInputToWorker(event) {
@@ -86,9 +84,8 @@ export class EventHandler {
         const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
         Atomics.store(waitArray, 0, 1); // this is for stopping the wait
         Atomics.notify(waitArray, 0, 1);
-        Atomics.store(waitArray, 1, 1);     // this is for checking if we've reset the game
-        // Atomics.notify(waitArray, 1, 1); // there is nobody waiting on this so no need to notify
-        this.worker.postMessage({type: "reset"});
+        Atomics.store(waitArray, 1, 1); // this is for checking (in worker) if we've reset the game
+        //this.worker.postMessage({type: "reset"});
     }
 
     #postMessageToWorker(message) {
