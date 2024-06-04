@@ -1,6 +1,6 @@
 import { PixiRenderer } from "./pixi_renderer.js";
 import { GraphicsEntitySystem } from "./graphics_entity_handler.js";
-import { Vector2 } from "../../newGame/vector.js";
+import { Vector2 } from "../vector.js";
 
 export class GraphicsHandler {
     constructor(width, height, onReadyFunc, onReadyFuncContext) {

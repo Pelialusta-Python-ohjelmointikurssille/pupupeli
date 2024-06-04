@@ -1,6 +1,6 @@
 
 import { Vector2 } from "../vector.js";
-import { Cell } from "../../newGame/cell.js";
+import { Cell } from "../../game/cell.js";
 import { Grid } from "../grid.js";
 
 Vector2.FromDirection = jest.fn();

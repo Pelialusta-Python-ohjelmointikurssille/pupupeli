@@ -1,5 +1,5 @@
 import * as globals from "./util/globals.js";
-import * as game from "./newGame/game_controller.js";
+import * as game from "./game/game_controller.js";
 import * as fileReader from "./file_reader.js";
 import * as editor from "./input/editor.js";
 import * as errorHandler from "./input/py_error_handling.js";
@@ -28,7 +28,7 @@ function initialize() {
 }
 
 async function initGame() {
-    let canvas = await game.initNewGame();
+    let canvas = await game.initGame();
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";

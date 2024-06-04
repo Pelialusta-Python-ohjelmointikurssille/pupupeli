@@ -1,4 +1,4 @@
-import * as gameController from './newGame/game_controller.js';
+import * as gameController from './game/game_controller.js';
 import * as ui from './ui.js'
 import * as globals from './util/globals.js';
 

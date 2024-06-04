@@ -1,5 +1,5 @@
 import { getEventHandler } from "../ui.js";
-import { Game } from "./new_game.js";
+import { Game } from "./game.js";
 
 //This file controls game. 
 // - Creates new game instances (Game contains both logic and rendering)
@@ -9,7 +9,7 @@ var game;
 var currentCommand;
 var eventHandler;
 
-export async function initNewGame() {
+export async function initGame() {
     game = new Game();
     await game.init();
     eventHandler = getEventHandler();

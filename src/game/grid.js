@@ -1,5 +1,5 @@
 import { Vector2 } from "./vector.js";
-import { Cell } from "../newGame/cell.js";
+import { Cell } from "./cell.js";
 import { Constants } from "./commonstrings.js";
 
 export class Grid {

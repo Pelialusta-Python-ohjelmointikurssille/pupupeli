@@ -1,5 +1,5 @@
 import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
-import { getNewGameGrid } from "./gridfactory.js";
+import { getGameGrid } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand } from "./commands.js";
 import { commandsDone } from "./game_controller.js";
@@ -8,7 +8,7 @@ import { Constants } from "./commonstrings.js";
 export class Game {
     constructor() {
         //give filemame tp create grid from here?
-        this.grid = getNewGameGrid();
+        this.grid = getGameGrid();
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
     }
