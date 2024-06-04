@@ -75,6 +75,12 @@ export class Grid {
         return true;
     }
 
+    /**
+     * returns array of entities of the Cell at x, y position in grid
+     * @param {number} x 
+     * @param {number} y 
+     * @returns {array} Cell.entities
+     */
     getObjectsAtGridPosition(x, y) {
         return this.doubleArray[x][y].entities;
     }
