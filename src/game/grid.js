@@ -99,6 +99,12 @@ export class Grid {
         return this.getObjectsAtGridPosition(posX, posY);
     }
 
+    /**
+     * Checks if given coordinate is within grid
+     * @param {number} x 
+     * @param {number} y 
+     * @returns {boolean} true if in grid, false if outside
+     */
     boundaryCheck(x, y) {
         if (x < 0 | x >= this.doubleArray.length) return false;
         if (y < 0 | y >= this.doubleArray[0].length) return false;
