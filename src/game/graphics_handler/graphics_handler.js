@@ -123,10 +123,10 @@ export class GraphicsHandler {
     createGrid() {
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
         if (this.gridWidth > this.gridHeight) {
-            this.graphicsEntityHandler.camera.zoomScale = 8 / (this.gridWidth * 1.15);
+            this.graphicsEntityHandler.camera.zoomScale = this.gridWidth**0.001 - 0.1;
         }
         else {
-            this.graphicsEntityHandler.camera.zoomScale = 8 / (this.gridHeight * 1.15);
+            this.graphicsEntityHandler.camera.zoomScale = this.gridHeight**0.001 - 0.1;
         }
     }
 }
