@@ -131,6 +131,7 @@ function onResetButtonClick() {
         errorContainer.classList.toggle("show-error");
         errorContainer.children[0].textContent = "";
     }
+    promptUserInput(true); // hide input box if visible
     initialize(); // has to be before game.resetGame() to initialize eventhandler first
     game.resetGame();
 }
