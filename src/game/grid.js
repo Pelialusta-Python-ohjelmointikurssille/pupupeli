@@ -36,7 +36,7 @@ export class Grid {
     }
 
     /**
-     * Resets grid objects to starting positions
+     * Resets grid objects to starting positions by creating a new double array
      */
     resetGrid() {
         this.doubleArray = this.CreateDoubleArray(this.width, this.height);
@@ -45,6 +45,9 @@ export class Grid {
         }
     }
 
+    /**
+     * 
+     */
     addToGrid(gridObject, x, y) {
         if (this.gridObjects.includes(gridObject) === false) {
             this.gridObjects.push(gridObject);
