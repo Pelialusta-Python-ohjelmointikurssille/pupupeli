@@ -38,11 +38,10 @@ export class GraphicsHandler {
         this.renderer = new PixiRenderer();
         await this.renderer.initialize({ screenHeight: 1024, screenWidth: 1024, maxFPS: 60, antialias: true });
         this.graphicsEntityHandler = new GraphicsEntitySystem(
-            this.renderer.builtinAssets,
             this.renderer,
             this
         );
-        this.renderer.addFunctionToRenderLoop(this.graphicsEntityHandler.updateAllObjects, this.graphicsEntityHandler);
+        this.renderer.addFunctionToRenderLoop(this.graphicsEntityHandler.updateAllEntities, this.graphicsEntityHandler);
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
 
         this.createGrid();
@@ -98,7 +97,7 @@ export class GraphicsHandler {
     /**
      * Calls reset on all grid objects. This resets their values back to their initial values.
      */
-    resetAllGridObjects() {
+    resetGridObjects() {
         this.graphicsEntityHandler.resetGridObjects();
     }
 
