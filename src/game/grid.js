@@ -126,6 +126,10 @@ export class Grid {
         return true;
     }
 
+    /**
+     * Removes given grid object from grid. Double array value at coord changed to 1 (empty cell).
+     * @param {GridObject} gridObject 
+     */
     removeFromGrid(gridObject) {
         let x = gridObject.cell.x;
         let y = gridObject.cell.y;
