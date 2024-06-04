@@ -57,7 +57,7 @@ export class GraphicsEntitySystem {
      * Creates the camera object.
      */
     createCamera() {
-        this.camera = new GraphicsCameraEntity(this.renderer.cameraWorldContainer, this.renderer.pixiApp.screen, new Vector2(30, 30));
+        this.camera = new GraphicsCameraEntity(this.renderer.cameraWorldContainer, this.renderer.pixiApp.screen, new Vector2(0, 0));
     }
 
    /**
