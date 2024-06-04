@@ -188,7 +188,7 @@ function getWorker() {
  * of "congratulations, you are a winner" message if so.
  */
 export function onFinishLastCommand() {
-    //disablePlayButtonsOnFinish();
+    disablePlayButtonsOnFinish();
     console.log("Last command finished. Called from index.js.");
 }
 
