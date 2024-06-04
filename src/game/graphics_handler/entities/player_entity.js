@@ -1,5 +1,5 @@
 import { GraphicsEntity } from "./graphics_entity.js";
-import { Vector2 } from "../../../newGame/vector.js";
+import { Vector2 } from "../../vector.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 import { AnimationProgress } from "../move_tween.js";
 import { GridObjectEntity } from "./grid_object_entity.js";

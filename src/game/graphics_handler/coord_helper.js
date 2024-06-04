@@ -1,4 +1,4 @@
-import { Vector2 } from "../../newGame/vector.js";
+import { Vector2 } from "../vector.js";
 
 /**
  * Returns screen space coordinates of a given grid cell. Coordinates are of

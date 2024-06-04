@@ -3,7 +3,7 @@ import { Grid } from "./grid.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 
-export function getNewGameGrid() {
+export function getGameGrid() {
     let player = getNewGridObject(Constants.PLAYER_STR);
     let collectible = getNewGridObject(Constants.COLLECTIBLE);
     let obstacle = getNewGridObject(Constants.OBSTACLE);

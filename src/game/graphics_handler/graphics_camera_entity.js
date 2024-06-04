@@ -1,4 +1,4 @@
-import { Vector2 } from "../../newGame/vector.js";
+import { Vector2 } from "../vector.js";
 
 export class GraphicsCameraEntity {
     constructor(container, pixiScreen, startPosition) {
