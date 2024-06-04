@@ -9,6 +9,7 @@ var game;
 var currentCommand;
 var eventHandler;
 
+
 export async function initGame() {
     game = new Game();
     await game.init();
@@ -24,6 +25,9 @@ export function giveCommand(dirtyCommand) {
     currentCommand = dirtyCommand;
 }
 
+/**
+ * Called by the Game class when game commands are done. 
+ */
 export function commandsDone() {
     if (currentCommand == null) return;
     eventHandler.postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
