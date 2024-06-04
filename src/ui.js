@@ -4,9 +4,12 @@ import * as fileReader from "./file_reader.js";
 import * as editor from "./input/editor.js";
 import * as errorHandler from "./input/py_error_handling.js";
 import { EventHandler } from "./event_handler.js";
+//import { initPyodide } from "./input/worker.js";
 
 let eventHandler;
 let state = { current: "initial" };
+let worker = new Worker('/src/input/worker.js');
+let initialized = false;
 
 async function main() {
     initialize();
@@ -16,14 +19,21 @@ async function main() {
 }
 
 function initialize() {
-    if (String(typeof eventHandler) === "object") eventHandler.terminateWorker();
-    eventHandler = new EventHandler();
-
-    try {
-        let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
-        eventHandler.postMessage({ type: 'init', details: pythonFileStr });
-    } catch (error) {
-        displayErrorMessage(error);
+    //    if (String(typeof eventHandler) === "object") eventHandler.terminateWorker();
+    // if (String(typeof eventHandler) === "object") worker.pyodide_py._state.restore_state(pyodideInitialState);
+    eventHandler = new EventHandler(getWorker());
+    if (!initialized) {
+        try {
+            let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
+            eventHandler.postMessage({ type: 'init', details: pythonFileStr });
+            initialized = true;
+        } catch (error) {
+            displayErrorMessage(error);
+        }
+    } else {
+        //let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
+        //eventHandler.postMessage({ type: 'restart' });
+        eventHandler.restartWorker()
     }
 }
 
@@ -170,13 +180,17 @@ export function getEventHandler() {
     return eventHandler;
 }
 
+function getWorker() {
+    return worker;
+}
+
 /**
  * Used to do something after there is no more python code to run.
  * This is probably where we want to check if the user has achieved the win conditions and display some kind
  * of "congratulations, you are a winner" message if so.
  */
 export function onFinishLastCommand() {
-    disablePlayButtonsOnFinish();
+    //disablePlayButtonsOnFinish();
     console.log("Last command finished. Called from index.js.");
 }
 

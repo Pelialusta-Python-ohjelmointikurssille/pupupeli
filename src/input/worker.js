@@ -2,9 +2,12 @@ let pyodide;
 let pythonFileStr;
 let continuePythonExecution;
 let ctr = 0;
+let state;
+let resetFlag = false;
 
 // eslint-disable-next-line no-undef
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
+//import "https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js";
 
 /**
  * The worker "message" event handler. This is executed when worker.postMessage(...) is called.
@@ -14,11 +17,18 @@ importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
  */
 self.onmessage = async function (event) {
     let message = event.data
+    //console.log("ASDFG", message.type, event, message)
     if (message.type === 'init') {
         initializePyodide(message.details);
     }
     if (message.type === 'start') {
         runPythonCode(pyodide, message.details);
+    }
+    if (message.type === 'restart') {
+        console.log("restart state")
+        //console.log(pyodide.pyodide_py._state);
+        //pyodide.runPythonAsync('globals().clear()');
+        //pyodide.pyodide_py._state.restore_state(state);
     }
 }
 
@@ -31,6 +41,7 @@ async function initializePyodide(pythonCode) {
     if (pyodide === undefined) {
         // eslint-disable-next-line no-undef
         pyodide = await loadPyodide();
+        pyodide.globals.set("reset_flag", resetFlag);
 
         pyodide.setStdin({
             stdin: () => {
@@ -72,8 +83,8 @@ function handleInput() {
  */
 // eslint-disable-next-line no-unused-vars
 function runCommand(command, parameters) {
-    const sab = new SharedArrayBuffer(4);
-    const waitArray = new Int32Array(sab, 0, 1);
+    const sab = new SharedArrayBuffer(8);
+    const waitArray = new Int32Array(sab, 0, 2);
 
     switch (command) {
         case "move":
@@ -88,7 +99,20 @@ function runCommand(command, parameters) {
     Atomics.wait(waitArray, 0, 0);
     ctr++;
     console.log(ctr + " hyppyä");
-    continuePythonExecution;
+
+    console.log(waitArray[1] === 0);
+    
+    if (waitArray[1] === 0) {
+        console.log(pyodide.globals.get("reset_flag"), "12345");
+        continuePythonExecution;
+        console.log("67890");
+    } else {
+        resetFlag = true;
+        pyodide.globals.set("reset_flag", resetFlag);
+        console.log(pyodide.globals.get("reset_flag"), "13579");
+        console.log(">>>>>>>>>restart<<<<<<<<<<")
+        continuePythonExecution;
+    }
 }
 
 /**
@@ -98,11 +122,14 @@ function runCommand(command, parameters) {
  */
 async function runPythonCode(pyodide, codeString) {
     pyodide.runPython(pythonFileStr);
+
     self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
         await self.continuePythonExecution;
         await pyodide.runPythonAsync(`print(check_while_usage("""${codeString}"""))`);
         // no more python left to run; let the event handler know
+        pyodide.runPythonAsync('globals().clear()');
+        pyodide.pyodide_py._state.restore_state(state);
         postMessage({ type: 'finish' });
     } catch (error) {
         postError(error.message);

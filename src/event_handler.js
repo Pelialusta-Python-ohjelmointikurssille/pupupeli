@@ -3,8 +3,8 @@ import * as ui from './ui.js'
 import * as globals from './util/globals.js';
 
 export class EventHandler {
-    constructor() {
-        this.worker = new Worker('src/input/worker.js');
+    constructor(worker) {
+        this.worker = worker;
         this.lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
         this.sendUserInputToWorker = this.sendUserInputToWorker.bind(this);
 
@@ -18,6 +18,7 @@ export class EventHandler {
                     ui.promptUserInput({ inputBoxHidden: true });
                     break;
                 case "run":
+                    globals.setCurrentSAB(message.sab);
                     gameController.giveCommand({ data: message.details, sab: message.sab });
                     break;
                 case "conditionCleared":
@@ -68,15 +69,6 @@ export class EventHandler {
 
     }
 
-    postMessageToWorker(type, message, sab, value) {
-        this.worker.postMessage({ type: type, message: message });
-        if (sab !== null) {
-            const waitArray = new Int32Array(sab, 0, 1);
-            Atomics.store(waitArray, 0, value);
-            Atomics.notify(waitArray, 0, value);
-        }
-    }
-
     sendUserInputToWorker(event) {
         if (event.key === 'Enter') {
             this.word = ui.promptUserInput({ inputBoxHidden: false });
@@ -90,10 +82,20 @@ export class EventHandler {
         }
     }
 
+    restartWorker() {
+        console.log("asd");
+        const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
+        Atomics.store(waitArray, 0, 1);
+        Atomics.notify(waitArray, 0, 1);
+        Atomics.store(waitArray, 1, 1);
+        Atomics.notify(waitArray, 1, 1);
+        this.worker.postMessage({type: "restart"});
+    }
+
     #postMessageToWorker(message) {
         this.worker.postMessage({ type: message.type, details: message.details });
         if (message.sab !== null) {
-            const waitArray = new Int32Array(message.sab, 0, 1);
+            const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
             Atomics.store(waitArray, 0, message.value);
             Atomics.notify(waitArray, 0, message.value);
         }
