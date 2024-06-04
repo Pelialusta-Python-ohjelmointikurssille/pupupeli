@@ -60,7 +60,7 @@ export class Grid {
     /**
      * Checks if player can move to given direction
      * @param {GridObject} gridObject 
-     * @param {string} direction // might be a another type like Constants or Direction
+     * @param {Direction} direction enum in direction.js
      * @returns {boolean} true if can move, false if cannot
      */
     moveGridObjectToDir(gridObject, direction) {
@@ -85,7 +85,13 @@ export class Grid {
         return this.doubleArray[x][y].entities;
     }
 
-    //Direction means direction class at direction.js
+    /**
+     * Returns array of entities of adjacent Cell in given direction 
+     * @param {number} posX 
+     * @param {number} posY 
+     * @param {Direction} direction enum in direction.js
+     * @returns {array} Cell.entities
+     */
     getAdjacentObjectsAtDir(posX, posY, direction) {
         let dirVector = Vector2.FromDirection(direction);
         posX += dirVector.x;
