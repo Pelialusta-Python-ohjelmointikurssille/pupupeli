@@ -18,11 +18,11 @@ export class PixiRenderer {
         })
         this.pixiApp.ticker.maxFPS = renderOptions.maxFPS;
         await this.loadAssetBuiltinBundles();
-        this.pixiApp.ticker.add((time) =>
-        {  
+        this.pixiApp.ticker.add((time) => {
             this.renderLoop(time);
         });
         this.cameraWorldContainer = new PIXI.Container();
+        this.cameraWorldContainer.sortDirty = true;
         this.pixiApp.stage.addChild(this.cameraWorldContainer);
     }
 
@@ -30,10 +30,10 @@ export class PixiRenderer {
         let t1 = new Date().getTime();
 
         await PIXI.Assets.init({ manifest: builtinAssetManifest });
-        this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts"]);
+        this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles"]);
 
         let t2 = new Date().getTime();
-        console.log(`Loading assets took ${t2-t1}ms`);
+        console.log(`Loading assets took ${t2 - t1}ms`);
     }
 
     // used to potentially load assets from other sources than builtin assets
@@ -46,12 +46,12 @@ export class PixiRenderer {
     renderLoop(time) {
         if (this.renderLoopFunctions == null || this.renderLoopFunctions.length <= 0) return;
         this.renderLoopFunctions.forEach(loopObject => {
-            loopObject.f.call(loopObject.o, time.deltaMS/1000);
+            loopObject.f.call(loopObject.o, time.deltaMS / 1000);
         });
-    }        
+    }
 
     addFunctionToRenderLoop(func, object) {
-        this.renderLoopFunctions.push({f: func, o: object});
+        this.renderLoopFunctions.push({ f: func, o: object });
     }
 
     addToStage(sprite) {
@@ -70,7 +70,7 @@ export class PixiRenderer {
  * Used for all game assets.
  */
 const builtinAssetManifest = {
-    bundles : [
+    bundles: [
         {
             name: "characters",
             assets: [
@@ -103,20 +103,38 @@ const builtinAssetManifest = {
         },
         {
             name: "fonts",
-            assets : [
+            assets: [
                 {
                     /*
                     Apache License
                     Version 2.0, January 2004
                     http://www.apache.org/licenses/
                     Mainly just placeholder font for testing font loading.
-                    */ 
+                    */
                     alias: "builtin_roboto_light",
                     src: "src/static/game_assets/Roboto-Light.ttf",
                     data: { family: 'Roboto Light' }
 
                 }
             ]
-        }
+        },
+        {
+            name: "collectibles",
+            assets: [
+                {
+                    alias: "carrot",
+                    src: "src/static/game_assets/carrot.png"
+                }
+            ]
+        },
+        {
+            name: "obstacles",
+            assets: [
+                {
+                    alias: "rock",
+                    src: "src/static/game_assets/Kivi3.png"
+                }
+            ]
+        },
     ]
 }

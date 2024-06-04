@@ -79,7 +79,7 @@ export class EventHandler {
 
     sendUserInputToWorker(event) {
         if (event.key === 'Enter') {
-            this.word = promptUserInput({ inputBoxHidden: false });
+            this.word = ui.promptUserInput({ inputBoxHidden: false });
             for (let i = 0; i < this.word.length; i++) {
                 this.sharedArray[i] = this.word.charCodeAt(i);
             }

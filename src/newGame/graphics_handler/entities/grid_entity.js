@@ -12,7 +12,7 @@ export class GridEntity extends GraphicsEntity {
         this.lineColor = 0x000000;
         this.lineWidth = 2;
         this.lineGraphics = new PIXI.Graphics()
-        this.font = "Roboto";
+        this.font = "Roboto Light";
         
         this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
         this.type = "grid";

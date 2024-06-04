@@ -25,6 +25,7 @@ export function giveCommand(dirtyCommand) {
 }
 
 export function commandsDone() {
+    if (currentCommand == null) return;
     eventHandler.postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
 
 }
