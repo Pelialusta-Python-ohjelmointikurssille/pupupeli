@@ -76,4 +76,42 @@ describe('Grid class', () => {
         expect(doubleArray[0].length).toBe(5);
         expect(doubleArray[0][0]).toBeInstanceOf(Cell);
     });
+
+    // tests for resetgrid fuction
+    test('resetGrid removes all objects from the grid', () => {
+        grid.addToGrid(gridObject, 1, 1);
+        grid.resetGrid();
+        expect(grid.doubleArray[1][1].entities).toEqual([]);
+    });
+
+    test('getObjectsAtGridPosition returns the objects at the specified cell', () => {
+        grid.addToGrid(gridObject, 1, 1);
+        expect(grid.getObjectsAtGridPosition(1, 1)).toContain(gridObject);
+    });
+
+    test('obstacleCheck returns true if there are no obstacles at the cell', () => {
+        expect(grid.obstacleCheck(1, 1)).toBe(true);
+    });
+
+    test('obstacleCheck returns false if there is an obstacle at the cell', () => {
+        grid.addToGrid({ type: 'obstacle' }, 1, 1);
+        expect(grid.obstacleCheck(1, 1)).toBe(false);
+    });
+
+    // test for consoleDebug function
+    test('consoleDebug prints the grid to the console', () => {
+        // Mock console.log
+        console.log = jest.fn();
+
+        grid.addToGrid(gridObject, 1, 1);
+        grid.consoleDebug();
+
+        expect(console.log).toHaveBeenCalledTimes(5);
+    });
+
+    test('getAdjacentObjectsAtDir returns the objects at the adjacent cell', () => {
+        grid.addToGrid(gridObject, 1, 1);
+        grid.addToGrid(gridObject, 2, 1);
+        expect(grid.getAdjacentObjectsAtDir(1, 1, 'right')).toContain(gridObject);
+    });
 });
