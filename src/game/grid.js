@@ -36,7 +36,7 @@ export class Grid {
     }
 
     /**
-     * 
+     * Resets grid objects to starting positions
      */
     resetGrid() {
         this.doubleArray = this.CreateDoubleArray(this.width, this.height);
