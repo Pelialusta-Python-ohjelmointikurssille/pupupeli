@@ -1,5 +1,4 @@
 import { AnimationProgress } from "../move_tween.js";
-import { Vector2 } from "../../vector.js";
 
 export class HideAnimation {
     constructor(gridObject, name, data) {

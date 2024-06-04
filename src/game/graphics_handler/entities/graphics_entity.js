@@ -1,5 +1,7 @@
 
 export class GraphicsEntity {
+    // data is used by subclasses
+    // eslint-disable-next-line no-unused-vars
     constructor(entityId, entityHandler, container, sprite, data) {
         this.entityId = entityId;
         this.entityHandler = entityHandler;
@@ -18,6 +20,8 @@ export class GraphicsEntity {
     onDestroy() {
     }
 
+    // deltaTime is used to sychronize the graphics with the game loop
+    // eslint-disable-next-line no-unused-vars
     onUpdate(deltaTime) {
     }
 }

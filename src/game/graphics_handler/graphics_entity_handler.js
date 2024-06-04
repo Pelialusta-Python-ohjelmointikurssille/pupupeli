@@ -1,8 +1,5 @@
-import { GraphicsEntity } from "./entities/graphics_entity.js";
 import { Vector2 } from "../vector.js";
 import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
-import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
-import { GridEntity } from "./entities/grid_entity.js";
 import { GraphicsEntityFactory } from "./graphics_entity_factory.js";
 import { AnimationFactory } from "./animations/animation_factory.js";
 
@@ -25,7 +22,7 @@ export class GraphicsEntitySystem {
     updateAllObjects(deltaTime) {
         this.camera.onUpdate(deltaTime);
         let maybeReady = true;
-        this.entityDict.forEach((value, key, map) => {
+        this.entityDict.forEach((value) => {
             value.onUpdate(deltaTime);
             if (value.isReady === false) {
                 maybeReady = false;
@@ -85,7 +82,7 @@ export class GraphicsEntitySystem {
     }
 
     resetGridObjects() {
-        this.entityDict.forEach((value, key, map) => {
+        this.entityDict.forEach((value) => {
             if (value.type === "grid_object") {
                 value.reset();
             }
