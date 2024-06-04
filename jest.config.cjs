@@ -31,7 +31,7 @@ module.exports = {
         "!src/**/ui.js",
         "!src/**/game.js",
         "!src/**/editor.js",
-        "!src/**/graphics_camera_entity.js",
+        "!src/**/graphics_camera_entity.js", // some of these can be mock tested
         "!src/**/graphics_entity_factory.js",
         "!src/**/graphics_entity_handler.js",
         "!src/**/graphics_handler.js",
@@ -40,6 +40,7 @@ module.exports = {
         "!src/**/example/**", // Exclude all files in specific directory
         "!src/**/objects/**",
         "!src/**/graphics_handler/entities/**",
+        "!src/**/graphics_handler/animations/**", // can be mock tested
         "!src/**/tests/**"
     ]
 };
