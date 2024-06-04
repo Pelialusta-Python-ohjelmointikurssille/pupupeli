@@ -57,8 +57,12 @@ export class Grid {
         gridObject.cell = this.doubleArray[x][y];
     }
 
-    //If GO unable to move to dir, returns fail.
-    //Returns true if move was succesful.
+    /**
+     * Checks if player can move to given direction
+     * @param {GridObject} gridObject 
+     * @param {string} direction // might be a another type like Constants or Direction
+     * @returns {boolean} true if can move, false if cannot
+     */
     moveGridObjectToDir(gridObject, direction) {
         if (gridObject == null) return false;
         let dirVector = Vector2.FromDirection(direction);
