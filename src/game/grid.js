@@ -111,6 +111,12 @@ export class Grid {
         return true;
     }
 
+    /**
+     * Checks if given coordinate has an obstacle
+     * @param {number} x 
+     * @param {number} y 
+     * @returns {boolean} true if has obstacle, false if doesn't
+     */
     obstacleCheck(x, y) {
         for (let i = 0; i < this.doubleArray[x][y].entities.length; i++) {
             if (this.doubleArray[x][y].entities[i].type === Constants.OBSTACLE) {
