@@ -25,6 +25,9 @@ export class Grid {
         this.resetPosMap = new Map();
     };
 
+    /**
+     * Saves the starting positions of grid objects
+     */
     saveCurrentStateForReset() {
         for (let i = 0; i < this.gridObjects.length; i++) {
             let go = this.gridObjects[i];
@@ -32,6 +35,9 @@ export class Grid {
         }
     }
 
+    /**
+     * 
+     */
     resetGrid() {
         this.doubleArray = this.CreateDoubleArray(this.width, this.height);
         for (let [gridobject, vector2] of this.resetPosMap.entries()) {
