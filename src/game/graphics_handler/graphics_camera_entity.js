@@ -5,9 +5,8 @@ export class GraphicsCameraEntity {
         this.container = container;
         this.pixiScreen = pixiScreen;
         this.position = startPosition;
-        // 640 is an arbitrary value, just used to get consistant scales
-        // accross resolutions
-        // also before the resolution was 640x640
+        // 1024 is an arbitrary value, just used to get consistant scales
+        // accross resolutions. Default resolution is 1024x1024
         this.renderScale = new Vector2(pixiScreen.width / 1024, pixiScreen.height / 1024);
         this.screenCenter = new Vector2(pixiScreen.width / 2, pixiScreen.height / 2)
         this.zoomScale = 1;
@@ -21,7 +20,6 @@ export class GraphicsCameraEntity {
     updatePosition() {
         this.totalRenderScale = this.getTotalRenderScale();
         // TODO: Solve this mess and how to properly make correct resolution scaling
-        // Works for resolutions that are multiples of 640x640
         this.container.position.x = (this.position.x + this.screenCenter.x) * (this.getTotalRenderScale());
         this.container.position.y = (this.position.y + this.screenCenter.y) * (this.getTotalRenderScale());
         this.container.rotation = this.rotation;
