@@ -9,12 +9,13 @@ export class MoveCommand {
         this.dir = dir;
         this.graphicsHandler = graphicsHandler;
         this.moveStartPos = this.gridObject.getVector2Position();
+        this.moveSpeed = 0.35;
     }
 
     execute() {
         let isSuccess = this.grid.moveGridObjectToDir(this.gridObject, this.dir);
         if (isSuccess) this.checkForObjects();
-        let dirObj = { direction: GetDirectionAsString(this.dir), time: 0.6};
+        let dirObj = { direction: GetDirectionAsString(this.dir), time: this.moveSpeed};
         if (isSuccess) {
             this.graphicsHandler.doAction(this.gridObject.id, Constants.MOVE_STR, dirObj);
         } else {
