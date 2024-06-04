@@ -16,7 +16,7 @@ export function getGameGrid() {
     let grid = globals.task.getGrid();
     let newGrid = new Grid(player, gridWidth, gridHeight);
 
-    newGrid.addToGrid(player, playerStartPosition.x, playerStartPosition.y);
+    newGrid.addToGrid(player, playerStartPosition.y, playerStartPosition.x);
 
     for (let y = 0; y < gridHeight; y++) {
         for (let x = 0; x < gridWidth; x++) {
