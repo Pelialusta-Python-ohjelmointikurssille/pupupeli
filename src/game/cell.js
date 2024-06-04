@@ -28,6 +28,10 @@ export class Cell {
         return "(" + this.x + ", " + this.y + ")";
     }
 
+    /**
+     * 
+     * @returns A list containing all the objects in the cell.
+     */
     getEntities() {
         return this.entities;
     }
