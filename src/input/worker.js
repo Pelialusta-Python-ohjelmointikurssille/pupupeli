@@ -37,7 +37,7 @@ async function initializePyodide(pythonCode) {
     if (pyodide === undefined) {
         // eslint-disable-next-line no-undef
         pyodide = await loadPyodide();
-        pyodide.globals.set("reset_flag", resetFlag);
+        state = pyodide.pyodide_py._state.save_state(); // we save pyodide initial state to restore if needed
 
         pyodide.setStdin({
             stdin: () => {
@@ -136,6 +136,7 @@ async function runPythonCode(pyodide, codeString) {
         // no more python left to run; let the event handler know
         postMessage({ type: 'finish' });
     } catch (error) {
+        pyodide.pyodide_py._state.restore_state(state);
         postError(error.message);
     }
 }
