@@ -139,6 +139,12 @@ export class Grid {
         gridObject.cell = null;
     }
 
+    /**
+     * Creates double array which represents game grid
+     * @param {number} width 
+     * @param {number} height 
+     * @returns {array} newDoubleArray
+     */
     CreateDoubleArray(width, height) {
         //js doesn't have double arrays T:Tommi
         let newDoubleArray = [];
