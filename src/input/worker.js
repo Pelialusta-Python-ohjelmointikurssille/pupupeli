@@ -24,7 +24,8 @@ self.onmessage = async function (event) {
         runPythonCode(pyodide, message.details);
     }
     if (message.type === 'reset') {
-        setResetFlag(true);
+        console.log("This should never print");
+        // setResetFlag(true);
     }
 }
 
@@ -96,6 +97,7 @@ function runCommand(command, parameters) {
     ctr++;
     console.log(ctr + " hyppyä");
 
+    // waitarray[1] will be "1" if resetWorker() is called in event handler, otherwise 0
     if (waitArray[1] === 0) {
         try {
             continuePythonExecution;
@@ -126,8 +128,7 @@ async function runPythonCode(pyodide, codeString) {
         await pyodide.runPythonAsync(`print(check_while_usage("""${codeString}"""))`);
 
         try {
-            // reset pyodide state to where we saved it earlier after we're done
-            // for some reason, this will currently throw an error
+            // reset pyodide state to where we saved it earlier after all commands are done
             pyodide.pyodide_py._state.restore_state(state);
         } catch (error) {
             postError(error.message);
@@ -136,6 +137,7 @@ async function runPythonCode(pyodide, codeString) {
         // no more python left to run; let the event handler know
         postMessage({ type: 'finish' });
     } catch (error) {
+        // also reset pyodide state on errors/exceptions such as when we reset the game mid-execution
         pyodide.pyodide_py._state.restore_state(state);
         postError(error.message);
     }

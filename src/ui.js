@@ -4,7 +4,6 @@ import * as fileReader from "./file_reader.js";
 import * as editor from "./input/editor.js";
 import * as errorHandler from "./input/py_error_handling.js";
 import { EventHandler } from "./event_handler.js";
-//import { initPyodide } from "./input/worker.js";
 
 let eventHandler;
 let state = { current: "initial" };
@@ -19,9 +18,8 @@ async function main() {
 }
 
 function initialize() {
-    //    if (String(typeof eventHandler) === "object") eventHandler.terminateWorker();
-    // if (String(typeof eventHandler) === "object") worker.pyodide_py._state.restore_state(pyodideInitialState);
     eventHandler = new EventHandler(getWorker());
+
     if (!initialized) {
         try {
             let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
@@ -189,7 +187,7 @@ function getWorker() {
  */
 export function onFinishLastCommand() {
     disablePlayButtonsOnFinish();
-    console.log("Last command finished. Called from index.js.");
+    console.log("Last command finished");
 }
 
 /**
