@@ -20,7 +20,7 @@ export function getGameTask() {
     let newGrid = new Grid(player, gridWidth, gridHeight);
 
     newGrid.addToGrid(player, playerStartPosition.y, playerStartPosition.x);
-    BuildGrid(gridIntTable, newGrid, gridWidth, gridHeight);
+    buildGrid(gridIntTable, newGrid, gridWidth, gridHeight);
     newGrid.saveCurrentStateForReset(); //Important!
     //make new gamemode last, make it here cause the info on gamemode is contained in the json?
     let currentGameMode = new GameModeGetCollectibles(newGrid);
@@ -35,7 +35,7 @@ export function getGameTask() {
  * @param {*} widht 
  * @param {*} height 
  */
-function BuildGrid(gridIntTable, newGrid, widht, height) {
+function buildGrid(gridIntTable, newGrid, widht, height) {
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < widht; x++) {
             if (gridIntTable[y][x] === 2) {
