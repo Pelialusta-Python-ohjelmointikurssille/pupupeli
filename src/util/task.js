@@ -72,6 +72,10 @@ export class Task {
         return {width:this.grid[0].length, height: this.grid.length};
     }
 
+    /**
+     * Returns amount of collectibles
+     * @returns {number} Amount of collectibles
+     */
     getTotalCollectibles() {
         let collectibles = 0;
 
