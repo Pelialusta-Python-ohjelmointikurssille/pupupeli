@@ -88,6 +88,10 @@ export class Task {
         return collectibles;
     }
 
+    /**
+     * Return task description
+     * @returns {string} description - The description of the task
+     */
     getDescription() {
         return this.description;
     }
