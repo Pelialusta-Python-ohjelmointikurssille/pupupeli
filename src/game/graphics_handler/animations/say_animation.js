@@ -23,6 +23,8 @@ export class SayAnimation {
     start() {
         this.progress.start();
         this.inProgress = true;
+
+        //Placeholder values, should not be hardcoded
         this.speechBubble.pivot.x = 0;
         this.speechBubble.pivot.y = 32;
         this.speechText.anchor.set(0.5);
@@ -31,6 +33,9 @@ export class SayAnimation {
         this.speechBubble
         .ellipse(0, 180, 200, 64)
         .fill({color: this.speechBubbleColor});
+
+        // Temporary fix to make speech bubble on top of everything
+        // This also makes the animated object be on top also though
         this.gridObject.container.zIndex = 9;
     }
 
