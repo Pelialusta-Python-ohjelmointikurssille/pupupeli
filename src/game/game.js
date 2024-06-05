@@ -1,14 +1,18 @@
 import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
-import { getGameGrid } from "./gridfactory.js";
+import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand } from "./commands.js";
 import { commandsDone } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
+import * as globals from "../util/globals.js";
 
 export class Game {
     constructor() {
-        //give filemame tp create grid from here?
-        this.grid = getGameGrid();
+        //getGameTask() returns object containing the grid and the gamemode
+        let gameTask = getGameTask();
+        this.grid = gameTask.grid;
+        this.gameMode = gameTask.gameMode;
+        this.gameMode.eventTarget.addEventListener("victory", this.gameHasBeenWon.bind(this));
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
     }
@@ -45,11 +49,16 @@ export class Game {
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
-        this.grid.consoleDebug();
     }
 
     resetGame() {
         this.grid.resetGrid();
         this.gh.resetAllGridObjects();
+        this.gameMode.reset();
+    }
+
+    gameHasBeenWon() {
+        console.log("Olet voittanut pelin!");
+        console.log("Loppupisteesi on: " + globals.collectibles.current);
     }
 }

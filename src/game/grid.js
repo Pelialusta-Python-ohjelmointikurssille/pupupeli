@@ -23,6 +23,7 @@ export class Grid {
         this.height = height;
         this.player = player;
         this.resetPosMap = new Map();
+        this.eventTarget = new EventTarget();
     };
 
     /**
@@ -46,7 +47,10 @@ export class Grid {
     }
 
     /**
-     * 
+     * Adds gridobject to grid at coordinate x y. The object is also added to the gridObjects array if it doesnt exist there already.
+     * @param {GridObject} gridObject 
+     * @param {number} x 
+     * @param {number} y 
      */
     addToGrid(gridObject, x, y) {
         if (this.gridObjects.includes(gridObject) === false) {
@@ -137,6 +141,8 @@ export class Grid {
         let index = cell.entities.indexOf(gridObject);
         cell.entities.splice(index, 1);
         gridObject.cell = null;
+        //? means that doesn't call if function undefined or null
+        this.eventTarget.dispatchEvent(new CustomEvent("remove", { detail: gridObject }));
     }
 
     /**
