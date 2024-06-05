@@ -1,6 +1,17 @@
 import { Vector2 } from "../vector.js";
+import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
+/**
+ * Entity used for changing viewport position and resolution scaling.
+ * Acts as a virtual camera in the game world.
+ */
 export class GraphicsCameraEntity {
+    /**
+     * 
+     * @param {PIXI.Container} container Reference to PixiRenderer's cameraWorldContainer
+     * @param {PIXI.Rectangle} pixiScreen Reference to PixiJS screen variable. Used to get game resolution
+     * @param {Vector2} startPosition Start position of camera as a Vector2
+     */
     constructor(container, pixiScreen, startPosition) {
         this.container = container;
         this.pixiScreen = pixiScreen;
@@ -17,6 +28,9 @@ export class GraphicsCameraEntity {
         this.updatePosition();
     }
 
+    /**
+     * Update the camera's position and associated variables
+     */
     updatePosition() {
         this.totalRenderScale = this.getTotalRenderScale();
         // TODO: Solve this mess and how to properly make correct resolution scaling
@@ -26,18 +40,18 @@ export class GraphicsCameraEntity {
         this.container.scale = this.totalRenderScale;
     }
 
+    /**
+     * 
+     * @returns {number} Total render scale taking into account resolution and camera zoom.
+     */
     getTotalRenderScale() {
         return this.renderScale.x * this.zoomScale;
     }
 
-    onCreate() {
-
-    }
-
-    onDestroy() {
-
-    }
-
+    /**
+     * Called every frame.
+     * @param {number} deltaTime Time delta in seconds 
+     */
     onUpdate(deltaTime) {
         this.updatePosition();
     }
