@@ -16,8 +16,14 @@
             <div id="left-container" class="is-flex">
                 <div id="task-container">
                     <div>
-                        <h1><a href="/?task=1" style="text-decoration:none;">< </a>Tehtävä <span id="task-id"></span><a href="/?task=2" style="text-decoration:none;"> ></a></h1>
-                        <button id="grid-toggle-button" type="button">Ruudukko</button>
+                        <h1 id="task-title">
+                            <span>Tehtävä </span><span id="task-id"></span>
+                            <button id="grid-toggle-button" type="button">Ruudukko</button>
+                            <select id="theme-select" type="button">
+                                <option>Pupu</option>
+                                <option>Robo</option>
+                            </select>
+                        </h1>
                         <div id="task-description">
                         </div>
                         <div id="multiple-choice-questions" class="is-hidden">
