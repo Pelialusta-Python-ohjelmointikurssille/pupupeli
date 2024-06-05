@@ -46,7 +46,12 @@ export class GraphicsEntityFactory {
     }
 
     createPlayer(entityId, data) {
-        let sprite = new PIXI.Sprite(this.builtinAssets.characters.bunny_right);
+        let tex_down = this.builtinAssets.characters.bunny_down;
+        let tex_right = this.builtinAssets.characters.bunny_right;
+        let tex_left = this.builtinAssets.characters.bunny_left;
+        let tex_up = this.builtinAssets.characters.bunny_up;
+        let sprite = new PIXI.Sprite(tex_right);
+        console.log(tex_down + ", " + tex_left + ", " + tex_right + ", " + tex_up);
         let entity = new GridObjectEntity(
             entityId,
             this.graphicsEntityHandler,
@@ -54,6 +59,7 @@ export class GraphicsEntityFactory {
             sprite,
             data
         );
+        entity.setDirectionTextures({ down: tex_down, right: tex_right, left: tex_left, up: tex_up });
         entity.container.zIndex = 1;
         return entity;
     }
