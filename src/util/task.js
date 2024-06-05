@@ -35,6 +35,11 @@ export class Task {
         }
     }
 
+    /**
+     * Create Task object from json. Calls (the other) fromJSON to give properties
+     * @param {json} json 
+     * @returns {Task} - An object representing a task
+     */
     static fromJSON(json) {
         const task = new Task();
         task.fromJSON(json);
