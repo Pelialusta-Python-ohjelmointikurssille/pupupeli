@@ -47,7 +47,10 @@ export class Grid {
     }
 
     /**
-     * 
+     * Adds gridobject to grid at coordinate x y. The object is also added to the gridObjects array if it doesnt exist there already.
+     * @param {GridObject} gridObject 
+     * @param {number} x 
+     * @param {number} y 
      */
     addToGrid(gridObject, x, y) {
         if (this.gridObjects.includes(gridObject) === false) {
