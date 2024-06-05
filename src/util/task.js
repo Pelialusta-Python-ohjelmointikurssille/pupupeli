@@ -118,6 +118,10 @@ export class Task {
         return this.multipleChoiceQuestions;
     }
 
+    /**
+     *  Returns a double array of numbers representing grid objects in their positions. Also gives implicit grid size.
+     * @returns {array} grid - Grid objects in double array
+     */
     getGrid() {
         return this.grid;
     }
