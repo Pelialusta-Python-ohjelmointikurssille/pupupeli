@@ -60,7 +60,7 @@ Retrospektiivi
 
 
 
-## Retro 3, 3.5.2024
+## Retro 3, 3.6.2024
 
 ### START aloitetaan
 - docstringit funktioihin
