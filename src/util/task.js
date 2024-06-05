@@ -46,6 +46,10 @@ export class Task {
         return task;
     }
 
+    /**
+     * Returns player start position object with properties {x, y}
+     * @returns {object} {x, y} player start position
+     */
     getPlayerStartPosition() {
         let playerStartPosition;
 
