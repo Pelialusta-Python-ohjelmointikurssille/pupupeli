@@ -1,4 +1,6 @@
 import { AnimationProgress } from "../move_tween.js";
+import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
+
 
 export class SayAnimation {
     constructor(gridObject, name, data) {
@@ -9,14 +11,27 @@ export class SayAnimation {
         this.progress = new AnimationProgress(data.time, this.onStart, this.onFinish, this, name);
         this.inProgress = false;
         this.name = name;
+        this.text = data.text;
+        this.speechBubble = new PIXI.Graphics();
+        this.speechBubbleColor = 0xFFFFFF;
+        this.speechText = new PIXI.Text({ text: `${this.text}`, style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0x000000 } });
+        this.previousZindex = this.gridObject.container.zIndex;
+        this.gridObject.container.addChild(this.speechBubble);
+        this.gridObject.container.addChild(this.speechText);
     }
 
     start() {
         this.progress.start();
         this.inProgress = true;
-        this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridCellPosition);
-        this.gridObject.container.x = this.gridObject.screenPosition.x + this.gridObject.fakeZPosition;
-        this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition;
+        this.speechBubble.pivot.x = 0;
+        this.speechBubble.pivot.y = 32;
+        this.speechText.anchor.set(0.5);
+        this.speechText.x = 0;
+        this.speechText.y = 135;
+        this.speechBubble
+        .ellipse(0, 180, 200, 64)
+        .fill({color: this.speechBubbleColor});
+        this.gridObject.container.zIndex = 9;
     }
 
     increment(deltaTime) {
@@ -27,6 +42,10 @@ export class SayAnimation {
     stop() {
         this.progress.stop();
         this.inProgress = false;
+        this.speechBubble.clear();
+        this.gridObject.container.removeChild(this.speechBubble);
+        this.gridObject.container.removeChild(this.speechText);
+        this.gridObject.container.zIndex = this.previousZindex;
     }
 
     onStart() {
@@ -35,13 +54,11 @@ export class SayAnimation {
 
     onFinish() {
         this.inProgress = false;
+        this.speechBubble.clear();
+        this.gridObject.container.removeChild(this.speechBubble);
+        this.gridObject.container.removeChild(this.speechText);
         this.gridObject.onFinishAnimation(this.name);
-    }
-
-    //????
-    getJumpHeight(progress) {
-        if (progress >= 1) progress = 1;
-        return -(Math.sin(Math.PI * progress) ** 0.75) * this.gridObject.gridReference.gridScale * 0.5;
+        this.gridObject.container.zIndex = this.previousZindex;
     }
 
 }

@@ -70,7 +70,7 @@ export class SayCommand {
     constructor(gridObject, graphicsHandler, sayString) {
         this.gridObject = gridObject;
         this.graphicsHandler = graphicsHandler;
-        this.time = 1;
+        this.time = 2;
         this.sayString = sayString;
     }
 
