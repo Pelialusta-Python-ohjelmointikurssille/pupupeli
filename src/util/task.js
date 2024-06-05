@@ -110,6 +110,10 @@ export class Task {
         return editorCodeString;
     }
 
+    /**
+     * Returns objects of multiple choice options and correct answer
+     * @returns {array} multipleChoiceQuestions objects
+     */
     getMultipleChoiceQuestions() {
         return this.multipleChoiceQuestions;
     }
