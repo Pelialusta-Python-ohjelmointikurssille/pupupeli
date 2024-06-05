@@ -63,16 +63,17 @@ body {
 }
 
 #task-selector-container {
-    padding: 1rem;
-    margin: 1rem;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+#task-selector-box{
     max-width: calc(var(--canvas-width) * 2.5);
     background-color: #ddd;
     border-radius: 8px;
     border: 1px solid black;
-}
+} 
 
 .is-flex {
     display: flex;
