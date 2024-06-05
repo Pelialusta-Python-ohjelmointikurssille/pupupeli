@@ -1,6 +1,6 @@
 import { Vector2 } from "../../vector.js";
 import { GraphicsEntity } from "./graphics_entity.js";
-
+import { Constants } from "../../commonstrings.js";
 
 export class GridObjectEntity extends GraphicsEntity {
     constructor(entityId, entityHandler, container, sprite, data) {
@@ -18,6 +18,7 @@ export class GridObjectEntity extends GraphicsEntity {
         }
         this.startPosition = new Vector2(this.gridCellPosition.x, this.gridCellPosition.y);
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
+        this.dirTexMap = new Map();
     }
 
     onCreate() {
@@ -32,7 +33,7 @@ export class GridObjectEntity extends GraphicsEntity {
 
     onUpdate(deltaTime) {
         super.onUpdate(deltaTime);
-        if(this.currentAnimation != null) {
+        if (this.currentAnimation != null) {
             this.currentAnimation.increment(deltaTime);
         }
     }
@@ -55,7 +56,7 @@ export class GridObjectEntity extends GraphicsEntity {
 
     reset() {
         console.log("RESET ");
-        if(this.currentAnimation != null) {
+        if (this.currentAnimation != null) {
             this.currentAnimation.stop();
         }
         this.currentAnimation = null;
@@ -66,6 +67,24 @@ export class GridObjectEntity extends GraphicsEntity {
         this.container.rotation = 0;
         this.container.alpha = 1;
         this.isReady = true;
-        
     }
+
+    /**
+     * 
+     * @param {*} textures Expects following object: { down: tex_down, right: tex_right, left: tex_left, up: tex_up }
+     */
+    setDirectionTextures(textures) {
+        this.dirTexMap.set(Constants.DOWN_STR, textures.down);
+        this.dirTexMap.set(Constants.UP_STR, textures.up);
+        this.dirTexMap.set(Constants.LEFT_STR, textures.left);
+        this.dirTexMap.set(Constants.RIGHT_STR, textures.right);
+    }
+
+    swapTextureToMoveDir(dir) {
+        let tex = this.dirTexMap.get(dir);
+        if (tex !== undefined) {
+            this.sprite.texture = this.dirTexMap.get(dir);
+        }
+    }
+
 }
