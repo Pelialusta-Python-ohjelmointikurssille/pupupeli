@@ -7,6 +7,8 @@ import { EventHandler } from "./event_handler.js";
 
 let eventHandler;
 let state = { current: "initial" };
+let worker = new Worker('/src/input/worker.js');
+let initialized = false;
 
 async function main() {
     initialize();
@@ -16,14 +18,18 @@ async function main() {
 }
 
 function initialize() {
-    if (String(typeof eventHandler) === "object") eventHandler.terminateWorker();
-    eventHandler = new EventHandler();
+    eventHandler = new EventHandler(getWorker());
 
-    try {
-        let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
-        eventHandler.postMessage({ type: 'init', details: pythonFileStr });
-    } catch (error) {
-        displayErrorMessage(error);
+    if (!initialized) {
+        try {
+            let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
+            eventHandler.postMessage({ type: 'init', details: pythonFileStr });
+            initialized = true;
+        } catch (error) {
+            displayErrorMessage(error);
+        }
+    } else {
+        eventHandler.resetWorker()
     }
 }
 
@@ -170,6 +176,10 @@ export function getEventHandler() {
     return eventHandler;
 }
 
+function getWorker() {
+    return worker;
+}
+
 /**
  * Used to do something after there is no more python code to run.
  * This is probably where we want to check if the user has achieved the win conditions and display some kind
@@ -177,7 +187,7 @@ export function getEventHandler() {
  */
 export function onFinishLastCommand() {
     disablePlayButtonsOnFinish();
-    console.log("Last command finished. Called from index.js.");
+    console.log("Last command finished");
 }
 
 /**

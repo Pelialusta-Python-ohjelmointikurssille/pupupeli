@@ -18,6 +18,18 @@ export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const conditions = task.getConditions();
 export const conditionsCleared = [];
 
+export let currentSAB;
+
+export let asd = false;
+
+export function setCurrentSAB(sab) {
+    currentSAB = sab;
+}
+
+export function getCurrentSAB() {
+    return currentSAB;
+}
+
 export function incrementCollectibles() {
     collectibles.current += 1;
 }
