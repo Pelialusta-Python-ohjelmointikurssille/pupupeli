@@ -20,11 +20,11 @@ export class Game {
     async init() {
         await this.gh.initialize();
         this.grid.gridObjects.forEach(item => {
-            this.createGridEntitiesForRendering(item);
+            this.createGridEntityForRendering(item);
         });
     }
 
-    createGridEntitiesForRendering(gridObject) {
+    createGridEntityForRendering(gridObject) {
         let data = { position: gridObject.getVector2Position() };
         this.gh.createEntity(gridObject.id, gridObject.type, data);
     }
