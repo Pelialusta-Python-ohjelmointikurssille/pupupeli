@@ -23,6 +23,10 @@ export class Task {
         this.conditions = conditions;
     }
 
+    /**
+     * From given json, gives properties to object
+     * @param {json} json 
+     */
     fromJSON(json) {
         for (let key in json) {
             if (Object.prototype.hasOwnProperty.call(json, key) && Object.prototype.hasOwnProperty.call(this, key)) {
