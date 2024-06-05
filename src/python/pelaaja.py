@@ -10,6 +10,15 @@ def check_while_usage(source_code):
 
     return False
 
+def check_for_usage(source_code):
+    tree = ast.parse(source_code)
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.For):
+            return True
+
+    return False
+
 class Pelaaja:
     def __init__(self, name="pupu"):
         self.__name = name

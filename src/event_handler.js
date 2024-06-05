@@ -21,8 +21,8 @@ export class EventHandler {
                     globals.setCurrentSAB(message.sab);
                     gameController.giveCommand({ data: message.details, sab: message.sab });
                     break;
-                case "conditionCleared":
-                    globals.addClearedCondition(message.details);
+                case "conditionsCleared":
+                    globals.addClearedConditions(message.details);
                     break;
                 case "finish":
                     ui.onFinishLastCommand();
