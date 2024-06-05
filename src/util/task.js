@@ -64,6 +64,10 @@ export class Task {
         return playerStartPosition;
     }
 
+    /**
+     * Returns grid dimensions
+     * @returns {object} {width, height} of grid
+     */
     getGridDimensions() {
         return {width:this.grid[0].length, height: this.grid.length};
     }
