@@ -96,6 +96,10 @@ export class Task {
         return this.description;
     }
 
+    /**
+     * Return pre-loaded code in the editor, if there is
+     * @returns {string} editorCode
+     */
     getEditorCode() {
         let editorCodeString = "";
 
