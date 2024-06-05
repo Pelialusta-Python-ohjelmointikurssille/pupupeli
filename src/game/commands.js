@@ -65,3 +65,16 @@ export class MoveCommand {
     }
 
 }
+
+export class SayCommand {
+    constructor(gridObject, graphicsHandler, sayString) {
+        this.gridObject = gridObject;
+        this.graphicsHandler = graphicsHandler;
+        this.time = 1;
+        this.sayString = sayString;
+    }
+
+    execute() {
+        this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
+    }
+}

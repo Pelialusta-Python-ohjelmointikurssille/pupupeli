@@ -1,7 +1,7 @@
 import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameGrid } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
-import { MoveCommand } from "./commands.js";
+import { MoveCommand, SayCommand } from "./commands.js";
 import { commandsDone } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 
@@ -34,8 +34,7 @@ export class Game {
         if (commandName === Constants.MOVE_STR) {
             this.MakeMoveCommand(commandParameter);
         } else if (commandName === Constants.SAY_STR) {
-            console.log(commandName, commandParameter);
-            throw new Error("not implemented yet (game.js)");
+            this.MakeSayCommand(commandParameter);
         }
     }
 
@@ -48,7 +47,11 @@ export class Game {
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
-        this.grid.consoleDebug();
+    }
+
+    MakeSayCommand(commandParameter) {
+        let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
+        sayCommand.execute();
     }
 
     resetGame() {
