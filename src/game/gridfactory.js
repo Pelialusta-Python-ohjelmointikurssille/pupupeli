@@ -30,14 +30,14 @@ export function getGameTask() {
 
 /**
  * Builds the grid. Doesn't add Player.
- * @param {*} gridIntTable 
- * @param {*} newGrid 
- * @param {*} widht 
- * @param {*} height 
+ * @param {array} gridIntTable | double array of grid objects represented by numbers
+ * @param {Grid} newGrid 
+ * @param {number} width
+ * @param {number} height 
  */
-function buildGrid(gridIntTable, newGrid, widht, height) {
+function buildGrid(gridIntTable, newGrid, width, height) {
     for (let y = 0; y < height; y++) {
-        for (let x = 0; x < widht; x++) {
+        for (let x = 0; x < width; x++) {
             if (gridIntTable[y][x] === 2) {
                 let collectible = getNewGridObject(Constants.COLLECTIBLE);
                 newGrid.addToGrid(collectible, x, y);
