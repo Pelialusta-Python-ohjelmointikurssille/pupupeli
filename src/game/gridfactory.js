@@ -3,6 +3,10 @@ import { Grid } from "./grid.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 
+/**
+ * Creates Grid object and saves starting state to allow reset. Takes current task and creates grid with positions of player, collectibles and obstacles.
+ * @returns {Grid} Freshly initialised grid
+ */
 export function getGameGrid() {
     let player = getNewGridObject(Constants.PLAYER_STR);
     let collectible = getNewGridObject(Constants.COLLECTIBLE);
