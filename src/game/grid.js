@@ -23,6 +23,7 @@ export class Grid {
         this.height = height;
         this.player = player;
         this.resetPosMap = new Map();
+        this.eventTarget = new EventTarget();
     };
 
     saveCurrentStateForReset() {
@@ -96,6 +97,8 @@ export class Grid {
         let index = cell.entities.indexOf(gridObject);
         cell.entities.splice(index, 1);
         gridObject.cell = null;
+        //? means that doesn't call if function undefined or null
+        this.eventTarget.dispatchEvent(new CustomEvent("remove", { detail: gridObject }));
     }
 
     CreateDoubleArray(width, height) {

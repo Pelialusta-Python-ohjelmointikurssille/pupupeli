@@ -34,7 +34,7 @@ export function commandsDone() {
 
 }
 
-export function getCanvas(){
+export function getCanvas() {
     game.getCanvas();
 }
 
