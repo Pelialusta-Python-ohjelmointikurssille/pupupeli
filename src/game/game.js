@@ -57,7 +57,7 @@ export class Game {
         this.gameMode.reset();
     }
 
-    gameHasBeenWon(e) {
+    gameHasBeenWon() {
         console.log("Olet voittanut pelin!");
         console.log("Loppupisteesi on: " + globals.collectibles.current);
     }
