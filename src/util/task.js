@@ -1,3 +1,19 @@
+/**
+ * Represents a task of the course. Can be created from a json file using the fromJSON method.
+ * @param {string} description - The description of the task
+ * @param {string} editorCode - Pre-loaded code in the editor, if there is
+ * @param {array} multipleChoiceQuestions - Objects of multiple choice options and correct answer
+ * @param {array} grid - A double array of numbers representing grid objects in their positions. Also gives implicit grid size.
+ * @param {array} conditions - Objects of requirements for a task as true or false
+ * @class
+ * @classdesc Represents a task of the course
+ * @property {string} description - The description of the task
+ * @property {string} editorCode - Pre-loaded code in the editor, if there is
+ * @property {array} multipleChoiceQuestions - Objects of multiple choice options and correct answer
+ * @property {array} grid - A double array of numbers representing grid objects in their positions. Also gives implicit grid size.
+ * @property {array} conditions - Objects of requirements for a task as true or false
+ * @returns {Task} - An object representing a task
+ */
 export class Task {
     constructor(description, editorCode, multipleChoiceQuestions, grid, conditions) {
         this.description = description;
