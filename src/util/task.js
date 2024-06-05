@@ -126,6 +126,10 @@ export class Task {
         return this.grid;
     }
 
+    /**
+     * Returns array of only those conditions which are marked as true
+     * @returns {array} conditions objects
+     */
     getConditions() {
         return this.conditions.filter((condition) => condition.parameter !== false);
     }
