@@ -4,12 +4,14 @@ import * as globals from "../util/globals.js";
 /**
  * The interface for GameMode
  */
+// eslint-disable-next-line no-unused-vars
 const GameMode = {
     reset: function () { },
     checkIfGameWon: function () { },
 };
 //TODO: ^ should GameMode be a class that is extended instead of a interface, 
 // cause js interfaces dont make any sense to me T:Tommi
+// remove lint ignore above when done
 
 //How to use for future users:
 // - to make a new gamemode, implement above interface to new class
@@ -30,8 +32,8 @@ export class GameModeGetCollectibles {
         this.eventTarget = new EventTarget();
     }
 
-    removedFromGrid(e) {
-        let gridobject = e.detail;
+    removedFromGrid(event) {
+        let gridobject = event.detail;
         if (gridobject.type === Constants.COLLECTIBLE) {
             globals.incrementCollectibles();
             console.log("Score is: " + globals.collectibles.current);
