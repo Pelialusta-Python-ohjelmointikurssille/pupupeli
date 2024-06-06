@@ -23,6 +23,7 @@ function initialize() {
     eventHandler = new EventHandler(getWorker());
 
     if (!initialized) {
+        console.log("Initializing pyodide worker...")
         try {
             let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
             eventHandler.postMessage({ type: 'init', details: pythonFileStr });
