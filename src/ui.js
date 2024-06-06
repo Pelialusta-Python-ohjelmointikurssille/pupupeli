@@ -62,6 +62,7 @@ async function initPage() {
     window.addEventListener('load', function () {
         editor.getEditor().setValue(globals.task.getEditorCode());
     });
+    createTaskButtons();
 
 }
 
@@ -74,6 +75,18 @@ function addButtonEvents() {
     function addEventToButton(id, func) {
         let buttonInput = document.getElementById(id);
         buttonInput.addEventListener("click", func, false);
+    }
+}
+
+function createTaskButtons() {
+    const numberOfButtons = fileReader.countForFilesInDirectory("/tasks");
+    const buttonContainer = document.getElementById('buttonTable');
+
+    // Create and append buttons
+    for (let i = 0; i < numberOfButtons; i++) {
+        const button = document.createElement('button');
+        button.innerText = `${i + 1}`;
+        buttonContainer.appendChild(button);
     }
 }
 

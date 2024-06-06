@@ -119,6 +119,14 @@ body {
     margin: 0;
 }
 
+#task-selector-box button {
+    justify-content: center;
+    font-size: 40px; /* Increase the font size */
+    padding: 20px; /* Add padding around the text */
+    width: 100px; /* Set a fixed width */
+    height: 100px; /* Set a fixed height */
+}
+
 #task-title {
     flex: 1;
 /*    background-color: white;
