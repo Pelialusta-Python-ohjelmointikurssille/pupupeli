@@ -78,11 +78,12 @@ export class SayCommand {
     execute() {
         // TEMPORARY HACK!! REMOVE THIS!
         //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
-        this.graphicsHandler.createEntity("test", "textbox", {
+        let textboxId = crypto.randomUUID().toString();
+        this.graphicsHandler.createEntity(textboxId, "textbox", {
             //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
             targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
             text: this.sayString
         });
-        this.graphicsHandler.doAction("test", "showinout", { time: 2 });
+        this.graphicsHandler.doAction(textboxId, "showinout", { time: 2 });
     }
 }
