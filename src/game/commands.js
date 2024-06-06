@@ -78,3 +78,16 @@ export class SayCommand {
         this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
     }
 }
+
+export class AskCommand {
+    constructor(gridObject, graphicsHandler, askString) {
+        this.gridObject = gridObject;
+        this.graphicsHandler = graphicsHandler;
+        this.time = 2;
+        this.askString = askString;
+    }
+
+    execute() {
+        this.graphicsHandler.doAction(this.gridObject.id, "ask", { time: this.time, text: this.askString });
+    }
+}

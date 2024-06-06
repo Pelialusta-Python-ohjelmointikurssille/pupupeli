@@ -17,13 +17,15 @@ export class AnimationFactory {
             return new FailMoveAnimation(gridObject, animationId, data);
         }
         if (animationId === "hide") {
-            console.log("CREATE HIDE ANIM")
             return new HideAnimation(gridObject, animationId, data);
         }
         if (animationId === "unhide") {
             return new UnhideAnimation(gridObject, animationId, data);
         }
         if (animationId === "say") {
+            return new SayAnimation(gridObject, animationId, data);
+        }
+        if (animationId === "ask") {
             return new SayAnimation(gridObject, animationId, data);
         }
     }

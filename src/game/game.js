@@ -1,7 +1,7 @@
 import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
-import { MoveCommand, SayCommand } from "./commands.js";
+import { AskCommand, MoveCommand, SayCommand } from "./commands.js";
 import { commandsDone } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
@@ -51,11 +51,6 @@ export class Game {
         commandsDone();
     }
 
-    makeAskCommand(commandParameter) {
-        console.log("soon(tm) " + commandParameter);
-        this.onAnimsReady();
-    }
-
     makeMoveCommand(commandParameter) {
         let dir = translatePythonMoveStringToDirection(commandParameter);
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
@@ -66,6 +61,11 @@ export class Game {
     makeSayCommand(commandParameter) {
         let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
         sayCommand.execute();
+    }
+
+    makeAskCommand(commandParameter) {
+        let moveCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
+        moveCommand.execute();
     }
 
     resetGame() {
