@@ -17,7 +17,7 @@ export class EventHandler {
                     this.syncArray = new Int32Array(message.sab, 0, 1);
                     ui.promptUserInput({ inputBoxHidden: true });
                     break;
-                case "run":
+                case "command":
                     globals.setCurrentSAB(message.sab);
                     gameController.giveCommand({ data: message.details, sab: message.sab });
                     break;

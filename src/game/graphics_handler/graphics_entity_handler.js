@@ -30,10 +30,10 @@ export class GraphicsEntitySystem {
         });
         if (this.isReady === true && maybeReady === false) {
             this.onEntitiesNotReady();
-        } 
+        }
         if (this.isReady === false && maybeReady === true) {
             this.onEntitiesReady();
-        } 
+        }
         this.isReady = maybeReady;
     }
 
@@ -62,6 +62,7 @@ export class GraphicsEntitySystem {
     doAction(entityId, animationId, animationData) {
         let entity = this.getGraphicsEntity(entityId);
         let animation = this.animationFactory.getAnimation(animationId, entity, animationData);
+        console.log(animation);
         entity.doGridAnimation(animation);
     }
 

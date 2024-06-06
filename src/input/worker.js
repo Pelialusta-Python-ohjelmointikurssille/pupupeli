@@ -85,10 +85,10 @@ function runCommand(command, parameters) {
 
     switch (command) {
         case "move":
-            self.postMessage({ type: 'run', details: { command: command, parameters: parameters }, sab: sab });
+            self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
             break;
         case "say":
-            postError(`Command '${command}' not implemented yet.`);
+            self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
             break;
         default:
             postError(`Command '${command}' is not a valid command.`);
