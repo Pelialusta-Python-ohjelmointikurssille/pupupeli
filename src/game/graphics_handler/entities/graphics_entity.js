@@ -1,7 +1,5 @@
 
 export class GraphicsEntity {
-    // data is used by subclasses
-    // eslint-disable-next-line no-unused-vars
     constructor(entityId, entityHandler, container, sprite, data) {
         this.entityId = entityId;
         this.entityHandler = entityHandler;
@@ -30,17 +28,24 @@ export class GraphicsEntity {
 
     onStartAnimation(name) {
         this.isReady = false;
-        console.log("START ANIM " + name)
     }
 
     onFinishAnimation(name) {
         this.isReady = true;
-        console.log("FINISH ANIM " + name)
     }
 
     doAnimation(animation) {
-        console.log(animation.name)
         this.currentAnimation = animation;
         this.currentAnimation.start();
+    }
+
+    reset() {
+        if (this.currentAnimation != null) {
+            this.currentAnimation.stop();
+        }
+        this.container.rotation = 0;
+        this.container.alpha = 1;
+        this.isReady = true;
+        this.currentAnimation = null;
     }
 }

@@ -14,7 +14,22 @@ export class TextBoxEntity extends GraphicsEntity {
 
         this.lineGraphic = new PIXI.Graphics();
 
-        this.textObject = new PIXI.Text({ text: "", style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0x000000 } });
+        this.textObject = new PIXI.Text({ text: "", style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0x000000 } });       
+        this.initTextObject();
+        this.initBoxSprite();
+        this.container.addChild(this.lineGraphic);
+        this.container.addChild(this.textboxSprite);
+        this.container.addChild(this.textObject);
+        this.container.zIndex = 1000;
+        
+        this.setDynamicallyPosition();
+        
+        if (this.targetPosition != null) {
+            this.createTargetArrow();
+        }
+    }
+
+    initTextObject() {
         this.textObject.anchor.set(0.5);
         this.textContent = "";
         if (this.data.text != null) {
@@ -34,22 +49,33 @@ export class TextBoxEntity extends GraphicsEntity {
         if (this.data.targetPosition != null) {
             this.targetPosition = this.data.targetPosition;
         }
-        
-        
+    }
+
+    initBoxSprite() {
         this.textboxSprite.pivot.x = this.textboxSprite.width / 2;
         this.textboxSprite.pivot.y = this.textboxSprite.height / 2;
         this.container.pivot.x = 0;
         this.container.pivot.y = 0;
-        this.container.addChild(this.lineGraphic);
-        this.container.addChild(this.textboxSprite);
-        this.container.addChild(this.textObject);
-        
-        this.container.zIndex = 1000;
+    }
 
+    createTargetArrow() {
+        let triWidth = this.textboxSprite.width / 10 + 20;
+        let path = [
+            -triWidth, 0,
+            triWidth, 0,
+            (this.targetPosition.x - this.container.x) * 0.8, (this.targetPosition.y - this.container.y) * 0.8,
+            -triWidth, 0
+        ]
+        
+        this.lineGraphic.poly(path);
+        this.lineGraphic.fill(0xffffff);
+    }
+
+    setDynamicallyPosition() {
         if (this.data.position != null) {
             this.container.x = this.data.position.x;
             this.container.y = this.data.position.y;
-        } else {
+        } else if (this.data.targetPosition != null){
             if (this.targetPosition.x >= 512){
                 this.container.x = this.targetPosition.x - (this.textboxSprite.width / 2 + 64);
             }
@@ -62,22 +88,6 @@ export class TextBoxEntity extends GraphicsEntity {
             else {
                 this.container.y = this.targetPosition.y + (this.textboxSprite.height / 2 + 64);
             }
-
-            //this.container.x = this.targetPosition.x;
-            //this.container.y = this.targetPosition.y;
         }
-
-        let triWidth = this.textboxSprite.width / 10 + 20;
-        let path = [
-            -triWidth, 0,
-            triWidth, 0,
-            (this.targetPosition.x - this.container.x) * 0.8, (this.targetPosition.y - this.container.y) * 0.8,
-            -triWidth, 0
-        ]
-        
-        this.lineGraphic.poly(path);
-        this.lineGraphic.fill(0xffffff);
-        
-        console.log(this.textboxSprite.position);
     }
 }
