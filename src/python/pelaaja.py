@@ -27,5 +27,15 @@ class Pelaaja:
 #        if reset_flag:
 #            raise Exception("Interpreter was reset")
         js.runCommand("say", sentence)
+    
+    def puhu(self, sentence: str):
+#        if reset_flag:
+#            raise Exception("Interpreter was reset")
+        js.runCommand("say", sentence)
+    
+    def kysy(self, sentence: str):
+#        if reset_flag:
+#            raise Exception("Interpreter was reset")
+        js.runCommand("ask", sentence)
 
 pupu = Pelaaja()
