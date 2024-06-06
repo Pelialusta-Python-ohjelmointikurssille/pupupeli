@@ -2,8 +2,6 @@ import { Vector2 } from "../vector.js";
 import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
 import { GraphicsEntityFactory } from "./graphics_entity_factory.js";
 import { AnimationFactory } from "./animations/animation_factory.js";
-import { PixiRenderer } from "./pixi_renderer.js";
-import { GraphicsHandler } from "./graphics_handler.js";
 
 /**
  * Manages all instantiated gfx entities.
