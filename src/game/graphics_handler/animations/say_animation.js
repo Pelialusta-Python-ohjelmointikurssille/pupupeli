@@ -1,4 +1,4 @@
-import { AnimationProgress } from "../move_tween.js";
+import { AnimationProgress } from "../animation_progress.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 
