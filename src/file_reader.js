@@ -65,8 +65,7 @@ export function tryGetFileAsJson(path) {
     function checkIfFileExists(path) {
         try {
             return tryGetFileAsJson(path);
-        } catch (error) {
-            console.log("File not found: " + path)
+        } catch {
             return null;
         }
     }
