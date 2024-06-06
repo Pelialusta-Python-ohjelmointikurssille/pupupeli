@@ -166,13 +166,14 @@ export class GraphicsEntityFactory {
     }
 
     createTextBox(entityId, data) {
-        
+        let texture = this.builtinAssets.ui.speechbubble_9slice;
         let entity = new TextBoxEntity(
             entityId,
             this.graphicsEntityHandler,
             new PIXI.Container(),
             null,
-            data
+            data,
+            texture
         );
         return entity;
     }
