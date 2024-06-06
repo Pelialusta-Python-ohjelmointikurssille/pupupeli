@@ -34,7 +34,16 @@ export class Game {
     }
 
     receiveInput(commandName, commandParameter) {
-
+        //If we are already executing a command, (animation not finished),
+        //we have the option of waiting for the current one finishing, 
+        //OR, quickly finishing the current one. 
+        //Because of how the logic works, I will for now opt into quickly finishing the current ones.
+        if (this.gh.isReady) {
+            console.log("My body is ready.");
+        } else {
+            console.log("I AM NOT READY!!!!!!");
+        }
+        //-----------------------------------------------
         if (commandName === Constants.MOVE_STR) {
             this.MakeMoveCommand(commandParameter);
         } else if (commandName === Constants.SAY_STR) {
