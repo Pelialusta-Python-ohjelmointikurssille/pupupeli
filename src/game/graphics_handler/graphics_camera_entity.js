@@ -46,17 +46,13 @@ export class GraphicsCameraEntity {
     getTotalRenderScale() {
         return this.renderScale.x * this.zoomScale;
     }
-
+    
     /**
      * Called every frame.
      * @param {number} deltaTime Time delta in seconds 
      */
     // deltaTime is used to sychronize the camera with the game loop
     // eslint-disable-next-line no-unused-vars
-    /**
-     * Called every frame.
-     * @param {number} deltaTime Time delta in seconds 
-     */
     onUpdate(deltaTime) {
         this.updatePosition();
     }
