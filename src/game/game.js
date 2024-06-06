@@ -52,8 +52,8 @@ export class Game {
     }
 
     makeAskCommand(commandParameter) {
-        console.log("soon(tm)");
-        onAnimsReady();
+        console.log("soon(tm) " + commandParameter);
+        this.onAnimsReady();
     }
 
     makeMoveCommand(commandParameter) {
