@@ -36,9 +36,20 @@ export class Game {
     receiveInput(commandName, commandParameter) {
 
         if (commandName === Constants.MOVE_STR) {
-            this.MakeMoveCommand(commandParameter);
+            this.makeMoveCommand(commandParameter);
         } else if (commandName === Constants.SAY_STR) {
-            this.MakeSayCommand(commandParameter);
+            this.makeSayCommand(commandParameter);
+        }
+        switch (commandName) {
+            case Constants.MOVE_STR:
+                this.makeMoveCommand(commandParameter);
+                break;
+            case Constants.SAY_STR:
+                this.makeSayCommand(commandParameter);
+                break;
+            case Constants.ASK_STR:
+                this.makeAskCommand(commandParameter);
+                break;
         }
     }
 
@@ -46,14 +57,19 @@ export class Game {
         commandsDone();
     }
 
-    MakeMoveCommand(commandParameter) {
+    makeAskCommand(commandParameter) {
+        console.log("soon(tm)");
+        onAnimsReady();
+    }
+
+    makeMoveCommand(commandParameter) {
         let dir = translatePythonMoveStringToDirection(commandParameter);
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
     }
 
-    MakeSayCommand(commandParameter) {
+    makeSayCommand(commandParameter) {
         let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
         sayCommand.execute();
     }
