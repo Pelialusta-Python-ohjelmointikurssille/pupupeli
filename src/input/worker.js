@@ -4,6 +4,7 @@ let continuePythonExecution;
 let ctr = 0;
 let state;
 let resetFlag = false;
+const validCommands = ["move", "say", "ask"];
 
 // eslint-disable-next-line no-undef
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
@@ -82,16 +83,11 @@ function handleInput() {
 function runCommand(command, parameters) {
     const sab = new SharedArrayBuffer(8);
     const waitArray = new Int32Array(sab, 0, 2);
-
-    switch (command) {
-        case "move":
-            self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
-            break;
-        case "say":
-            self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
-            break;
-        default:
-            postError(`Command '${command}' is not a valid command.`);
+    if (validCommands.includes(command)) {
+        //Posted to eventHandler
+        self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
+    } else {
+        postError(`Command '${command}' is not a valid command.`);
     }
     Atomics.wait(waitArray, 0, 0);
     ctr++;
