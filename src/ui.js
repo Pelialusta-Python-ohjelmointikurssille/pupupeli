@@ -113,16 +113,18 @@ function createTaskButtons() {
     const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
     if (localStorage.getItem("completedTasks") === null) {
-        let completedTasks = [];
-        localStorage.setItem("completedTasks", completedTasks)
+        let completedTasksStr = "";
+        localStorage.setItem("completedTasks", completedTasksStr)
     }
-    let completedTasks = localStorage.getItem("completedTasks");
-    console.log(localStorage.getItem("completedTasks"));
+    let completedTasksStr = localStorage.getItem("completedTasks");
+    let completedTasksArr = completedTasksStr.split(",");
+
+
     // Create and append buttons
     for (let i = 0; i < numberOfButtons; i++) {
         const button = document.createElement('button');
         button.id = `button-${i + 1}`;
-        if (completedTasks.includes(i + 1)) {
+        if (completedTasksArr.includes(`${i + 1}`)) {
             button.classList.add("button-completed");
         } else {
             button.classList.add("button-incompleted");
@@ -142,12 +144,17 @@ export function onTaskComplete() {
     const taskIdentifier = globals.taskIdentifier;
     const buttonid = `button-${taskIdentifier}`;
     let button = document.getElementById(buttonid);
-    let completedTasks = localStorage.getItem("completedTasks");
 
     if (button.getAttribute("class") == "button-incompleted") {
+        let completedTasksStr = localStorage.getItem("completedTasks");
         button.classList.replace("button-incompleted", "button-completed");
-        completedTasks.push(taskIdentifier);
-        localStorage.setItem("completedTasks", completedTasks);
+
+        let completedTasksArr = completedTasksStr.split(",");
+
+        completedTasksArr.push(taskIdentifier);
+
+        completedTasksStr = completedTasksArr.join(",")
+        localStorage.setItem("completedTasks", completedTasksStr);
     }
 }
 
