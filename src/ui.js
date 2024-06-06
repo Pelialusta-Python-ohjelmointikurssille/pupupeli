@@ -135,8 +135,8 @@ function createTaskButtons() {
     }
 }
 
-function turnButtonGreen(button) {
-    button.style.backgroundColor = 'green';
+function onTaskComplete(button) {
+    button.id = "button-completed";
 }
 
 function onRunButtonClick() {
