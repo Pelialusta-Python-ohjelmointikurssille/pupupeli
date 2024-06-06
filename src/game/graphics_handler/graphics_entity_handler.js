@@ -138,7 +138,7 @@ export class GraphicsEntitySystem {
         console.log("skipAnimationsAndFinish");
         this.entityDict.forEach((entity) => {
             if (entity.currentAnimation != null) {
-                console.log(entity.currentAnimation);
+                entity.currentAnimation.onFinish();
             }
         });
     }
