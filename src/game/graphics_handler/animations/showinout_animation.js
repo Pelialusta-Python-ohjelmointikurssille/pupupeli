@@ -7,7 +7,10 @@ export class ShowInOutAnimation {
         this.progress = new AnimationProgress(data.time, this.onStart, this.onFinish, this, name);
         this.inProgress = false;
         this.name = name;
-        this.currentAnimation = null;;
+        this.currentAnimation = null;
+
+        this.scaleStart = 0.05;
+        this.scaleEnd = 0.95;
     }
 
     start() {
@@ -19,11 +22,14 @@ export class ShowInOutAnimation {
     increment(deltaTime) {
         if (this.inProgress === false) return;
         this.progress.increment(deltaTime);
-        if (this.progress.value < 0.05 && this.progress.value > 0) {
-            this.entity.container.scale = ((this.progress.value) * 20);
+        if (this.progress.value < this.scaleStart && this.progress.value > 0) {
+            this.entity.container.scale = ((this.progress.value) * (1 / this.scaleStart));
         }
-        if (this.progress.value > 0.95) {
-            this.entity.container.scale = 1.2 - ((this.progress.value - 0.95) * 20);
+        if (this.progress.value >= this.scaleStart && this.progress.value <= this.scaleEnd) {
+            this.entity.container.scale = 1;
+        }
+        if (this.progress.value > this.scaleEnd) {
+            this.entity.container.scale = 1 - ((this.progress.value - this.scaleEnd) * (1/this.scaleEnd));
         }
     }
 
