@@ -83,7 +83,7 @@ export class AskCommand {
     constructor(gridObject, graphicsHandler, askString) {
         this.gridObject = gridObject;
         this.graphicsHandler = graphicsHandler;
-        this.time = 2;
+        this.time = 0.5;
         this.askString = askString;
     }
 
