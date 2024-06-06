@@ -41,8 +41,33 @@ async function initGame() {
 }
 
 async function initPage() {
-    // set task identifier
-    document.getElementById("task-id").innerHTML = globals.taskIdentifier;
+    // Set task identifier
+    const taskIdentifier = globals.taskIdentifier;
+
+    //copypasted from createTaskButtons function, this could be globals
+    const totalTasks = fileReader.countForFilesInDirectory("/tasks");
+
+    document.getElementById("task-id").innerHTML = taskIdentifier;
+
+    // Update the href for previous and next task links
+    const prevTaskLink = document.querySelector('a[href^="/?task="]:first-child');
+    const nextTaskLink = document.querySelector('a[href^="/?task="]:last-child');
+
+    // Changes href of prevtasklink and hides it if no prev task exists
+    if (taskIdentifier > 1) {
+        prevTaskLink.href = `/?task=${taskIdentifier - 1}`;
+        prevTaskLink.style.display = 'inline'; // Ensure it's visible
+    } else {
+        prevTaskLink.style.display = 'none'; // Hide if on the first task
+    }
+
+    // Changes href of nexttasklink and hides it if no prev task exists
+    if (taskIdentifier < totalTasks) {
+        nextTaskLink.href = `/?task=${taskIdentifier + 1}`;
+        nextTaskLink.style.display = 'inline'; // Ensure it's visible
+    } else {
+        nextTaskLink.style.display = 'none'; // Hide if on the last task
+    }
 
     // set description
     globals.task.getDescription().forEach((line) => {
