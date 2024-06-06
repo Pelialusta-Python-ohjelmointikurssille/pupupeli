@@ -182,11 +182,11 @@ button:hover {
     background: rgb(231, 231, 231);
 }
 
-#button-completed {
+.button-completed {
     background: rgb(0, 255, 0);
 }
 
-#button-completed:hover {
+.button-completed:hover {
     background: rgb(0, 231, 0);
 }
 
