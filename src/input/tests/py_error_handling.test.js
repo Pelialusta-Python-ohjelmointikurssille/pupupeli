@@ -1,71 +1,93 @@
-// py_error_handling.test.js
-import { extractErrorDetails } from '../../input/py_error_handling.js';
+import { extractErrorDetails, translateErrorType } from '../py_error_handling';
 
 describe('extractErrorDetails', () => {
-  test('should extract details from a standard error message', () => {
-    const errorMessage = `Traceback (most recent call last):
+    it('should extract line number and translate error type correctly', () => {
+        const errorMessage = `Traceback (most recent call last):
+  File "example.py", line 1, in <module>
+    import something
+ModuleNotFoundError: No module named 'something'`;
+
+        const result = extractErrorDetails(errorMessage);
+        expect(result).toEqual({ text: "Yritit käyttää moduulia, jota ei löydy. Tarkista moduulin nimi", line: "1" });
+    });
+
+    it('should return default message if error type cannot be translated', () => {
+        const errorMessage = `Traceback (most recent call last):
   File "example.py", line 2, in <module>
-    main()
-  File "example.py", line 5, in main
-    raise ValueError("An error occurred")
-ValueError: An error occurred`;
+    some_function()
+SomeUnknownError: This is an unknown error`;
 
-    const expectedOutput = { text: '    raise ValueError("An error occurred")', line: '5' };
-    const actualOutput = extractErrorDetails(errorMessage);
-    expect(actualOutput).toEqual(expectedOutput);
-  });
+        const result = extractErrorDetails(errorMessage);
+        expect(result).toEqual({ text: "SomeUnknownError: This is an unknown error", line: "2" });
+    });
 
-  test('should extract details from an error message with multiple file references', () => {
-    const errorMessage = `Traceback (most recent call last):
-  File "example.py", line 2, in <module>
-    main()
-  File "another_example.py", line 10, in main
-    function()
-  File "another_example.py", line 20, in function
-    raise TypeError("Another error occurred")
-TypeError: Another error occurred`;
+    it('should return unknown line if no line number is found', () => {
+        const errorMessage = `Some error message without a line number
+Another line of error message`;
 
-    const expectedOutput = { text: '    raise TypeError("Another error occurred")', line: '20' };
-    const actualOutput = extractErrorDetails(errorMessage);
-    expect(actualOutput).toEqual(expectedOutput);
-  });
+        const result = extractErrorDetails(errorMessage);
+        expect(result).toEqual({ text: "Some error message without a line number\nAnother line of error message", line: "Tuntematon rivi" });
+    });
 
-  test('should return the given error message for a malformed error message', () => {
-    const errorMessage = `This is a malformed error message without proper file and line references`;
+    it('should handle syntax errors correctly', () => {
+        const errorMessage = `Traceback (most recent call last):
+  File "example.py", line 10
+    if True print("Hello")
+          ^
+SyntaxError: invalid syntax`;
 
-    const expectedOutput = { text: "This is a malformed error message without proper file and line references", line: "Unknown Line" };
-    const actualOutput = extractErrorDetails(errorMessage);
-    expect(actualOutput).toEqual(expectedOutput);
-  });
-
-  test('should empty error for an empty error message', () => {
-    const errorMessage = ``;
-
-    const expectedOutput = { text: "", line: "Unknown Line" };
-    const actualOutput = extractErrorDetails(errorMessage);
-    expect(actualOutput).toEqual(expectedOutput);
-  });
-
-  test('should extract error details correctly', () => {
-    const errorMessage = 'File "<stdin>", line 1\n    print(a)\nNameError: name \'a\' is not defined\n ' ;
-    const result = extractErrorDetails(errorMessage);
-    expect(result).toEqual({ text: 'NameError: name \'a\' is not defined', line: '1' });
-  });
-
-  test('should return the error message if no match found', () => {
-    const errorMessage = 'An unknown error occurred';
-    const result = extractErrorDetails(errorMessage);
-    expect(result).toEqual({ text: 'An unknown error occurred', line: 'Unknown Line' });
-  });
-  // Test so that only line is defined
-  test('should extract error details correctly', () => {
-      const errorMessage = 'File "<stdin>", line 1\n    print(a)\nNameError: name \'a\' is not defined\n ' ;
-      const result = extractErrorDetails(errorMessage);
-      expect(result).toEqual({ text: 'NameError: name \'a\' is not defined', line: '1' });
-  });
-  test('should return corrrect line if error is virheellinen suunta', () => {
-      const errorMessage = 'File "<stdin>", line 1\n File "<stdin>", line 2\n File "<stdin>", line 3\n print(a)\nValueError: Virheellinen suunta\n' ;
-      const result = extractErrorDetails(errorMessage);
-      expect(result).toEqual({ text: 'ValueError: Virheellinen suunta', line: '2' });
-  });
+        const result = extractErrorDetails(errorMessage);
+        expect(result).toEqual({ text: "Koodistasi löytyy kirjoitusvirhe", line: "10" });
+    });
 });
+
+describe('translateErrorType', () => {
+    it('should translate SyntaxError correctly', () => {
+        const errorType = "SyntaxError: invalid syntax";
+        const result = translateErrorType(errorType);
+        expect(result).toBe("Koodistasi löytyy kirjoitusvirhe");
+    });
+
+    it('should translate ValueError correctly', () => {
+        const errorType = "ValueError: Virheellinen suunta";
+        const result = translateErrorType(errorType);
+        expect(result).toBe("Antamasi suunta ei ole kirjoitettu oikein");
+    });
+
+    it('should translate IndexError correctly', () => {
+        const errorType = "IndexError: list index out of range";
+        const result = translateErrorType(errorType);
+        expect(result).toBe("Yritit käyttää listan kohtaa, jota ei ole olemassa. Tarkista listan pituus ja yritä uudelleen");
+    });
+
+    it('should translate NameError correctly', () => {
+        const errorType = "NameError: name 'foo' is not defined";
+        const result = translateErrorType(errorType);
+        expect(result).toBe("Käytit nimeä, jota ei ole määritelty. Tarkista kirjoitusvirheet");
+    });
+
+    it('should translate ModuleNotFoundError correctly', () => {
+        const errorType = "ModuleNotFoundError: No module named 'foo'";
+        const result = translateErrorType(errorType);
+        expect(result).toBe("Yritit käyttää moduulia, jota ei löydy. Tarkista moduulin nimi");
+    });
+
+    it('should translate IndentationError correctly', () => {
+        const errorType = "IndentationError: expected an indented block";
+        const result = translateErrorType(errorType);
+        expect(result).toBe("Tarkista, että jätät rivin alkuun tyhjää tilaa");
+    });
+
+    it('should translate TypeError correctly', () => {
+        const errorType = "TypeError: unsupported operand type(s) for +: 'int' and 'str'";
+        const result = translateErrorType(errorType);
+        expect(result).toBe("Tarkista, että käyttämäsi arvot ovat oikeaa tyyppiä");
+    });
+
+    it('should return original error type if no translation found', () => {
+        const errorType = "SomeUnknownError: This is an unknown error";
+        const result = translateErrorType(errorType);
+        expect(result).toBe("SomeUnknownError: This is an unknown error");
+    });
+});
+

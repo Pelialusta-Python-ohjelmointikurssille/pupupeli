@@ -4,7 +4,7 @@ export function extractErrorDetails(errorMessage) {
     let lastLineReference;
 
     const lines = errorMessage.split('\n');
-    const errorTypeMatch = lines[lines.length - 2];
+    const errorTypeMatch = lines[lines.length - 1].trim();
 
     while ((match = regex.exec(errorMessage)) !== null) {
         lastLineReference = match[1];
@@ -20,12 +20,15 @@ export function extractErrorDetails(errorMessage) {
     }
 }
 
-function translateErrorType(errorType) {
+export function translateErrorType(errorType) {
+    // if (!errorType) {
+    //     return errorType;
+    // }
+
     const translations = {
         "SyntaxError: invalid syntax": "Koodistasi löytyy kirjoitusvirhe",
         "ValueError: Virheellinen suunta": "Antamasi suunta ei ole kirjoitettu oikein",
         "IndexError: list index out of range": "Yritit käyttää listan kohtaa, jota ei ole olemassa. Tarkista listan pituus ja yritä uudelleen"
-
     };
 
     if (errorType.startsWith("NameError: name")) {
