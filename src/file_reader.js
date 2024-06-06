@@ -49,3 +49,23 @@ export function tryGetFileAsJson(path) {
     const result = JSON.parse(response);
     return result;
 }
+
+    export function countForFilesInDirectory(directory) {
+        let fileNumber = 1;
+
+        // Check files from 1 to n in a for loop
+        while (checkIfFileExists(`${directory}/${fileNumber}.json`) !== null) {
+            fileNumber++;
+        }
+
+        // The number of files is one less than the first file that was not found
+        return fileNumber - 1;
+    }
+
+    function checkIfFileExists(path) {
+        try {
+            return tryGetFileAsJson(path);
+        } catch {
+            return null;
+        }
+    }

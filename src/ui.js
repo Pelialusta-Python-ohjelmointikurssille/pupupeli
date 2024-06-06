@@ -41,8 +41,33 @@ async function initGame() {
 }
 
 async function initPage() {
-    // set task identifier
-    document.getElementById("task-id").innerHTML = globals.taskIdentifier;
+    // Set task identifier
+    const taskIdentifier = globals.taskIdentifier;
+
+    //copypasted from createTaskButtons function, this could be globals
+    const totalTasks = fileReader.countForFilesInDirectory("/tasks");
+
+    document.getElementById("task-id").innerHTML = taskIdentifier;
+
+    // Update the href for previous and next task links
+    const prevTaskLink = document.querySelector('a[href^="/?task="]:first-child');
+    const nextTaskLink = document.querySelector('a[href^="/?task="]:last-child');
+
+    // Changes href of prevtasklink and hides it if no prev task exists
+    if (taskIdentifier > 1) {
+        prevTaskLink.href = `/?task=${taskIdentifier - 1}`;
+        prevTaskLink.style.display = 'inline'; // Ensure it's visible
+    } else {
+        prevTaskLink.style.display = 'none'; // Hide if on the first task
+    }
+
+    // Changes href of nexttasklink and hides it if no prev task exists
+    if (taskIdentifier < totalTasks) {
+        nextTaskLink.href = `/?task=${taskIdentifier + 1}`;
+        nextTaskLink.style.display = 'inline'; // Ensure it's visible
+    } else {
+        nextTaskLink.style.display = 'none'; // Hide if on the last task
+    }
 
     // set description
     globals.task.getDescription().forEach((line) => {
@@ -62,6 +87,7 @@ async function initPage() {
     window.addEventListener('load', function () {
         editor.getEditor().setValue(globals.task.getEditorCode());
     });
+    createTaskButtons();
 
 }
 
@@ -74,6 +100,28 @@ function addButtonEvents() {
     function addEventToButton(id, func) {
         let buttonInput = document.getElementById(id);
         buttonInput.addEventListener("click", func, false);
+    }
+}
+
+/**
+ * Create buttons for selecting tasks based on how many json files exist in tasks directory.
+ * In the future the path should be able to check different directories so we can implement "chapters".
+ */
+function createTaskButtons() {
+    const numberOfButtons = fileReader.countForFilesInDirectory("/tasks");
+    const buttonContainer = document.getElementById('buttonTable');
+
+    // Create and append buttons
+    for (let i = 0; i < numberOfButtons; i++) {
+        const button = document.createElement('button');
+        button.innerText = `${i + 1}`;
+
+        button.addEventListener('click', () => {
+            window.location.href = `?task=${i + 1}`;
+        });
+        // Add that button turns to green when task if completed
+        // when task completion system is implemented
+        buttonContainer.appendChild(button);
     }
 }
 

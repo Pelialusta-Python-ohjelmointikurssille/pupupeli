@@ -62,6 +62,20 @@ body {
     border: 1px solid black;
 }
 
+#task-selector-container {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#task-selector-box{
+    max-width: 1565px;
+    background-color: #ddd;
+    border-radius: 8px;
+    border: 1px solid black;
+    padding: 1px;
+} 
+
 .is-flex {
     display: flex;
 }
@@ -104,6 +118,15 @@ body {
     min-height: 32px;
     min-width: 64px;
     margin: 0;
+}
+
+#task-selector-box button {
+    justify-content: center;
+    margin: 0.1rem;
+    font-size: 30px; /* Increase the font size */
+    padding: 15px; /* Add padding around the text */
+    width: 75px; /* Set a fixed width */
+    height: 75px; /* Set a fixed height */
 }
 
 #task-title {
