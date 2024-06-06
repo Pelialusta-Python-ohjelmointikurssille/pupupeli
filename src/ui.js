@@ -10,6 +10,7 @@ let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
 const totalTasks = fileReader.countForFilesInDirectory("/tasks");
+const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 async function main() {
     initialize();
@@ -117,6 +118,12 @@ function createTaskButtons() {
         const button = document.createElement('button');
         button.innerText = `${i + 1}`;
 
+        console.log(completedTasks.tasks);
+        // change to green if completed
+        if (completedTasks.tasks.includes(i + 1)) {
+            turnButtonGreen(button);
+        }
+
         button.addEventListener('click', () => {
             window.location.href = `?task=${i + 1}`;
         });
@@ -124,6 +131,10 @@ function createTaskButtons() {
         // when task completion system is implemented
         buttonContainer.appendChild(button);
     }
+}
+
+function turnButtonGreen(button) {
+    button.style.backgroundColor = 'green';
 }
 
 function onRunButtonClick() {
