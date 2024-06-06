@@ -133,4 +133,13 @@ export class GraphicsEntitySystem {
             }
         });
     }
+
+    skipAnimationsAndFinish() {
+        console.log("skipAnimationsAndFinish");
+        this.entityDict.forEach((value) => {
+            if (value.type === "grid_object") {
+                value.reset();
+            }
+        });
+    }
 }

@@ -106,6 +106,7 @@ export class GraphicsHandler {
      * Called when entity handler enters the "not ready" state.
      */
     onEntitiesNotReady() {
+        //unnecessary?
     }
 
     /**
@@ -130,6 +131,10 @@ export class GraphicsHandler {
         else {
             this.graphicsEntityHandler.camera.zoomScale = this.gridHeight**0.001 - 0.1;
         }
+    }
+
+    finishAnimationsImmediately() {
+        this.graphicsEntityHandler.skipAnimationsAndFinish();
     }
 }
 
