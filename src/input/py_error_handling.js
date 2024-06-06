@@ -3,7 +3,6 @@ export function extractErrorDetails(errorMessage) {
     let match;
     let lastLineReference;
     // let lastToLastLineReference;
-    let lineNumberMatch
 
     const lines = errorMessage.split('\n');
     const errorTypeMatch = lines[lines.length - 2];
@@ -13,13 +12,14 @@ export function extractErrorDetails(errorMessage) {
         lastLineReference = match[1];
     }
 
-    if (errorTypeMatch === "ValueError: Virheellinen suunta") {
-        // lineNumberMatch = lastToLastLineReference;
-        lineNumberMatch = lastLineReference
-    } else {
-        lineNumberMatch = lastLineReference;
-    }
+    // if (errorTypeMatch === "ValueError: Virheellinen suunta") {
+    //     // lineNumberMatch = lastToLastLineReference;
+    //     lineNumberMatch = lastLineReference
+    // } else {
+    //     lineNumberMatch = lastLineReference;
+    // }
 
+    const lineNumberMatch = lastLineReference;
     const translatedErrorType = translateErrorType(errorTypeMatch)
 
     if (translatedErrorType && lineNumberMatch) {
@@ -43,6 +43,10 @@ function translateErrorType(errorType) {
     
     if (errorType.startsWith("ModuleNotFoundError: No module named")) {
         return "Yritit käyttää moduulia, jota ei löydy. Tarkista moduulin nimi!";
+    }
+
+    if (errorType.startsWith("IndentationError: expected an indented block")) {
+        return "Koodisi sisennyksessä on ongelmia. Tarkista, että jätät rivin alkuun tyhjää tilaa!";
     }
 
     return translations[errorType] || errorType;
