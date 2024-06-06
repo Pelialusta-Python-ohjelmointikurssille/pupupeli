@@ -46,6 +46,7 @@ async function initializePyodide(pythonCode) {
             }
         });
         pythonFileStr = pythonCode;
+        console.log("Initialized pyodide worker");
     }
 }
 
@@ -95,7 +96,7 @@ function runCommand(command, parameters) {
     }
     Atomics.wait(waitArray, 0, 0);
     ctr++;
-    console.log(ctr + " hyppyä");
+    //console.log(ctr + " hyppyä");
 
     // waitarray[1] will be "1" if resetWorker() is called in event handler, otherwise 0
     if (waitArray[1] === 0) {

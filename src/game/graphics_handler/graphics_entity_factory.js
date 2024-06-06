@@ -80,7 +80,7 @@ export class GraphicsEntityFactory {
         let tex_left = this.builtinAssets.characters.bunny_left;
         let tex_up = this.builtinAssets.characters.bunny_up;
         let sprite = new PIXI.Sprite(tex_right);
-        console.log(tex_down + ", " + tex_left + ", " + tex_right + ", " + tex_up);
+        //console.log(tex_down + ", " + tex_left + ", " + tex_right + ", " + tex_up);
         let entity = new GridObjectEntity(
             entityId,
             this.graphicsEntityHandler,

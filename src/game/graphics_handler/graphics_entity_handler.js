@@ -89,7 +89,6 @@ export class GraphicsEntitySystem {
     doAction(entityId, animationId, animationData) {
         let entity = this.getGraphicsEntity(entityId);
         let animation = this.animationFactory.getAnimation(animationId, entity, animationData);
-        console.log(animation);
         entity.doAnimation(animation);
     }
 
