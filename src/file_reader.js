@@ -62,33 +62,6 @@ export function tryGetFileAsJson(path) {
         return fileNumber - 1;
     }
 
-    export function countFilesInDirectory(directory) {
-        let low = 1;
-        let high = 2;
-        let middle;
-
-        // Expand the search range until a file is not found
-        while (checkIfFileExists(`${directory}/${high}.json`) !== null) {          
-            low = high;
-            high *= 2;
-            console.log("moi" + high)
-        }
-
-        // Perform a binary search to find the last file
-        while (low < high) {
-            middle = Math.floor((low + high) / 2);
-
-            if (checkIfFileExists(`${directory}/${middle}.json`) !== null) {
-                low = middle + 1;
-            } else {
-                high = middle;
-            }
-        }
-
-        // The number of files is one less than the first file that was not found
-        return low - 1;
-    }
-
     function checkIfFileExists(path) {
         try {
             return tryGetFileAsJson(path);
