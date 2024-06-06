@@ -4,6 +4,7 @@ let continuePythonExecution;
 let ctr = 0;
 let state;
 let resetFlag = false;
+//remember to update this when new commands are added
 const validCommands = ["move", "say", "ask"];
 
 // eslint-disable-next-line no-undef

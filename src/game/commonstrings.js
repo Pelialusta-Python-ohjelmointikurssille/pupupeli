@@ -3,8 +3,6 @@ import { Direction } from "./direction.js";
 const PLAYER_STR = "player";
 const TYPE_STR = "type";
 const GRID_STR = "grid";
-const MOVE_STR = "move";
-const SAY_STR = "say"
 const UP_STR = "up";
 const DOWN_STR = "down";
 const LEFT_STR = "left";
@@ -14,6 +12,11 @@ const TEST_STR = "test";
 export class Constants {
     static COLLECTIBLE = "collectible";
     static OBSTACLE = "obstacle";
+    //Following are the valid command strings:
+    static MOVE_STR = "move";
+    static SAY_STR = "say";
+    static ASK_STR = "ask";
+    //--------------------------------
 
     static get PLAYER_STR() {
         return PLAYER_STR;
@@ -23,12 +26,6 @@ export class Constants {
     }
     static get GRID_STR() {
         return GRID_STR;
-    }
-    static get MOVE_STR() {
-        return MOVE_STR;
-    }
-    static get SAY_STR() {
-        return SAY_STR;
     }
     static get UP_STR() {
         return UP_STR;
