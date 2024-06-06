@@ -116,13 +116,15 @@ function createTaskButtons() {
     // Create and append buttons
     for (let i = 0; i < numberOfButtons; i++) {
         const button = document.createElement('button');
+        if (completedTasks.tasks.includes(i + 1)) {
+            button.id = "button-completed";
+        } else {
+            button.id = "button-incompleted";
+        }
         button.innerText = `${i + 1}`;
 
         console.log(completedTasks.tasks);
         // change to green if completed
-        if (completedTasks.tasks.includes(i + 1)) {
-            turnButtonGreen(button);
-        }
 
         button.addEventListener('click', () => {
             window.location.href = `?task=${i + 1}`;
