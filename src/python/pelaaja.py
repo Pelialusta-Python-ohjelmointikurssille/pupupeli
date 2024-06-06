@@ -29,9 +29,7 @@ class Pelaaja:
         js.runCommand("say", sentence)
     
     def puhu(self, sentence: str):
-#        if reset_flag:
-#            raise Exception("Interpreter was reset")
-        js.runCommand("say", sentence)
+        self.sano(sentence)
     
     def kysy(self, sentence: str):
 #        if reset_flag:
