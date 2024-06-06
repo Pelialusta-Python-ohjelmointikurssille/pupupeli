@@ -34,12 +34,6 @@ export class Game {
     }
 
     receiveInput(commandName, commandParameter) {
-
-        if (commandName === Constants.MOVE_STR) {
-            this.makeMoveCommand(commandParameter);
-        } else if (commandName === Constants.SAY_STR) {
-            this.makeSayCommand(commandParameter);
-        }
         switch (commandName) {
             case Constants.MOVE_STR:
                 this.makeMoveCommand(commandParameter);
