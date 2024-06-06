@@ -35,7 +35,7 @@ module.exports = {
         "!src/**/graphics_entity_factory.js",
         "!src/**/graphics_entity_handler.js",
         "!src/**/graphics_handler.js",
-        "!src/**/move_tween.js",
+        "!src/**/animation_progress.js",
         "!src/**/pixi_renderer.js",
         "!src/**/example/**", // Exclude all files in specific directory
         "!src/**/objects/**",

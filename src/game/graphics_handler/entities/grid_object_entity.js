@@ -5,7 +5,7 @@ import { Constants } from "../../commonstrings.js";
 export class GridObjectEntity extends GraphicsEntity {
     constructor(entityId, entityHandler, container, sprite, data) {
         super(entityId, entityHandler, container, sprite, data);
-        this.gridReference = entityHandler.getGridObject();
+        this.gridReference = entityHandler.getMainGridObject();
         this.gridCellPosition = new Vector2(0, 0);
         this.sizeWithinCellMultiplier = 0.9;
         this.fakeZPosition = 0;

@@ -1,4 +1,4 @@
-import { AnimationProgress } from "../move_tween.js";
+import { AnimationProgress } from "../animation_progress.js";
 
 export class UnhideAnimation {
     constructor(gridObject, name, data) {

@@ -60,7 +60,7 @@ export class Game {
 
     resetGame() {
         this.grid.resetGrid();
-        this.gh.resetAllGridObjects();
+        this.gh.resetGridObjects();
         this.gameMode.reset();
     }
 
