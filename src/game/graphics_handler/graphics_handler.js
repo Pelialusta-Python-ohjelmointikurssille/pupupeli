@@ -108,6 +108,10 @@ export class GraphicsHandler {
         this.graphicsEntityHandler.resetGridObjects();
     }
 
+    destroyTextBoxes() {
+        this.graphicsEntityHandler.destroyTextBoxes();
+    }
+
     /**
      * Called when entity handler enters the "not ready" state.
      */

@@ -83,5 +83,6 @@ export class SayCommand {
             targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
             text: this.sayString
         });
+        this.graphicsHandler.doAction("test", "showinout", { time: 2 });
     }
 }

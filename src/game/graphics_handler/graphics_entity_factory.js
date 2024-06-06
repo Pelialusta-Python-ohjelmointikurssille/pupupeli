@@ -175,6 +175,7 @@ export class GraphicsEntityFactory {
             data,
             texture
         );
+        entity.type = "textbox"
         return entity;
     }
 }
