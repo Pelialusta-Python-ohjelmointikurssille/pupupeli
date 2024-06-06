@@ -9,6 +9,7 @@ let eventHandler;
 let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
+const totalTasks = fileReader.countForFilesInDirectory("/tasks");
 
 async function main() {
     initialize();
@@ -45,7 +46,7 @@ async function initPage() {
     const taskIdentifier = globals.taskIdentifier;
 
     //copypasted from createTaskButtons function, this could be globals
-    const totalTasks = fileReader.countForFilesInDirectory("/tasks");
+    //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
 
     document.getElementById("task-id").innerHTML = taskIdentifier;
 
@@ -108,7 +109,7 @@ function addButtonEvents() {
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
 function createTaskButtons() {
-    const numberOfButtons = fileReader.countForFilesInDirectory("/tasks");
+    const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
 
     // Create and append buttons
