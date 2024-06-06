@@ -10,7 +10,7 @@ let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
 const totalTasks = fileReader.countForFilesInDirectory("/tasks");
-const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
+// const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 async function main() {
     initialize();
@@ -112,12 +112,17 @@ function addButtonEvents() {
 function createTaskButtons() {
     const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
-
+    if (localStorage.getItem("completedTasks") === null) {
+        let completedTasks = [];
+        localStorage.setItem("completedTasks", completedTasks)
+    }
+    let completedTasks = localStorage.getItem("completedTasks");
+    console.log(localStorage.getItem("completedTasks"));
     // Create and append buttons
     for (let i = 0; i < numberOfButtons; i++) {
         const button = document.createElement('button');
         button.id = `button-${i + 1}`;
-        if (completedTasks.tasks.includes(i + 1)) {
+        if (completedTasks.includes(i + 1)) {
             button.classList.add("button-completed");
         } else {
             button.classList.add("button-incompleted");
@@ -137,9 +142,12 @@ export function onTaskComplete() {
     const taskIdentifier = globals.taskIdentifier;
     const buttonid = `button-${taskIdentifier}`;
     let button = document.getElementById(buttonid);
+    let completedTasks = localStorage.getItem("completedTasks");
 
     if (button.getAttribute("class") == "button-incompleted") {
         button.classList.replace("button-incompleted", "button-completed");
+        completedTasks.push(taskIdentifier);
+        localStorage.setItem("completedTasks", completedTasks);
     }
 }
 
