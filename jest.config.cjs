@@ -41,6 +41,7 @@ module.exports = {
         "!src/**/objects/**",
         "!src/**/graphics_handler/entities/**",
         "!src/**/graphics_handler/animations/**", // can be mock tested
-        "!src/**/tests/**"
+        "!src/**/tests/**",
+        "!src/util/globals.js"
     ]
 };

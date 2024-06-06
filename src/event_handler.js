@@ -3,8 +3,8 @@ import * as ui from './ui.js'
 import * as globals from './util/globals.js';
 
 export class EventHandler {
-    constructor() {
-        this.worker = new Worker('src/input/worker.js');
+    constructor(worker) {
+        this.worker = worker;
         this.lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
         this.sendUserInputToWorker = this.sendUserInputToWorker.bind(this);
 
@@ -17,7 +17,8 @@ export class EventHandler {
                     this.syncArray = new Int32Array(message.sab, 0, 1);
                     ui.promptUserInput({ inputBoxHidden: true });
                     break;
-                case "run":
+                case "command":
+                    globals.setCurrentSAB(message.sab);
                     gameController.giveCommand({ data: message.details, sab: message.sab });
                     break;
                 case "conditionCleared":
@@ -62,19 +63,8 @@ export class EventHandler {
             this.setMessagePassingState({ paused: true });
             return;
         }
-
         this.setMessagePassingState({ paused: false });
         this.setMessagePassingState({ paused: true });
-
-    }
-
-    postMessageToWorker(type, message, sab, value) {
-        this.worker.postMessage({ type: type, message: message });
-        if (sab !== null) {
-            const waitArray = new Int32Array(sab, 0, 1);
-            Atomics.store(waitArray, 0, value);
-            Atomics.notify(waitArray, 0, value);
-        }
     }
 
     sendUserInputToWorker(event) {
@@ -90,10 +80,18 @@ export class EventHandler {
         }
     }
 
+    resetWorker() {
+        const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
+        Atomics.store(waitArray, 0, 1); // this is for stopping the wait
+        Atomics.notify(waitArray, 0, 1);
+        Atomics.store(waitArray, 1, 1); // this is for checking (in worker) if we've reset the game
+        //this.worker.postMessage({type: "reset"});
+    }
+
     #postMessageToWorker(message) {
         this.worker.postMessage({ type: message.type, details: message.details });
         if (message.sab !== null) {
-            const waitArray = new Int32Array(message.sab, 0, 1);
+            const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
             Atomics.store(waitArray, 0, message.value);
             Atomics.notify(waitArray, 0, message.value);
         }

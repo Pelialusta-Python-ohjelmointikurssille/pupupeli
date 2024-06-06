@@ -1,5 +1,6 @@
 import { AnimationProgress } from "../animation_progress.js";
 import { Vector2 } from "../../vector.js";
+import { Constants } from "../../commonstrings.js";
 
 export class MoveAnimation {
     constructor(gridObject, name, data) {
@@ -9,16 +10,16 @@ export class MoveAnimation {
         this.inProgress = false;
         this.name = name;
         this.moveDirection = null;
-        if (this.data.direction === "down") {
+        if (this.data.direction === Constants.DOWN_STR) {
             this.moveDirection = new Vector2(0, 1);
         }
-        if (this.data.direction === "left") {
+        if (this.data.direction === Constants.LEFT_STR) {
             this.moveDirection = new Vector2(-1, 0);
         }
-        if (this.data.direction === "right") {
+        if (this.data.direction === Constants.RIGHT_STR) {
             this.moveDirection = new Vector2(1, 0);
         }
-        if (this.data.direction === "up") {
+        if (this.data.direction === Constants.UP_STR) {
             this.moveDirection = new Vector2(0, -1);
         }
     }
@@ -29,6 +30,7 @@ export class MoveAnimation {
         this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition;
         this.progress.start();
         this.inProgress = true;
+        this.gridObject.swapTextureToMoveDir(this.data.direction);
     }
 
     increment(deltaTime) {
@@ -60,7 +62,7 @@ export class MoveAnimation {
 
     getJumpHeight(progress) {
         if (progress >= 1) progress = 1;
-        return -(Math.sin(Math.PI * progress)**0.75) * this.gridObject.gridReference.gridScale * 0.5;
+        return -(Math.sin(Math.PI * progress) ** 0.75) * this.gridObject.gridReference.gridScale * 0.5;
     }
-    
+
 }

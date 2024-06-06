@@ -57,3 +57,34 @@ Retrospektiivi
 
 ### LESS OF vähemmän
 - sooloilua
+
+
+
+## Retro 3, 3.6.2024
+
+### START aloitetaan
+- docstringit funktioihin
+- lisää user storyja
+- defnition of done noudattaminen <- testaus ja toistsen tsekkaama
+- alottakaa opettaa tommille openshiftiä 
+- seuratkaa definition of donea
+
+- taskit: yks harjoittelija ja yks osaaja, harjoittelija kirjoittaa (jos on tutkimista niin molemmat voi tutkia)
+
+### STOP lopetetaan
+- liian pitkä retro
+- eteenpäin siirtyminen ilman testejä jne
+
+### CONTINUE jatketaan
+- kaaviot
+- vastaava storyjen määrä
+- Pidetään mainista huolta
+- kommunikointia
+- refaktorointi / nykyisen parantaminen
+- feature branch / pull request
+- pullarikatselmointi
+
+### MORE OF lisää
+
+
+### LESS OF vähemmän

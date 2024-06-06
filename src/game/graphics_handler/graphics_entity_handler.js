@@ -1,8 +1,5 @@
-import { GraphicsEntity } from "./entities/graphics_entity.js";
 import { Vector2 } from "../vector.js";
 import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
-import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
-import { GridEntity } from "./entities/grid_entity.js";
 import { GraphicsEntityFactory } from "./graphics_entity_factory.js";
 import { AnimationFactory } from "./animations/animation_factory.js";
 import { PixiRenderer } from "./pixi_renderer.js";
@@ -37,7 +34,7 @@ export class GraphicsEntitySystem {
     updateAllEntities(deltaTime) {
         this.camera.onUpdate(deltaTime);
         let maybeReady = true;
-        this.entityDict.forEach((value, key, map) => {
+        this.entityDict.forEach((value) => {
             value.onUpdate(deltaTime);
             if (value.isReady === false) {
                 maybeReady = false;
@@ -46,10 +43,10 @@ export class GraphicsEntitySystem {
         // Checks if transitioned from or to the ready state.
         if (this.isReady === true && maybeReady === false) {
             this.onEntitiesNotReady();
-        } 
+        }
         if (this.isReady === false && maybeReady === true) {
             this.onEntitiesReady();
-        } 
+        }
         this.isReady = maybeReady;
     }
 
@@ -94,6 +91,7 @@ export class GraphicsEntitySystem {
     doAction(entityId, animationId, animationData) {
         let entity = this.getGraphicsEntity(entityId);
         let animation = this.animationFactory.getAnimation(animationId, entity, animationData);
+        console.log(animation);
         entity.doGridAnimation(animation);
     }
 
@@ -131,7 +129,7 @@ export class GraphicsEntitySystem {
      * Calls reset on all grid objects. This resets their values back to their initial values.
      */
     resetGridObjects() {
-        this.entityDict.forEach((value, key, map) => {
+        this.entityDict.forEach((value) => {
             if (value.type === "grid_object") {
                 value.reset();
             }

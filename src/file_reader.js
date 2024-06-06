@@ -24,6 +24,11 @@ export function tryGetFileAsText(path) {
     return fileAsString
 }
 
+/**
+ * Returns the parsed contents of a json file
+ * @param {string} path 
+ * @returns {json} File's contents as json
+ */
 export function tryGetFileAsJson(path) {
     let response;
 
