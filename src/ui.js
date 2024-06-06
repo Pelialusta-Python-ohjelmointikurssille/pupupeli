@@ -78,6 +78,10 @@ function addButtonEvents() {
     }
 }
 
+/**
+ * Create buttons for selecting tasks based on how many json files exist in tasks directory.
+ * In the future the path should be able to check different directories so we can implement "chapters".
+ */
 function createTaskButtons() {
     const numberOfButtons = fileReader.countForFilesInDirectory("/tasks");
     const buttonContainer = document.getElementById('buttonTable');
