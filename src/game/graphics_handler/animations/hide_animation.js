@@ -31,6 +31,7 @@ export class HideAnimation {
         this.inProgress = false;
         this.gridObject.container.rotation = 0;
         this.gridObject.container.alpha = 1;
+        this.gridObject.container.scale = 1;
     }
 
     onStart() {
