@@ -14,7 +14,7 @@ export class SayAnimation {
         this.text = data.text;
         this.speechBubble = new PIXI.Graphics();
         this.speechBubbleColor = 0xFFFFFF;
-        this.speechText = new PIXI.Text({ text: `${this.text}`, style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0x000000 } });
+        this.speechText = new PIXI.Text({ text: `${this.text}`, style: { fontFamily: "Roboto Light", fontSize: 32, fill: 0x000000 } });
         this.previousZindex = this.gridObject.container.zIndex;
         this.gridObject.container.addChild(this.speechBubble);
         this.gridObject.container.addChild(this.speechText);
@@ -31,8 +31,8 @@ export class SayAnimation {
         this.speechText.x = 0;
         this.speechText.y = 135;
         this.speechBubble
-        .ellipse(0, 180, 200, 64)
-        .fill({color: this.speechBubbleColor});
+            .ellipse(0, 180, 200, 64)
+            .fill({ color: this.speechBubbleColor });
 
         // Temporary fix to make speech bubble on top of everything
         // This also makes the animated object be on top also though

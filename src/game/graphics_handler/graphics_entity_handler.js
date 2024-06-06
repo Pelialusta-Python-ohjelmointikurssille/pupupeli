@@ -89,7 +89,6 @@ export class GraphicsEntitySystem {
     doAction(entityId, animationId, animationData) {
         let entity = this.getGraphicsEntity(entityId);
         let animation = this.animationFactory.getAnimation(animationId, entity, animationData);
-        console.log(animation);
         entity.doGridAnimation(animation);
     }
 
@@ -135,10 +134,9 @@ export class GraphicsEntitySystem {
     }
 
     skipAnimationsAndFinish() {
-        console.log("skipAnimationsAndFinish");
-        this.entityDict.forEach((entity) => {
-            if (entity.currentAnimation != null) {
-                entity.currentAnimation.onFinish();
+        this.entityDict.forEach((value) => {
+            if (value.type === "grid_object") {
+                value.finishAnimationsInstantly();
             }
         });
     }
