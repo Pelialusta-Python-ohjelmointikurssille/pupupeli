@@ -67,7 +67,7 @@ export class TextBoxEntity extends GraphicsEntity {
             //this.container.y = this.targetPosition.y;
         }
 
-        let triWidth = this.textboxSprite.width / 4;
+        let triWidth = this.textboxSprite.width / 10 + 20;
         let path = [
             -triWidth, 0,
             triWidth, 0,
