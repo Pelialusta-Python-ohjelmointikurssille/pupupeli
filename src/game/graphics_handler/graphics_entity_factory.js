@@ -4,6 +4,7 @@ import { GraphicsEntity } from "./entities/graphics_entity.js";
 import { BackgroundEntity } from "./entities/background_entity.js";
 import { GridObjectEntity } from "./entities/grid_object_entity.js";
 import { Constants } from "../commonstrings.js";
+import { TextBoxEntity } from "./entities/textbox_entity.js";
 
 /**
  * Class that manages creation of different entities
@@ -44,6 +45,9 @@ export class GraphicsEntityFactory {
         }
         if (type === Constants.OBSTACLE) {
             return this.createObstacle(entityId, data);
+        }
+        if(type === "textbox") {
+            return this.createTextBox(entityId, data)
         }
     }
 
@@ -156,6 +160,18 @@ export class GraphicsEntityFactory {
             this.graphicsEntityHandler,
             new PIXI.Container(),
             sprite,
+            data
+        );
+        return entity;
+    }
+
+    createTextBox(entityId, data) {
+        
+        let entity = new TextBoxEntity(
+            entityId,
+            this.graphicsEntityHandler,
+            new PIXI.Container(),
+            null,
             data
         );
         return entity;
