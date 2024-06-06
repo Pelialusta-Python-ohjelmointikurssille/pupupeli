@@ -69,10 +69,11 @@ body {
 }
 
 #task-selector-box{
-    max-width: calc(var(--canvas-width) * 2.5);
+    max-width: 1565px;
     background-color: #ddd;
     border-radius: 8px;
     border: 1px solid black;
+    padding: 1px;
 } 
 
 .is-flex {
@@ -121,10 +122,11 @@ body {
 
 #task-selector-box button {
     justify-content: center;
-    font-size: 40px; /* Increase the font size */
-    padding: 20px; /* Add padding around the text */
-    width: 100px; /* Set a fixed width */
-    height: 100px; /* Set a fixed height */
+    margin: 0.1rem;
+    font-size: 30px; /* Increase the font size */
+    padding: 15px; /* Add padding around the text */
+    width: 75px; /* Set a fixed width */
+    height: 75px; /* Set a fixed height */
 }
 
 #task-title {
