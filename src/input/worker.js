@@ -2,6 +2,8 @@ let pyodide;
 let pythonFileStr;
 let continuePythonExecution;
 let ctr = 0;
+let state;
+let resetFlag = false;
 
 // eslint-disable-next-line no-undef
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
@@ -18,7 +20,12 @@ self.onmessage = async function (event) {
         initializePyodide(message.details);
     }
     if (message.type === 'start') {
+        setResetFlag(false);
         runPythonCode(pyodide, message.details);
+    }
+    if (message.type === 'reset') {
+        console.log("This should never print");
+        // setResetFlag(true);
     }
 }
 
@@ -31,6 +38,7 @@ async function initializePyodide(pythonCode) {
     if (pyodide === undefined) {
         // eslint-disable-next-line no-undef
         pyodide = await loadPyodide();
+        state = pyodide.pyodide_py._state.save_state(); // we save pyodide initial state to restore if needed
 
         pyodide.setStdin({
             stdin: () => {
@@ -72,8 +80,8 @@ function handleInput() {
  */
 // eslint-disable-next-line no-unused-vars
 function runCommand(command, parameters) {
-    const sab = new SharedArrayBuffer(4);
-    const waitArray = new Int32Array(sab, 0, 1);
+    const sab = new SharedArrayBuffer(8);
+    const waitArray = new Int32Array(sab, 0, 2);
 
     switch (command) {
         case "move":
@@ -88,7 +96,22 @@ function runCommand(command, parameters) {
     Atomics.wait(waitArray, 0, 0);
     ctr++;
     console.log(ctr + " hyppyä");
-    continuePythonExecution;
+
+    // waitarray[1] will be "1" if resetWorker() is called in event handler, otherwise 0
+    if (waitArray[1] === 0) {
+        try {
+            continuePythonExecution;
+        } catch (error) {
+            postError(error.message);
+        }
+    } else {
+        try {
+            setResetFlag(true);
+            continuePythonExecution;
+        } catch (error) {
+            postError(error.message);
+        }
+    }
 }
 
 /**
@@ -98,23 +121,39 @@ function runCommand(command, parameters) {
  */
 async function runPythonCode(pyodide, codeString) {
     pyodide.runPython(pythonFileStr);
+
     self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
         await self.continuePythonExecution;
         await pyodide.runPythonAsync(`print(check_while_usage("""${codeString}"""))`);
+
+        try {
+            // reset pyodide state to where we saved it earlier after all commands are done
+            pyodide.pyodide_py._state.restore_state(state);
+        } catch (error) {
+            postError(error.message);
+        }
+
         // no more python left to run; let the event handler know
         postMessage({ type: 'finish' });
     } catch (error) {
+        // also reset pyodide state on errors/exceptions such as when we reset the game mid-execution
+        pyodide.pyodide_py._state.restore_state(state);
         postError(error.message);
     }
 }
 
+function setResetFlag(value) {
+    resetFlag = value;
+    pyodide.globals.set("reset_flag", resetFlag);
+}
 
 /**
  * Helper function to post error messages back to main thread for putting on the page.
  * @param {*} error Either an error object, or a string.
  */
 function postError(error) {
+    if (error.includes("Interpreter was reset")) return;
     if (typeof (error) === "string") {
         self.postMessage({ type: 'error', error: { message: error } })
     } else {

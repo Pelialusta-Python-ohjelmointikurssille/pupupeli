@@ -1,14 +1,18 @@
 import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
-import { getGameGrid } from "./gridfactory.js";
+import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand } from "./commands.js";
 import { commandsDone } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
+import * as globals from "../util/globals.js";
 
 export class Game {
     constructor() {
-        //give filemame tp create grid from here?
-        this.grid = getGameGrid();
+        //getGameTask() returns object containing the grid and the gamemode
+        let gameTask = getGameTask();
+        this.grid = gameTask.grid;
+        this.gameMode = gameTask.gameMode;
+        this.gameMode.eventTarget.addEventListener("victory", this.gameHasBeenWon.bind(this));
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
     }
@@ -16,11 +20,11 @@ export class Game {
     async init() {
         await this.gh.initialize();
         this.grid.gridObjects.forEach(item => {
-            this.createGridEntitiesForRendering(item);
+            this.createGridEntityForRendering(item);
         });
     }
 
-    createGridEntitiesForRendering(gridObject) {
+    createGridEntityForRendering(gridObject) {
         let data = { position: gridObject.getVector2Position() };
         this.gh.createEntity(gridObject.id, gridObject.type, data);
     }
@@ -57,5 +61,11 @@ export class Game {
     resetGame() {
         this.grid.resetGrid();
         this.gh.resetAllGridObjects();
+        this.gameMode.reset();
+    }
+
+    gameHasBeenWon() {
+        console.log("Olet voittanut pelin!");
+        console.log("Loppupisteesi on: " + globals.collectibles.current);
     }
 }
