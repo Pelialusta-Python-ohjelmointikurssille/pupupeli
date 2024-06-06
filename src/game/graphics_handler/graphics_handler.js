@@ -59,6 +59,7 @@ export class GraphicsHandler {
      * @param {object} actionData Data related to the animation in object form.
      */
     doAction(entityId, actionId, actionData) {
+        this.isReady = false;
         this.graphicsEntityHandler.doAction(entityId, actionId, actionData);
     }
 
@@ -112,6 +113,7 @@ export class GraphicsHandler {
      */
     onEntitiesReady() {
         if (this.onReadyFunc == null || this.onReadyFuncContext == null) return;
+        this.isReady = true;
         this.onReadyFunc.call(this.onReadyFuncContext);
     }
 
