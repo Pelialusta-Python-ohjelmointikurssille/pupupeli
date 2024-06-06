@@ -4,16 +4,16 @@ export function extractErrorDetails(errorMessage) {
     let lastLineReference;
 
     const lines = errorMessage.split('\n');
-    const errorTypeMatch = lines[lines.length - 1].trim();
+    const errorTypeMatch = lines[lines.length - 2].trim();
 
     while ((match = regex.exec(errorMessage)) !== null) {
         lastLineReference = match[1];
     }
 
-    const lineNumberMatch = lastLineReference;
-    const translatedErrorType = translateErrorType(errorTypeMatch)
+    const lineNumberMatch = lastLineReference || "Tuntematon rivi";
+    const translatedErrorType = translateErrorType(errorTypeMatch);
 
-    if (translatedErrorType && lineNumberMatch) {
+    if (translatedErrorType) {
         return { text: translatedErrorType, line: lineNumberMatch };
     } else {
         return { text: errorMessage, line: "Tuntematon rivi" };
@@ -21,9 +21,9 @@ export function extractErrorDetails(errorMessage) {
 }
 
 export function translateErrorType(errorType) {
-    // if (!errorType) {
-    //     return errorType;
-    // }
+    if (!errorType) {
+        return errorType;
+    }
 
     const translations = {
         "SyntaxError: invalid syntax": "Koodistasi löytyy kirjoitusvirhe",
@@ -34,7 +34,7 @@ export function translateErrorType(errorType) {
     if (errorType.startsWith("NameError: name")) {
         return "Käytit nimeä, jota ei ole määritelty. Tarkista kirjoitusvirheet";
     }
-    
+
     if (errorType.startsWith("ModuleNotFoundError: No module named")) {
         return "Yritit käyttää moduulia, jota ei löydy. Tarkista moduulin nimi";
     }

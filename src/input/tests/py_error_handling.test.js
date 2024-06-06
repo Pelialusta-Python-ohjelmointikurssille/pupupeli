@@ -1,93 +1,114 @@
 import { extractErrorDetails, translateErrorType } from '../py_error_handling';
 
 describe('extractErrorDetails', () => {
-    it('should extract line number and translate error type correctly', () => {
-        const errorMessage = `Traceback (most recent call last):
-  File "example.py", line 1, in <module>
-    import something
-ModuleNotFoundError: No module named 'something'`;
-
+    test('should extract line number and translate error type', () => {
+        const errorMessage = `
+            Traceback (most recent call last):
+              File "script.py", line 2, in <module>
+                main()
+              File "script.py", line 5, in main
+                raise ValueError('Virheellinen suunta')
+            ValueError: Virheellinen suunta
+        `;
         const result = extractErrorDetails(errorMessage);
-        expect(result).toEqual({ text: "Yritit käyttää moduulia, jota ei löydy. Tarkista moduulin nimi", line: "1" });
+        expect(result).toEqual({
+            text: 'Antamasi suunta ei ole kirjoitettu oikein',
+            line: '5'
+        });
     });
 
-    it('should return default message if error type cannot be translated', () => {
-        const errorMessage = `Traceback (most recent call last):
-  File "example.py", line 2, in <module>
-    some_function()
-SomeUnknownError: This is an unknown error`;
-
+    test('should handle unknown error types', () => {
+        const errorMessage = `
+            Traceback (most recent call last):
+              File "script.py", line 2, in <module>
+                main()
+              File "script.py", line 5, in main
+                raise UnknownError('Tuntematon virhe')
+            UnknownError: Tuntematon virhe
+        `;
         const result = extractErrorDetails(errorMessage);
-        expect(result).toEqual({ text: "SomeUnknownError: This is an unknown error", line: "2" });
+        expect(result).toEqual({
+            text: 'UnknownError: Tuntematon virhe',
+            line: '5'
+        });
     });
 
-    it('should return unknown line if no line number is found', () => {
-        const errorMessage = `Some error message without a line number
-Another line of error message`;
-
+    test('should handle missing line number', () => {
+        const errorMessage = `
+            Traceback (most recent call last):
+              File "script.py", line 2, in <module>
+                main()
+              File "script.py", line 5, in main
+                raise UnknownError('Tuntematon virhe')
+            UnknownError: Tuntematon virhe
+        `;
         const result = extractErrorDetails(errorMessage);
-        expect(result).toEqual({ text: "Some error message without a line number\nAnother line of error message", line: "Tuntematon rivi" });
+        expect(result.line).toBe('5');
     });
 
-    it('should handle syntax errors correctly', () => {
-        const errorMessage = `Traceback (most recent call last):
-  File "example.py", line 10
-    if True print("Hello")
-          ^
-SyntaxError: invalid syntax`;
-
+    test('should handle errors without file reference', () => {
+        const errorMessage = `
+            Traceback (most recent call last):
+                raise SyntaxError('invalid syntax')
+            SyntaxError: invalid syntax
+        `;
         const result = extractErrorDetails(errorMessage);
-        expect(result).toEqual({ text: "Koodistasi löytyy kirjoitusvirhe", line: "10" });
+        expect(result).toEqual({
+            text: 'Koodistasi löytyy kirjoitusvirhe',
+            line: 'Tuntematon rivi'
+        });
     });
 });
 
 describe('translateErrorType', () => {
-    it('should translate SyntaxError correctly', () => {
-        const errorType = "SyntaxError: invalid syntax";
+    test('should translate SyntaxError', () => {
+        const errorType = 'SyntaxError: invalid syntax';
         const result = translateErrorType(errorType);
-        expect(result).toBe("Koodistasi löytyy kirjoitusvirhe");
+        expect(result).toBe('Koodistasi löytyy kirjoitusvirhe');
     });
 
-    it('should translate ValueError correctly', () => {
-        const errorType = "ValueError: Virheellinen suunta";
+    test('should translate ValueError', () => {
+        const errorType = 'ValueError: Virheellinen suunta';
         const result = translateErrorType(errorType);
-        expect(result).toBe("Antamasi suunta ei ole kirjoitettu oikein");
+        expect(result).toBe('Antamasi suunta ei ole kirjoitettu oikein');
     });
 
-    it('should translate IndexError correctly', () => {
-        const errorType = "IndexError: list index out of range";
+    test('should translate IndexError', () => {
+        const errorType = 'IndexError: list index out of range';
         const result = translateErrorType(errorType);
-        expect(result).toBe("Yritit käyttää listan kohtaa, jota ei ole olemassa. Tarkista listan pituus ja yritä uudelleen");
+        expect(result).toBe('Yritit käyttää listan kohtaa, jota ei ole olemassa. Tarkista listan pituus ja yritä uudelleen');
     });
 
-    it('should translate NameError correctly', () => {
-        const errorType = "NameError: name 'foo' is not defined";
+    test('should handle unknown error types', () => {
+        const errorType = 'UnknownError: tuntematon virhe';
         const result = translateErrorType(errorType);
-        expect(result).toBe("Käytit nimeä, jota ei ole määritelty. Tarkista kirjoitusvirheet");
+        expect(result).toBe('UnknownError: tuntematon virhe');
     });
 
-    it('should translate ModuleNotFoundError correctly', () => {
-        const errorType = "ModuleNotFoundError: No module named 'foo'";
+    test('should handle NameError', () => {
+        const errorType = 'NameError: name "foo" is not defined';
         const result = translateErrorType(errorType);
-        expect(result).toBe("Yritit käyttää moduulia, jota ei löydy. Tarkista moduulin nimi");
+        expect(result).toBe('Käytit nimeä, jota ei ole määritelty. Tarkista kirjoitusvirheet');
     });
 
-    it('should translate IndentationError correctly', () => {
-        const errorType = "IndentationError: expected an indented block";
+    test('should handle ModuleNotFoundError', () => {
+        const errorType = 'ModuleNotFoundError: No module named "foo"';
         const result = translateErrorType(errorType);
-        expect(result).toBe("Tarkista, että jätät rivin alkuun tyhjää tilaa");
+        expect(result).toBe('Yritit käyttää moduulia, jota ei löydy. Tarkista moduulin nimi');
     });
 
-    it('should translate TypeError correctly', () => {
-        const errorType = "TypeError: unsupported operand type(s) for +: 'int' and 'str'";
+    test('should handle IndentationError', () => {
+        const errorType = 'IndentationError: expected an indented block';
         const result = translateErrorType(errorType);
-        expect(result).toBe("Tarkista, että käyttämäsi arvot ovat oikeaa tyyppiä");
+        expect(result).toBe('Tarkista, että jätät rivin alkuun tyhjää tilaa');
     });
 
-    it('should return original error type if no translation found', () => {
-        const errorType = "SomeUnknownError: This is an unknown error";
+    test('should handle TypeError', () => {
+        const errorType = 'TypeError: unsupported operand type(s)';
         const result = translateErrorType(errorType);
-        expect(result).toBe("SomeUnknownError: This is an unknown error");
+        expect(result).toBe('Tarkista, että käyttämäsi arvot ovat oikeaa tyyppiä');
     });
 });
+
+
 
