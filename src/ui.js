@@ -86,6 +86,10 @@ function createTaskButtons() {
     for (let i = 0; i < numberOfButtons; i++) {
         const button = document.createElement('button');
         button.innerText = `${i + 1}`;
+
+        button.addEventListener('click', () => {
+            window.location.href = `?task=${i + 1}`;
+        });
         buttonContainer.appendChild(button);
     }
 }
