@@ -56,6 +56,8 @@ export class Game {
     MakeSayCommand(commandParameter) {
         let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
         sayCommand.execute();
+        // TEMPORARY HACK!! REMOVE THIS!
+        this.onAnimsReady();
     }
 
     resetGame() {
