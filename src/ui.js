@@ -116,16 +116,14 @@ function createTaskButtons() {
     // Create and append buttons
     for (let i = 0; i < numberOfButtons; i++) {
         const button = document.createElement('button');
+        button.id = `button-${i + 1}`;
         if (completedTasks.tasks.includes(i + 1)) {
-            button.id = "button-completed";
+            button.classList.add("button-completed");
         } else {
-            button.id = "button-incompleted";
+            button.classList.add("button-incompleted");
         }
         button.innerText = `${i + 1}`;
-
-        console.log(completedTasks.tasks);
-        // change to green if completed
-
+        button.class
         button.addEventListener('click', () => {
             window.location.href = `?task=${i + 1}`;
         });
@@ -135,8 +133,14 @@ function createTaskButtons() {
     }
 }
 
-function onTaskComplete(button) {
-    button.id = "button-completed";
+export function onTaskComplete() {
+    const taskIdentifier = globals.taskIdentifier;
+    const buttonid = `button-${taskIdentifier}`;
+    let button = document.getElementById(buttonid);
+
+    if (button.getAttribute("class") == "button-incompleted") {
+        button.classList.replace("button-incompleted", "button-completed");
+    }
 }
 
 function onRunButtonClick() {
