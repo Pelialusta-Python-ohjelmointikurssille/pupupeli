@@ -57,12 +57,13 @@ export class Game {
         let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
         sayCommand.execute();
         // TEMPORARY HACK!! REMOVE THIS!
-        this.onAnimsReady();
+        //this.onAnimsReady();
     }
 
     resetGame() {
         this.grid.resetGrid();
         this.gh.resetGridObjects();
+        this.gh.destroyTextBoxes();
         this.gameMode.reset();
     }
 

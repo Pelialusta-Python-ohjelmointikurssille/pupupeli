@@ -14,15 +14,33 @@ export class GraphicsEntity {
             this.container.addChild(this.sprite);
         }
     }
-
     onCreate() {
+
     }
 
-    onDestroy() {
-    }
-
-    // deltaTime is used to sychronize the graphics with the game loop
-    // eslint-disable-next-line no-unused-vars
     onUpdate(deltaTime) {
+        if (this.currentAnimation != null) {
+            this.currentAnimation.increment(deltaTime);
+        }
+    }
+    
+    onDestroy() {
+
+    }
+
+    onStartAnimation(name) {
+        this.isReady = false;
+        console.log("START ANIM " + name)
+    }
+
+    onFinishAnimation(name) {
+        this.isReady = true;
+        console.log("FINISH ANIM " + name)
+    }
+
+    doAnimation(animation) {
+        console.log(animation.name)
+        this.currentAnimation = animation;
+        this.currentAnimation.start();
     }
 }

@@ -33,9 +33,9 @@ export class GridObjectEntity extends GraphicsEntity {
 
     onUpdate(deltaTime) {
         super.onUpdate(deltaTime);
-        if (this.currentAnimation != null) {
-            this.currentAnimation.increment(deltaTime);
-        }
+        //if (this.currentAnimation != null) {
+        //    this.currentAnimation.increment(deltaTime);
+        //}
     }
 
     onStartAnimation(name) {
@@ -48,7 +48,7 @@ export class GridObjectEntity extends GraphicsEntity {
         console.log("FINISH ANIM " + name)
     }
 
-    doGridAnimation(animation) {
+    doAnimation(animation) {
         console.log(animation.name)
         this.currentAnimation = animation;
         this.currentAnimation.start();
