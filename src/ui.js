@@ -138,6 +138,9 @@ function createTaskButtons() {
     }
 }
 
+/**
+ * Turns task button green and saves completion status. The html button's class is changed and the task number is added to localStorage. 
+ */
 export function onTaskComplete() {
     const taskIdentifier = globals.taskIdentifier;
     const buttonid = `button-${taskIdentifier}`;
