@@ -15,6 +15,7 @@ export class Game {
         this.gameMode.eventTarget.addEventListener("victory", this.gameHasBeenWon.bind(this));
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
+        this.gameWon = false;
     }
 
     async init() {
@@ -43,7 +44,13 @@ export class Game {
         }
     }
 
+    /**
+     * Calls game_controller.commandsDone. if gameWon is true, calls game_controller.notifyGameWon
+     */
     onAnimsReady() {
+        if (this.gameWon === true) {
+            notifyGameWon();
+        }
         commandsDone();
     }
 
@@ -67,13 +74,15 @@ export class Game {
     resetGame() {
         this.grid.resetGrid();
         this.gh.resetGridObjects();
-        this.gh.destroyTextBoxes();
         this.gameMode.reset();
     }
 
+    /**
+     * changes gameWon attribute to true
+     */
     gameHasBeenWon() {
         console.log("Olet voittanut pelin!");
         console.log("Loppupisteesi on: " + globals.collectibles.current);
-        notifyGameWon();
+        this.gameWon = true;
     }
 }
