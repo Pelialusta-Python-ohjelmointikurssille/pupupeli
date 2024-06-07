@@ -26,11 +26,11 @@ export class GraphicsEntity {
 
     }
 
-    onStartAnimation(name) {
+    onStartAnimation() {
         this.isReady = false;
     }
 
-    onFinishAnimation(name) {
+    onFinishAnimation() {
         this.isReady = true;
     }
 
