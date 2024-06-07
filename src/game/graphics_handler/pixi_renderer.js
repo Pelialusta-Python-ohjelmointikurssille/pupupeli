@@ -178,7 +178,7 @@ const roboAssetManifest = {
             assets: [
                 {
                     alias: "background_grass",
-                    src: "src/static/game_assets/background_grass.png"
+                    src: "src/static/game_assets/background_metal.png"
                 }
             ]
         },
@@ -204,7 +204,7 @@ const roboAssetManifest = {
             assets: [
                 {
                     alias: "carrot",
-                    src: "src/static/game_assets/carrot.png"
+                    src: "src/static/game_assets/wrench.png"
                 }
             ]
         },
@@ -213,7 +213,7 @@ const roboAssetManifest = {
             assets: [
                 {
                     alias: "rock",
-                    src: "src/static/game_assets/Kivi3.png"
+                    src: "src/static/game_assets/well.png"
                 }
             ]
         },
