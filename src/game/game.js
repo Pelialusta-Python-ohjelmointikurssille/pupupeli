@@ -6,8 +6,6 @@ import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 
-var gameWon = false;
-
 export class Game {
     constructor() {
         //getGameTask() returns object containing the grid and the gamemode
@@ -17,6 +15,7 @@ export class Game {
         this.gameMode.eventTarget.addEventListener("victory", this.gameHasBeenWon.bind(this));
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
+        this.gameWon = false;
     }
 
     async init() {
@@ -53,8 +52,11 @@ export class Game {
         }
     }
 
+    /**
+     * Calls game_controller.commandsDone. if gameWon is true, calls game_controller.notifyGameWon
+     */
     onAnimsReady() {
-        if (gameWon === true) {
+        if (this.gameWon === true) {
             notifyGameWon();
         }
         commandsDone();
@@ -79,9 +81,12 @@ export class Game {
         this.gameMode.reset();
     }
 
+    /**
+     * changes gameWon attribute to true
+     */
     gameHasBeenWon() {
         console.log("Olet voittanut pelin!");
         console.log("Loppupisteesi on: " + globals.collectibles.current);
-        gameWon = true;
+        this.gameWon = true;
     }
 }
