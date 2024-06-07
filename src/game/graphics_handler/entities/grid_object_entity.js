@@ -40,10 +40,6 @@ export class GridObjectEntity extends GraphicsEntity {
     }
 
     onFinishAnimation(name) {
-      //changes here!!!
-        this.isReady = true;
-        this.currentAnimation = null;
-        console.log("FINISH ANIM " + name)
         super.onFinishAnimation(name);
     }
 

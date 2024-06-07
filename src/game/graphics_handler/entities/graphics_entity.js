@@ -8,6 +8,7 @@ export class GraphicsEntity {
         this.isReady = true;
         this.data = data;
         this.type = "base";
+        this.currentAnimation = null;
         if (this.sprite !== null) {
             this.container.addChild(this.sprite);
         }
@@ -32,6 +33,8 @@ export class GraphicsEntity {
 
     onFinishAnimation() {
         this.isReady = true;
+        this.currentAnimation = null;
+        console.log("FINISH ANIM " + name)
     }
 
     doAnimation(animation) {
