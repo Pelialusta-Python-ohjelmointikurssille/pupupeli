@@ -100,12 +100,20 @@ async function initPage() {
 
 }
 
+/**
+ * Adds events to code execution buttons (run/pause, stop, skip)
+ */
 function addButtonEvents() {
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", onNextStepButtonClick);
     //addEventToButton("grid-toggle-button", game.rendererToggleGrid);
 
+    /**
+     * Adds eventlistener to a given button to trigger given function
+     * @param {string} id 
+     * @param {function} func 
+     */
     function addEventToButton(id, func) {
         let buttonInput = document.getElementById(id);
         buttonInput.addEventListener("click", func, false);
