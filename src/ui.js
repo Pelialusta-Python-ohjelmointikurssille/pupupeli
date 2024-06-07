@@ -174,6 +174,9 @@ export function onTaskComplete() {
     }
 }
 
+/**
+ * Runs the code or pauses execution and changes the image of run/pause button.
+ */
 function onRunButtonClick() {
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
@@ -197,6 +200,12 @@ function onRunButtonClick() {
     }
     setButtonState(img, state, runButtonText);
 
+    /**
+     * sets run button's state
+     * @param {image} img - a html image element
+     * @param {string} state 
+     * @param {object} runButtonText - html element
+     */
     function setButtonState(img, state, runButtonText) {
         switch (state.current) {
             case "initial":
