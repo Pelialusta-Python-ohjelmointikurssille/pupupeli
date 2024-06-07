@@ -11,6 +11,9 @@ let worker = new Worker('/src/input/worker.js');
 let initialized = false;
 const totalTasks = fileReader.countForFilesInDirectory("/tasks");
 
+/**
+ * Runs ui initialisation functions
+ */
 async function main() {
     initialize();
     initPage()
