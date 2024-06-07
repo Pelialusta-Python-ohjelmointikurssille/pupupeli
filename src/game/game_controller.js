@@ -1,4 +1,4 @@
-import { getEventHandler } from "../ui.js";
+import { getEventHandler, onTaskComplete } from "../ui.js";
 import { Game } from "./game.js";
 
 //This file controls game. 
@@ -29,9 +29,9 @@ export function giveCommand(dirtyCommand) {
  * Called by the Game class when game commands are done. 
  */
 export function commandsDone() {
+    console.log("command: " + currentCommand);
     if (currentCommand == null) return;
     eventHandler.postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
-
 }
 
 export function getCanvas() {
@@ -41,4 +41,8 @@ export function getCanvas() {
 export function resetGame() {
     game.resetGame();
     eventHandler = getEventHandler();
+}
+
+export function notifyGameWon() {
+    onTaskComplete();
 }

@@ -56,12 +56,12 @@ export class GraphicsEntitySystem {
         this.camera = new GraphicsCameraEntity(this.renderer.cameraWorldContainer, this.renderer.pixiApp.screen, new Vector2(0, 0));
     }
 
-   /**
-     * Used to create a gfx entity.
-     * @param {string} entityId The entity will be created using the given uuid. 
-     * @param {string} type Type of entity
-     * @param {object} data Data related to the entity in object form.
-     */
+    /**
+      * Used to create a gfx entity.
+      * @param {string} entityId The entity will be created using the given uuid. 
+      * @param {string} type Type of entity
+      * @param {object} data Data related to the entity in object form.
+      */
     createGraphicsEntity(entityId, type, data) {
         let entity = this.graphicsRegistry.createEntity(entityId, type, data);
         if (type === "ent_grid") {
@@ -131,6 +131,12 @@ export class GraphicsEntitySystem {
             if (value.type.startsWith("grid_ent")) {
                 value.reset();
             }
+        });
+    }
+
+    skipAnimationsAndFinish() {
+        this.entityDict.forEach((value) => {
+            value.finishAnimationsInstantly();
         });
     }
     destroyTextBoxes() {

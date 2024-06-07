@@ -46,7 +46,7 @@ export class GraphicsCameraEntity {
     getTotalRenderScale() {
         return this.renderScale.x * this.zoomScale;
     }
-
+    
     /**
      * Called every frame.
      * @param {number} deltaTime Time delta in seconds 

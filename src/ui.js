@@ -9,7 +9,11 @@ let eventHandler;
 let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
+const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks");
 
+/**
+ * Runs ui initialisation functions
+ */
 async function main() {
     initialize();
     initPage()
@@ -17,6 +21,9 @@ async function main() {
     await initGame();
 }
 
+/**
+ * Creates worker event handler and posts message to initialise pyodide with python file. On reload, calls to reset worker.
+ */
 function initialize() {
     eventHandler = new EventHandler(getWorker());
 
@@ -34,6 +41,9 @@ function initialize() {
     }
 }
 
+/**
+ * Inserts game canvas to right side of left container and gives it id "game"
+ */
 async function initGame() {
     let canvas = await game.initGame();
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
@@ -41,14 +51,43 @@ async function initGame() {
     canvas.id = "game";
 }
 
+/**
+ * Inserts information to page elements according to current task. Also adds task select buttons.
+ */
 async function initPage() {
-    // set task identifier
-    document.getElementById("task-id").innerHTML = globals.taskIdentifier;
+    // Set task identifier
+    const taskIdentifier = globals.taskIdentifier;
+    document.getElementById("task-id").innerHTML = taskIdentifier;
+
+    // Update the href for previous and next task links
+    const prevTaskLink = document.querySelector('a[href^="/?task="]:first-child');
+    const nextTaskLink = document.querySelector('a[href^="/?task="]:last-child');
+
+    // Changes href of prevtasklink and hides it if no prev task exists
+    if (taskIdentifier > 1) {
+        prevTaskLink.href = `/?task=${taskIdentifier - 1}`;
+        prevTaskLink.style.display = 'inline'; // Ensure it's visible
+    } else {
+        prevTaskLink.style.display = 'none'; // Hide if on the first task
+    }
+
+    // Changes href of nexttasklink and hides it if no prev task exists
+    if (taskIdentifier < totalTasks) {
+        nextTaskLink.href = `/?task=${taskIdentifier + 1}`;
+        nextTaskLink.style.display = 'inline'; // Ensure it's visible
+    } else {
+        nextTaskLink.style.display = 'none'; // Hide if on the last task
+    }
 
     // set description
-    globals.task.getDescription().forEach((line) => {
+    globals.task.getDescription().forEach((line, i) => {
         line = line === "" ? "<br>" : line;
-        document.getElementById("task-description").insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
+        if (line === "<br>" && i < 2) return;
+        if (i === 0) {
+            document.getElementById("task-description").insertAdjacentHTML("beforeend", "<p>" + line + "</p>");
+        } else {
+            document.getElementById("task-description").insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
+        }
     });
 
     // set multiple choice questions
@@ -63,21 +102,97 @@ async function initPage() {
     window.addEventListener('load', function () {
         editor.getEditor().setValue(globals.task.getEditorCode());
     });
+    createTaskButtons();
 
+    // set theme eventlistener, but first set theme if not set
+    if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
+    let themeSelectDropdown = document.getElementById("theme-select");
+    themeSelectDropdown.value = localStorage.getItem("theme");
+    themeSelectDropdown.addEventListener('change', function(event) {
+        let selectedValue = event.target.value;
+        localStorage.setItem("theme", selectedValue);
+        window.location.reload();
+    });
+    console.log(globals.theme);
 }
 
+/**
+ * Adds events to code execution buttons (run/pause, stop, skip)
+ */
 function addButtonEvents() {
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", onNextStepButtonClick);
     //addEventToButton("grid-toggle-button", game.rendererToggleGrid);
 
+    /**
+     * Adds eventlistener to a given button to trigger given function
+     * @param {string} id 
+     * @param {function} func 
+     */
     function addEventToButton(id, func) {
         let buttonInput = document.getElementById(id);
         buttonInput.addEventListener("click", func, false);
     }
 }
 
+/**
+ * Create buttons for selecting tasks based on how many json files exist in tasks directory.
+ * In the future the path should be able to check different directories so we can implement "chapters".
+ */
+function createTaskButtons() {
+    const numberOfButtons = totalTasks
+    const buttonContainer = document.getElementById('buttonTable');
+    if (localStorage.getItem("completedTasks") === null) {
+        let completedTasksStr = "";
+        localStorage.setItem("completedTasks", completedTasksStr)
+    }
+    let completedTasksStr = localStorage.getItem("completedTasks");
+    let completedTasksArr = completedTasksStr.split(",");
+
+
+    // Create and append buttons
+    for (let i = 0; i < numberOfButtons; i++) {
+        const button = document.createElement('button');
+        button.id = `button-${i + 1}`;
+        if (completedTasksArr.includes(`${i + 1}`)) {
+            button.classList.add("button-completed");
+        } else {
+            button.classList.add("button-incompleted");
+        }
+        button.innerText = `${i + 1}`;
+        button.class
+        button.addEventListener('click', () => {
+            window.location.href = `?task=${i + 1}`;
+        });
+        buttonContainer.appendChild(button);
+    }
+}
+
+/**
+ * Turns task button green and saves completion status. The html button's class is changed and the task number is added to localStorage. 
+ */
+export function onTaskComplete() {
+    const taskIdentifier = globals.taskIdentifier;
+    const buttonid = `button-${taskIdentifier}`;
+    let button = document.getElementById(buttonid);
+
+    if (button.getAttribute("class") == "button-incompleted") {
+        let completedTasksStr = localStorage.getItem("completedTasks");
+        button.classList.replace("button-incompleted", "button-completed");
+
+        let completedTasksArr = completedTasksStr.split(",");
+
+        completedTasksArr.push(taskIdentifier);
+
+        completedTasksStr = completedTasksArr.join(",")
+        localStorage.setItem("completedTasks", completedTasksStr);
+    }
+}
+
+/**
+ * Runs the code or pauses execution and changes the image of run/pause button.
+ */
 function onRunButtonClick() {
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
@@ -101,6 +216,12 @@ function onRunButtonClick() {
     }
     setButtonState(img, state, runButtonText);
 
+    /**
+     * sets run button's state
+     * @param {image} img - a html image element
+     * @param {string} state 
+     * @param {object} runButtonText - html element
+     */
     function setButtonState(img, state, runButtonText) {
         switch (state.current) {
             case "initial":
@@ -123,6 +244,11 @@ function onRunButtonClick() {
     }
 }
 
+/**
+ * Sets state to initial and resets all task elements to default state.
+ * Also resets worker by calling initialize while initialized === true.
+ * Does nothing if state is initial.
+ */
 function onResetButtonClick() {
     if (state.current === "initial") return;
     state.current = "initial";
@@ -143,12 +269,20 @@ function onResetButtonClick() {
     game.resetGame();
 }
 
+/**
+ * Changes state to paused, runs single command, changes state to running
+ */
 function onNextStepButtonClick() {
     onRunButtonClick();
     eventHandler.runSingleCommand();
     if (state.current === "running") onRunButtonClick();
 }
 
+/**
+ * disables run and skip buttons, changes their images and changes state to "ended".
+ * If code had an error, button changes text to indicate that.
+ * @param {*} cause 
+ */
 function disablePlayButtonsOnFinish(cause = null) {
     let button = document.getElementById("editor-run-pause-button");
     let buttonNext = document.getElementById("editor-skip-button");
@@ -177,6 +311,10 @@ export function getEventHandler() {
     return eventHandler;
 }
 
+/**
+ * Returns worker object
+ * @returns {Worker} worker
+ */
 function getWorker() {
     return worker;
 }

@@ -8,6 +8,7 @@ export class GraphicsEntity {
         this.isReady = true;
         this.data = entityData;
         this.type = "null";
+        this.currentAnimation = null;
         if (this.sprite !== null) {
             this.container.addChild(this.sprite);
         }
@@ -18,6 +19,7 @@ export class GraphicsEntity {
 
     onUpdate(deltaTime) {
         if (this.currentAnimation != null) {
+            if (this.currentAnimation.inProgress === false) return;
             this.currentAnimation.increment(deltaTime);
         }
     }
@@ -25,13 +27,21 @@ export class GraphicsEntity {
     onDestroy() {
 
     }
+    
+    finishAnimationsInstantly() {
+        if (this.currentAnimation != null) {
+            this.currentAnimation.skipToEnd();
+        }
+    }
 
-    onStartAnimation(name) {
+    onStartAnimation() {
         this.isReady = false;
     }
 
-    onFinishAnimation(name) {
+    onFinishAnimation() {
         this.isReady = true;
+        this.currentAnimation = null;
+        console.log("FINISH ANIM " + name)
     }
 
     doAnimation(animation) {

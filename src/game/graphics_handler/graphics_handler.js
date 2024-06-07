@@ -75,6 +75,7 @@ export class GraphicsHandler {
      * @param {object} actionData Data related to the animation in object form.
      */
     doAction(entityId, actionId, actionData) {
+        this.isReady = false;
         this.graphicsEntityHandler.doAction(entityId, actionId, actionData);
     }
 
@@ -125,6 +126,7 @@ export class GraphicsHandler {
      * Called when entity handler enters the "not ready" state.
      */
     onEntitiesNotReady() {
+        //unnecessary?
     }
 
     /**
@@ -132,6 +134,7 @@ export class GraphicsHandler {
      */
     onEntitiesReady() {
         if (this.onReadyFunc == null || this.onReadyFuncContext == null) return;
+        this.isReady = true;
         this.onReadyFunc.call(this.onReadyFuncContext);
     }
 
@@ -148,6 +151,10 @@ export class GraphicsHandler {
         else {
             this.graphicsEntityHandler.camera.zoomScale = this.gridHeight**0.001 - 0.1;
         }
+    }
+
+    finishAnimationsImmediately() {
+        this.graphicsEntityHandler.skipAnimationsAndFinish();
     }
 }
 

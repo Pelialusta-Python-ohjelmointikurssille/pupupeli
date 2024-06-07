@@ -46,6 +46,10 @@ export class MoveAnimation {
         this.inProgress = false;
     }
 
+    skipToEnd() {
+        this.progress.skipToEnd();
+    }
+
     onStart() {
         this.gridObject.onStartAnimation(this.name);
     }
@@ -57,7 +61,12 @@ export class MoveAnimation {
         this.gridObject.container.x = this.gridObject.screenPosition.x + this.gridObject.fakeZPosition;
         this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition;
         this.inProgress = false;
+        
         this.gridObject.onFinishAnimation(this.name);
+        console.log(`FINISH ANIM move on player`);
+        console.log(this.gridObject.container.position);
+        console.log(this.progress.value)
+        console.log(this.gridObject.fakeZPosition)
     }
 
     getJumpHeight(progress) {
