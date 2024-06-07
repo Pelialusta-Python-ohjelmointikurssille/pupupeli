@@ -30,7 +30,7 @@ export class PixiRenderer {
         let t1 = new Date().getTime();
 
         await PIXI.Assets.init({ manifest: builtinAssetManifest });
-        this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles"]);
+        this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles", "ui"]);
 
         let t2 = new Date().getTime();
         console.log(`Loading assets took ${t2 - t1}ms`);
@@ -136,5 +136,14 @@ const builtinAssetManifest = {
                 }
             ]
         },
+        {
+            name: "ui",
+            assets: [
+                {
+                    alias: "speechbubble_9slice",
+                    src: "src/static/game_assets/speechbubblenineslice.png"
+                }
+            ]
+        }
     ]
 }

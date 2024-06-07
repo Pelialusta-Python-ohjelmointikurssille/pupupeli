@@ -48,6 +48,12 @@ export class GraphicsHandler {
 
         // TODO: create proper grid scaling?
         this.createEntity("bgtest", "background", { bgWidth: this.gridWidth * 128, bgHeight: this.gridHeight * 128});
+        //this.createEntity("test", "textbox", {
+        //    texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
+        //    targetPosition: new Vector2(900, 900),
+        //    text: "Hello world."
+        //});
+
         let t2 = new Date().getTime();
         console.log(`Loading graphics engine took ${t2-t1}ms`);
     }
@@ -100,6 +106,10 @@ export class GraphicsHandler {
      */
     resetGridObjects() {
         this.graphicsEntityHandler.resetGridObjects();
+    }
+
+    destroyTextBoxes() {
+        this.graphicsEntityHandler.destroyTextBoxes();
     }
 
     /**

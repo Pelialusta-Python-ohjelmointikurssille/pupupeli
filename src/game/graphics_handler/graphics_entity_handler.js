@@ -89,8 +89,7 @@ export class GraphicsEntitySystem {
     doAction(entityId, animationId, animationData) {
         let entity = this.getGraphicsEntity(entityId);
         let animation = this.animationFactory.getAnimation(animationId, entity, animationData);
-        console.log(animation);
-        entity.doGridAnimation(animation);
+        entity.doAnimation(animation);
     }
 
     /**
@@ -130,6 +129,13 @@ export class GraphicsEntitySystem {
         this.entityDict.forEach((value) => {
             if (value.type === "grid_object") {
                 value.reset();
+            }
+        });
+    }
+    destroyTextBoxes() {
+        this.entityDict.forEach((value, key) => {
+            if (value.type === "textbox"){
+                this.destroyGraphicsEntity(key);
             }
         });
     }
