@@ -9,7 +9,7 @@ let eventHandler;
 let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
-const totalTasks = fileReader.countForFilesInDirectory("/tasks");
+const totalTasks = fileReader.countForFilesInDirectory("/tasks/"+globals.chapterIdentifier);
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 async function main() {
