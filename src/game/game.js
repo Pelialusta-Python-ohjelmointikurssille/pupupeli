@@ -6,6 +6,8 @@ import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 
+var gameWon = false;
+
 export class Game {
     constructor() {
         //getGameTask() returns object containing the grid and the gamemode
@@ -52,6 +54,9 @@ export class Game {
     }
 
     onAnimsReady() {
+        if (gameWon === true) {
+            notifyGameWon();
+        }
         commandsDone();
     }
 
@@ -77,6 +82,6 @@ export class Game {
     gameHasBeenWon() {
         console.log("Olet voittanut pelin!");
         console.log("Loppupisteesi on: " + globals.collectibles.current);
-        notifyGameWon();
+        gameWon = true;
     }
 }
