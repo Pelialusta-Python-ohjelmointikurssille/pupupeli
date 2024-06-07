@@ -40,6 +40,9 @@ function initialize() {
     }
 }
 
+/**
+ * Inserts game canvas to right side of left container and gives it id "game"
+ */
 async function initGame() {
     let canvas = await game.initGame();
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
