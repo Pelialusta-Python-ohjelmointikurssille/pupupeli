@@ -10,13 +10,16 @@ let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
 const totalTasks = fileReader.countForFilesInDirectory("/tasks/"+globals.chapterIdentifier);
+const totalChapters = fileReader.countForChaptersInDirectory();
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 async function main() {
     initialize();
-    initPage()
+    initPage();
     addButtonEvents();
     await initGame();
+    
+     // Create chapter buttons
 }
 
 function initialize() {
@@ -45,13 +48,11 @@ async function initGame() {
 
 async function initPage() {
     // Set task identifier
-    const taskIdentifier = globals.taskIdentifier;
-    const chapterIdentifier = globals.chapterIdentifier;
-
     //copypasted from createTaskButtons function, this could be globals
     //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
-
-    document.getElementById("task-id").innerHTML = taskIdentifier;
+    const taskIdentifier = globals.taskIdentifier;
+    const chapterIdentifier = globals.chapterIdentifier;
+    document.getElementById("task-id").innerHTML = globals.taskIdentifier;
 
     // Update the href for previous and next task links
     const prevTaskLink = document.querySelector('a[href^="/?task="]:first-child');
@@ -60,18 +61,22 @@ async function initPage() {
     // Changes href of prevtasklink and hides it if no prev task exists
     if (taskIdentifier > 1) {
         prevTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier - 1}`;
+
         prevTaskLink.style.display = 'inline'; // Ensure it's visible
     } else {
         prevTaskLink.style.display = 'none'; // Hide if on the first task
     }
-
+    const totalTasks = fileReader.countForFilesInDirectory(`/tasks/${globals.chapterIdentifier}`);
     // Changes href of nexttasklink and hides it if no prev task exists
     if (taskIdentifier < totalTasks) {
         nextTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier + 1}`;
+
         nextTaskLink.style.display = 'inline'; // Ensure it's visible
     } else {
         nextTaskLink.style.display = 'none'; // Hide if on the last task
     }
+
+
 
     // set description
     globals.task.getDescription().forEach((line) => {
@@ -91,9 +96,10 @@ async function initPage() {
     window.addEventListener('load', function () {
         editor.getEditor().setValue(globals.task.getEditorCode());
     });
+    
     createTaskButtons();
+    createChapterButtons();
     isUserLoggedIn();
-
 }
 
 function addButtonEvents() {
@@ -157,7 +163,7 @@ function isUserLoggedIn() {
  * Create buttons for selecting tasks based on how many json files exist in tasks directory.
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
-function createTaskButtons() {
+function createTaskButtons(chapterIdentifier) {
     const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
     if (localStorage.getItem("completedTasks") === null) {
@@ -178,15 +184,32 @@ function createTaskButtons() {
             button.classList.add("button-incompleted");
         }
         button.innerText = `${i + 1}`;
-        button.class
         button.addEventListener('click', () => {
-            window.location.href = `?chapter=${globals.chapterIdentifier}&task=${i + 1}`;
+            window.location.href = `?chapter=${chapterIdentifier}&task=${i + 1}`;
         });
         // Add that button turns to green when task if completed
         // when task completion system is implemented
         buttonContainer.appendChild(button);
     }
 }
+
+function createChapterButtons() {
+    const numberOfButtons = totalChapters
+    const buttonContainer = document.getElementById('chapterbuttontable');
+    for (let i = 0; i < numberOfButtons; i++) {
+        const button = document.createElement('option');
+        // button.id = `chapter-button-${i + 1}`;
+        // button.value = i + 1
+        button.innerText = `${i + 1}`;
+        button.addEventListener('click', () => {
+            window.location.href = `/?chapter=${i + 1}&task=1`;
+            createTaskButtons(chapterIdentifier);
+        });
+        buttonContainer.appendChild(button);
+    }
+    document.getElementById('chapterbuttontable').value = chapterIdentifier;
+}   
+
 
 export function onTaskComplete() {
     const taskIdentifier = globals.taskIdentifier;
