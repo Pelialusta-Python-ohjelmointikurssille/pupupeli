@@ -91,6 +91,7 @@ async function initPage() {
         editor.getEditor().setValue(globals.task.getEditorCode());
     });
     createTaskButtons();
+    isUserLoggedIn();
 
 }
 
@@ -103,6 +104,43 @@ function addButtonEvents() {
     function addEventToButton(id, func) {
         let buttonInput = document.getElementById(id);
         buttonInput.addEventListener("click", func, false);
+    }
+}
+
+function isUserLoggedIn() {
+    let userContainer = document.getElementById('user-container');
+    if (localStorage.getItem("username") !== null) {
+        userContainer.textContent = "Käyttäjä: " + localStorage.getItem("username");
+        let logoutButton = document.createElement('button');
+        logoutButton.textContent = "Kirjaudu ulos";
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem("username");
+            userContainer.textContent = "";
+            isUserLoggedIn()
+        });
+        userContainer.appendChild(logoutButton);
+    } else {
+        // Create the input elements
+        let userInput = document.createElement('input');
+        let submitButton = document.createElement('input');
+
+        // Set the attributes for the user input
+        userInput.setAttribute('type', 'text');
+        userInput.setAttribute('id', 'user-input');
+        userInput.setAttribute('placeholder', 'Enter user name');
+
+        // Set the attributes for the submit button
+        submitButton.setAttribute('type', 'submit');
+        submitButton.setAttribute('value', 'Submit');
+        submitButton.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent the form from being submitted
+            localStorage.setItem("username", userInput.value);
+            isUserLoggedIn()
+        });
+
+        // Append the elements to the user container
+        userContainer.appendChild(userInput);
+        userContainer.appendChild(submitButton);
     }
 }
 
