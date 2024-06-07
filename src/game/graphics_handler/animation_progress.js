@@ -24,6 +24,12 @@ export class AnimationProgress {
         }
     }
 
+    skipToEnd() {
+        this.value = 1;
+        this.stop();
+        this.finishfunc.call(this.context, this.name);
+    }
+
     stop() {
         this.value = 0;
         this.inProgress = false;

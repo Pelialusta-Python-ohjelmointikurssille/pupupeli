@@ -1,4 +1,4 @@
-import { AnimationProgress } from "../move_tween.js";
+import { AnimationProgress } from "../animation_progress.js";
 
 export class UnhideAnimation {
     constructor(gridObject, name, data) {
@@ -27,6 +27,10 @@ export class UnhideAnimation {
         this.inProgress = false;
         this.gridObject.container.rotation = 0;
         this.gridObject.container.alpha = 0;
+    }
+
+    skipToEnd() {
+        this.progress.skipToEnd();
     }
 
     onStart() {

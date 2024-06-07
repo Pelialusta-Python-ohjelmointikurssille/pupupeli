@@ -1,4 +1,4 @@
-import { AnimationProgress } from "../move_tween.js";
+import { AnimationProgress } from "../animation_progress.js";
 import { Vector2 } from "../../vector.js";
 
 export class FailMoveAnimation {
@@ -43,6 +43,10 @@ export class FailMoveAnimation {
             this.gridObject.container.x = this.gridObject.screenPosition.x + ((1 - this.progress.value) * 0.75 * this.moveDirection.x * this.gridObject.gridReference.gridScale);
             this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition + ((1 - this.progress.value) * 0.75 * this.moveDirection.y * this.gridObject.gridReference.gridScale);   
         }
+    }
+
+    skipToEnd() {
+        this.progress.skipToEnd();
     }
 
     stop() {

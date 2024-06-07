@@ -6,6 +6,7 @@ export const taskIdentifier = (function () {
     if (searchParams.size === 0) return 1;
 
     const taskIdentifier = parseInt(searchParams.get("task"));
+    if(isNaN(taskIdentifier)) return 1;
     return taskIdentifier;
 })();
 

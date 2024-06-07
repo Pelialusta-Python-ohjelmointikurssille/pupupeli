@@ -1,4 +1,4 @@
-import { AnimationProgress } from "../move_tween.js";
+import { AnimationProgress } from "../animation_progress.js";
 
 export class HideAnimation {
     constructor(gridObject, name, data) {
@@ -31,6 +31,11 @@ export class HideAnimation {
         this.inProgress = false;
         this.gridObject.container.rotation = 0;
         this.gridObject.container.alpha = 1;
+        this.gridObject.container.scale = 1;
+    }
+
+    skipToEnd() {
+        this.progress.skipToEnd();
     }
 
     onStart() {

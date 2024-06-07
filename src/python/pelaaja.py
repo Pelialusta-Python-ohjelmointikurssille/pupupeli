@@ -22,5 +22,10 @@ class Pelaaja:
             js.runCommand("move", direction)
         else:
             raise ValueError("Virheellinen suunta")
+        
+    def sano(self, sentence: str):
+#        if reset_flag:
+#            raise Exception("Interpreter was reset")
+        js.runCommand("say", sentence)
 
 pupu = Pelaaja()

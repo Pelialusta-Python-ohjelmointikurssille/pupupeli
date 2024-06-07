@@ -4,6 +4,7 @@ const PLAYER_STR = "player";
 const TYPE_STR = "type";
 const GRID_STR = "grid";
 const MOVE_STR = "move";
+const SAY_STR = "say"
 const UP_STR = "up";
 const DOWN_STR = "down";
 const LEFT_STR = "left";
@@ -25,6 +26,9 @@ export class Constants {
     }
     static get MOVE_STR() {
         return MOVE_STR;
+    }
+    static get SAY_STR() {
+        return SAY_STR;
     }
     static get UP_STR() {
         return UP_STR;
