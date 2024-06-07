@@ -45,6 +45,10 @@ aceEditorScript.onload = () => {
     };
 };
 
+/**
+ * Returns ace editor object
+ * @returns {object} editor
+ */
 export function getEditor() {
     return editor;
 }
