@@ -42,7 +42,7 @@ describe('MoveCommand', () => {
         expect(mockGraphicsHandler.doAction).toHaveBeenCalledWith(
             'test-id',
             Constants.MOVE_STR,
-            { direction: GetDirectionAsString('UP'), time: 0.35 }
+            { direction: GetDirectionAsString('UP'), time: 0.4 }
         );
     });
 
@@ -56,7 +56,7 @@ describe('MoveCommand', () => {
         expect(mockGraphicsHandler.doAction).toHaveBeenCalledWith(
             'test-id',
             'failmove',
-            { direction: GetDirectionAsString('UP'), time: 0.35 }
+            { direction: GetDirectionAsString('UP'), time: 0.4 }
         );
     });
 
@@ -72,7 +72,7 @@ describe('MoveCommand', () => {
         expect(mockGraphicsHandler.doAction).toHaveBeenCalledWith(
             'test-id',
             Constants.MOVE_STR,
-            { direction: GetDirectionAsString('UP'), time: 0.35 }
+            { direction: GetDirectionAsString('UP'), time: 0.4 }
         );
         expect(mockGraphicsHandler.doAction).toHaveBeenCalledWith(
             'collectible-id',
