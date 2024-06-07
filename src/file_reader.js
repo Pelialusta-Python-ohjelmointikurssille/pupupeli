@@ -74,7 +74,7 @@ export function countForTaskFilesInDirectory(dirPath) {
  * @param {string} path - path to json file
  * @returns {json|null} result or null
  */
-function checkIfFileExists(path) {
+export function checkIfFileExists(path) {
     try {
         return tryGetFileAsJson(path);
     } catch {
