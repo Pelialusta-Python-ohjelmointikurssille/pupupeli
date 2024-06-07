@@ -54,7 +54,7 @@ export function tryGetFileAsJson(path) {
  * This function's while loop depends on catching an error to stop, so it causes 404 file not found each run.
  * If another way is found, it might be preferred.
  * @param {string} dirPath - path to the directory 
- * @returns 
+ * @returns {number} fileNumber - count of files in directory
  */
 export function countForTaskFilesInDirectory(dirPath) {
     let fileNumber = 1;
