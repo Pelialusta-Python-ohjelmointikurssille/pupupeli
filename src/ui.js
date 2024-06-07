@@ -10,8 +10,10 @@ let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
 const totalTasks = fileReader.countForFilesInDirectory("/tasks");
-// const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
+/**
+ * Runs ui initialisation functions
+ */
 async function main() {
     initialize();
     initPage()
@@ -19,6 +21,9 @@ async function main() {
     await initGame();
 }
 
+/**
+ * Creates worker event handler and posts message to initialise pyodide with python file. On reload, calls to reset worker.
+ */
 function initialize() {
     eventHandler = new EventHandler(getWorker());
 
@@ -36,6 +41,9 @@ function initialize() {
     }
 }
 
+/**
+ * Inserts game canvas to right side of left container and gives it id "game"
+ */
 async function initGame() {
     let canvas = await game.initGame();
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
@@ -43,13 +51,12 @@ async function initGame() {
     canvas.id = "game";
 }
 
+/**
+ * Inserts information to page elements according to current task. Also adds task select buttons.
+ */
 async function initPage() {
     // Set task identifier
     const taskIdentifier = globals.taskIdentifier;
-
-    //copypasted from createTaskButtons function, this could be globals
-    //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
-
     document.getElementById("task-id").innerHTML = taskIdentifier;
 
     // Update the href for previous and next task links
@@ -94,12 +101,20 @@ async function initPage() {
 
 }
 
+/**
+ * Adds events to code execution buttons (run/pause, stop, skip)
+ */
 function addButtonEvents() {
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", onNextStepButtonClick);
     //addEventToButton("grid-toggle-button", game.rendererToggleGrid);
 
+    /**
+     * Adds eventlistener to a given button to trigger given function
+     * @param {string} id 
+     * @param {function} func 
+     */
     function addEventToButton(id, func) {
         let buttonInput = document.getElementById(id);
         buttonInput.addEventListener("click", func, false);
@@ -135,12 +150,13 @@ function createTaskButtons() {
         button.addEventListener('click', () => {
             window.location.href = `?task=${i + 1}`;
         });
-        // Add that button turns to green when task if completed
-        // when task completion system is implemented
         buttonContainer.appendChild(button);
     }
 }
 
+/**
+ * Turns task button green and saves completion status. The html button's class is changed and the task number is added to localStorage. 
+ */
 export function onTaskComplete() {
     const taskIdentifier = globals.taskIdentifier;
     const buttonid = `button-${taskIdentifier}`;
@@ -159,6 +175,9 @@ export function onTaskComplete() {
     }
 }
 
+/**
+ * Runs the code or pauses execution and changes the image of run/pause button.
+ */
 function onRunButtonClick() {
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
@@ -182,6 +201,12 @@ function onRunButtonClick() {
     }
     setButtonState(img, state, runButtonText);
 
+    /**
+     * sets run button's state
+     * @param {image} img - a html image element
+     * @param {string} state 
+     * @param {object} runButtonText - html element
+     */
     function setButtonState(img, state, runButtonText) {
         switch (state.current) {
             case "initial":
@@ -204,6 +229,11 @@ function onRunButtonClick() {
     }
 }
 
+/**
+ * Sets state to initial and resets all task elements to default state.
+ * Also resets worker by calling initialize while initialized === true.
+ * Does nothing if state is initial.
+ */
 function onResetButtonClick() {
     if (state.current === "initial") return;
     state.current = "initial";
@@ -224,12 +254,20 @@ function onResetButtonClick() {
     game.resetGame();
 }
 
+/**
+ * Changes state to paused, runs single command, changes state to running
+ */
 function onNextStepButtonClick() {
     onRunButtonClick();
     eventHandler.runSingleCommand();
     if (state.current === "running") onRunButtonClick();
 }
 
+/**
+ * disables run and skip buttons, changes their images and changes state to "ended".
+ * If code had an error, button changes text to indicate that.
+ * @param {*} cause 
+ */
 function disablePlayButtonsOnFinish(cause = null) {
     let button = document.getElementById("editor-run-pause-button");
     let buttonNext = document.getElementById("editor-skip-button");
@@ -258,6 +296,10 @@ export function getEventHandler() {
     return eventHandler;
 }
 
+/**
+ * Returns worker object
+ * @returns {Worker} worker
+ */
 function getWorker() {
     return worker;
 }
