@@ -84,7 +84,7 @@ export class SayCommand {
             targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
             text: this.sayString
         });
-        this.graphicsHandler.doAction(textboxId, "showinout", { time: 2 });
+        this.graphicsHandler.doAction(textboxId, "say", { time: 2 });
     }
 }
 
@@ -97,6 +97,14 @@ export class AskCommand {
     }
 
     execute() {
-        this.graphicsHandler.doAction(this.gridObject.id, "ask", { time: this.time, text: this.askString });
+        // TEMPORARY HACK!! REPLACE THIS!
+        //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
+        let textboxId = crypto.randomUUID().toString();
+        this.graphicsHandler.createEntity(textboxId, "textbox", {
+            //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
+            targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
+            text: this.sayString
+        });
+        this.graphicsHandler.doAction(textboxId, "ask", { time: 2 });
     }
 }
