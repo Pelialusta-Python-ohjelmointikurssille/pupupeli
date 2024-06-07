@@ -182,6 +182,14 @@ button:hover {
     background: rgb(231, 231, 231);
 }
 
+.button-completed {
+    background: rgb(0, 255, 0);
+}
+
+.button-completed:hover {
+    background: rgb(0, 231, 0);
+}
+
 #multiple-choice-questions {
     display: grid;
     grid-template-columns: 1fr 1fr;

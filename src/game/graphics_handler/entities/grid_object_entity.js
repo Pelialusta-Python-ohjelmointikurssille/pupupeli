@@ -11,8 +11,8 @@ export class GridObjectEntity extends GraphicsEntity {
         this.fakeZPosition = 0;
         this.currentAnimation = null;
         this.type = "grid_object";
-        if (data !== null) {
-            if (data.position !== null) {
+        if (data != null) {
+            if (data.position != null) {
                 this.gridCellPosition = data.position;
             }
         }
@@ -33,41 +33,30 @@ export class GridObjectEntity extends GraphicsEntity {
 
     onUpdate(deltaTime) {
         super.onUpdate(deltaTime);
-        if (this.currentAnimation != null) {
-            this.currentAnimation.increment(deltaTime);
-        }
     }
 
     onStartAnimation(name) {
-        this.isReady = false;
-        console.log("START ANIM " + name)
+        super.onStartAnimation(name);
     }
 
     onFinishAnimation(name) {
+      //changes here!!!
         this.isReady = true;
         this.currentAnimation = null;
         console.log("FINISH ANIM " + name)
+        super.onFinishAnimation(name);
     }
 
-    doGridAnimation(animation) {
-        console.log(animation.name)
-        this.currentAnimation = animation;
-        this.currentAnimation.start();
+    doAnimation(animation) {
+        super.doAnimation(animation);
     }
 
     reset() {
-        console.log("RESET ");
-        if (this.currentAnimation != null) {
-            this.currentAnimation.stop();
-        }
-        this.currentAnimation = null;
+        super.reset();
         this.gridCellPosition = new Vector2(this.startPosition.x, this.startPosition.y);
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
         this.container.x = this.screenPosition.x;
         this.container.y = this.screenPosition.y;
-        this.container.rotation = 0;
-        this.container.alpha = 1;
-        this.isReady = true;
     }
 
     finishAnimationsInstantly() {

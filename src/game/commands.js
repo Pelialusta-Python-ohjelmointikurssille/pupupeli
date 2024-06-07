@@ -1,4 +1,5 @@
 import { Constants, GetDirectionAsString } from "./commonstrings.js";
+import { Vector2 } from "./vector.js";
 //implements the interface Command. That just means that all these classes have the function "execute()" (and can easily implement "undo()").
 //Stuff to read if interested: 
 //    https://refactoring.guru/design-patterns/command
@@ -75,6 +76,14 @@ export class SayCommand {
     }
 
     execute() {
-        this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
+        // TEMPORARY HACK!! REPLACE THIS!
+        //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
+        let textboxId = crypto.randomUUID().toString();
+        this.graphicsHandler.createEntity(textboxId, "textbox", {
+            //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
+            targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
+            text: this.sayString
+        });
+        this.graphicsHandler.doAction(textboxId, "showinout", { time: 2 });
     }
 }

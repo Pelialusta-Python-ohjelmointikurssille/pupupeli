@@ -1,4 +1,4 @@
-import { getEventHandler } from "../ui.js";
+import { getEventHandler, onTaskComplete } from "../ui.js";
 import { Game } from "./game.js";
 
 //This file controls game. 
@@ -41,4 +41,8 @@ export function getCanvas() {
 export function resetGame() {
     game.resetGame();
     eventHandler = getEventHandler();
+}
+
+export function notifyGameWon() {
+    onTaskComplete();
 }

@@ -2,7 +2,7 @@ import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand } from "./commands.js";
-import { commandsDone } from "./game_controller.js";
+import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 
@@ -69,11 +69,13 @@ export class Game {
     resetGame() {
         this.grid.resetGrid();
         this.gh.resetGridObjects();
+        this.gh.destroyTextBoxes();
         this.gameMode.reset();
     }
 
     gameHasBeenWon() {
         console.log("Olet voittanut pelin!");
         console.log("Loppupisteesi on: " + globals.collectibles.current);
+        notifyGameWon();
     }
 }

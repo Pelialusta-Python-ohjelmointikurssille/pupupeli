@@ -9,6 +9,8 @@ let eventHandler;
 let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
+const totalTasks = fileReader.countForFilesInDirectory("/tasks");
+// const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 async function main() {
     initialize();
@@ -21,6 +23,7 @@ function initialize() {
     eventHandler = new EventHandler(getWorker());
 
     if (!initialized) {
+        console.log("Initializing pyodide worker...")
         try {
             let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
             eventHandler.postMessage({ type: 'init', details: pythonFileStr });
@@ -45,7 +48,7 @@ async function initPage() {
     const taskIdentifier = globals.taskIdentifier;
 
     //copypasted from createTaskButtons function, this could be globals
-    const totalTasks = fileReader.countForFilesInDirectory("/tasks");
+    //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
 
     document.getElementById("task-id").innerHTML = taskIdentifier;
 
@@ -108,20 +111,51 @@ function addButtonEvents() {
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
 function createTaskButtons() {
-    const numberOfButtons = fileReader.countForFilesInDirectory("/tasks");
+    const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
+    if (localStorage.getItem("completedTasks") === null) {
+        let completedTasksStr = "";
+        localStorage.setItem("completedTasks", completedTasksStr)
+    }
+    let completedTasksStr = localStorage.getItem("completedTasks");
+    let completedTasksArr = completedTasksStr.split(",");
+
 
     // Create and append buttons
     for (let i = 0; i < numberOfButtons; i++) {
         const button = document.createElement('button');
+        button.id = `button-${i + 1}`;
+        if (completedTasksArr.includes(`${i + 1}`)) {
+            button.classList.add("button-completed");
+        } else {
+            button.classList.add("button-incompleted");
+        }
         button.innerText = `${i + 1}`;
-
+        button.class
         button.addEventListener('click', () => {
             window.location.href = `?task=${i + 1}`;
         });
         // Add that button turns to green when task if completed
         // when task completion system is implemented
         buttonContainer.appendChild(button);
+    }
+}
+
+export function onTaskComplete() {
+    const taskIdentifier = globals.taskIdentifier;
+    const buttonid = `button-${taskIdentifier}`;
+    let button = document.getElementById(buttonid);
+
+    if (button.getAttribute("class") == "button-incompleted") {
+        let completedTasksStr = localStorage.getItem("completedTasks");
+        button.classList.replace("button-incompleted", "button-completed");
+
+        let completedTasksArr = completedTasksStr.split(",");
+
+        completedTasksArr.push(taskIdentifier);
+
+        completedTasksStr = completedTasksArr.join(",")
+        localStorage.setItem("completedTasks", completedTasksStr);
     }
 }
 
