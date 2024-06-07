@@ -18,6 +18,7 @@ export class Constants {
     static ASK_STR = "ask";
     //--------------------------------
 
+    static PYODIDE_INTERRUPT_INPUT = "pyodide_interrupt_input_666"
     static get PLAYER_STR() {
         return PLAYER_STR;
     }

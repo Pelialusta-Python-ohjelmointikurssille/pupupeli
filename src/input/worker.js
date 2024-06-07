@@ -1,9 +1,11 @@
+const PYODIDE_INTERRUPT_INPUT = "pyodide_interrupt_input_666"
 let pyodide;
 let pythonFileStr;
 let continuePythonExecution;
 let ctr = 0;
-let state;
+let saveState;
 let resetFlag = false;
+let interruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
 //remember to update this when new commands are added
 const validCommands = ["move", "say", "ask"];
 
@@ -40,7 +42,7 @@ async function initializePyodide(pythonCode) {
     if (pyodide === undefined) {
         // eslint-disable-next-line no-undef
         pyodide = await loadPyodide();
-        state = pyodide.pyodide_py._state.save_state(); // we save pyodide initial state to restore if needed
+        saveState = pyodide.pyodide_py._state.save_state(); // we save pyodide initial state to restore if needed
 
         pyodide.setStdin({
             stdin: () => {
@@ -48,6 +50,7 @@ async function initializePyodide(pythonCode) {
             }
         });
         pythonFileStr = pythonCode;
+        pyodide.setInterruptBuffer(interruptBuffer);
         console.log("Initialized pyodide worker");
     }
 }
@@ -69,7 +72,16 @@ function handleInput() {
         if (sharedArray[i] === 0) break;
         word += String.fromCharCode(sharedArray[i]);
     }
-    console.log(word);
+    //special case where we want to reset python if it's waiting for input.
+    //We interrupt pyodide and and send message that we are finished.
+    //This sends out an error but it's a friend, not an enemy.
+    //https://pyodide.org/en/stable/usage/streams.html#handling-keyboard-interrupts
+    //KeyboardInterrupt should probably be handled somehow. 
+    if (word === PYODIDE_INTERRUPT_INPUT) {
+        interruptBuffer[0] = 2;
+        pyodide.checkInterrupt();
+        postMessage({ type: 'finish' });
+    }
     return word;
 }
 
@@ -127,7 +139,8 @@ async function runPythonCode(pyodide, codeString) {
 
         try {
             // reset pyodide state to where we saved it earlier after all commands are done
-            pyodide.pyodide_py._state.restore_state(state);
+            interruptBuffer[0] = 0;
+            pyodide.pyodide_py._state.restore_state(saveState);
         } catch (error) {
             postError(error.message);
         }
@@ -136,7 +149,7 @@ async function runPythonCode(pyodide, codeString) {
         postMessage({ type: 'finish' });
     } catch (error) {
         // also reset pyodide state on errors/exceptions such as when we reset the game mid-execution
-        pyodide.pyodide_py._state.restore_state(state);
+        pyodide.pyodide_py._state.restore_state(saveState);
         postError(error.message);
     }
 }

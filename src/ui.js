@@ -4,6 +4,7 @@ import * as fileReader from "./file_reader.js";
 import * as editor from "./input/editor.js";
 import * as errorHandler from "./input/py_error_handling.js";
 import { EventHandler } from "./event_handler.js";
+import { Constants } from "./game/commonstrings.js";
 
 let eventHandler;
 let state = { current: "initial" };
@@ -235,7 +236,7 @@ function onRunButtonClick() {
  * Does nothing if state is initial.
  */
 function onResetButtonClick() {
-    eventHandler.inputToWorker("reset");
+    eventHandler.inputToWorker(Constants.PYODIDE_INTERRUPT_INPUT); //Special str that interrupt pyodide if it's in handleInput()
     if (state.current === "initial") return;
     state.current = "initial";
     let buttonNext = document.getElementById("editor-skip-button");
