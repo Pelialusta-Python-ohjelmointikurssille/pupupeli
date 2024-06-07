@@ -33,6 +33,11 @@ export class GridObjectEntity extends GraphicsEntity {
 
     onUpdate(deltaTime) {
         super.onUpdate(deltaTime);
+        if (this.currentAnimation == null) {
+            this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
+            this.container.x = this.screenPosition.x;
+            this.container.y = this.screenPosition.y;
+        }
     }
 
     onStartAnimation(name) {

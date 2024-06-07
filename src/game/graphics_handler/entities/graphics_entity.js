@@ -19,6 +19,7 @@ export class GraphicsEntity {
 
     onUpdate(deltaTime) {
         if (this.currentAnimation != null) {
+            if (this.currentAnimation.inProgress === false) return;
             this.currentAnimation.increment(deltaTime);
         }
     }
