@@ -56,10 +56,6 @@ async function initGame() {
 async function initPage() {
     // Set task identifier
     const taskIdentifier = globals.taskIdentifier;
-
-    //copypasted from createTaskButtons function, this could be globals
-    //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
-
     document.getElementById("task-id").innerHTML = taskIdentifier;
 
     // Update the href for previous and next task links
