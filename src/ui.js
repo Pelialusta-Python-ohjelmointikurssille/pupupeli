@@ -107,9 +107,11 @@ async function initPage() {
     // set theme eventlistener, but first set theme if not set
     if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
     let themeSelectDropdown = document.getElementById("theme-select");
+    themeSelectDropdown.value = localStorage.getItem("theme");
     themeSelectDropdown.addEventListener('change', function(event) {
         let selectedValue = event.target.value;
         localStorage.setItem("theme", selectedValue);
+        window.location.reload();
     });
     console.log(globals.theme);
 }
