@@ -1,8 +1,8 @@
 import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
-import { AskCommand, MoveCommand, SayCommand } from "./commands.js";
-import { commandsDone } from "./game_controller.js";
+import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
+import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 
@@ -34,16 +34,20 @@ export class Game {
     }
 
     receiveInput(commandName, commandParameter) {
-        switch (commandName) {
-            case Constants.MOVE_STR:
-                this.makeMoveCommand(commandParameter);
-                break;
-            case Constants.SAY_STR:
-                this.makeSayCommand(commandParameter);
-                break;
-            case Constants.ASK_STR:
-                this.makeAskCommand(commandParameter);
-                break;
+        //If we are already executing a command, (animation not finished),
+        //we have the option of waiting for the current one finishing, 
+        //OR, quickly finishing the current one. 
+        //Because of how the logic works, I will for now opt into quickly finishing the current ones.
+        if (this.gh.isReady) {
+            console.log("My body is ready.");
+        } else {
+            console.log("I AM NOT READY!!!!!!");
+        }
+        //-----------------------------------------------
+        if (commandName === Constants.MOVE_STR) {
+            this.MakeMoveCommand(commandParameter);
+        } else if (commandName === Constants.SAY_STR) {
+            this.MakeSayCommand(commandParameter);
         }
     }
 
@@ -71,11 +75,13 @@ export class Game {
     resetGame() {
         this.grid.resetGrid();
         this.gh.resetGridObjects();
+        this.gh.destroyTextBoxes();
         this.gameMode.reset();
     }
 
     gameHasBeenWon() {
         console.log("Olet voittanut pelin!");
         console.log("Loppupisteesi on: " + globals.collectibles.current);
+        notifyGameWon();
     }
 }

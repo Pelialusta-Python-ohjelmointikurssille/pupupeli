@@ -61,8 +61,6 @@ export class GridEntity extends GraphicsEntity {
 
     gridToScreenCoordinates(gridCellPosition) {
         let screenPos = GridVectorToScreenVector(gridCellPosition, this.sizeOnScreen, this.gridSize, new Vector2(this.container.x, this.container.y));
-        //screenPos.x += this.gridScale / 2;
-        //screenPos.y += this.gridScale / 2;
         return screenPos;
     }
 }

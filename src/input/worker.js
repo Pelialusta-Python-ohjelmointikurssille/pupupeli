@@ -48,6 +48,7 @@ async function initializePyodide(pythonCode) {
             }
         });
         pythonFileStr = pythonCode;
+        console.log("Initialized pyodide worker");
     }
 }
 
