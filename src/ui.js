@@ -134,8 +134,6 @@ function createTaskButtons() {
         button.addEventListener('click', () => {
             window.location.href = `?task=${i + 1}`;
         });
-        // Add that button turns to green when task if completed
-        // when task completion system is implemented
         buttonContainer.appendChild(button);
     }
 }
