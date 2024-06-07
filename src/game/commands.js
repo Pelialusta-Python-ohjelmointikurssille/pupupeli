@@ -31,7 +31,7 @@ export class MoveCommand {
         this.dir = dir;
         this.graphicsHandler = graphicsHandler;
         this.moveStartPos = this.gridObject.getVector2Position();
-        this.moveSpeed = 2;
+        this.moveSpeed = 0.4;
         this.objectHideSpeed = 0.6;
     }
 
