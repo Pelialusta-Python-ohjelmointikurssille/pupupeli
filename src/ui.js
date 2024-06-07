@@ -50,6 +50,9 @@ async function initGame() {
     canvas.id = "game";
 }
 
+/**
+ * Inserts information to page elements according to current task. Also adds task select buttons.
+ */
 async function initPage() {
     // Set task identifier
     const taskIdentifier = globals.taskIdentifier;
