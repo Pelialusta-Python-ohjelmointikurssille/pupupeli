@@ -47,6 +47,10 @@ export class GridObjectEntity extends GraphicsEntity {
         super.doAnimation(animation);
     }
 
+    finishAnimationsInstantly() {
+        super.finishAnimationsInstantly();
+    }
+
     reset() {
         super.reset();
         this.gridCellPosition = new Vector2(this.startPosition.x, this.startPosition.y);

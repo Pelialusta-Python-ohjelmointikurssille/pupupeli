@@ -39,6 +39,10 @@ export class SayAnimation {
         this.gridObject.container.zIndex = 9;
     }
 
+    skipToEnd() {
+        this.progress.skipToEnd();
+    }
+
     increment(deltaTime) {
         if (this.inProgress === false) return;
         this.progress.increment(deltaTime);

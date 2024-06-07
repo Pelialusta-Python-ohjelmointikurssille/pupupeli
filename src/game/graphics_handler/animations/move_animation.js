@@ -46,6 +46,10 @@ export class MoveAnimation {
         this.inProgress = false;
     }
 
+    skipToEnd() {
+        this.progress.skipToEnd();
+    }
+
     onStart() {
         this.gridObject.onStartAnimation(this.name);
     }

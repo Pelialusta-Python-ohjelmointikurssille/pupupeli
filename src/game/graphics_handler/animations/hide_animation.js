@@ -34,6 +34,10 @@ export class HideAnimation {
         this.gridObject.container.scale = 1;
     }
 
+    skipToEnd() {
+        this.progress.skipToEnd();
+    }
+
     onStart() {
         this.gridObject.container.alpha = 1;
         this.gridObject.onStartAnimation(this.name);

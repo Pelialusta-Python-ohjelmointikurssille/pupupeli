@@ -26,12 +26,10 @@ export class GraphicsEntity {
     onDestroy() {
 
     }
-
+    
     finishAnimationsInstantly() {
         if (this.currentAnimation != null) {
-            
-            this.currentAnimation.onFinish();
-            this.currentAnimation.stop();
+            this.currentAnimation.skipToEnd();
         }
     }
 

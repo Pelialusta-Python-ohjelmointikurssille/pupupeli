@@ -78,6 +78,7 @@ export class SayCommand {
     execute() {
         // TEMPORARY HACK!! REPLACE THIS!
         //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
+        this.graphicsHandler.destroyTextBoxes();
         let textboxId = crypto.randomUUID().toString();
         this.graphicsHandler.createEntity(textboxId, "textbox", {
             //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
