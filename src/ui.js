@@ -45,6 +45,7 @@ async function initGame() {
 async function initPage() {
     // Set task identifier
     const taskIdentifier = globals.taskIdentifier;
+    const chapterIdentifier = globals.chapterIdentifier;
 
     //copypasted from createTaskButtons function, this could be globals
     //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
@@ -57,7 +58,7 @@ async function initPage() {
 
     // Changes href of prevtasklink and hides it if no prev task exists
     if (taskIdentifier > 1) {
-        prevTaskLink.href = `/?task=${taskIdentifier - 1}`;
+        prevTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier - 1}`;
         prevTaskLink.style.display = 'inline'; // Ensure it's visible
     } else {
         prevTaskLink.style.display = 'none'; // Hide if on the first task
@@ -65,7 +66,7 @@ async function initPage() {
 
     // Changes href of nexttasklink and hides it if no prev task exists
     if (taskIdentifier < totalTasks) {
-        nextTaskLink.href = `/?task=${taskIdentifier + 1}`;
+        nextTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier + 1}`;
         nextTaskLink.style.display = 'inline'; // Ensure it's visible
     } else {
         nextTaskLink.style.display = 'none'; // Hide if on the last task
@@ -132,7 +133,7 @@ function createTaskButtons() {
         button.innerText = `${i + 1}`;
         button.class
         button.addEventListener('click', () => {
-            window.location.href = `?task=${i + 1}`;
+            window.location.href = `?chapter=${globals.chapterIdentifier}&task=${i + 1}`;
         });
         // Add that button turns to green when task if completed
         // when task completion system is implemented
