@@ -38,6 +38,7 @@ export class Game {
         if (!this.gh.isReady) {
             this.gh.finishAnimationsImmediately();
         }
+        this.gh.destroyTextBoxes();
         if (commandName === Constants.MOVE_STR) {
             this.makeMoveCommand(commandParameter);
         } else if (commandName === Constants.SAY_STR) {
