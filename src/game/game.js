@@ -39,12 +39,11 @@ export class Game {
         //we have the option of waiting for the current one finishing, 
         //OR, quickly finishing the current one. 
         //Because of how the logic works, I will for now opt into quickly finishing the current ones.
-        if (this.gh.isReady) {
-            console.log("My body is ready.");
-        } else {
-            console.log("I AM NOT READY!!!!!!");
+        if (!this.gh.isReady) {
+            this.gh.finishAnimationsImmediately();
         }
         //-----------------------------------------------
+        //Do a new command:
         if (commandName === Constants.MOVE_STR) {
             this.MakeMoveCommand(commandParameter);
         } else if (commandName === Constants.SAY_STR) {
@@ -77,7 +76,6 @@ export class Game {
     resetGame() {
         this.grid.resetGrid();
         this.gh.resetGridObjects();
-        this.gh.destroyTextBoxes();
         this.gameMode.reset();
     }
 

@@ -71,6 +71,26 @@ export class TextBoxEntity extends GraphicsEntity {
         this.lineGraphic.fill(0xffffff);
     }
 
+    onUpdate(deltaTime) {
+        super.onUpdate(deltaTime);
+    }
+
+    onStartAnimation(name) {
+        super.onStartAnimation(name);
+    }
+
+    onFinishAnimation(name) {
+        super.onFinishAnimation(name);
+    }
+
+    doAnimation(animation) {
+        super.doAnimation(animation);
+    }
+
+    finishAnimationsInstantly() {
+        super.finishAnimationsInstantly();
+    }
+
     setDynamicallyPosition() {
         if (this.data.position != null) {
             this.container.x = this.data.position.x;

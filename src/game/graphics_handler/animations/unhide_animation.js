@@ -29,6 +29,10 @@ export class UnhideAnimation {
         this.gridObject.container.alpha = 0;
     }
 
+    skipToEnd() {
+        this.progress.skipToEnd();
+    }
+
     onStart() {
         this.gridObject.container.rotation = 0;
         this.gridObject.container.alpha = 0;

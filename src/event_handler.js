@@ -11,7 +11,7 @@ export class EventHandler {
         this.worker = worker;
         this.lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
         this.sendUserInputToWorker = this.sendUserInputToWorker.bind(this);
-
+        this.isMessagePassingPaused = false; //keep as default, trust me bro
         // receives messages from worker
         this.worker.onmessage = (message) => {
             message = message.data;
