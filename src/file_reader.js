@@ -49,23 +49,35 @@ export function tryGetFileAsJson(path) {
     const result = JSON.parse(response);
     return result;
 }
+/**
+ * Returns count of tasks json files in directory. This is used for creating the right number of buttons in ui.
+ * This function's while loop depends on catching an error to stop, so it causes 404 file not found each run.
+ * If another way is found, it might be preferred.
+ * @param {string} dirPath - path to the directory 
+ * @returns 
+ */
+export function countForTaskFilesInDirectory(dirPath) {
+    let fileNumber = 1;
 
-    export function countForFilesInDirectory(directory) {
-        let fileNumber = 1;
-
-        // Check files from 1 to n in a for loop
-        while (checkIfFileExists(`${directory}/${fileNumber}.json`) !== null) {
-            fileNumber++;
-        }
-
-        // The number of files is one less than the first file that was not found
-        return fileNumber - 1;
+    // Check files from 1 to n in a for loop
+    // loop stops when an error is caught
+    while (checkIfFileExists(`${dirPath}/${fileNumber}.json`) !== null) {
+        fileNumber++;
     }
 
-    function checkIfFileExists(path) {
-        try {
-            return tryGetFileAsJson(path);
-        } catch {
-            return null;
-        }
+    // The number of files is one less than the first file that was not found
+    return fileNumber - 1;
+}
+
+/**
+ * Returns result if task json file exists, null if doesnt
+ * @param {string} path - path to json file
+ * @returns {json|null} result or null
+ */
+function checkIfFileExists(path) {
+    try {
+        return tryGetFileAsJson(path);
+    } catch {
+        return null;
     }
+}
