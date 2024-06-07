@@ -108,30 +108,38 @@ function addButtonEvents() {
 }
 
 function isUserLoggedIn() {
-    let userContainer = document.getElementById('user-container');
+    let userNameContainer = document.getElementById('user-name');
+    let userLogContainer = document.getElementById('log-button');
+    userNameContainer.innerHTML = ''; // Clear the userContainer
+    userLogContainer.innerHTML = ''; // Clear the userContainer
     if (localStorage.getItem("username") !== null) {
-        userContainer.textContent = "Käyttäjä: " + localStorage.getItem("username");
+        let usernameElement = document.createElement('p');
+        userNameContainer.style.width = "300px";
+        usernameElement.textContent = "Käyttäjä: " + localStorage.getItem("username");
         let logoutButton = document.createElement('button');
         logoutButton.textContent = "Kirjaudu ulos";
+        logoutButton.style.marginBottom = "0px";
+        logoutButton.style.height = "30px";
         logoutButton.addEventListener('click', () => {
             localStorage.removeItem("username");
-            userContainer.textContent = "";
+            usernameElement.textContent = "";
             isUserLoggedIn()
         });
-        userContainer.appendChild(logoutButton);
+        userNameContainer.appendChild(usernameElement) // Append the usernameElement
+        userLogContainer.appendChild(logoutButton);
     } else {
         // Create the input elements
         let userInput = document.createElement('input');
-        let submitButton = document.createElement('input');
-
+        let submitButton = document.createElement('button');
+        userNameContainer.style.width = "150px";
         // Set the attributes for the user input
         userInput.setAttribute('type', 'text');
         userInput.setAttribute('id', 'user-input');
         userInput.setAttribute('placeholder', 'Enter user name');
 
         // Set the attributes for the submit button
-        submitButton.setAttribute('type', 'submit');
-        submitButton.setAttribute('value', 'Submit');
+        submitButton.style.marginBottom = "0px";
+        submitButton.textContent = "Kirjaudu sisään";
         submitButton.addEventListener('click', (event) => {
             event.preventDefault(); // Prevent the form from being submitted
             localStorage.setItem("username", userInput.value);
@@ -139,8 +147,8 @@ function isUserLoggedIn() {
         });
 
         // Append the elements to the user container
-        userContainer.appendChild(userInput);
-        userContainer.appendChild(submitButton);
+        userNameContainer.appendChild(userInput);
+        userLogContainer.appendChild(submitButton);
     }
 }
 
