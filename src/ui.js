@@ -262,6 +262,11 @@ function onNextStepButtonClick() {
     if (state.current === "running") onRunButtonClick();
 }
 
+/**
+ * disables run and skip buttons, changes their images and changes state to "ended".
+ * If code had an error, button changes text to indicate that.
+ * @param {*} cause 
+ */
 function disablePlayButtonsOnFinish(cause = null) {
     let button = document.getElementById("editor-run-pause-button");
     let buttonNext = document.getElementById("editor-skip-button");
