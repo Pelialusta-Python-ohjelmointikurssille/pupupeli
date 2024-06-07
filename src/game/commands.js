@@ -76,7 +76,7 @@ export class SayCommand {
     }
 
     execute() {
-        // TEMPORARY HACK!! REMOVE THIS!
+        // TEMPORARY HACK!! REPLACE THIS!
         //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
         let textboxId = crypto.randomUUID().toString();
         this.graphicsHandler.createEntity(textboxId, "textbox", {
