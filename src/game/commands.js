@@ -93,7 +93,7 @@ export class AskCommand {
     constructor(gridObject, graphicsHandler, askString) {
         this.gridObject = gridObject;
         this.graphicsHandler = graphicsHandler;
-        this.time = 0.5;
+        this.time = 0.1;
         this.askString = askString;
     }
 
@@ -104,7 +104,7 @@ export class AskCommand {
         this.graphicsHandler.createEntity(textboxId, "textbox", {
             //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
             targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
-            text: this.sayString
+            text: this.askString
         });
         this.graphicsHandler.doAction(textboxId, "ask", { time: 2 });
     }

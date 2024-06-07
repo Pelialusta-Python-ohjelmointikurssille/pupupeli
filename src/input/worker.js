@@ -63,14 +63,14 @@ function handleInput() {
 
     postMessage({ type: 'input', details: "", sab: sab });
     Atomics.wait(syncArray, 0, 0);
-
+    console.log("ATOMICS WAIT: CLEAR");
     let word = '';
     for (let i = 0; i < sharedArray.length; i++) {
         if (sharedArray[i] === 0) break;
         word += String.fromCharCode(sharedArray[i]);
     }
-
-    return word
+    console.log(word);
+    return word;
 }
 
 /**
@@ -102,6 +102,7 @@ function runCommand(command, parameters) {
             postError(error.message);
         }
     } else {
+        console.log("Worker on resetattu!");
         try {
             setResetFlag(true);
             continuePythonExecution;

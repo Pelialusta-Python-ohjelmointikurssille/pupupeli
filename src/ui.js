@@ -235,6 +235,7 @@ function onRunButtonClick() {
  * Does nothing if state is initial.
  */
 function onResetButtonClick() {
+    eventHandler.inputToWorker("reset");
     if (state.current === "initial") return;
     state.current = "initial";
     let buttonNext = document.getElementById("editor-skip-button");

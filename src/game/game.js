@@ -35,6 +35,9 @@ export class Game {
     }
 
     receiveInput(commandName, commandParameter) {
+        if (!this.gh.isReady) {
+            this.gh.finishAnimationsImmediately();
+        }
         if (commandName === Constants.MOVE_STR) {
             this.makeMoveCommand(commandParameter);
         } else if (commandName === Constants.SAY_STR) {
