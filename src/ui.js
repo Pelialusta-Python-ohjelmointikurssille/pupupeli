@@ -295,6 +295,10 @@ export function getEventHandler() {
     return eventHandler;
 }
 
+/**
+ * Returns worker object
+ * @returns {Worker} worker
+ */
 function getWorker() {
     return worker;
 }
