@@ -228,6 +228,11 @@ function onRunButtonClick() {
     }
 }
 
+/**
+ * Sets state to initial and resets all task elements to default state.
+ * Also resets worker by calling initialize while initialized === true.
+ * Does nothing if state is initial.
+ */
 function onResetButtonClick() {
     if (state.current === "initial") return;
     state.current = "initial";
