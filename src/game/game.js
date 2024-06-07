@@ -72,9 +72,11 @@ export class Game {
     makeAskCommand(commandParameter) {
         let moveCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
         moveCommand.execute();
+        this.onAnimsReady();
     }
 
     resetGame() {
+        this.gh.destroyTextBoxes();
         this.grid.resetGrid();
         this.gh.resetGridObjects();
         this.gameMode.reset();

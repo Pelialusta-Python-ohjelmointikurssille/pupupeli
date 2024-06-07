@@ -59,7 +59,7 @@ export class TextBoxEntity extends GraphicsEntity {
     }
 
     createTargetArrow() {
-        let triWidth = this.textboxSprite.width / 10 + 20;
+        let triWidth = this.textboxSprite.width / 50 + 20;
         let path = [
             -triWidth, 0,
             triWidth, 0,

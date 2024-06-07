@@ -100,12 +100,15 @@ export class AskCommand {
     execute() {
         // TEMPORARY HACK!! REPLACE THIS!
         //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
+        this.graphicsHandler.destroyTextBoxes();
         let textboxId = crypto.randomUUID().toString();
         this.graphicsHandler.createEntity(textboxId, "textbox", {
             //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
+            position: new Vector2(512, 980),
+            size: new Vector2(1000, 200),
             targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
             text: this.askString
         });
-        this.graphicsHandler.doAction(textboxId, "ask", { time: 2 });
+        //this.graphicsHandler.doAction(textboxId, "ask", { time: 2 });
     }
 }
