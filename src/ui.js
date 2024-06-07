@@ -10,7 +10,6 @@ let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
 const totalTasks = fileReader.countForFilesInDirectory("/tasks");
-// const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 async function main() {
     initialize();
