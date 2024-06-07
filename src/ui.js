@@ -21,6 +21,9 @@ async function main() {
     await initGame();
 }
 
+/**
+ * Creates worker event handler and posts message to initialise pyodide with python file. On reload, calls to reset worker.
+ */
 function initialize() {
     eventHandler = new EventHandler(getWorker());
 
