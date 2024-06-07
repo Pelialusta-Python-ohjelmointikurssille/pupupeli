@@ -253,6 +253,9 @@ function onResetButtonClick() {
     game.resetGame();
 }
 
+/**
+ * Changes state to paused, runs single command, changes state to running
+ */
 function onNextStepButtonClick() {
     onRunButtonClick();
     eventHandler.runSingleCommand();
