@@ -55,7 +55,6 @@ export class ShowInOutAnimation {
     }
 
     onUpdate(deltaTime) {
-        super.onUpdate(deltaTime);
         if (this.currentAnimation != null) {
             this.currentAnimation.increment(deltaTime);
         }

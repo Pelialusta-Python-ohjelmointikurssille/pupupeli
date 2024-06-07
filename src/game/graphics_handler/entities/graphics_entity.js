@@ -27,6 +27,14 @@ export class GraphicsEntity {
 
     }
 
+    finishAnimationsInstantly() {
+        if (this.currentAnimation != null) {
+            
+            this.currentAnimation.onFinish();
+            this.currentAnimation.stop();
+        }
+    }
+
     onStartAnimation() {
         this.isReady = false;
     }

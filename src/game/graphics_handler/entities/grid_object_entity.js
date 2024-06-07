@@ -55,12 +55,6 @@ export class GridObjectEntity extends GraphicsEntity {
         this.container.y = this.screenPosition.y;
     }
 
-    finishAnimationsInstantly() {
-        if (this.currentAnimation != null) {
-            this.currentAnimation.onFinish();
-        }
-    }
-
     /**
      * 
      * @param {*} textures Expects following object: { down: tex_down, right: tex_right, left: tex_left, up: tex_up }

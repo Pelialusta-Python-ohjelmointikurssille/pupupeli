@@ -135,9 +135,7 @@ export class GraphicsEntitySystem {
 
     skipAnimationsAndFinish() {
         this.entityDict.forEach((value) => {
-            if (value.type === "grid_object") {
-                value.finishAnimationsInstantly();
-            }
+            value.finishAnimationsInstantly();
         });
     }
     destroyTextBoxes() {
