@@ -12,15 +12,16 @@ export class GraphicsEntitySystem {
      * @param {PixiRenderer} renderer PixiRenderer object reference
      * @param {GraphicsHandler} graphicsHandler GraphicsHandler object reference
      */
-    constructor(renderer, graphicsHandler) {
+    constructor(renderer, graphicsHandler, graphicsRegistry) {
         this.builtinAssets = renderer.builtinAssets;
         this.entityDict = new Map();
         this.spriteDict = new Map();
         this.renderer = renderer;
         this.camera = null;
-        this.entityFactory = new GraphicsEntityFactory(this, this.builtinAssets);
+        //this.entityFactory = new GraphicsEntityFactory(this, this.builtinAssets);
         this.isReady = true;
         this.graphicsHandler = graphicsHandler;
+        this.graphicsRegistry = graphicsRegistry;
         this.animationFactory = new AnimationFactory();
         this.mainGridEntityUUID = "";
     }
@@ -62,8 +63,8 @@ export class GraphicsEntitySystem {
      * @param {object} data Data related to the entity in object form.
      */
     createGraphicsEntity(entityId, type, data) {
-        let entity = this.entityFactory.createEntity(entityId, type, data);
-        if (type === "grid") {
+        let entity = this.graphicsRegistry.createEntity(entityId, type, data);
+        if (type === "ent_grid") {
             this.mainGridEntityUUID = entityId;
         }
         this.entityDict.set(entityId, entity);
@@ -127,14 +128,14 @@ export class GraphicsEntitySystem {
      */
     resetGridObjects() {
         this.entityDict.forEach((value) => {
-            if (value.type === "grid_object") {
+            if (value.type.startsWith("grid_ent")) {
                 value.reset();
             }
         });
     }
     destroyTextBoxes() {
         this.entityDict.forEach((value, key) => {
-            if (value.type === "textbox"){
+            if (value.type === "ui_textbox"){
                 this.destroyGraphicsEntity(key);
             }
         });

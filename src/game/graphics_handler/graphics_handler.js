@@ -1,6 +1,8 @@
 import { PixiRenderer } from "./pixi_renderer.js";
 import { GraphicsEntitySystem } from "./graphics_entity_handler.js";
 import { Vector2 } from "../vector.js";
+import { GraphicsRegistry } from "./graphics_registry.js";
+import { registerAnimations, registerEntities, registerEntitySkins } from "./graphics_manifest.js";
 
 /**
  * Used for handling pixiJS integration and drawing/animating sprites.
@@ -17,6 +19,7 @@ export class GraphicsHandler {
         this.gridHeight = height;
         this.renderer = null;
         this.graphicsEntityHandler = null;
+        this.graphicsRegistry = null;
         this.isReady = true;
         this.onReadyFunc = onReadyFunc;
         this.onReadyFuncContext = onReadyFuncContext;
@@ -37,10 +40,17 @@ export class GraphicsHandler {
 
         this.renderer = new PixiRenderer();
         await this.renderer.initialize({ screenHeight: 1024, screenWidth: 1024, maxFPS: 60, antialias: true });
+        this.graphicsRegistry = new GraphicsRegistry();
         this.graphicsEntityHandler = new GraphicsEntitySystem(
             this.renderer,
-            this
+            this,
+            this.graphicsRegistry
         );
+
+        registerEntities(this.graphicsRegistry);
+        registerAnimations(this.graphicsRegistry);
+        registerEntitySkins(this.graphicsRegistry);
+        
         this.renderer.addFunctionToRenderLoop(this.graphicsEntityHandler.updateAllEntities, this.graphicsEntityHandler);
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
 
