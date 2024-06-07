@@ -80,9 +80,14 @@ async function initPage() {
     }
 
     // set description
-    globals.task.getDescription().forEach((line) => {
+    globals.task.getDescription().forEach((line, i) => {
         line = line === "" ? "<br>" : line;
-        document.getElementById("task-description").insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
+        if (line === "<br>" && i < 2) return;
+        if (i === 0) {
+            document.getElementById("task-description").insertAdjacentHTML("beforeend", "<p>" + line + "</p>");
+        } else {
+            document.getElementById("task-description").insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
+        }
     });
 
     // set multiple choice questions
@@ -99,6 +104,16 @@ async function initPage() {
     });
     createTaskButtons();
 
+    // set theme eventlistener, but first set theme if not set
+    if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
+    let themeSelectDropdown = document.getElementById("theme-select");
+    themeSelectDropdown.value = localStorage.getItem("theme");
+    themeSelectDropdown.addEventListener('change', function(event) {
+        let selectedValue = event.target.value;
+        localStorage.setItem("theme", selectedValue);
+        window.location.reload();
+    });
+    console.log(globals.theme);
 }
 
 /**
