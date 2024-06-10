@@ -207,13 +207,13 @@ button:hover {
 #celebration {
     position: fixed;
     top: 5%;
-    left: 30%;
+    left: 40%;
     transform: translate(-50%, -50%);
-    padding: 20px;
+    padding: 1rem;
     background-color: #4CAF50;
     color: white;
     border-radius: 8px;
-    font-size: 1.5em;
+    font-size: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     z-index: 1000;
