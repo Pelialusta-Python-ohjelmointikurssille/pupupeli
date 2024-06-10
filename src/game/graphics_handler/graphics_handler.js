@@ -40,7 +40,7 @@ export class GraphicsHandler {
 
         this.renderer = new PixiRenderer();
         await this.renderer.initialize({ screenHeight: 1024, screenWidth: 1024, maxFPS: 60, antialias: true });
-        this.graphicsRegistry = new GraphicsRegistry();
+        this.graphicsRegistry = new GraphicsRegistry(this);
         this.graphicsEntityHandler = new GraphicsEntitySystem(
             this.renderer,
             this,

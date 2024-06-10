@@ -64,7 +64,7 @@ export class GraphicsEntitySystem {
       */
     createGraphicsEntity(entityId, type, data) {
         let entity = this.graphicsRegistry.createEntity(entityId, type, data);
-        if (type === "ent_grid") {
+        if (type === "grid") {
             this.mainGridEntityUUID = entityId;
         }
         this.entityDict.set(entityId, entity);

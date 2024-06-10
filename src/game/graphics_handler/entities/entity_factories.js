@@ -11,6 +11,7 @@ import { TextBoxEntity } from "./textbox_entity.js";
  * @returns {GraphicsEntity} A basic GraphicsEntity object for testing
  */
 export function createGenericEntity(entityUUID, entityData, graphicsEntityHandler, skin) {
+    let sprite = new PIXI.Sprite();
     let entity = new GraphicsEntity(
         entityUUID,
         graphicsEntityHandler,
@@ -28,6 +29,7 @@ export function createGenericEntity(entityUUID, entityData, graphicsEntityHandle
  * @returns {GridObjectEntity} Player object
  */
 export function createGridObject(entityUUID, entityData, graphicsEntityHandler, skin) {
+    let sprite = new PIXI.Sprite();
     let entity = new GridObjectEntity(
         entityUUID,
         graphicsEntityHandler,
@@ -45,6 +47,7 @@ export function createGridObject(entityUUID, entityData, graphicsEntityHandler, 
  * @returns  {GridEntity} Grid object to display in game grid
  */
 export function createGrid(entityUUID, entityData, graphicsEntityHandler, skin) {
+    let sprite = new PIXI.Sprite();
     let entity = new GridEntity(
         entityUUID,
         graphicsEntityHandler,
@@ -62,7 +65,7 @@ export function createGrid(entityUUID, entityData, graphicsEntityHandler, skin) 
  * @returns {BackgroundEntity} Background to the grid, rendered behind everything
  */
 export function createBackground(entityUUID, entityData, graphicsEntityHandler, skin) {
-    let sprite = new PIXI.Sprite(this.builtinAssets.backgrounds.background_grass);
+    let sprite = new PIXI.Sprite();
     let entity = new BackgroundEntity(
         entityUUID,
         graphicsEntityHandler,
@@ -74,14 +77,13 @@ export function createBackground(entityUUID, entityData, graphicsEntityHandler, 
 }
 
 export function createTextBox(entityUUID, entityData, graphicsEntityHandler, skin) {
-    let texture = this.builtinAssets.ui.speechbubble_9slice;
     let entity = new TextBoxEntity(
         entityUUID,
         graphicsEntityHandler,
         new PIXI.Container(),
         null,
         entityData,
-        texture
+        null
     );
     return entity;
 }

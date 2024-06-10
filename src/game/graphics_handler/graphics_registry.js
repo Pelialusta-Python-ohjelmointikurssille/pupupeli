@@ -37,7 +37,7 @@ export class GraphicsRegistry {
 
     createEntity(entityUUID, entityType, entityData) {
         if (this.registeredEntities.has(entityType) === false) return;
-        let entity = this.registeredEntities.get(entityType)(entityUUID, entityData, this.graphicsHandler.graphicsEntityHandler);
+        let entity = this.registeredEntities.get(entityType).call(this, entityUUID, entityData, this.graphicsHandler.graphicsEntityHandler);
         entity.type = entityType;
         return entity;
     }
