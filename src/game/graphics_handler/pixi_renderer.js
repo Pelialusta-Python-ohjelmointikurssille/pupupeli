@@ -32,14 +32,14 @@ export class PixiRenderer {
 
         if (globals.theme === "Pupu") {
             await PIXI.Assets.init({ manifest: builtinAssetManifest });
-            this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles"]);
+            this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles", "ui"]);
         }
         else if (globals.theme === "Robo") {
             await PIXI.Assets.init({ manifest: roboAssetManifest });
-            this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles"]);
+            this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles", "ui"]);
         } else {
             await PIXI.Assets.init({ manifest: builtinAssetManifest });
-            this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles"]);
+            this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles", "ui"]);
         }
 
         let t2 = new Date().getTime();
@@ -225,5 +225,14 @@ const roboAssetManifest = {
                 }
             ]
         },
+        {
+            name: "ui",
+            assets: [
+                {
+                    alias: "speechbubble_9slice",
+                    src: "src/static/game_assets/speechbubblenineslice.png"
+                }
+            ]
+        }
     ]
 }
