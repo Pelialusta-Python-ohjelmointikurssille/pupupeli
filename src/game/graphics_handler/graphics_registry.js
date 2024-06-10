@@ -27,12 +27,14 @@ export class GraphicsRegistry {
         }
     }
 
-    registerEntitySkin(skinType, entityType, factoryFunction) {
-
+    registerEntitySkin(skinName, factoryFunction) {
+        this.registeredEntitySkins.set(skinName, factoryFunction);
     }
 
-    deRegisterEntitySkin(skinType, entityType) {
-        
+    deRegisterEntitySkin(skinName) {
+        if (this.registeredEntitySkins.has(skinName)) {
+            this.registeredEntitySkins.delete(skinName);
+        }
     }
 
     createEntity(entityUUID, entityType, entityData) {
@@ -44,5 +46,9 @@ export class GraphicsRegistry {
 
     createAnimation(animationType, animationData, entity) {
         
+    }
+
+    createEntitySkin(skinName) {
+
     }
 }

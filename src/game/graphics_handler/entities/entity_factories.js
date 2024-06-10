@@ -10,7 +10,7 @@ import { TextBoxEntity } from "./textbox_entity.js";
  * @param {string} entityUUID 
  * @returns {GraphicsEntity} A basic GraphicsEntity object for testing
  */
-export function createGenericEntity(entityUUID, entityData, graphicsEntityHandler, skin) {
+export function createGenericEntity(entityUUID, entityData, graphicsEntityHandler, skins) {
     let sprite = new PIXI.Sprite();
     let entity = new GraphicsEntity(
         entityUUID,
@@ -28,7 +28,7 @@ export function createGenericEntity(entityUUID, entityData, graphicsEntityHandle
  * @param {*} entityData 
  * @returns {GridObjectEntity} Player object
  */
-export function createGridObject(entityUUID, entityData, graphicsEntityHandler, skin) {
+export function createGridObject(entityUUID, entityData, graphicsEntityHandler, skins) {
     let sprite = new PIXI.Sprite();
     let entity = new GridObjectEntity(
         entityUUID,
@@ -46,7 +46,7 @@ export function createGridObject(entityUUID, entityData, graphicsEntityHandler, 
  * @param {*} entityData 
  * @returns  {GridEntity} Grid object to display in game grid
  */
-export function createGrid(entityUUID, entityData, graphicsEntityHandler, skin) {
+export function createGrid(entityUUID, entityData, graphicsEntityHandler, skins) {
     let sprite = new PIXI.Sprite();
     let entity = new GridEntity(
         entityUUID,
@@ -64,7 +64,7 @@ export function createGrid(entityUUID, entityData, graphicsEntityHandler, skin) 
  * @param {*} entityData 
  * @returns {BackgroundEntity} Background to the grid, rendered behind everything
  */
-export function createBackground(entityUUID, entityData, graphicsEntityHandler, skin) {
+export function createBackground(entityUUID, entityData, graphicsEntityHandler, skins) {
     let sprite = new PIXI.Sprite();
     let entity = new BackgroundEntity(
         entityUUID,
@@ -76,7 +76,7 @@ export function createBackground(entityUUID, entityData, graphicsEntityHandler, 
     return entity;
 }
 
-export function createTextBox(entityUUID, entityData, graphicsEntityHandler, skin) {
+export function createTextBox(entityUUID, entityData, graphicsEntityHandler, skins) {
     let entity = new TextBoxEntity(
         entityUUID,
         graphicsEntityHandler,

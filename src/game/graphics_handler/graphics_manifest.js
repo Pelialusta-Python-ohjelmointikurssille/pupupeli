@@ -50,7 +50,7 @@ export function registerEntities(graphicsRegistry) {
     graphicsRegistry.registerEntity(ENTITY_TYPE.GRID_PAWN, createGridObject);
     graphicsRegistry.registerEntity(ENTITY_TYPE.TEMP_PLAYER, createGridObject);
     graphicsRegistry.registerEntity(ENTITY_TYPE.TEMP_COLLECTIBLE, createGridObject);
-    graphicsRegistry.registerEntity(ENTITY_TYPE.TEMP_COLLECTIBLE, createGridObject);
+    graphicsRegistry.registerEntity(ENTITY_TYPE.TEMP_OBSTACLE, createGridObject);
     graphicsRegistry.registerEntity(ENTITY_TYPE.UI_TEXTBOX, createTextBox); 
 }
 
