@@ -35,6 +35,6 @@ class Pelaaja:
 #        if reset_flag:
 #            raise Exception("Interpreter was reset")
         js.runCommand("ask", question)
-        input()
+        return input()
 
 pupu = Pelaaja()
