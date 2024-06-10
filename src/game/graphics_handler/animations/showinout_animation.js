@@ -33,6 +33,10 @@ export class ShowInOutAnimation {
         }
     }
 
+    skipToEnd() {
+        this.progress.skipToEnd();
+    }
+
     stop() {
         this.progress.stop();
         this.inProgress = false;
@@ -55,7 +59,6 @@ export class ShowInOutAnimation {
     }
 
     onUpdate(deltaTime) {
-        super.onUpdate(deltaTime);
         if (this.currentAnimation != null) {
             this.currentAnimation.increment(deltaTime);
         }

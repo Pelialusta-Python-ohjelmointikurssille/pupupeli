@@ -2,12 +2,16 @@ import * as gameController from './game/game_controller.js';
 import * as ui from './ui.js'
 import * as globals from './util/globals.js';
 
+/**
+ * Sends messages to and manages messages from the worker. 
+ * Requires the worker as a param when creating.
+ */
 export class EventHandler {
     constructor(worker) {
         this.worker = worker;
         this.lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
         this.sendUserInputToWorker = this.sendUserInputToWorker.bind(this);
-
+        this.isMessagePassingPaused = false; //keep as default, trust me bro
         // receives messages from worker
         this.worker.onmessage = (message) => {
             message = message.data;
@@ -34,10 +38,11 @@ export class EventHandler {
         }
     }
 
-    terminateWorker() {
-        this.worker.terminate();
-    }
-
+    /**
+     * Logic to handle passing messages to worker depending on various conditions.
+     * @param {*} message The message object, usually in the form of { type: "messagetype", details: "messagedata"}, also
+     * possibly a shared array buffer if necessary
+     */
     postMessage(message) {
         if (message.sab === null || message.sab === undefined) {
             this.#postMessageToWorker({ type: message.type, details: message.details, sab: null, value: 0 });
@@ -51,6 +56,10 @@ export class EventHandler {
         }
     }
 
+    /**
+     * Used to control whether the worker should continue executing further commands or not.
+     * @param {*} state An object in the form of { paused: boolean }
+     */
     setMessagePassingState(state) {
         this.isMessagePassingPaused = state.paused;
         if (!this.isMessagePassingPaused) {
@@ -58,6 +67,10 @@ export class EventHandler {
         }
     }
     
+    /**
+     * A somewhat hacky implementation of running just one line of python in the worker.
+     * This is a good target for refactoring.
+     */
     runSingleCommand() {
         if (!this.isMessagePassingPaused) {
             this.setMessagePassingState({ paused: true });
@@ -67,6 +80,11 @@ export class EventHandler {
         this.setMessagePassingState({ paused: true });
     }
 
+    /**
+     * Called every time the user inputs something in the input box
+     * @param {*} event The event when the user inputs something in the input box,
+     * in this case, the relevant part is the key the user inputs.
+     */
     sendUserInputToWorker(event) {
         if (event.key === 'Enter') {
             this.word = ui.promptUserInput({ inputBoxHidden: false });
@@ -80,14 +98,22 @@ export class EventHandler {
         }
     }
 
+    /**
+     * First allows the worker to continue, but then immediately sets the second value in waitArray to 1
+     * so that the worker knows to not run any more python code.
+     */
     resetWorker() {
         const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
         Atomics.store(waitArray, 0, 1); // this is for stopping the wait
         Atomics.notify(waitArray, 0, 1);
         Atomics.store(waitArray, 1, 1); // this is for checking (in worker) if we've reset the game
-        //this.worker.postMessage({type: "reset"});
     }
 
+    /**
+     * An event handler internal method that does the actual sending of messages to the handler, and
+     * if necessary, telling the worker that it should proceed to the next command
+     * @param {*} message The message object, usually in the form of { type: "messagetype", details: "messagedata"}
+     */
     #postMessageToWorker(message) {
         this.worker.postMessage({ type: message.type, details: message.details });
         if (message.sab !== null) {
@@ -97,6 +123,10 @@ export class EventHandler {
         }
     }
 
+    /**
+     * An event handler internal method that saves the last executed command in case we need it later.
+     * @param {*} message The message object, usually in the form of { type: "messagetype", details: "messagedata"}
+     */
     #saveLastMessage(message) {
         this.lastMessage = message;
     }

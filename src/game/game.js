@@ -15,6 +15,9 @@ export class Game {
         this.gameMode.eventTarget.addEventListener("victory", this.gameHasBeenWon.bind(this));
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
+        this.gameWon = false;
+
+        this.isGridEnabled = true;
     }
 
     async init() {
@@ -38,12 +41,11 @@ export class Game {
         //we have the option of waiting for the current one finishing, 
         //OR, quickly finishing the current one. 
         //Because of how the logic works, I will for now opt into quickly finishing the current ones.
-        if (this.gh.isReady) {
-            console.log("My body is ready.");
-        } else {
-            console.log("I AM NOT READY!!!!!!");
+        if (!this.gh.isReady) {
+            this.gh.finishAnimationsImmediately();
         }
         //-----------------------------------------------
+        //Do a new command:
         if (commandName === Constants.MOVE_STR) {
             this.MakeMoveCommand(commandParameter);
         } else if (commandName === Constants.SAY_STR) {
@@ -51,7 +53,13 @@ export class Game {
         }
     }
 
+    /**
+     * Calls game_controller.commandsDone. if gameWon is true, calls game_controller.notifyGameWon
+     */
     onAnimsReady() {
+        if (this.gameWon === true) {
+            notifyGameWon();
+        }
         commandsDone();
     }
 
@@ -74,9 +82,22 @@ export class Game {
         this.gameMode.reset();
     }
 
+    /**
+     * changes gameWon attribute to true
+     */
     gameHasBeenWon() {
         console.log("Olet voittanut pelin!");
         console.log("Loppupisteesi on: " + globals.collectibles.current);
-        notifyGameWon();
+        this.gameWon = true;
+    }
+
+    toggleGrid() {
+        if (this.isGridEnabled === true) {
+            this.isGridEnabled = false;
+            this.gh.setGridState(false);
+        } else {
+            this.isGridEnabled = true;
+            this.gh.setGridState(true);
+        }
     }
 }

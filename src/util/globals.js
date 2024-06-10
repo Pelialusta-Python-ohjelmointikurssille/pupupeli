@@ -30,7 +30,7 @@ export const conditionsCleared = [];
 
 export let currentSAB;
 
-export let asd = false;
+export const theme = localStorage.getItem("theme");
 
 export function setCurrentSAB(sab) {
     currentSAB = sab;
