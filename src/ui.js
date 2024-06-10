@@ -164,7 +164,7 @@ function isUserLoggedIn() {
  * Create buttons for selecting tasks based on how many json files exist in tasks directory.
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
-function createTaskButtons(chapterIdentifier) {
+function createTaskButtons() {
     const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
     if (localStorage.getItem("completedTasks") === null) {
@@ -186,7 +186,7 @@ function createTaskButtons(chapterIdentifier) {
         }
         button.innerText = `${i + 1}`;
         button.addEventListener('click', () => {
-            window.location.href = `?chapter=${chapterIdentifier}&task=${i + 1}`;
+            window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
         });
         // Add that button turns to green when task if completed
         // when task completion system is implemented
@@ -211,7 +211,7 @@ function createChapterButtons() {
     selectContainer.addEventListener('change', (event) => {
         const selectedChapter = event.target.value;
         window.location.href = `/?chapter=${selectedChapter}&task=1`;
-        createTaskButtons(selectedChapter);
+        createTaskButtons();
     });
 } 
 
