@@ -67,7 +67,7 @@ function handleInput() {
     postMessage({ type: 'input', details: "", sab: sab });
     Atomics.wait(syncArray, 0, 0);
     let word = getStringFromSharedArray(sharedArray);
-    console.log("worker word: " + word);
+    console.log("worker received word: " + word);
     //special case where we want to reset python if it's waiting for input.
     //We interrupt pyodide and and send message that we are finished.
     //This sends out an error but it's a friend, not an enemy.
