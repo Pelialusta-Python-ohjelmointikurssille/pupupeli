@@ -21,9 +21,8 @@ export async function initGame() {
 // "{ data: data, sab: sab })" 
 // where data is ? and sab is an SharedArrayBuffer.
 export function giveCommand(dirtyCommand) {
-    console.log(dirtyCommand);
+    currentCommand = dirtyCommand; //Do this first, always. Thank you.
     game.receiveInput(dirtyCommand.data.command, dirtyCommand.data.parameters);
-    currentCommand = dirtyCommand;
 }
 
 /**
