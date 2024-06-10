@@ -42,7 +42,7 @@ export class GraphicsRegistry {
         return entity;
     }
 
-    createAnimation(animationType, animationData) {
+    createAnimation(animationType, animationData, entity) {
         
     }
 }
