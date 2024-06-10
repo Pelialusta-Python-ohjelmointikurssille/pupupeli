@@ -138,6 +138,7 @@ export class GraphicsEntitySystem {
             value.finishAnimationsInstantly();
         });
     }
+
     destroyTextBoxes() {
         this.entityDict.forEach((value, key) => {
             if (value.type === "textbox"){
