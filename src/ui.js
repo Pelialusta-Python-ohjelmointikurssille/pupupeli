@@ -11,6 +11,7 @@ let worker = new Worker('/src/input/worker.js');
 let initialized = false;
 const totalTasks = fileReader.countForFilesInDirectory("/tasks/"+globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
+let currentChapter = globals.chapterIdentifier;
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 async function main() {
@@ -194,21 +195,25 @@ function createTaskButtons(chapterIdentifier) {
 }
 
 function createChapterButtons() {
-    const numberOfButtons = totalChapters
-    const buttonContainer = document.getElementById('chapterbuttontable');
+    const numberOfButtons = totalChapters;
+    const selectContainer = document.getElementById('chapterbuttontable');
+
     for (let i = 0; i < numberOfButtons; i++) {
-        const button = document.createElement('option');
-        // button.id = `chapter-button-${i + 1}`;
-        // button.value = i + 1
-        button.innerText = `${i + 1}`;
-        button.addEventListener('click', () => {
-            window.location.href = `/?chapter=${i + 1}&task=1`;
-            createTaskButtons(chapterIdentifier);
-        });
-        buttonContainer.appendChild(button);
+        const option = document.createElement('option');
+        option.id = `chapter-option-${i + 1}`;
+        option.value = i + 1;
+        option.innerText = `Tehtäväsarja ${i + 1}`;
+        selectContainer.appendChild(option);
     }
-    document.getElementById('chapterbuttontable').value = chapterIdentifier;
-}   
+
+    selectContainer.value = currentChapter;
+
+    selectContainer.addEventListener('change', (event) => {
+        const selectedChapter = event.target.value;
+        window.location.href = `/?chapter=${selectedChapter}&task=1`;
+        createTaskButtons(selectedChapter);
+    });
+} 
 
 
 export function onTaskComplete() {

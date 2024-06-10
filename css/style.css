@@ -67,6 +67,10 @@ body {
     border: 1px solid black;
 }
 
+#chapter-selector-text {
+    margin-top: 0px;
+}
+
 #user-container {
     height: 30px;
 }
