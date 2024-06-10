@@ -123,7 +123,7 @@ function addButtonEvents() {
     addEventToButton("editor-run-pause-button", onRunButtonClick);
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", onNextStepButtonClick);
-    //addEventToButton("grid-toggle-button", game.rendererToggleGrid);
+    addEventToButton("grid-toggle-button", game.toggleGrid);
 
     /**
      * Adds eventlistener to a given button to trigger given function

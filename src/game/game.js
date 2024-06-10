@@ -16,6 +16,8 @@ export class Game {
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
+
+        this.isGridEnabled = true;
     }
 
     async init() {
@@ -86,5 +88,15 @@ export class Game {
         console.log("Olet voittanut pelin!");
         console.log("Loppupisteesi on: " + globals.collectibles.current);
         this.gameWon = true;
+    }
+
+    toggleGrid() {
+        if (this.isGridEnabled === true) {
+            this.isGridEnabled = false;
+            this.gh.setGridState(false);
+        } else {
+            this.isGridEnabled = true;
+            this.gh.setGridState(true);
+        }
     }
 }

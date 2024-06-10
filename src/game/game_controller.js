@@ -46,3 +46,7 @@ export function resetGame() {
 export function notifyGameWon() {
     onTaskComplete();
 }
+
+export function toggleGrid() {
+    game.toggleGrid();
+}
