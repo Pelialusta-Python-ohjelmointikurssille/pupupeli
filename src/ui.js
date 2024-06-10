@@ -173,7 +173,6 @@ function createTaskButtons() {
  * Turns task button green and saves completion status. The html button's class is changed and the task number is added to localStorage. 
  */
 export function onTaskComplete() {
-    console.log("joo kutsutaan")
     const taskIdentifier = globals.taskIdentifier;
     const buttonid = `button-${taskIdentifier}`;
     let button = document.getElementById(buttonid);
@@ -272,8 +271,6 @@ function onResetButtonClick() {
     promptUserInput(true); // hide input box if visible
     let containsInvisible = celebrationBox.classList.contains("is-invisible");
     if (!containsInvisible) {
-        console.log(containsInvisible)
-        console.log(celebrationBox.classList)
         celebrationBox.classList.add("is-invisible") // hide celebration box
     }
    
