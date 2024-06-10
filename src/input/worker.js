@@ -66,12 +66,8 @@ function handleInput() {
 
     postMessage({ type: 'input', details: "", sab: sab });
     Atomics.wait(syncArray, 0, 0);
-    console.log("ATOMICS WAIT: CLEAR");
-    let word = '';
-    for (let i = 0; i < sharedArray.length; i++) {
-        if (sharedArray[i] === 0) break;
-        word += String.fromCharCode(sharedArray[i]);
-    }
+    let word = getStringFromSharedArray(sharedArray);
+    
     //special case where we want to reset python if it's waiting for input.
     //We interrupt pyodide and and send message that we are finished.
     //This sends out an error but it's a friend, not an enemy.
@@ -81,6 +77,16 @@ function handleInput() {
         interruptBuffer[0] = 2;
         pyodide.checkInterrupt();
         postMessage({ type: 'finish' });
+    }
+    console.log(word);
+    return word;
+}
+
+function getStringFromSharedArray(sharedArray) {
+    let word = '';
+    for (let i = 0; i < sharedArray.length; i++) {
+        if (sharedArray[i] === 0) break;
+        word += String.fromCharCode(sharedArray[i]);
     }
     return word;
 }

@@ -31,10 +31,10 @@ class Pelaaja:
     def puhu(self, sentence: str):
         self.sano(sentence)
     
-    def kysy(self, sentence: str):
+    def kysy(self, question: str = "?"):
 #        if reset_flag:
 #            raise Exception("Interpreter was reset")
-        js.runCommand("ask", sentence)
+        js.runCommand("ask", question)
         input()
 
 pupu = Pelaaja()
