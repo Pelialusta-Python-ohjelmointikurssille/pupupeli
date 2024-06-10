@@ -323,6 +323,11 @@ export function onFinishLastCommand() {
 export function displayErrorMessage(error) {
     if (typeof error === "string") { console.log(error) } else { console.log(error.message) }
     let errorDetails = errorHandler.extractErrorDetails(error.message);
+    if (errorDetails.text === "KeyboardInterrupt") {
+        //KeyboardInterrupt error happens when pyodide is interrupted while doing "input()"
+        //Do not show this error to user, as it's working as intended.
+        return;
+    }
     let errorContainer = document.getElementById("error-box");
     errorContainer.classList.toggle("show-error");
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
