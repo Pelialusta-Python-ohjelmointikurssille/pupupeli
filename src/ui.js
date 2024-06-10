@@ -9,7 +9,7 @@ let eventHandler;
 let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
-const totalTasks = fileReader.countForFilesInDirectory("/tasks/"+globals.chapterIdentifier);
+const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/"+globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
@@ -79,7 +79,7 @@ async function initPage() {
     } else {
         prevTaskLink.style.display = 'none'; // Hide if on the first task
     }
-    const totalTasks = fileReader.countForFilesInDirectory(`/tasks/${globals.chapterIdentifier}`);
+    const totalTasks = fileReader.countForTaskFilesInDirectory(`/tasks/${globals.chapterIdentifier}`);
     // Changes href of nexttasklink and hides it if no prev task exists
     if (taskIdentifier < totalTasks) {
         nextTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier + 1}`;
