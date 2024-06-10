@@ -258,7 +258,7 @@ button:hover {
 
 #celebration {
     position: fixed;
-    top: 5%;
+    top: 15%;
     left: 40%;
     transform: translate(-50%, -50%);
     padding: 1rem;
