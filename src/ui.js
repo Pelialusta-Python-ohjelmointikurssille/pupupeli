@@ -176,6 +176,17 @@ export function onTaskComplete() {
     const taskIdentifier = globals.taskIdentifier;
     const buttonid = `button-${taskIdentifier}`;
     let button = document.getElementById(buttonid);
+    let celebrationBox = document.getElementById("celebration")
+
+    celebrationBox.classList.remove("is-invisible");
+    console.log(celebrationBox);
+
+    // if (inputBoxState.inputBoxHidden === true) {
+    //     celebrationBox.classList.remove("is-invisible");
+    // } //else {
+    // //     let inputValue = inputBox.value;
+    // //     inputBox.classList.add("is-invisible");
+    // //    }
 
     if (button.getAttribute("class") == "button-incompleted") {
         let completedTasksStr = localStorage.getItem("completedTasks");
