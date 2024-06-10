@@ -2,7 +2,6 @@ const PYODIDE_INTERRUPT_INPUT = "pyodide_interrupt_input_666"
 let pyodide;
 let pythonFileStr;
 let continuePythonExecution;
-let ctr = 0;
 let saveState;
 let resetFlag = false;
 let interruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
@@ -109,7 +108,6 @@ function runCommand(command, parameters) {
         postError(`Command '${command}' is not a valid command.`);
     }
     Atomics.wait(waitArray, 0, 0);
-    ctr++;
 
     // waitarray[1] will be "1" if resetWorker() is called in event handler, otherwise 0
     if (waitArray[1] === 0) {
