@@ -5,3 +5,4 @@ html-report/
 __pycache__
 cert.pem
 key.pem
+.idea

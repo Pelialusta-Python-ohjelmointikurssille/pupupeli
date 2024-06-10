@@ -71,6 +71,7 @@ export class TextBoxEntity extends GraphicsEntity {
         this.lineGraphic.fill(0xffffff);
     }
 
+
     onUpdate(deltaTime) {
         super.onUpdate(deltaTime);
     }

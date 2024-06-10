@@ -10,8 +10,17 @@ export const taskIdentifier = (function () {
     return taskIdentifier;
 })();
 
+export const chapterIdentifier = (function () {
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.size === 0) return 1;
+
+    const chapterIdentifier = parseInt(searchParams.get("chapter"));
+    if(isNaN(chapterIdentifier)) return 1;
+    return chapterIdentifier
+})();
+
 export const task = (function () {
-    const path = `/tasks/${taskIdentifier}.json`;
+    const path = `/tasks/${chapterIdentifier}/${taskIdentifier}.json`;
     return Task.fromJSON(tryGetFileAsJson(path));
 })();
 

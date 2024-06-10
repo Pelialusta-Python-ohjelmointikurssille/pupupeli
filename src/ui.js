@@ -10,16 +10,21 @@ let eventHandler;
 let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
-const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks");
+const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/"+globals.chapterIdentifier);
+const totalChapters = fileReader.countForChaptersInDirectory();
+let currentChapter = globals.chapterIdentifier;
+// const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
  * Runs ui initialisation functions
  */
 async function main() {
     initialize();
-    initPage()
+    initPage();
     addButtonEvents();
     await initGame();
+    
+     // Create chapter buttons
 }
 
 /**
@@ -57,8 +62,11 @@ async function initGame() {
  */
 async function initPage() {
     // Set task identifier
+    //copypasted from createTaskButtons function, this could be globals
+    //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
     const taskIdentifier = globals.taskIdentifier;
-    document.getElementById("task-id").innerHTML = taskIdentifier;
+    const chapterIdentifier = globals.chapterIdentifier;
+    document.getElementById("task-id").innerHTML = globals.taskIdentifier;
 
     // Update the href for previous and next task links
     const prevTaskLink = document.querySelector('a[href^="/?task="]:first-child');
@@ -66,19 +74,23 @@ async function initPage() {
 
     // Changes href of prevtasklink and hides it if no prev task exists
     if (taskIdentifier > 1) {
-        prevTaskLink.href = `/?task=${taskIdentifier - 1}`;
+        prevTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier - 1}`;
+
         prevTaskLink.style.display = 'inline'; // Ensure it's visible
     } else {
         prevTaskLink.style.display = 'none'; // Hide if on the first task
     }
-
+    const totalTasks = fileReader.countForTaskFilesInDirectory(`/tasks/${globals.chapterIdentifier}`);
     // Changes href of nexttasklink and hides it if no prev task exists
     if (taskIdentifier < totalTasks) {
-        nextTaskLink.href = `/?task=${taskIdentifier + 1}`;
+        nextTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier + 1}`;
+
         nextTaskLink.style.display = 'inline'; // Ensure it's visible
     } else {
         nextTaskLink.style.display = 'none'; // Hide if on the last task
     }
+
+
 
     // set description
     globals.task.getDescription().forEach((line, i) => {
@@ -103,7 +115,10 @@ async function initPage() {
     window.addEventListener('load', function () {
         editor.getEditor().setValue(globals.task.getEditorCode());
     });
+    
     createTaskButtons();
+    createChapterButtons();
+    isUserLoggedIn();
 
     // set theme eventlistener, but first set theme if not set
     if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
@@ -137,6 +152,51 @@ function addButtonEvents() {
     }
 }
 
+function isUserLoggedIn() {
+    let userNameContainer = document.getElementById('user-name');
+    let userLogContainer = document.getElementById('log-button');
+    userNameContainer.innerHTML = ''; // Clear the userContainer
+    userLogContainer.innerHTML = ''; // Clear the userContainer
+    if (localStorage.getItem("username") !== null) {
+        let usernameElement = document.createElement('p');
+        userNameContainer.style.width = "300px";
+        usernameElement.textContent = "Käyttäjä: " + localStorage.getItem("username");
+        let logoutButton = document.createElement('button');
+        logoutButton.textContent = "Kirjaudu ulos";
+        logoutButton.style.marginBottom = "0px";
+        logoutButton.style.height = "30px";
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem("username");
+            usernameElement.textContent = "";
+            isUserLoggedIn()
+        });
+        userNameContainer.appendChild(usernameElement) // Append the usernameElement
+        userLogContainer.appendChild(logoutButton);
+    } else {
+        // Create the input elements
+        let userInput = document.createElement('input');
+        let submitButton = document.createElement('button');
+        userNameContainer.style.width = "150px";
+        // Set the attributes for the user input
+        userInput.setAttribute('type', 'text');
+        userInput.setAttribute('id', 'user-input');
+        userInput.setAttribute('placeholder', 'Enter user name');
+
+        // Set the attributes for the submit button
+        submitButton.style.marginBottom = "0px";
+        submitButton.textContent = "Kirjaudu sisään";
+        submitButton.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent the form from being submitted
+            localStorage.setItem("username", userInput.value);
+            isUserLoggedIn()
+        });
+
+        // Append the elements to the user container
+        userNameContainer.appendChild(userInput);
+        userLogContainer.appendChild(submitButton);
+    }
+}
+
 /**
  * Create buttons for selecting tasks based on how many json files exist in tasks directory.
  * In the future the path should be able to check different directories so we can implement "chapters".
@@ -162,13 +222,33 @@ function createTaskButtons() {
             button.classList.add("button-incompleted");
         }
         button.innerText = `${i + 1}`;
-        button.class
         button.addEventListener('click', () => {
-            window.location.href = `?task=${i + 1}`;
+            window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
         });
         buttonContainer.appendChild(button);
     }
 }
+
+function createChapterButtons() {
+    const numberOfButtons = totalChapters;
+    const selectContainer = document.getElementById('chapterbuttontable');
+
+    for (let i = 0; i < numberOfButtons; i++) {
+        const option = document.createElement('option');
+        option.id = `chapter-option-${i + 1}`;
+        option.value = i + 1;
+        option.innerText = `Tehtäväsarja ${i + 1}`;
+        selectContainer.appendChild(option);
+    }
+
+    selectContainer.value = currentChapter;
+
+    selectContainer.addEventListener('change', (event) => {
+        const selectedChapter = event.target.value;
+        window.location.href = `/?chapter=${selectedChapter}&task=1`;
+        createTaskButtons();
+    });
+} 
 
 /**
  * Turns task button green and saves completion status. The html button's class is changed and the task number is added to localStorage. 
