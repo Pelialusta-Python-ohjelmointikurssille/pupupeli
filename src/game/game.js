@@ -1,7 +1,7 @@
 import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
-import { MoveCommand, SayCommand } from "./commands.js";
+import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
 import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
@@ -37,19 +37,16 @@ export class Game {
     }
 
     receiveInput(commandName, commandParameter) {
-        //If we are already executing a command, (animation not finished),
-        //we have the option of waiting for the current one finishing, 
-        //OR, quickly finishing the current one. 
-        //Because of how the logic works, I will for now opt into quickly finishing the current ones.
         if (!this.gh.isReady) {
             this.gh.finishAnimationsImmediately();
         }
-        //-----------------------------------------------
-        //Do a new command:
+        this.gh.destroyTextBoxes();
         if (commandName === Constants.MOVE_STR) {
-            this.MakeMoveCommand(commandParameter);
+            this.makeMoveCommand(commandParameter);
         } else if (commandName === Constants.SAY_STR) {
-            this.MakeSayCommand(commandParameter);
+            this.makeSayCommand(commandParameter);
+        } else if (commandName === Constants.ASK_STR) {
+            this.makeAskCommand(commandParameter);
         }
     }
 
@@ -63,19 +60,26 @@ export class Game {
         commandsDone();
     }
 
-    MakeMoveCommand(commandParameter) {
+    makeMoveCommand(commandParameter) {
         let dir = translatePythonMoveStringToDirection(commandParameter);
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
     }
 
-    MakeSayCommand(commandParameter) {
+    makeSayCommand(commandParameter) {
         let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
         sayCommand.execute();
     }
 
+    makeAskCommand(commandParameter) {
+        let moveCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
+        moveCommand.execute();
+        this.onAnimsReady();
+    }
+
     resetGame() {
+        this.gh.destroyTextBoxes();
         this.grid.resetGrid();
         this.gh.resetGridObjects();
         this.gameMode.reset();

@@ -4,6 +4,7 @@ import * as fileReader from "./file_reader.js";
 import * as editor from "./input/editor.js";
 import * as errorHandler from "./input/py_error_handling.js";
 import { EventHandler } from "./event_handler.js";
+import { Constants } from "./game/commonstrings.js";
 
 let eventHandler;
 let state = { current: "initial" };
@@ -250,6 +251,7 @@ function onRunButtonClick() {
  * Does nothing if state is initial.
  */
 function onResetButtonClick() {
+    eventHandler.inputToWorker(Constants.PYODIDE_INTERRUPT_INPUT); //Special str that interrupt pyodide if it's in handleInput()
     if (state.current === "initial") return;
     state.current = "initial";
     let buttonNext = document.getElementById("editor-skip-button");
@@ -336,6 +338,11 @@ export function onFinishLastCommand() {
 export function displayErrorMessage(error) {
     if (typeof error === "string") { console.log(error) } else { console.log(error.message) }
     let errorDetails = errorHandler.extractErrorDetails(error.message);
+    if (errorDetails.text === "KeyboardInterrupt") {
+        //KeyboardInterrupt error happens when pyodide is interrupted while doing "input()"
+        //Do not show this error to user, as it's working as intended.
+        return;
+    }
     let errorContainer = document.getElementById("error-box");
     errorContainer.classList.toggle("show-error");
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
