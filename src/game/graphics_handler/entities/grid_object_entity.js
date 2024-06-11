@@ -10,6 +10,7 @@ export class GridObjectEntity extends GraphicsEntity {
         this.sizeWithinCellMultiplier = 0.9;
         this.fakeZPosition = 0;
         this.currentAnimation = null;
+        this.usesTrail = false;
         this.type = "grid_object";
         if (data != null) {
             if (data.position != null) {
