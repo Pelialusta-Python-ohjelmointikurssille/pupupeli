@@ -28,7 +28,13 @@ export class Game {
     }
 
     createGridEntityForRendering(gridObject) {
-        let data = { position: gridObject.getVector2Position() };
+        let data;
+        if (gridObject.type === Constants.PLAYER_STR) {
+            data = { position: gridObject.getVector2Position(), trail: true };
+        }
+        else {
+            data = { position: gridObject.getVector2Position(), trail: false };
+        }
         this.gh.createEntity(gridObject.id, gridObject.type, data);
     }
 
