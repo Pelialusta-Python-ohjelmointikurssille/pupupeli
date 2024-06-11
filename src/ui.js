@@ -265,7 +265,7 @@ export function onTaskComplete() {
 
     if (button.getAttribute("class") == "button-incompleted") {
         if (localStorage.getItem("completedTasks") === null) {
-            createEmptyChapterCompletedJson()
+            createEmptyTasksCompletedJson()
         }
         addCompletedTaskToLocalStorage()
         button.classList.replace("button-incompleted", "button-completed");
