@@ -271,6 +271,25 @@ button:hover {
     z-index: 1000;
 }
 
+#input-container {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#input-container div {
+    padding: 0.25rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+#input-container div:last-child {
+    border-bottom: none;
+}
+
 @media (max-width: calc((640px * 2) + 3rem)) {
     #app-container {
         flex-direction: column;
