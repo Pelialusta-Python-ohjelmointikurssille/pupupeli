@@ -49,6 +49,9 @@ export class GraphicsEntityFactory {
         if(type === "textbox") {
             return this.createTextBox(entityId, data)
         }
+        if(type === "trail") {
+            return this.createTrail()
+        }
     }
 
     /**
@@ -174,6 +177,20 @@ export class GraphicsEntityFactory {
             data,
             texture
         );
+        entity.type = "textbox"
+        return entity;
+    }
+
+    createTrail(entityId, data) {
+        let entity = new TextBoxEntity(
+            entityId,
+            this.graphicsEntityHandler,
+            new PIXI.Container(),
+            null,
+            data,
+            texture
+        );
+        entity.container.zIndex = 0;
         entity.type = "textbox"
         return entity;
     }
