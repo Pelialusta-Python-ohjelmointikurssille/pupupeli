@@ -6,6 +6,8 @@ import * as errorHandler from "./input/py_error_handling.js";
 import { EventHandler } from "./event_handler.js";
 import { Constants } from "./game/commonstrings.js";
 
+/* global ace */
+
 let eventHandler;
 let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');

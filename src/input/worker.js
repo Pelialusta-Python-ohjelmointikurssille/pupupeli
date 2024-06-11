@@ -127,6 +127,7 @@ function runCommand(command, parameters) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 function sendLine(line) {
     self.postMessage({ type: 'line', details: line });
 }
