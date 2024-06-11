@@ -1,6 +1,5 @@
 import { Vector2 } from "../vector.js";
 import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
-import { AnimationFactory } from "./animations/animation_factory.js";
 
 /**
  * Manages all instantiated gfx entities.
@@ -21,7 +20,6 @@ export class GraphicsEntitySystem {
         this.isReady = true;
         this.graphicsHandler = graphicsHandler;
         this.graphicsRegistry = graphicsRegistry;
-        this.animationFactory = new AnimationFactory();
         this.mainGridEntityUUID = "";
     }
 
@@ -88,7 +86,7 @@ export class GraphicsEntitySystem {
      */
     doAction(entityId, animationId, animationData) {
         let entity = this.getGraphicsEntity(entityId);
-        let animation = this.animationFactory.getAnimation(animationId, entity, animationData);
+        let animation = this.graphicsRegistry.createAnimation(animationId, animationData, entity);
         entity.doAnimation(animation);
     }
 

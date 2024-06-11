@@ -43,9 +43,9 @@ export class MoveCommand {
         if (isSuccess) this.#checkForObjects();
         let dirObj = { direction: GetDirectionAsString(this.dir), time: this.moveSpeed };
         if (isSuccess) {
-            this.graphicsHandler.doAction(this.gridObject.id, Constants.MOVE_STR, dirObj);
+            this.graphicsHandler.doAction(this.gridObject.id, "pawn_move", dirObj);
         } else {
-            this.graphicsHandler.doAction(this.gridObject.id, "failmove", dirObj);
+            this.graphicsHandler.doAction(this.gridObject.id, "pawn_failmove", dirObj);
         }
 
     }
@@ -85,6 +85,6 @@ export class SayCommand {
             targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
             text: this.sayString
         });
-        this.graphicsHandler.doAction(textboxId, "showinout", { time: 2 });
+        this.graphicsHandler.doAction(textboxId, "appear_hide", { time: 2 });
     }
 }

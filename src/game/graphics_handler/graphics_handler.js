@@ -49,6 +49,7 @@ export class GraphicsHandler {
 
         this.graphicsRegistry.registerEntityList(ENTITIES);
         this.graphicsRegistry.registerEntitySkinList(ENTITY_SKINS);
+        this.graphicsRegistry.registerAnimationList(ANIMATIONS);
         
         this.renderer.addFunctionToRenderLoop(this.graphicsEntityHandler.updateAllEntities, this.graphicsEntityHandler);
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
