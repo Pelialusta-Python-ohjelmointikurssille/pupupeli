@@ -6,6 +6,7 @@ import
     createGrid,
     createTextBox
 } from "./entities/entity_factories.js";
+
 import {
     createAppearHideAnimation,
     createHideAnimation,
@@ -13,6 +14,7 @@ import {
     createPawnMoveAnimation,
     createUnHideAnimation
 } from "./animations/animation_factories.js";
+
 import
 {
     createBackgroundGrassSkin,
@@ -20,6 +22,7 @@ import
     createCollectibleCarrotSkin,
     createObstacleRockSkin
 } from "./entity_skins/entity_skin_factories.js";
+
 
 export const ENTITIES = [
     {
