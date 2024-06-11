@@ -1,6 +1,8 @@
 import * as gameController from './game/game_controller.js';
-import * as ui from './ui.js'
+import { getInputBoxValue, hideAndClearInputBox, showInputBox } from './ui/inputBox.js';
+import { displayErrorMessage, onFinishLastCommand } from './ui/ui.js';
 import * as globals from './util/globals.js';
+
 
 /**
  * Sends messages to and manages messages from the worker. 
@@ -19,7 +21,7 @@ export class EventHandler {
                 case "input":
                     this.sharedArray = new Uint16Array(message.sab, 4);
                     this.syncArray = new Int32Array(message.sab, 0, 1);
-                    ui.setUserInputBoxVisibility(true);
+                    showInputBox();
                     break;
                 case "command":
                     globals.setCurrentSAB(message.sab);
@@ -29,10 +31,10 @@ export class EventHandler {
                     globals.addClearedCondition(message.details);
                     break;
                 case "finish":
-                    ui.onFinishLastCommand();
+                    onFinishLastCommand();
                     break;
                 case "error":
-                    ui.displayErrorMessage(message.error);
+                    displayErrorMessage(message.error);
                     break;
             }
         }
@@ -87,9 +89,8 @@ export class EventHandler {
      */
     sendUserInputToWorker(event) {
         if (event.key === 'Enter') {
-            this.word = ui.getInputBoxValue();
-            ui.setUserInputBoxVisibility(false);
-            ui.clearInputBoxValue();
+            this.word = getInputBoxValue();
+            hideAndClearInputBox();
             this.inputToWorker(this.word);
         }
     }

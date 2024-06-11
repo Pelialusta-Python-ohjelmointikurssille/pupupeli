@@ -1,10 +1,11 @@
-import * as globals from "./util/globals.js";
-import * as game from "./game/game_controller.js";
-import * as fileReader from "./file_reader.js";
-import * as editor from "./input/editor.js";
-import * as errorHandler from "./input/py_error_handling.js";
-import { EventHandler } from "./event_handler.js";
-import { Constants } from "./game/commonstrings.js";
+import * as globals from "../util/globals.js";
+import * as game from "../game/game_controller.js";
+import * as fileReader from "../file_reader.js";
+import * as editor from "../input/editor.js";
+import * as errorHandler from "../input/py_error_handling.js";
+import { EventHandler } from "../event_handler.js";
+import { Constants } from "../game/commonstrings.js";
+import { hideAndClearInputBox } from "./inputBox.js";
 
 let eventHandler;
 let state = { current: "initial" };
@@ -13,7 +14,6 @@ let initialized = false;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
-let inputBox = document.getElementById("input-box");
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
@@ -357,8 +357,7 @@ function onResetButtonClick() {
         errorContainer.classList.toggle("show-error");
         errorContainer.children[0].textContent = "";
     }
-    setUserInputBoxVisibility(false);
-    clearInputBoxValue();
+    hideAndClearInputBox();
     let containsInvisible = celebrationBox.classList.contains("is-invisible");
     if (!containsInvisible) {
         celebrationBox.classList.add("is-invisible") // hide celebration box
@@ -444,30 +443,6 @@ export function displayErrorMessage(error) {
     errorContainer.classList.toggle("show-error");
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
     disablePlayButtonsOnFinish("error");
-}
-
-/**
- * @param {*} isVisible boolean, if true set box visible. Else, invisible. 
- */
-export function setUserInputBoxVisibility(isVisible) {
-    if (isVisible) {
-        inputBox.classList.remove("is-invisible");
-        inputBox.addEventListener("keydown", eventHandler.sendUserInputToWorker);
-        return;
-    }
-    inputBox.classList.add("is-invisible");
-    inputBox.removeEventListener("keydown", eventHandler.sendUserInputToWorker);
-}
-
-export function getInputBoxValue() {
-    return inputBox.value;
-}
-
-/**
- * Sets the text of inputBox to empty.
- */
-export function clearInputBoxValue() {
-    inputBox.value = "";
 }
 
 await main();
