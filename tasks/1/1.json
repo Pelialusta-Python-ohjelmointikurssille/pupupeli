@@ -1,24 +1,23 @@
 {
   "description": [
-    "Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:",
-    "",
-    "pupu.liiku(\"oikea\")",
-    "pupu.liiku(\"alas\")",
-    "pupu.liiku(\"vasen\")",
-    "pupu.liiku(\"ylös\")"
+    "Piirrä semmonen neliö tän kentän ympärille"
   ],
   "editorCode": [
     "for i in range(7):",
     "\tpupu.liiku(\"oikea\")",
     "for i in range(7):",
-    "\tpupu.liiku(\"alas\")"
+    "\tpupu.liiku(\"alas\")",
+    "for i in range(7):",
+    "\tpupu.liiku(\"vasen\")",
+    "for i in range(7):",
+    "\tpupu.liiku(\"ylös\")"
   ],
   "multipleChoiceQuestions": [],
   "grid": [
     [0,1,1,1,1,1,1,2],
     [1,1,3,3,1,1,1,1],
     [1,1,1,3,1,1,1,1],
-    [1,1,1,3,1,1,2,1],
+    [1,1,1,3,1,1,1,1],
     [1,1,1,3,1,1,1,1],
     [1,1,1,3,1,1,1,1],
     [1,1,1,1,1,1,1,1],
