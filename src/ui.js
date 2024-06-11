@@ -205,7 +205,7 @@ function createTaskButtons() {
     const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
     if (localStorage.getItem("completedTasks") === null) {
-        createEmptyChapterCompletedJson()
+        createEmptyTasksCompletedJson()
     }
     let completedTasksStrRaw = localStorage.getItem("completedTasks");
     let completedTasksDict = JSON.parse(completedTasksStrRaw);
@@ -227,12 +227,12 @@ function createTaskButtons() {
     }
 }
 
-function createEmptyChapterCompletedJson() {
-    let chapterCompleted = {};
+function createEmptyTasksCompletedJson() {
+    let tasksCompleted = {};
     for (let i = 1; i <= totalChapters; i++) {
-        chapterCompleted[i] = [];
+        tasksCompleted[i] = [];
     }
-    localStorage.setItem("completedTasks", JSON.stringify(chapterCompleted));
+    localStorage.setItem("completedTasks", JSON.stringify(tasksCompleted));
 }
 
 function createChapterButtons() {
