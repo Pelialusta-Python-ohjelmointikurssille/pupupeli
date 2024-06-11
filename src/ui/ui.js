@@ -2,10 +2,10 @@ import * as globals from "../util/globals.js";
 import * as game from "../game/game_controller.js";
 import * as fileReader from "../file_reader.js";
 import * as editor from "../input/editor.js";
-import * as errorHandler from "../input/py_error_handling.js";
 import { EventHandler } from "../event_handler.js";
 import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
+import { extractErrorDetails } from "../input/py_error_handling.js"
 
 let eventHandler;
 let state = { current: "initial" };
@@ -433,7 +433,7 @@ export function onFinishLastCommand() {
  */
 export function displayErrorMessage(error) {
     if (typeof error === "string") { console.log(error) } else { console.log(error.message) }
-    let errorDetails = errorHandler.extractErrorDetails(error.message);
+    let errorDetails = extractErrorDetails(error.message);
     if (errorDetails.text === "KeyboardInterrupt") {
         //KeyboardInterrupt error happens when pyodide is interrupted while doing "input()"
         //Do not show this error to user, as it's working as intended.
