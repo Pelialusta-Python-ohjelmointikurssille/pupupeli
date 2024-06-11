@@ -34,11 +34,11 @@
   "conditions": [
     {
       "condition": "conditionUsedWhile",
-      "parameter": true
+      "parameter": false
     },
     {
       "condition": "conditionUsedFor",
-      "parameter": false
+      "parameter": true
     },
     {
       "condition": "conditionUsedInput",
@@ -46,7 +46,7 @@
     },
     {
       "condition": "conditionMaxLines",
-      "parameter": false
+      "parameter": 6
     }
   ]
 }

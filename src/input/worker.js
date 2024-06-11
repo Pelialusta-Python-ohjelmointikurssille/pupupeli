@@ -138,7 +138,7 @@ async function runPythonCode(pyodide, codeString) {
     self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
         await self.continuePythonExecution;
-        await pyodide.runPythonAsync(`print(check_while_usage("""${codeString}"""))`);
+        await checkClearedConditions(codeString);
 
         try {
             // reset pyodide state to where we saved it earlier after all commands are done
@@ -155,6 +155,15 @@ async function runPythonCode(pyodide, codeString) {
         pyodide.pyodide_py._state.restore_state(saveState);
         postError(error.message);
     }
+}
+
+async function checkClearedConditions(codeString) {
+    let clearedConditions = [];
+    clearedConditions.push({ condition: "conditionUsedWhile", parameter: await pyodide.runPythonAsync(`check_while_usage("""${codeString}""")`) });
+    clearedConditions.push({ condition: "conditionUsedFor", parameter: await pyodide.runPythonAsync(`check_for_usage("""${codeString}""")`) });
+    clearedConditions.push({ condition: "conditionMaxLines", parameter: codeString.split("\n").filter(line => line.trim() !== "").length });
+    clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
+    self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
 }
 
 function setResetFlag(value) {
