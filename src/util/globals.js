@@ -21,8 +21,6 @@ export const conditionsCleared = [];
 
 export let currentSAB;
 
-export let asd = false;
-
 export function setCurrentSAB(sab) {
     currentSAB = sab;
 }
@@ -36,11 +34,11 @@ export function incrementCollectibles() {
 }
 
 export function addClearedConditions(clearedConditions) {
-
     conditionsCleared.length = 0; // reset cleared conditions
     clearedConditions.forEach(condition => {
         if (condition.condition === "conditionMaxLines") {
-            if (conditions.filter(cond => cond.condition === "conditionMaxLines")[0].parameter >= condition.parameter) {
+            let maxLinesCondition = conditions.filter(cond => cond.condition === "conditionMaxLines")[0];
+            if (typeof maxLinesCondition !== 'undefined' && maxLinesCondition.parameter >= condition.parameter) {
                 conditionsCleared.push(condition);
             }
         } else {
@@ -58,39 +56,29 @@ export function allConditionsCleared() {
  * Also returns true if more cleared conditions exist in conditionsCleared than conditionsToClear.
  * Returns false if conditionsCleared doesn't include a condition that's in conditionsToClear, or if any condition in conditionsCleared has a parameter
  * with a higher value than the matching condition in conditionsToClear (i.e. conditionMaxLines check).
- * This is awful and should be redone eventually.
  * @param {*} conditionsToClear Array of condition objects.
  * @param {*} conditionsCleared Array of condition objects.
  * @returns boolean
  */
 function conditionChecker(conditionsToClear, conditionsCleared) {
-    // check if each key-value pair in conditionsToClear exists in conditionsCleared
-    for (let conditionToClear of conditionsToClear) {
-        let found = false;
-        for (let conditionCleared of conditionsCleared) {
-            if (Object.keys(conditionToClear).every(key => conditionCleared.hasOwnProperty(key) && conditionCleared[key] === conditionToClear[key])) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) return false;
+    const map1 = new Map();
+    for (let obj of conditionsToClear) {
+        map1.set(obj.condition, obj.parameter);
     }
 
-    // check if there are any extra objects in conditionsCleared
-    for (let conditionCleared of conditionsCleared) {
-        let found = false;
-        for (let conditionToClear of conditionsToClear) {
-            if (Object.keys(conditionCleared).every(key => conditionToClear.hasOwnProperty(key) && conditionToClear[key] === conditionCleared[key])) {
-                found = true;
-                break;
+    for (let obj of conditionsCleared) {
+        const param1 = map1.get(obj.condition);
+        const param2 = obj.parameter;
+
+        if (param1 === undefined) {
+            return false;
+        } else if (typeof param1 === 'boolean' && typeof param2 === 'boolean') {
+            if (param1 !== param2) {
+                return false;
             }
-        }
-        if (!found) {
-            // check if conditionCleared has a key with a numeric value lower than in conditionToClear
-            for (let key in conditionCleared) {
-                if (typeof conditionCleared[key] === 'number' && conditionCleared[key] < conditionsToClear[0][key]) {
-                    return false;
-                }
+        } else if (typeof param1 === 'number' && typeof param2 === 'number') {
+            if (param1 < param2) {
+                return false;
             }
         }
     }
