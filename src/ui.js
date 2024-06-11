@@ -205,18 +205,16 @@ function createTaskButtons() {
     const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
     if (localStorage.getItem("completedTasks") === null) {
-        let completedTasksStr = "";
-        localStorage.setItem("completedTasks", completedTasksStr)
+        createEmptyTasksCompletedJson()
     }
-    let completedTasksStr = localStorage.getItem("completedTasks");
-    let completedTasksArr = completedTasksStr.split(",");
-
+    let completedTasksStrRaw = localStorage.getItem("completedTasks");
+    let completedTasksDict = JSON.parse(completedTasksStrRaw);
 
     // Create and append buttons
     for (let i = 0; i < numberOfButtons; i++) {
         const button = document.createElement('button');
         button.id = `button-${i + 1}`;
-        if (completedTasksArr.includes(`${i + 1}`)) {
+        if (completedTasksDict[currentChapter].includes(i + 1)) {
             button.classList.add("button-completed");
         } else {
             button.classList.add("button-incompleted");
@@ -227,6 +225,14 @@ function createTaskButtons() {
         });
         buttonContainer.appendChild(button);
     }
+}
+
+function createEmptyTasksCompletedJson() {
+    let tasksCompleted = {};
+    for (let i = 1; i <= totalChapters; i++) {
+        tasksCompleted[i] = [];
+    }
+    localStorage.setItem("completedTasks", JSON.stringify(tasksCompleted));
 }
 
 function createChapterButtons() {
@@ -246,7 +252,6 @@ function createChapterButtons() {
     selectContainer.addEventListener('change', (event) => {
         const selectedChapter = event.target.value;
         window.location.href = `/?chapter=${selectedChapter}&task=1`;
-        createTaskButtons();
     });
 } 
 
@@ -262,16 +267,18 @@ export function onTaskComplete() {
     celebrationBox.classList.remove("is-invisible");
 
     if (button.getAttribute("class") == "button-incompleted") {
-        let completedTasksStr = localStorage.getItem("completedTasks");
+        if (localStorage.getItem("completedTasks") === null) {
+            createEmptyTasksCompletedJson()
+        }
+        addCompletedTaskToLocalStorage()
         button.classList.replace("button-incompleted", "button-completed");
-
-        let completedTasksArr = completedTasksStr.split(",");
-
-        completedTasksArr.push(taskIdentifier);
-
-        completedTasksStr = completedTasksArr.join(",")
-        localStorage.setItem("completedTasks", completedTasksStr);
     }
+}
+
+function addCompletedTaskToLocalStorage() {
+    let completedTasksDict = JSON.parse(localStorage.getItem("completedTasks"));
+    completedTasksDict[currentChapter].push(globals.taskIdentifier);
+    localStorage.setItem("completedTasks", JSON.stringify(completedTasksDict));
 }
 
 /**
