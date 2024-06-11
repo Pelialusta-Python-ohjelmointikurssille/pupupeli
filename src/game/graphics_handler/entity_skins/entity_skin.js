@@ -12,8 +12,9 @@ Skin options object structure:
 */
 
 export class EntitySkin {
-    constructor(skinName, skinOptions) {
+    constructor(skinName, theme, skinOptions) {
         this.skinName = skinName;
+        this.theme = theme;
         this.defaultTexture = (skinOptions.defaultTexture != null) ? skinOptions.defaultTexture : null;
         this.upTexture = (skinOptions.upTexture != null) ? skinOptions.upTexture : null;
         this.downTexture = (skinOptions.downTexture != null) ? skinOptions.downTexture : null;

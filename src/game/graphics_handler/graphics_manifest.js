@@ -6,6 +6,10 @@ import
     createGrid,
     createTextBox
 } from "./entities/entity_factories.js";
+import
+{
+    createCharacterBunnySkin
+} from "./entity_skins/entity_skin_factories.js";
 
 /*
 Naming convention:
@@ -43,6 +47,36 @@ export class ENTITY_TYPE {
     }
 }
 
+export class THEME {
+    static get BUNNY() {
+        return "theme_bunny";
+    }
+    static get ROBOT() {
+        return "theme_robot";
+    }
+}
+
+export class ENTITY_SKIN {
+    static get CHARACTER_BUNNY() {
+        return "skin_character_bunny";
+    }
+    static get CHARACTER_ROBOT() {
+        return "skin_character_robot";
+    }
+    static get COLLECTIBLE_CARROT() {
+        return "skin_collectible_carrot";
+    }
+    static get COLLECTIBLE_WRENCH() {
+        return "skin_collectible_wrench";
+    }
+    static get OBSTACLE_ROCK() {
+        return "skin_obstacle_rock";
+    }
+    static get OBSTACLE_WELL() {
+        return "skin_obstacle_well";
+    }
+}
+
 export function registerEntities(graphicsRegistry) {
     graphicsRegistry.registerEntity(ENTITY_TYPE.GENERIC, createGenericEntity);
     graphicsRegistry.registerEntity(ENTITY_TYPE.GRID, createGrid);
@@ -59,5 +93,5 @@ export function registerAnimations(graphicsRegistry) {
 }
 
 export function registerEntitySkins(graphicsRegistry) {
-    
+    graphicsRegistry.registerEntitySkin(ENTITY_SKIN.CHARACTER_BUNNY, THEME.BUNNY, createCharacterBunnySkin);
 }

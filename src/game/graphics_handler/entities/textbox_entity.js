@@ -2,8 +2,8 @@ import { GraphicsEntity } from "./graphics_entity.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 export class TextBoxEntity extends GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite, data, texture) {
-        super(entityId, entityHandler, container, sprite, data);
+    constructor(entityId, entityHandler, container, sprite, data, texture, skins) {
+        super(entityId, entityHandler, container, sprite, data, skins);
         this.textboxSprite = new PIXI.NineSliceSprite({
             texture: texture,
             leftWidth: 64,

@@ -3,8 +3,8 @@ import { GraphicsEntity } from "./graphics_entity.js";
 import { Constants } from "../../commonstrings.js";
 
 export class GridObjectEntity extends GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite, data) {
-        super(entityId, entityHandler, container, sprite, data);
+    constructor(entityId, entityHandler, container, sprite, data, skins) {
+        super(entityId, entityHandler, container, sprite, data, skins);
         this.gridReference = entityHandler.getMainGridObject();
         this.gridCellPosition = new Vector2(0, 0);
         this.sizeWithinCellMultiplier = 0.9;
@@ -23,6 +23,9 @@ export class GridObjectEntity extends GraphicsEntity {
 
     onCreate() {
         super.onCreate();
+        if (this.skins != null) {
+            this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
+        }
         this.sprite.anchor.set(0.5);
         this.sprite.height = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
         this.sprite.width = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
@@ -76,9 +79,21 @@ export class GridObjectEntity extends GraphicsEntity {
     }
 
     swapTextureToMoveDir(dir) {
-        let tex = this.dirTexMap.get(dir);
+        let tex;
+        if (dir === "up" && this.skins.get(this.currentSkin).upTexture != null) {
+            tex = this.skins.get(this.currentSkin).upTexture;
+        }
+        if (dir === "down" && this.skins.get(this.currentSkin).upTexture != null) {
+            tex = this.skins.get(this.currentSkin).downTexture;
+        }
+        if (dir === "left" && this.skins.get(this.currentSkin).upTexture != null) {
+            tex = this.skins.get(this.currentSkin).leftTexture;
+        }
+        if (dir === "right" && this.skins.get(this.currentSkin).upTexture != null) {
+            tex = this.skins.get(this.currentSkin).rightTexture;
+        }
         if (tex !== undefined) {
-            this.sprite.texture = this.dirTexMap.get(dir);
+            this.sprite.texture = tex;
         }
     }
 

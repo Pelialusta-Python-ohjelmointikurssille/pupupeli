@@ -63,7 +63,7 @@ export class GraphicsEntitySystem {
       * @param {object} data Data related to the entity in object form.
       */
     createGraphicsEntity(entityId, type, data) {
-        let entity = this.graphicsRegistry.createEntity(entityId, type, data);
+        let entity = this.graphicsRegistry.createEntity(entityId, type, data, ["skin_character_bunny"]);
         if (type === "grid") {
             this.mainGridEntityUUID = entityId;
         }
@@ -128,9 +128,7 @@ export class GraphicsEntitySystem {
      */
     resetGridObjects() {
         this.entityDict.forEach((value) => {
-            if (value.type.startsWith("grid_ent")) {
-                value.reset();
-            }
+            value.reset();
         });
     }
 

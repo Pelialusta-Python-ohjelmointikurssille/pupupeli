@@ -16,8 +16,9 @@ export function createGenericEntity(entityUUID, entityData, graphicsEntityHandle
         entityUUID,
         graphicsEntityHandler,
         new PIXI.Container(),
-        null,
-        entityData
+        sprite,
+        entityData,
+        skins
     );
     return entity;
 }
@@ -35,7 +36,8 @@ export function createGridObject(entityUUID, entityData, graphicsEntityHandler, 
         graphicsEntityHandler,
         new PIXI.Container(),
         sprite,
-        entityData
+        entityData,
+        skins
     );
     return entity;
 }
@@ -52,8 +54,9 @@ export function createGrid(entityUUID, entityData, graphicsEntityHandler, skins)
         entityUUID,
         graphicsEntityHandler,
         new PIXI.Container(),
-        null,
-        entityData
+        sprite,
+        entityData,
+        skins
     );
     return entity;
 }
@@ -71,7 +74,8 @@ export function createBackground(entityUUID, entityData, graphicsEntityHandler, 
         graphicsEntityHandler,
         new PIXI.Container(),
         sprite,
-        entityData
+        entityData,
+        skins
     );
     return entity;
 }
@@ -83,7 +87,8 @@ export function createTextBox(entityUUID, entityData, graphicsEntityHandler, ski
         new PIXI.Container(),
         null,
         entityData,
-        null
+        null,
+        skins
     );
     return entity;
 }

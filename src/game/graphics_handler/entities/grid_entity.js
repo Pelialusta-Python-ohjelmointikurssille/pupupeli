@@ -4,8 +4,8 @@ import { GridVectorToScreenVector } from "../coord_helper.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 export class GridEntity extends GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite, data) {
-        super(entityId, entityHandler, container, sprite, data);
+    constructor(entityId, entityHandler, container, sprite, data, skins) {
+        super(entityId, entityHandler, container, sprite, data, skins);
         this.gridSize = data.gridSize;
         this.sizeOnScreen = new Vector2(this.gridSize.x * 128, this.gridSize.y * 128)
         this.lineGraphicsList =  [];

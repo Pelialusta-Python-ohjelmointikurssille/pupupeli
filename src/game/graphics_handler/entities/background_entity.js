@@ -1,7 +1,7 @@
 import { GraphicsEntity } from "./graphics_entity.js";
 
 export class BackgroundEntity extends GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite, data) {
+    constructor(entityId, entityHandler, container, sprite, data, skins) {
         super(entityId, entityHandler, container, sprite, data);
         this.entityId = entityId;
         this.entityHandler = entityHandler;

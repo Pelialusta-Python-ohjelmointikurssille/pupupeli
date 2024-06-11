@@ -1,6 +1,6 @@
 
 export class GraphicsEntity {
-    constructor(entityUUID, entityHandler, pixiContainer, sprite, entityData) {
+    constructor(entityUUID, entityHandler, pixiContainer, sprite, entityData, skins) {
         this.entityId = entityUUID;
         this.entityHandler = entityHandler;
         this.container = pixiContainer;
@@ -8,6 +8,11 @@ export class GraphicsEntity {
         this.isReady = true;
         this.data = entityData;
         this.type = "null";
+        this.skins = skins;
+        this.currentSkin = null;
+        if (this.skins != null) {
+            this.currentSkin = this.skins.keys().next().value;
+        }
         this.currentAnimation = null;
         if (this.sprite !== null) {
             this.container.addChild(this.sprite);
