@@ -37,7 +37,8 @@ class Pelaaja:
         js.runCommand("ask", question)
         return input()
     
-    def rivi(self, rivi: int):
-        self.puhu(str(rivi))
+    def rivi(self, line: int):
+        self.puhu(str(line))
+        js.sendLine(line)
 
 pupu = Pelaaja()

@@ -13,6 +13,7 @@ let initialized = false;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/"+globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
+let currentMarker;
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
@@ -448,6 +449,16 @@ export function promptUserInput(inputBoxState) {
         inputBox.removeEventListener("keydown", eventHandler.sendUserInputToWorker);
         return inputValue;
     }
+}
+
+export function highlightCurrentLine(lineNumber) {
+    let linesetter = editor.getEditor();
+    if (currentMarker !== undefined) {
+        linesetter.session.removeMarker(lineNumber);
+    }
+    console.log("Highlighting line: " + lineNumber);
+    // Add new marker
+    linesetter.session.addMarker(new ace.Range(lineNumber, 0, lineNumber, 1), "executing-line", "fullLine");
 }
 
 await main();

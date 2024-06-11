@@ -127,6 +127,10 @@ function runCommand(command, parameters) {
     }
 }
 
+function sendLine(line) {
+    self.postMessage({ type: 'line', details: line });
+}
+
 /**
  * Runs python code on pyodide.
  * @param {object} pyodide The pyodide object initialized in initializePyodide().
