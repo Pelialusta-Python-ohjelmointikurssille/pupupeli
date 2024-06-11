@@ -13,7 +13,7 @@ export class BackgroundEntity extends GraphicsEntity {
             this.container.addChild(this.sprite);
             this.sprite.width = data.bgWidth;
             this.sprite.height = data.bgHeight;
-            this.container.zIndex = -1;
+            this.container.zIndex = -1000;
         }
     }
 }
