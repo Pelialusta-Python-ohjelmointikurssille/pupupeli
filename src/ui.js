@@ -107,8 +107,19 @@ async function initPage() {
     let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
     if (globals.task.getMultipleChoiceQuestions().length > 0) {
         multipleChoiceContainer.classList.remove("is-hidden");
-        globals.task.getMultipleChoiceQuestions().forEach((question) => {
-            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question'>${question.question}</div>`);
+        let optionIdCounter = 0;
+        globals.task.getMultipleChoiceQuestions().forEach((option) => {
+            //const optionId = optionIdCounter++;
+            console.log(optionIdCounter);
+            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='option-${optionIdCounter++}'>${option.question}</div>`);
+
+            if (option.isCorrectAnswer === true) {
+                let optionId = `option-${optionIdCounter}`;
+                let questionButton = document.getElementById(optionId);
+                console.log(questionButton);
+                questionButton.addEventListener("click", onTaskComplete, false);
+                console.log(questionButton);
+               }
         });
     }
     // set editor code
