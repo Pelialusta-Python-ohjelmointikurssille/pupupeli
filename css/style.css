@@ -256,10 +256,25 @@ button:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
+
 .ace_marker-layer .executing-line {
     background: rgba(255, 255, 0, 0.5);
     position: absolute; /* without this positions will be erong */
     z-index: 1000; /* in front of all other markers */ 
+
+#celebration {
+    position: fixed;
+    top: 15%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    padding: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
 }
 
 @media (max-width: calc((640px * 2) + 3rem)) {
