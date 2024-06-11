@@ -1,10 +1,10 @@
-import * as globals from "../util/globals.js";
-import * as game from "../game/game_controller.js";
-import * as fileReader from "../file_reader.js";
-import * as editor from "../input/editor.js";
-import * as errorHandler from "../input/py_error_handling.js";
-import { EventHandler } from "../event_handler.js";
-import { Constants } from "../game/commonstrings.js";
+import * as globals from "./util/globals.js";
+import * as game from "./game/game_controller.js";
+import * as fileReader from "./file_reader.js";
+import * as editor from "./input/editor.js";
+import * as errorHandler from "./input/py_error_handling.js";
+import { EventHandler } from "./event_handler.js";
+import { Constants } from "./game/commonstrings.js";
 
 let eventHandler;
 let state = { current: "initial" };
