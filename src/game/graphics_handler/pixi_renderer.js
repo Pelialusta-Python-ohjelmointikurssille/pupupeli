@@ -1,5 +1,6 @@
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
-import * as globals from "../../util/globals.js";
+import { ASSETS } from "./graphics_manifest.js";
+
 
 export class PixiRenderer {
     constructor() {
@@ -30,17 +31,8 @@ export class PixiRenderer {
     async loadAssetBuiltinBundles() {
         let t1 = new Date().getTime();
 
-        if (globals.theme === "Pupu") {
-            await PIXI.Assets.init({ manifest: builtinAssetManifest });
-            this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles"]);
-        }
-        else if (globals.theme === "Robo") {
-            await PIXI.Assets.init({ manifest: roboAssetManifest });
-            this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles"]);
-        } else {
-            await PIXI.Assets.init({ manifest: builtinAssetManifest });
-            this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles"]);
-        }
+        await PIXI.Assets.init({ manifest: ASSETS });
+        this.builtinAssets = await PIXI.Assets.loadBundle(["characters", "backgrounds", "fonts", "collectibles", "obstacles", "ui"]);
 
         let t2 = new Date().getTime();
         console.log(`Loading assets took ${t2 - t1}ms`);
@@ -73,157 +65,3 @@ export class PixiRenderer {
     }
 }
 
-
-/**
- * Asset manifest containing asset bundles
- * of sprites for characters and backgrounds.
- * Used for all game assets.
- */
-const builtinAssetManifest = {
-    bundles: [
-        {
-            name: "characters",
-            assets: [
-                {
-                    alias: "bunny_down",
-                    src: "src/static/game_assets/bunny_front.png"
-                },
-                {
-                    alias: "bunny_right",
-                    src: "src/static/game_assets/bunny_right.png"
-                },
-                {
-                    alias: "bunny_left",
-                    src: "src/static/game_assets/bunny_left.png"
-                },
-                {
-                    alias: "bunny_up",
-                    src: "src/static/game_assets/bunny_back.png"
-                }
-            ]
-        },
-        {
-            name: "backgrounds",
-            assets: [
-                {
-                    alias: "background_grass",
-                    src: "src/static/game_assets/background_grass.png"
-                }
-            ]
-        },
-        {
-            name: "fonts",
-            assets: [
-                {
-                    /*
-                    Apache License
-                    Version 2.0, January 2004
-                    http://www.apache.org/licenses/
-                    Mainly just placeholder font for testing font loading.
-                    */
-                    alias: "builtin_roboto_light",
-                    src: "src/static/game_assets/Roboto-Light.ttf",
-                    data: { family: 'Roboto Light' }
-
-                }
-            ]
-        },
-        {
-            name: "collectibles",
-            assets: [
-                {
-                    alias: "carrot",
-                    src: "src/static/game_assets/carrot.png"
-                }
-            ]
-        },
-        {
-            name: "obstacles",
-            assets: [
-                {
-                    alias: "rock",
-                    src: "src/static/game_assets/Kivi3.png"
-                }
-            ]
-        },
-        {
-            name: "ui",
-            assets: [
-                {
-                    alias: "speechbubble_9slice",
-                    src: "src/static/game_assets/speechbubblenineslice.png"
-                }
-            ]
-        }
-    ]
-}
-
-const roboAssetManifest = {
-    bundles: [
-        {
-            name: "characters",
-            assets: [
-                {
-                    alias: "bunny_down",
-                    src: "src/static/game_assets/robot_front.png"
-                },
-                {
-                    alias: "bunny_right",
-                    src: "src/static/game_assets/robot_right.png"
-                },
-                {
-                    alias: "bunny_left",
-                    src: "src/static/game_assets/robot_left.png"
-                },
-                {
-                    alias: "bunny_up",
-                    src: "src/static/game_assets/robot_back.png"
-                }
-            ]
-        },
-        {
-            name: "backgrounds",
-            assets: [
-                {
-                    alias: "background_grass",
-                    src: "src/static/game_assets/background_metal.png"
-                }
-            ]
-        },
-        {
-            name: "fonts",
-            assets: [
-                {
-                    /*
-                    Apache License
-                    Version 2.0, January 2004
-                    http://www.apache.org/licenses/
-                    Mainly just placeholder font for testing font loading.
-                    */
-                    alias: "builtin_roboto_light",
-                    src: "src/static/game_assets/Roboto-Light.ttf",
-                    data: { family: 'Roboto Light' }
-
-                }
-            ]
-        },
-        {
-            name: "collectibles",
-            assets: [
-                {
-                    alias: "carrot",
-                    src: "src/static/game_assets/wrench.png"
-                }
-            ]
-        },
-        {
-            name: "obstacles",
-            assets: [
-                {
-                    alias: "rock",
-                    src: "src/static/game_assets/well.png"
-                }
-            ]
-        },
-    ]
-}
