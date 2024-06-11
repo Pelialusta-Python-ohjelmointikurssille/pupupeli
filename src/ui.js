@@ -10,9 +10,10 @@ let eventHandler;
 let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
 let initialized = false;
-const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/"+globals.chapterIdentifier);
+const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
+let inputBox = document.getElementById("input-box");
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
@@ -23,8 +24,8 @@ async function main() {
     initPage();
     addButtonEvents();
     await initGame();
-    
-     // Create chapter buttons
+
+    // Create chapter buttons
 }
 
 /**
@@ -32,7 +33,6 @@ async function main() {
  */
 function initialize() {
     eventHandler = new EventHandler(getWorker());
-
     if (!initialized) {
         console.log("Initializing pyodide worker...")
         try {
@@ -115,7 +115,7 @@ async function initPage() {
     window.addEventListener('load', function () {
         editor.getEditor().setValue(globals.task.getEditorCode());
     });
-    
+
     createTaskButtons();
     createChapterButtons();
     isUserLoggedIn();
@@ -124,7 +124,7 @@ async function initPage() {
     if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
     let themeSelectDropdown = document.getElementById("theme-select");
     themeSelectDropdown.value = localStorage.getItem("theme");
-    themeSelectDropdown.addEventListener('change', function(event) {
+    themeSelectDropdown.addEventListener('change', function (event) {
         let selectedValue = event.target.value;
         localStorage.setItem("theme", selectedValue);
         window.location.reload();
@@ -253,7 +253,7 @@ function createChapterButtons() {
         const selectedChapter = event.target.value;
         window.location.href = `/?chapter=${selectedChapter}&task=1`;
     });
-} 
+}
 
 /**
  * Turns task button green and saves completion status. The html button's class is changed and the task number is added to localStorage. 
@@ -357,12 +357,13 @@ function onResetButtonClick() {
         errorContainer.classList.toggle("show-error");
         errorContainer.children[0].textContent = "";
     }
-    promptUserInput(true); // hide input box if visible
+    setUserInputBoxVisibility(false);
+    clearInputBoxValue();
     let containsInvisible = celebrationBox.classList.contains("is-invisible");
     if (!containsInvisible) {
         celebrationBox.classList.add("is-invisible") // hide celebration box
     }
-   
+
     initialize(); // has to be before game.resetGame() to initialize eventhandler first
     game.resetGame();
 }
@@ -446,24 +447,27 @@ export function displayErrorMessage(error) {
 }
 
 /**
- * Used by event handler twice, first to display the input box, then a second time after the user has entered
- * something into the input box and presses enter; the first time the function doesn't return anything, while
- * the second time it hides the box again and returns the value the user entered in the box.
- * @param {*} inputBoxState Boolean to indicate whether the input box is currently hidden or not.
- * @returns The value in the input box.
+ * @param {*} isVisible boolean, if true set box visible. Else, invisible. 
  */
-export function promptUserInput(inputBoxState) {
-    let inputBox = document.getElementById("input-box");
-    if (inputBoxState.inputBoxHidden === true) {
+export function setUserInputBoxVisibility(isVisible) {
+    if (isVisible) {
         inputBox.classList.remove("is-invisible");
         inputBox.addEventListener("keydown", eventHandler.sendUserInputToWorker);
-    } else {
-        let inputValue = inputBox.value;
-        inputBox.classList.add("is-invisible");
-        inputBox.value = "";
-        inputBox.removeEventListener("keydown", eventHandler.sendUserInputToWorker);
-        return inputValue;
+        return;
     }
+    inputBox.classList.add("is-invisible");
+    inputBox.removeEventListener("keydown", eventHandler.sendUserInputToWorker);
+}
+
+export function getInputBoxValue() {
+    return inputBox.value;
+}
+
+/**
+ * Sets the text of inputBox to empty.
+ */
+export function clearInputBoxValue() {
+    inputBox.value = "";
 }
 
 await main();

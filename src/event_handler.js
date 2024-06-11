@@ -19,7 +19,7 @@ export class EventHandler {
                 case "input":
                     this.sharedArray = new Uint16Array(message.sab, 4);
                     this.syncArray = new Int32Array(message.sab, 0, 1);
-                    ui.promptUserInput({ inputBoxHidden: true });
+                    ui.setUserInputBoxVisibility(true);
                     break;
                 case "command":
                     globals.setCurrentSAB(message.sab);
@@ -87,7 +87,9 @@ export class EventHandler {
      */
     sendUserInputToWorker(event) {
         if (event.key === 'Enter') {
-            this.word = ui.promptUserInput({ inputBoxHidden: false });
+            this.word = ui.getInputBoxValue();
+            ui.setUserInputBoxVisibility(false);
+            ui.clearInputBoxValue();
             this.inputToWorker(this.word);
         }
     }
