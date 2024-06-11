@@ -51,3 +51,29 @@ export class GameModeGetCollectibles {
         globals.collectibles.current = this.startScore;
     }
 }
+
+export class GameModeMultipleChoice {
+    constructor(grid) {
+        grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
+        this.startScore = globals.collectibles.current;
+        //this does nothing but line 15 in game.js requires this. In case that line changes, the following is the code in question
+        // this.gameMode.eventTarget.addEventListener("victory", this.gameHasBeenWon.bind(this));
+        this.eventTarget = new EventTarget();
+    }
+
+    removedFromGrid(event) {
+        let gridobject = event.detail;
+        if (gridobject.type === Constants.COLLECTIBLE) {
+            globals.incrementCollectibles();
+            console.log("Score is: " + globals.collectibles.current);
+            this.checkIfGameWon();
+        }
+    }
+
+    checkIfGameWon() {
+    }
+
+    reset() {
+        globals.collectibles.current = this.startScore;
+    }
+}
