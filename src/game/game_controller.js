@@ -1,4 +1,4 @@
-import { getEventHandler, onTaskComplete } from "../ui.js";
+import { getEventHandler, onTaskComplete } from "../ui/ui.js";
 import { Game } from "./game.js";
 
 //This file controls game. 
