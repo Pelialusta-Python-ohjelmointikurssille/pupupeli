@@ -167,9 +167,18 @@ async function runPythonCode(pyodide, codeString) {
 
 function addLineNumberOutputs(codeString) {
     let lines = codeString.split('\n');
+    let lastIndentation = '';
     lines = lines.map((line, index) => {
         const indentation = line.match(/^\s*/)[0];
-        return `${indentation}pupu.rivi(${index + 1})\n${line}`;
+        // Check if the line is empty, contains only whitespace, or is a comment
+        if (line.trim() === '' || line.trim().startsWith('#')) {
+            // Use the last non-empty line's indentation for empty lines and comment lines
+            return `${lastIndentation}pupu.rivi(${index + 1})\n${line}`;
+        } else {
+            // Update the last non-empty line's indentation
+            lastIndentation = indentation;
+            return `${indentation}pupu.rivi(${index + 1})\n${line}`;
+        }
     });
     codeString = lines.join('\n');
     return codeString;
