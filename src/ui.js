@@ -109,16 +109,13 @@ async function initPage() {
         multipleChoiceContainer.classList.remove("is-hidden");
         let optionIdCounter = 0;
         globals.task.getMultipleChoiceQuestions().forEach((option) => {
-            //const optionId = optionIdCounter++;
-            console.log(optionIdCounter);
-            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='option-${optionIdCounter++}'>${option.question}</div>`);
+            const optionId = `option-${optionIdCounter++}`;
+            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
 
+            // if option is correct, add eventlistener which calls onTaskComplete
             if (option.isCorrectAnswer === true) {
-                let optionId = `option-${optionIdCounter}`;
                 let questionButton = document.getElementById(optionId);
-                console.log(questionButton);
                 questionButton.addEventListener("click", onTaskComplete, false);
-                console.log(questionButton);
                }
         });
     }
