@@ -36,5 +36,8 @@ class Pelaaja:
 #            raise Exception("Interpreter was reset")
         js.runCommand("ask", question)
         return input()
+    
+    def rivi(self, rivi: int):
+        self.puhu(str(rivi))
 
 pupu = Pelaaja()

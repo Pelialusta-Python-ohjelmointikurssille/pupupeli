@@ -133,12 +133,15 @@ function runCommand(command, parameters) {
  * @param {string} codeString The input from the editor on the website.
  */
 async function runPythonCode(pyodide, codeString) {
+    let codeStringLined;
     pyodide.runPython(pythonFileStr);
+    codeStringLined = addLineNumberOutputs(codeString);
+    console.log("Running code: " + codeStringLined);
+    self.continuePythonExecution = pyodide.runPythonAsync(codeStringLined);
 
-    self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
         await self.continuePythonExecution;
-        await pyodide.runPythonAsync(`print(check_while_usage("""${codeString}"""))`);
+        await pyodide.runPythonAsync(`print(check_while_usage("""${codeStringLined}"""))`);
 
         try {
             // reset pyodide state to where we saved it earlier after all commands are done
@@ -155,6 +158,16 @@ async function runPythonCode(pyodide, codeString) {
         pyodide.pyodide_py._state.restore_state(saveState);
         postError(error.message);
     }
+}
+
+function addLineNumberOutputs(codeString) {
+    let lines = codeString.split('\n');
+    lines = lines.map((line, index) => {
+        const indentation = line.match(/^\s*/)[0];
+        return `${indentation}pupu.rivi(${index + 1})\n${line}`;
+    });
+    codeString = lines.join('\n');
+    return codeString;
 }
 
 function setResetFlag(value) {
