@@ -2,7 +2,7 @@ import { PixiRenderer } from "./pixi_renderer.js";
 import { GraphicsEntitySystem } from "./graphics_entity_handler.js";
 import { Vector2 } from "../vector.js";
 import { GraphicsRegistry } from "./graphics_registry.js";
-import { registerAnimations, registerEntities, registerEntitySkins } from "./graphics_manifest.js";
+import { ENTITIES, ANIMATIONS, ENTITY_SKINS, SKIN_BUNDLES } from "./graphics_manifest.js";
 
 /**
  * Used for handling pixiJS integration and drawing/animating sprites.
@@ -47,9 +47,8 @@ export class GraphicsHandler {
             this.graphicsRegistry
         );
 
-        registerEntities(this.graphicsRegistry);
-        registerAnimations(this.graphicsRegistry);
-        registerEntitySkins(this.graphicsRegistry);
+        this.graphicsRegistry.registerEntityList(ENTITIES);
+        this.graphicsRegistry.registerEntitySkinList(ENTITY_SKINS);
         
         this.renderer.addFunctionToRenderLoop(this.graphicsEntityHandler.updateAllEntities, this.graphicsEntityHandler);
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
@@ -57,7 +56,7 @@ export class GraphicsHandler {
         this.createGrid();
 
         // TODO: create proper grid scaling?
-        this.createEntity("bgtest", "background", { bgWidth: this.gridWidth * 128, bgHeight: this.gridHeight * 128});
+        this.createEntity("bgtest", "background", { bgWidth: this.gridWidth * 128, bgHeight: this.gridHeight * 128}, SKIN_BUNDLES["background"]);
         //this.createEntity("test", "textbox", {
         //    texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
         //    targetPosition: new Vector2(900, 900),
@@ -85,8 +84,8 @@ export class GraphicsHandler {
      * @param {string} type Type of entity
      * @param {object} data Data related to the entity in object form.
      */
-    createEntity(entityId, type, data) {
-        this.graphicsEntityHandler.createGraphicsEntity(entityId, type, data);
+    createEntity(entityId, type, data, skins) {
+        this.graphicsEntityHandler.createGraphicsEntity(entityId, type, data, skins);
     }
 
     /**

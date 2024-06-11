@@ -9,6 +9,22 @@ export class GraphicsRegistry {
         this.graphicsHandler = graphicsHandler;
     }
 
+    registerEntityList(entityList) {
+        entityList.forEach(entObject => {
+            this.registerEntity(entObject.typeName, entObject.factoryFunction);
+        });
+    }
+
+    registerAnimationList(animationList) {
+
+    }
+
+    registerEntitySkinList(entitySkinList) {
+        entitySkinList.forEach(skinObj => {
+            this.registerEntitySkin(skinObj.typeName, skinObj.theme, skinObj.factoryFunction)
+        });
+    }
+
     registerEntity(entityType, factoryFunction) {
         this.registeredEntities.set(entityType, factoryFunction);
     }
@@ -38,12 +54,14 @@ export class GraphicsRegistry {
     createEntity(entityUUID, entityType, entityData, skinList) {
         if (this.registeredEntities.has(entityType) === false) return;
         let skins = new Map();
-        skinList.forEach(skinName => {
-            let skin = this.createEntitySkin(skinName);
-            if (skin != null) {
-                skins.set(skinName, skin);
-            }
-        });
+        if (skinList != null) {
+            skinList.forEach(skinName => {
+                let skin = this.createEntitySkin(skinName);
+                if (skin != null) {
+                    skins.set(skinName, skin);
+                }
+            });
+        }
         let entity = this.registeredEntities.get(entityType).call(this, entityUUID, entityData, this.graphicsHandler.graphicsEntityHandler, skins);
         entity.type = entityType;
         return entity;

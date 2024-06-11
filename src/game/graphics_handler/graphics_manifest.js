@@ -8,90 +8,81 @@ import
 } from "./entities/entity_factories.js";
 import
 {
-    createCharacterBunnySkin
+    createBackgroundGrassSkin,
+    createCharacterBunnySkin,
+    createCollectibleCarrotSkin,
+    createObstacleRockSkin
 } from "./entity_skins/entity_skin_factories.js";
 
-/*
-Naming convention:
+export const ENTITIES = [
+    {
+        typeName: "generic",
+        factoryFunction: createGenericEntity
+    },
+    {
+        typeName: "grid",
+        factoryFunction: createGrid
+    },
+    {
+        typeName: "background",
+        factoryFunction: createBackground
+    },
+    {
+        typeName: "pawn",
+        factoryFunction: createGridObject
+    },
+    {
+        typeName: "textbox",
+        factoryFunction: createTextBox
+    },
+    {
+        typeName: "player",
+        factoryFunction: createGridObject
+    },
+    {
+        typeName: "obstacle",
+        factoryFunction: createGridObject
+    },
+    {
+        typeName: "collectible",
+        factoryFunction: createGridObject
+    }
+]
 
-ent_<type> for general non-ui entities
-ent_grid_<type> for entities that are inside a grid
-ui_<type> for ui related entities
+export const ANIMATIONS = [
+    {
+        typeName: "pawn_move",
+        compatibleEntities: ["pawn"],
+        factoryFunction: null
+    }
+]
 
-*/
+export const ENTITY_SKINS = [
+    {
+        typeName: "skin_character_bunny",
+        theme: "bunny",
+        factoryFunction: createCharacterBunnySkin
+    },
+    {
+        typeName: "skin_collectible_carrot",
+        theme: "bunny",
+        factoryFunction: createCollectibleCarrotSkin
+    },
+    {
+        typeName: "skin_obstacle_rock",
+        theme: "bunny",
+        factoryFunction: createObstacleRockSkin
+    },
+    {
+        typeName: "skin_background_grass",
+        theme: "bunny",
+        factoryFunction: createBackgroundGrassSkin
+    }
+]
 
-export class ENTITY_TYPE {
-    static get GENERIC() {
-        return "ent_generic";
-    }
-    static get GRID() {
-        return "grid"; // rename ent_grid
-    }
-    static get BACKGROUND() {
-        return "background"; // rename to ent_background
-    }
-    static get GRID_PAWN() {
-        return "grid_object"; // rename to ent_grid_pawn
-    }
-    static get UI_TEXTBOX() {
-        return "textbox"; // rename to ui_textbox
-    }
-    static get TEMP_PLAYER() {
-        return "player"; // remove
-    }
-    static get TEMP_COLLECTIBLE() {
-        return "collectible"; // remove
-    }
-    static get TEMP_OBSTACLE() {
-        return "obstacle"; // remove
-    }
-}
-
-export class THEME {
-    static get BUNNY() {
-        return "theme_bunny";
-    }
-    static get ROBOT() {
-        return "theme_robot";
-    }
-}
-
-export class ENTITY_SKIN {
-    static get CHARACTER_BUNNY() {
-        return "skin_character_bunny";
-    }
-    static get CHARACTER_ROBOT() {
-        return "skin_character_robot";
-    }
-    static get COLLECTIBLE_CARROT() {
-        return "skin_collectible_carrot";
-    }
-    static get COLLECTIBLE_WRENCH() {
-        return "skin_collectible_wrench";
-    }
-    static get OBSTACLE_ROCK() {
-        return "skin_obstacle_rock";
-    }
-    static get OBSTACLE_WELL() {
-        return "skin_obstacle_well";
-    }
-}
-
-export function registerEntities(graphicsRegistry) {
-    graphicsRegistry.registerEntity(ENTITY_TYPE.GENERIC, createGenericEntity);
-    graphicsRegistry.registerEntity(ENTITY_TYPE.GRID, createGrid);
-    graphicsRegistry.registerEntity(ENTITY_TYPE.BACKGROUND, createBackground);
-    graphicsRegistry.registerEntity(ENTITY_TYPE.GRID_PAWN, createGridObject);
-    graphicsRegistry.registerEntity(ENTITY_TYPE.TEMP_PLAYER, createGridObject);
-    graphicsRegistry.registerEntity(ENTITY_TYPE.TEMP_COLLECTIBLE, createGridObject);
-    graphicsRegistry.registerEntity(ENTITY_TYPE.TEMP_OBSTACLE, createGridObject);
-    graphicsRegistry.registerEntity(ENTITY_TYPE.UI_TEXTBOX, createTextBox); 
-}
-
-export function registerAnimations(graphicsRegistry) {
-
-}
-
-export function registerEntitySkins(graphicsRegistry) {
-    graphicsRegistry.registerEntitySkin(ENTITY_SKIN.CHARACTER_BUNNY, THEME.BUNNY, createCharacterBunnySkin);
+export const SKIN_BUNDLES = {
+    "player": ["skin_character_bunny"],
+    "obstacle": ["skin_obstacle_rock"],
+    "collectible": ["skin_collectible_carrot"],
+    "background": ["skin_background_grass"]
 }

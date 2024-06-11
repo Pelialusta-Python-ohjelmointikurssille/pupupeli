@@ -10,8 +10,9 @@ export class GraphicsEntity {
         this.type = "null";
         this.skins = skins;
         this.currentSkin = null;
-        if (this.skins != null) {
+        if (this.skins != null && this.skins.size > 0) {
             this.currentSkin = this.skins.keys().next().value;
+            this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
         }
         this.currentAnimation = null;
         if (this.sprite !== null) {
@@ -63,4 +64,24 @@ export class GraphicsEntity {
         this.isReady = true;
         this.currentAnimation = null;
     }
+
+    swapTextureToMoveDir(dir) {
+        let tex;
+        if (dir === "up" && this.skins.get(this.currentSkin).upTexture != null) {
+            tex = this.skins.get(this.currentSkin).upTexture;
+        }
+        if (dir === "down" && this.skins.get(this.currentSkin).upTexture != null) {
+            tex = this.skins.get(this.currentSkin).downTexture;
+        }
+        if (dir === "left" && this.skins.get(this.currentSkin).upTexture != null) {
+            tex = this.skins.get(this.currentSkin).leftTexture;
+        }
+        if (dir === "right" && this.skins.get(this.currentSkin).upTexture != null) {
+            tex = this.skins.get(this.currentSkin).rightTexture;
+        }
+        if (tex !== undefined) {
+            this.sprite.texture = tex;
+        }
+    }
+
 }

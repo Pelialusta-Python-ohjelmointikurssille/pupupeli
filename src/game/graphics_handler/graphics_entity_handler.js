@@ -1,6 +1,5 @@
 import { Vector2 } from "../vector.js";
 import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
-import { GraphicsEntityFactory } from "./graphics_entity_factory.js";
 import { AnimationFactory } from "./animations/animation_factory.js";
 
 /**
@@ -62,8 +61,8 @@ export class GraphicsEntitySystem {
       * @param {string} type Type of entity
       * @param {object} data Data related to the entity in object form.
       */
-    createGraphicsEntity(entityId, type, data) {
-        let entity = this.graphicsRegistry.createEntity(entityId, type, data, ["skin_character_bunny"]);
+    createGraphicsEntity(entityId, type, data, skins) {
+        let entity = this.graphicsRegistry.createEntity(entityId, type, data, skins);
         if (type === "grid") {
             this.mainGridEntityUUID = entityId;
         }

@@ -5,6 +5,7 @@ import { MoveCommand, SayCommand } from "./commands.js";
 import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
+import { SKIN_BUNDLES } from "./graphics_handler/graphics_manifest.js";
 
 export class Game {
     constructor() {
@@ -27,7 +28,8 @@ export class Game {
 
     createGridEntityForRendering(gridObject) {
         let data = { position: gridObject.getVector2Position() };
-        this.gh.createEntity(gridObject.id, gridObject.type, data);
+        let skins = SKIN_BUNDLES[gridObject.type];
+        this.gh.createEntity(gridObject.id, gridObject.type, data, skins);
     }
 
     getCanvas() {

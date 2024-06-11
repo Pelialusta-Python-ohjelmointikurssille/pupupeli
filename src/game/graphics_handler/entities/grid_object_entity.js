@@ -23,9 +23,6 @@ export class GridObjectEntity extends GraphicsEntity {
 
     onCreate() {
         super.onCreate();
-        if (this.skins != null) {
-            this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
-        }
         this.sprite.anchor.set(0.5);
         this.sprite.height = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
         this.sprite.width = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
@@ -66,35 +63,4 @@ export class GridObjectEntity extends GraphicsEntity {
         this.container.x = this.screenPosition.x;
         this.container.y = this.screenPosition.y;
     }
-
-    /**
-     * 
-     * @param {*} textures Expects following object: { down: tex_down, right: tex_right, left: tex_left, up: tex_up }
-     */
-    setDirectionTextures(textures) {
-        this.dirTexMap.set(Constants.DOWN_STR, textures.down);
-        this.dirTexMap.set(Constants.UP_STR, textures.up);
-        this.dirTexMap.set(Constants.LEFT_STR, textures.left);
-        this.dirTexMap.set(Constants.RIGHT_STR, textures.right);
-    }
-
-    swapTextureToMoveDir(dir) {
-        let tex;
-        if (dir === "up" && this.skins.get(this.currentSkin).upTexture != null) {
-            tex = this.skins.get(this.currentSkin).upTexture;
-        }
-        if (dir === "down" && this.skins.get(this.currentSkin).upTexture != null) {
-            tex = this.skins.get(this.currentSkin).downTexture;
-        }
-        if (dir === "left" && this.skins.get(this.currentSkin).upTexture != null) {
-            tex = this.skins.get(this.currentSkin).leftTexture;
-        }
-        if (dir === "right" && this.skins.get(this.currentSkin).upTexture != null) {
-            tex = this.skins.get(this.currentSkin).rightTexture;
-        }
-        if (tex !== undefined) {
-            this.sprite.texture = tex;
-        }
-    }
-
 }

@@ -10,3 +10,24 @@ export function createCharacterBunnySkin(skinName, theme, assets) {
     }
     return new EntitySkin(skinName, theme, skinOptions);
 }
+
+export function createCollectibleCarrotSkin(skinName, theme, assets) {
+    let skinOptions = {
+        defaultTexture: assets.collectibles.carrot,
+    }
+    return new EntitySkin(skinName, theme, skinOptions);
+}
+
+export function createObstacleRockSkin(skinName, theme, assets) {
+    let skinOptions = {
+        defaultTexture: assets.obstacles.rock,
+    }
+    return new EntitySkin(skinName, theme, skinOptions);
+}
+
+export function createBackgroundGrassSkin(skinName, theme, assets) {
+    let skinOptions = {
+        defaultTexture: assets.backgrounds.background_grass,
+    }
+    return new EntitySkin(skinName, theme, skinOptions);
+}
