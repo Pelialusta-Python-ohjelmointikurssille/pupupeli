@@ -51,13 +51,16 @@ export class Game {
     }
 
     /**
-     * Calls game_controller.commandsDone. if gameWon is true, calls game_controller.notifyGameWon
+     * Calls game_controller.commandsDone. if gameWon is true, calls game_controller.notifyGameWon.
+     * This.gameWon is changed to FALSE after this method, to reset that state without initialising new game entirely.
+     * This is necessary to not call gamewon and display celebration box after inputting wrong code after a succesful pass.
      */
     onAnimsReady() {
         if (this.gameWon === true) {
             notifyGameWon();
         }
         commandsDone();
+        this.gameWon = false;
     }
 
     makeMoveCommand(commandParameter) {

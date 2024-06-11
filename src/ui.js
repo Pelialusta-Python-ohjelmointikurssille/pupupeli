@@ -257,6 +257,9 @@ export function onTaskComplete() {
     const taskIdentifier = globals.taskIdentifier;
     const buttonid = `button-${taskIdentifier}`;
     let button = document.getElementById(buttonid);
+    let celebrationBox = document.getElementById("celebration")
+
+    celebrationBox.classList.remove("is-invisible");
 
     if (button.getAttribute("class") == "button-incompleted") {
         let completedTasksStr = localStorage.getItem("completedTasks");
@@ -337,6 +340,7 @@ function onResetButtonClick() {
     let buttonNext = document.getElementById("editor-skip-button");
     let button = document.getElementById("editor-run-pause-button");
     let img = button.querySelector('img');
+    let celebrationBox = document.getElementById("celebration")
     img.src = "src/static/runbutton.png";
     button.querySelector('#runButtonText').textContent = 'Suorita';
     buttonNext.disabled = false;
@@ -347,6 +351,11 @@ function onResetButtonClick() {
         errorContainer.children[0].textContent = "";
     }
     promptUserInput(true); // hide input box if visible
+    let containsInvisible = celebrationBox.classList.contains("is-invisible");
+    if (!containsInvisible) {
+        celebrationBox.classList.add("is-invisible") // hide celebration box
+    }
+   
     initialize(); // has to be before game.resetGame() to initialize eventhandler first
     game.resetGame();
 }
