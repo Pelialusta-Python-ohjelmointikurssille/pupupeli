@@ -258,6 +258,8 @@ button:hover {
 
 .ace_marker-layer .executing-line {
     background: rgba(255, 255, 0, 0.5);
+    position: absolute; /* without this positions will be erong */
+    z-index: 1000; /* in front of all other markers */ 
 }
 
 @media (max-width: calc((640px * 2) + 3rem)) {

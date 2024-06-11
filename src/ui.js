@@ -452,13 +452,10 @@ export function promptUserInput(inputBoxState) {
 }
 
 export function highlightCurrentLine(lineNumber) {
-    let linesetter = editor.getEditor();
     if (currentMarker !== undefined) {
-        linesetter.session.removeMarker(lineNumber);
+        editor.getEditor().session.removeMarker(currentMarker);
     }
-    console.log("Highlighting line: " + lineNumber);
-    // Add new marker
-    linesetter.session.addMarker(new ace.Range(lineNumber, 0, lineNumber, 1), "executing-line", "fullLine");
+    currentMarker = editor.getEditor().session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "executing-line", "fullLine");
 }
 
 await main();

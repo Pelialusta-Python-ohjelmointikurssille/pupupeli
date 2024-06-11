@@ -38,7 +38,6 @@ class Pelaaja:
         return input()
     
     def rivi(self, line: int):
-        self.puhu(str(line))
         js.sendLine(line)
 
 pupu = Pelaaja()
