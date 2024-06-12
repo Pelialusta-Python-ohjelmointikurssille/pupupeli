@@ -12,7 +12,6 @@ let eventHandler;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
-let currentMarker;
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
@@ -274,13 +273,6 @@ export function displayErrorMessage(error) {
     errorContainer.classList.toggle("show-error");
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
     disablePlayButton("error");
-}
-
-export function highlightCurrentLine(lineNumber) {
-    if (currentMarker !== undefined) {
-        getEditor().session.removeMarker(currentMarker);
-    }
-    currentMarker = getEditor().session.addMarker(new ace.Range(lineNumber - 1, 4, lineNumber - 1, 5), "executing-line", "fullLine");
 }
 
 await main();
