@@ -11,7 +11,8 @@ export class Game {
         //getGameTask() returns object containing the grid and the gamemode
         let gameTask = getGameTask();
         this.grid = gameTask.grid;
-        this.gameMode = this.initGameMode(gameTask);
+        this.gameMode = gameTask.gameMode // this.initGameMode(gameTask);
+        this.gameMode.eventTarget?.addEventListener("victory", this.gameHasBeenWon.bind(this));
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
@@ -24,19 +25,6 @@ export class Game {
         this.grid.gridObjects.forEach(item => {
             this.createGridEntityForRendering(item);
         });
-    }
-
-    /**
-     * Returns gameMode object and adds event listener to eventTarget if mode is GetCollectibles 
-     * @param {gameTask} gameTask object {grid, gameMode}
-     * @returns {GameModeGetCollectibles|GameModeMultipleChoice} object of correct game mode class
-     */
-    initGameMode(gameTask) {
-        let gameMode = gameTask.gameMode;
-        if (gameMode.name === "GetCollectibles") {
-            gameMode.eventTarget.addEventListener("victory", this.gameHasBeenWon.bind(this));
-        }
-        return gameMode;
     }
 
     createGridEntityForRendering(gridObject) {
