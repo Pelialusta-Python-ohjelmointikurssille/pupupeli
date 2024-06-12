@@ -26,53 +26,40 @@ logoutButton.addEventListener("click", () => {
         });
 });
 
-async function login(url = '') {
+async function postData(url, data) {
+    const formData = new URLSearchParams();
+    Object.keys(data).forEach(key => formData.append(key, data[key]));
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData
+    });
+    try {
+        // try to parse response body as JSON
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        // if parsing fails, return the raw response
+        return response;
+    }
+}
+
+async function login(url) {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
     const data = {
         username: user,
         password: pass
-    }
-    const formData = new URLSearchParams();
-    Object.keys(data).forEach(key => formData.append(key, data[key]));
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: formData
-    });
-    return response.json();
+    };
+    return postData(url, data);
 }
 
-async function logout(url = '') {
+async function logout(url) {
     const data = {
         token: localStorage.getItem("token")
-    }
-    const formData = new URLSearchParams();
-    Object.keys(data).forEach(key => formData.append(key, data[key]));
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: formData
-    });
-    return response;
+    };
+    return postData(url, data);
 }
-
-/*async function postData(data, url) {
-    const formData = new URLSearchParams();
-    Object.keys(data).forEach(key => formData.append(key, data[key]));
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: formData
-    });
-    return response.json();
-}*/
