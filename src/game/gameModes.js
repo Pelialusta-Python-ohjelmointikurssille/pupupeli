@@ -27,7 +27,6 @@ const GameMode = {
  */
 export class GameModeGetCollectibles {
     constructor(grid) {
-        this.name = "GetCollectibles"
         grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
         this.startScore = globals.collectibles.current;
         this.eventTarget = new EventTarget();
@@ -59,7 +58,6 @@ export class GameModeGetCollectibles {
  */
 export class GameModeMultipleChoice {
     constructor(grid) {
-        this.name = "MultipleChoice"
         grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
         this.startScore = globals.collectibles.current;
     }
