@@ -1,6 +1,5 @@
 import { Vector2 } from "../../../vector.js";
 import { GraphicsEntity } from "../graphics_entity.js";
-import { Constants } from "../../../commonstrings.js";
 
 export class PawnEntity extends GraphicsEntity {
     constructor(entityId, entityHandler, container, sprite, data, skins) {
@@ -8,7 +7,6 @@ export class PawnEntity extends GraphicsEntity {
         this.gridReference = entityHandler.getMainGridObject();
         this.gridCellPosition = new Vector2(0, 0);
         this.sizeWithinCellMultiplier = 0.9;
-        this.fakeZPosition = 0;
         this.currentAnimation = null;
         if (data != null) {
             if (data.position != null) {

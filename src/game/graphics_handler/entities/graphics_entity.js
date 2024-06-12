@@ -10,6 +10,7 @@ export class GraphicsEntity {
         this.type = "generic";
         this.direction = "down";
         this.skins = skins;
+        this.fakeZPosition = 0;
         this.currentSkin = null;
         this.currentSkin = this.skins.keys().next().value;
         this.swapTextureToMoveDir(this.direction);
