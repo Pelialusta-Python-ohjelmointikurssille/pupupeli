@@ -361,6 +361,7 @@ function onResetButtonClick() {
     let celebrationBox = document.getElementById("celebration")
     img.src = "src/static/runbutton.png";
     button.querySelector('#runButtonText').textContent = 'Suorita';
+    globals.setCurrentLine(null);
     buttonNext.disabled = false;
     button.disabled = false;
     if (document.getElementById("error").innerHTML !== "") {
@@ -478,6 +479,7 @@ export function promptUserInput(inputBoxState) {
 }
 
 export function highlightCurrentLine(lineNumber) {
+    globals.setCurrentLine(lineNumber);
     if (currentMarker !== undefined) {
         editor.getEditor().session.removeMarker(currentMarker);
     }

@@ -1,3 +1,5 @@
+import { getCurrentLine } from "../util/globals.js";
+
 export function extractErrorDetails(errorMessage) {
     const regex = /File .*?, line (\d+)/g;
     let match;
@@ -14,10 +16,14 @@ export function extractErrorDetails(errorMessage) {
     }
 
     const translatedErrorType = translateErrorType(errorTypeMatch);
-    if (translatedErrorType === "Antamasi suunta ei ole kirjoitettu oikein") {
-        lineNumberMatch = lastToLastLineReference || "Tuntematon rivi";
+    if ( getCurrentLine() ) {
+        lineNumberMatch = getCurrentLine() || "Tuntematon rivi";
     } else {
-        lineNumberMatch = lastLineReference || "Tuntematon rivi";
+        if (translatedErrorType === "Antamasi suunta ei ole kirjoitettu oikein") {
+            lineNumberMatch = lastToLastLineReference || "Tuntematon rivi";
+        } else {
+            lineNumberMatch = lastLineReference || "Tuntematon rivi";
+        }
     }
 
     if (translatedErrorType) {

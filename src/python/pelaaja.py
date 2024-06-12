@@ -20,7 +20,7 @@ def check_for_usage(source_code):
     return False
 
 def mock_input(prompt=""):
-    return
+    return 0
 
 class Pelaaja:
     def __init__(self, name="pupu"):
@@ -58,10 +58,7 @@ class ErrorCheck:
         self.__directions =  ["oikea", "vasen", "ylös", "alas"]
 
     def liiku(self, direction: str):
-        if direction in self.__directions:
-            return
-        else:
-            raise ValueError("Virheellinen suunta")
+        return
         
     def sano(self, sentence: str):
         return
