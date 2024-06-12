@@ -1,57 +1,34 @@
 import * as globals from "../util/globals.js";
-import * as game from "../game/game_controller.js";
 import * as fileReader from "../file_reader.js";
-import * as editor from "../input/editor.js";
-import { EventHandler } from "../event_handler.js";
-import { Constants } from "../game/commonstrings.js";
-import { hideAndClearInputBox } from "./inputBox.js";
+import { getEditor } from "../input/editor.js"
+import { initWorker } from "../event_handler.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
+import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
+import { initGame } from "../game/game_controller.js";
 
 let eventHandler;
-let state = { current: "initial" };
-let worker = new Worker('/src/input/worker.js');
-let initialized = false;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
- * Runs ui initialisation functions
+ * Runs ui initialisation functions + atm the event_handlers worker
  */
 async function main() {
-    initialize();
+    initWorker();
     initPage();
-    addButtonEvents();
-    await initGame();
+    initializeEditorButtons();
+    await initGameAndCanvas();
 
     // Create chapter buttons
 }
 
 /**
- * Creates worker event handler and posts message to initialise pyodide with python file. On reload, calls to reset worker.
- */
-function initialize() {
-    eventHandler = new EventHandler(getWorker());
-    if (!initialized) {
-        console.log("Initializing pyodide worker...")
-        try {
-            let pythonFileStr = fileReader.tryGetFileAsText("./src/python/pelaaja.py");
-            eventHandler.postMessage({ type: 'init', details: pythonFileStr });
-            initialized = true;
-        } catch (error) {
-            displayErrorMessage(error);
-        }
-    } else {
-        eventHandler.resetWorker()
-    }
-}
-
-/**
  * Inserts game canvas to right side of left container and gives it id "game"
  */
-async function initGame() {
-    let canvas = await game.initGame();
+async function initGameAndCanvas() {
+    let canvas = await initGame();
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
@@ -113,7 +90,7 @@ async function initPage() {
     }
     // set editor code
     window.addEventListener('load', function () {
-        editor.getEditor().setValue(globals.task.getEditorCode());
+        getEditor().setValue(globals.task.getEditorCode());
     });
 
     createTaskButtons();
@@ -130,26 +107,6 @@ async function initPage() {
         window.location.reload();
     });
     console.log(globals.theme);
-}
-
-/**
- * Adds events to code execution buttons (run/pause, stop, skip)
- */
-function addButtonEvents() {
-    addEventToButton("editor-run-pause-button", onRunButtonClick);
-    addEventToButton("editor-stop-button", onResetButtonClick);
-    addEventToButton("editor-skip-button", onNextStepButtonClick);
-    addEventToButton("grid-toggle-button", game.toggleGrid);
-
-    /**
-     * Adds eventlistener to a given button to trigger given function
-     * @param {string} id 
-     * @param {function} func 
-     */
-    function addEventToButton(id, func) {
-        let buttonInput = document.getElementById(id);
-        buttonInput.addEventListener("click", func, false);
-    }
 }
 
 function isUserLoggedIn() {
@@ -281,125 +238,6 @@ function addCompletedTaskToLocalStorage() {
     localStorage.setItem("completedTasks", JSON.stringify(completedTasksDict));
 }
 
-/**
- * Runs the code or pauses execution and changes the image of run/pause button.
- */
-function onRunButtonClick() {
-    let button = document.getElementById("editor-run-pause-button");
-    let img = button.querySelector('img');
-    let runButtonText = button.querySelector('#runButtonText');
-    if (!img) {
-        img = document.createElement('img');
-        button.appendChild(img);
-    }
-
-    switch (state.current) {
-        case "initial":
-            eventHandler.postMessage({ type: 'start', details: editor.getEditor().getValue() });
-            break;
-        case "running":
-            eventHandler.setMessagePassingState({ paused: true });
-            break;
-        case "paused":
-            eventHandler.setMessagePassingState({ paused: false });
-            break;
-
-    }
-    setButtonState(img, state, runButtonText);
-
-    /**
-     * sets run button's state
-     * @param {image} img - a html image element
-     * @param {string} state 
-     * @param {object} runButtonText - html element
-     */
-    function setButtonState(img, state, runButtonText) {
-        switch (state.current) {
-            case "initial":
-                img.src = "src/static/pausebutton.png";
-                runButtonText.textContent = 'Tauko';
-                state.current = "running"
-                break;
-            case "running":
-                img.src = "src/static/runbutton.png";
-                runButtonText.textContent = 'Jatka';
-                state.current = "paused"
-                break;
-            case "paused":
-                img.src = "src/static/pausebutton.png";
-                runButtonText.textContent = 'Tauko';
-                state.current = "running"
-                break;
-
-        }
-    }
-}
-
-/**
- * Sets state to initial and resets all task elements to default state.
- * Also resets worker by calling initialize while initialized === true.
- * Does nothing if state is initial.
- */
-function onResetButtonClick() {
-    eventHandler.inputToWorker(Constants.PYODIDE_INTERRUPT_INPUT); //Special str that interrupt pyodide if it's in handleInput()
-    if (state.current === "initial") return;
-    state.current = "initial";
-    let buttonNext = document.getElementById("editor-skip-button");
-    let button = document.getElementById("editor-run-pause-button");
-    let img = button.querySelector('img');
-    let celebrationBox = document.getElementById("celebration")
-    img.src = "src/static/runbutton.png";
-    button.querySelector('#runButtonText').textContent = 'Suorita';
-    buttonNext.disabled = false;
-    button.disabled = false;
-    if (document.getElementById("error").innerHTML !== "") {
-        let errorContainer = document.getElementById("error-box");
-        errorContainer.classList.toggle("show-error");
-        errorContainer.children[0].textContent = "";
-    }
-    hideAndClearInputBox();
-    let containsInvisible = celebrationBox.classList.contains("is-invisible");
-    if (!containsInvisible) {
-        celebrationBox.classList.add("is-invisible") // hide celebration box
-    }
-
-    initialize(); // has to be before game.resetGame() to initialize eventhandler first
-    game.resetGame();
-}
-
-/**
- * Changes state to paused, runs single command, changes state to running
- */
-function onNextStepButtonClick() {
-    onRunButtonClick();
-    eventHandler.runSingleCommand();
-    if (state.current === "running") onRunButtonClick();
-}
-
-/**
- * disables run and skip buttons, changes their images and changes state to "ended".
- * If code had an error, button changes text to indicate that.
- * @param {*} cause 
- */
-function disablePlayButtonsOnFinish(cause = null) {
-    let button = document.getElementById("editor-run-pause-button");
-    let buttonNext = document.getElementById("editor-skip-button");
-    let img = button.querySelector('img');
-    let runButtonText = button.querySelector('#runButtonText');
-    if (!img) {
-        img = document.createElement('img');
-        button.appendChild(img);
-    }
-    img.src = "src/static/resetbutton.png";
-    if (cause === "error") {
-        runButtonText.textContent = 'Virhe';
-    } else {
-        runButtonText.textContent = 'Loppu';
-    }
-    state.current = "ended";
-    buttonNext.disabled = true;
-    button.disabled = true;
-}
 
 /**
  * Used to get the event handler we are currently using.
@@ -407,24 +245,6 @@ function disablePlayButtonsOnFinish(cause = null) {
  */
 export function getEventHandler() {
     return eventHandler;
-}
-
-/**
- * Returns worker object
- * @returns {Worker} worker
- */
-function getWorker() {
-    return worker;
-}
-
-/**
- * Used to do something after there is no more python code to run.
- * This is probably where we want to check if the user has achieved the win conditions and display some kind
- * of "congratulations, you are a winner" message if so.
- */
-export function onFinishLastCommand() {
-    disablePlayButtonsOnFinish();
-    console.log("Last command finished");
 }
 
 /**
@@ -442,7 +262,7 @@ export function displayErrorMessage(error) {
     let errorContainer = document.getElementById("error-box");
     errorContainer.classList.toggle("show-error");
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
-    disablePlayButtonsOnFinish("error");
+    disablePlayButton("error");
 }
 
 await main();
