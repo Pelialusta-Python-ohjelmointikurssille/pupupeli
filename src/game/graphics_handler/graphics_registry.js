@@ -70,8 +70,6 @@ export class GraphicsRegistry {
     }
 
     createAnimation(animationType, animationData, entity) {
-        console.log(animationType, animationData);
-        console.log(this.registeredAnimations);
         if (this.registeredAnimations.has(animationType) === false) return;
         let animation = this.registeredAnimations.get(animationType).call(this, animationType, entity, animationData);
         return animation;

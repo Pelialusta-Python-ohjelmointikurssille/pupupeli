@@ -63,10 +63,6 @@ export class MoveAnimation {
         this.inProgress = false;
         
         this.gridObject.onFinishAnimation(this.name);
-        console.log(`FINISH ANIM move on player`);
-        console.log(this.gridObject.container.position);
-        console.log(this.progress.value)
-        console.log(this.gridObject.fakeZPosition)
     }
 
     getJumpHeight(progress) {

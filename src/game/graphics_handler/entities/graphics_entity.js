@@ -47,7 +47,6 @@ export class GraphicsEntity {
     onFinishAnimation() {
         this.isReady = true;
         this.currentAnimation = null;
-        console.log("FINISH ANIM " + name)
     }
 
     doAnimation(animation) {
