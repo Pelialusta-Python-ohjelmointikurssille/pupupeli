@@ -11,8 +11,8 @@ export class Game {
         //getGameTask() returns object containing the grid and the gamemode
         let gameTask = getGameTask();
         this.grid = gameTask.grid;
-        this.gameMode = gameTask.gameMode;
-        this.gameMode.eventTarget.addEventListener("victory", this.gameHasBeenWon.bind(this));
+        this.gameMode = gameTask.gameMode // this.initGameMode(gameTask);
+        this.gameMode.eventTarget?.addEventListener("victory", this.gameHasBeenWon.bind(this));
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
