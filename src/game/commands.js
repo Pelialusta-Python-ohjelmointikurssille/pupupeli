@@ -1,4 +1,4 @@
-import { Constants, GetDirectionAsString } from "./commonstrings.js";
+import { Constants } from "./commonstrings.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { Vector2 } from "./vector.js";
 //implements the interface Command. That just means that all these classes have the function "execute()" (and can easily implement "undo()").
@@ -42,7 +42,7 @@ export class MoveCommand {
     execute() {
         let isSuccess = this.grid.moveGridObjectToDir(this.gridObject, this.dir);
         if (isSuccess) this.#checkForObjects();
-        let dirObj = { direction: GetDirectionAsString(this.dir), time: this.moveSpeed };
+        let dirObj = { direction: this.dir, time: this.moveSpeed };
         if (isSuccess) {
             this.graphicsHandler.doAction(this.gridObject.id, "pawn_move", dirObj);
         } else {

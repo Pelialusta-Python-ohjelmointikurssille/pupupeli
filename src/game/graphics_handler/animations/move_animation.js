@@ -1,6 +1,5 @@
 import { AnimationProgress } from "./tweener/animation_progress.js";
 import { Vector2 } from "../../vector.js";
-import { Constants } from "../../commonstrings.js";
 
 export class MoveAnimation {
     constructor(gridObject, name, data) {
@@ -10,17 +9,8 @@ export class MoveAnimation {
         this.inProgress = false;
         this.name = name;
         this.moveDirection = null;
-        if (this.data.direction === Constants.DOWN_STR) {
-            this.moveDirection = new Vector2(0, 1);
-        }
-        if (this.data.direction === Constants.LEFT_STR) {
-            this.moveDirection = new Vector2(-1, 0);
-        }
-        if (this.data.direction === Constants.RIGHT_STR) {
-            this.moveDirection = new Vector2(1, 0);
-        }
-        if (this.data.direction === Constants.UP_STR) {
-            this.moveDirection = new Vector2(0, -1);
+        if (this.data.direction != null) {
+            this.moveDirection = Vector2.FromDirection(this.data.direction);
         }
     }
 

@@ -9,17 +9,8 @@ export class FailMoveAnimation {
         this.inProgress = false;
         this.name = name;
         this.moveDirection = null;
-        if (this.data.direction === "down") {
-            this.moveDirection = new Vector2(0, 1);
-        }
-        if (this.data.direction === "left") {
-            this.moveDirection = new Vector2(-1, 0);
-        }
-        if (this.data.direction === "right") {
-            this.moveDirection = new Vector2(1, 0);
-        }
-        if (this.data.direction === "up") {
-            this.moveDirection = new Vector2(0, -1);
+        if (this.data.direction != null) {
+            this.moveDirection = Vector2.FromDirection(this.data.direction);
         }
     }
 

@@ -1,3 +1,4 @@
+import { Direction } from "../../direction.js";
 
 export class GraphicsEntity {
     constructor(entityUUID, entityHandler, pixiContainer, sprite, entityData, skins) {
@@ -76,16 +77,16 @@ export class GraphicsEntity {
         }
         
         let tex;
-        if (dir === "up" && this.skins.get(this.currentSkin).upTexture != null) {
+        if (dir === Direction.Up && this.skins.get(this.currentSkin).upTexture != null) {
             tex = this.skins.get(this.currentSkin).upTexture;
         }
-        if (dir === "down" && this.skins.get(this.currentSkin).downTexture != null) {
+        if (dir === Direction.Down && this.skins.get(this.currentSkin).downTexture != null) {
             tex = this.skins.get(this.currentSkin).downTexture;
         }
-        if (dir === "left" && this.skins.get(this.currentSkin).leftTexture != null) {
+        if (dir === Direction.Left && this.skins.get(this.currentSkin).leftTexture != null) {
             tex = this.skins.get(this.currentSkin).leftTexture;
         }
-        if (dir === "right" && this.skins.get(this.currentSkin).rightTexture != null) {
+        if (dir === Direction.Right && this.skins.get(this.currentSkin).rightTexture != null) {
             tex = this.skins.get(this.currentSkin).rightTexture;
         }
         if (tex !== undefined) {
