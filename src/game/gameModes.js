@@ -27,6 +27,7 @@ const GameMode = {
  */
 export class GameModeGetCollectibles {
     constructor(grid) {
+        this.name = "GetCollectibles"
         grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
         this.startScore = globals.collectibles.current;
         this.eventTarget = new EventTarget();
@@ -54,6 +55,7 @@ export class GameModeGetCollectibles {
 
 export class GameModeMultipleChoice {
     constructor(grid) {
+        this.name = "GetMultipleChoice"
         grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
         this.startScore = globals.collectibles.current;
         //this does nothing but line 15 in game.js requires this. In case that line changes, the following is the code in question
