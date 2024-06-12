@@ -4,6 +4,7 @@ import { toggleGrid } from "../game/game_controller.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker } from "../event_handler.js";
 import { getEditor } from "../input/editor.js";
 import { resetGame } from "../game/game_controller.js";
+import { resetInputHistory } from "./inputBox.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -59,6 +60,7 @@ function onResetButtonClick() {
     resetCelebrationBox();
     resetWorker();
     resetGame();
+    resetInputHistory();
     _buttonsState = States.INITIAL;
     setMessagePassingState({ paused: false });
 }

@@ -1,5 +1,5 @@
 import * as gameController from './game/game_controller.js';
-import { getInputBoxValue, hideAndClearInputBox, showInputBox } from './ui/inputBox.js';
+import { getInputBoxValue, showInputBox } from './ui/inputBox.js';
 import { disablePlayButton } from './ui/ui_editor_buttons.js'
 import { displayErrorMessage } from './ui/ui.js';
 import * as globals from './util/globals.js';
@@ -11,7 +11,6 @@ let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for 
 let isMessagePassingPaused = false; //keep as default, trust me bro
 let sharedArray; //array shared with worker
 let syncArray;
-let userInputs = []
 /**
  * Creates a new worker
  */
@@ -101,19 +100,8 @@ export function runSingleCommand() {
  * in this case, the relevant part is the key the user inputs.
  */
 export function onUserSendInputToWorker(event) {
-    if (event.key === 'Enter') {
-        let word = getInputBoxValue();
-        addInputToUserInputs(word);
-        inputToWorker(word);
-        hideAndClearInputBox();
-    }
-}
-
-function addInputToUserInputs(word) {
-    if (word) {
-        userInputs.push(word);
-        displayPreviousInputs();
-    }
+    let word = getInputBoxValue();
+    inputToWorker(word);
 }
 
 export function inputToWorker(word) {
@@ -132,8 +120,6 @@ export function inputToWorker(word) {
  * so that the worker knows to not run any more python code.
  */
 export function resetWorker() {
-    userInputs = [];
-    displayPreviousInputs(); //user input handling should move somewhere else
     if (globals.getCurrentSAB() === undefined) return;
     const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
     Atomics.store(waitArray, 0, 1); // this is for stopping the wait
@@ -161,15 +147,4 @@ function postMessageToWorker(message) {
  */
 function saveLastMessage(message) {
     lastMessage = message;
-}
-
-//move to ui!
-function displayPreviousInputs() {
-    const inputContainer = document.getElementById('input-container')
-    inputContainer.innerHTML = '';
-    userInputs.forEach(input => {
-        const inputElement = document.createElement('div');
-        inputElement.textContent = input;
-        inputContainer.appendChild(inputElement);
-    })
 }
