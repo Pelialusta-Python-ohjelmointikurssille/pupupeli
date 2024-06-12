@@ -1,6 +1,18 @@
 import { Direction } from "../../direction.js";
 
+/**
+ * The base graphics object. Used to display in-game graphics. All graphics classes must inheret from this base class.
+ */
 export class GraphicsEntity {
+    /**
+     * 
+     * @param {*} entityUUID A unique ID used identify the object. For example, this is used to refer to the entity when calling it to do an animation. 
+     * @param {*} entityHandler A reference to the entity handler that created it.
+     * @param {*} pixiContainer A PixiJS container object that is added to pixiJS stage. All graphics should be children of this container.
+     * @param {*} sprite A PixiJS sprite object.
+     * @param {*} entityData An entityDate object. Contains optional override parameters when this object is created.
+     * @param {*} skins An array of EntitySkin objects. A list of available skins for the entity. Used also when switching themes.
+     */
     constructor(entityUUID, entityHandler, pixiContainer, sprite, entityData, skins) {
         this.entityUUID = entityUUID;
         this.entityHandler = entityHandler;
@@ -21,6 +33,9 @@ export class GraphicsEntity {
         this.isReady = true;
     }
 
+    /**
+     * Called when onCreate is called. Handles setting override variables if given using entityData.
+     */
     applyEntityData() {
         if (this.entityData != null) {
             if (this.entityData.position != null) {
@@ -47,10 +62,19 @@ export class GraphicsEntity {
         }
     }
 
+    /**
+     * Called when the entity is created by the GraphicsEntityHandler.
+     * Tip: if you want to apply changes to variables after onCreate is called,
+     * run them after calling super.onCreate in the new onCreate functions.
+     */
     onCreate() {
         this.applyEntityData();
     }
 
+    /**
+     * Called every frame.
+     * @param {*} deltaTime Time between frames in seconds. 
+     */
     onUpdate(deltaTime) {
         if (this.currentAnimation != null) {
             if (this.currentAnimation.inProgress === false) return;
@@ -58,31 +82,50 @@ export class GraphicsEntity {
         }
     }
     
+    /**
+     * Called when the entity is destroyed by the GraphicsEntityHandler
+     */
     onDestroy() {
 
     }
     
+    /**
+     * Skips/Fast forwards the currently playing animation to the end.
+     */
     finishAnimationsInstantly() {
         if (this.currentAnimation != null) {
             this.currentAnimation.skipToEnd();
         }
     }
 
+    /**
+     * Called when the current animation has started playing.
+     */
     onStartAnimation() {
         this.isReady = false;
     }
 
+    /**
+     * Called when the current animation has finished playing
+     */
     onFinishAnimation() {
         this.isReady = true;
 
         this.currentAnimation = null;
     }
 
+    /**
+     * Used to play a given animation
+     * @param {*} animation An animation object that should play.
+     */
     doAnimation(animation) {
         this.currentAnimation = animation;
         this.currentAnimation.start();
     }
 
+    /**
+     * Reset the variables to initial values when created.
+     */
     reset() {
         if (this.currentAnimation != null) {
             this.currentAnimation.stop();
@@ -121,6 +164,11 @@ export class GraphicsEntity {
         this.direction = dir;
     }
 
+    /**
+     * Check if the list of skins (this.skins) containes the given theme.
+     * @param {string} theme Name of the theme. 
+     * @returns A boolean on wether or not a matching skin of the given theme was found.
+     */
     hasTheme(theme) {
         let hasThemedSkin = false;
         this.skins.forEach((value) => {
@@ -131,6 +179,10 @@ export class GraphicsEntity {
         return hasThemedSkin;
     }
     
+    /**
+     * Sets the current skin to match given theme if possible.
+     * @param {string} theme The theme to switch to.
+     */
     setTheme(theme) {
         if (this.hasTheme(theme) === false) return;
         this.skins.forEach((value, key) => {

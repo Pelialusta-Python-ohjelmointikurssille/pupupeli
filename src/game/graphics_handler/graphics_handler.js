@@ -13,8 +13,8 @@ export class GraphicsHandler {
     /**
      * @param {number} width 
      * @param {number} height 
-     * @param {object} onReadyFunc 
-     * @param {object} onReadyFuncContext 
+     * @param {object} onReadyFunc Called when all playing animations have finished
+     * @param {object} onReadyFuncContext Context for the onReadyFunc, as in which object should execute the function
      */
     constructor(width, height, onReadyFunc, onReadyFuncContext) {
         this.gridWidth = width;
@@ -81,6 +81,7 @@ export class GraphicsHandler {
      * @param {string} entityId The entity will be created using the given uuid. 
      * @param {string} type Type of entity
      * @param {object} data Data related to the entity in object form.
+     * @param {Array} skins A list of strings. All the skins of the entity. For ease of use when creating, use skin bundles in manifests/skin_manifest.js 
      */
     createEntity(entityId, type, data, skins) {
         this.graphicsEntityHandler.createGraphicsEntity(entityId, type, data, skins);
@@ -108,6 +109,9 @@ export class GraphicsHandler {
         this.graphicsEntityHandler.resetGridObjects();
     }
 
+    /**
+     * Destroys all entities of type "textbox". Used to remove unwanted speech bubbles and the like.
+     */
     destroyTextBoxes() {
         this.graphicsEntityHandler.destroyTextBoxes();
     }
@@ -136,14 +140,26 @@ export class GraphicsHandler {
         }
     }
 
+    /**
+     * Forces all currently playing animations to finish immediately. Used to skip animations to be able to run next command.
+     */
     finishAnimationsImmediately() {
         this.graphicsEntityHandler.skipAnimationsAndFinish();
     }
 
+    /**
+     * Sets the skin of all entities to follow given theme. If the entity 
+     * doesn't have a skin of the corresponding theme, this instruction is ignored.
+     * @param {string} theme The theme to be selected. Themes of skins are defined in the skin manifest, under the theme variable.
+     */
     setEntityThemes(theme) {
         this.graphicsEntityHandler.setEntityThemes(theme);
     }
     
+    /**
+     * Sets wether or not the grid visuals are shown. True for showing them, false for hiding them.
+     * @param {boolean} isActive 
+     */
     setGridState(isActive) {
         let grid = this.graphicsEntityHandler.getMainGridObject();
         if (isActive === true) {

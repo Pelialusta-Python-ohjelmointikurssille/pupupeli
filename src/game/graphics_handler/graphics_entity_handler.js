@@ -1,5 +1,6 @@
 import { Vector2 } from "../vector.js";
 import { GraphicsCamera } from "./graphics_camera.js";
+import { GraphicsRegistry } from "./graphics_registry.js";
 
 /**
  * Manages all instantiated gfx entities.
@@ -9,6 +10,7 @@ export class GraphicsEntitySystem {
      * 
      * @param {PixiRenderer} renderer PixiRenderer object reference
      * @param {GraphicsHandler} graphicsHandler GraphicsHandler object reference
+     * @param {GraphicsRegistry} graphicsRegistry Registry that holds information about animations, entities and skins. Contains the factories needed to create them.
      */
     constructor(renderer, graphicsHandler, graphicsRegistry) {
         this.builtinAssets = renderer.builtinAssets;
@@ -16,7 +18,6 @@ export class GraphicsEntitySystem {
         this.spriteDict = new Map();
         this.renderer = renderer;
         this.camera = null;
-        //this.entityFactory = new GraphicsEntityFactory(this, this.builtinAssets);
         this.isReady = true;
         this.graphicsHandler = graphicsHandler;
         this.graphicsRegistry = graphicsRegistry;
@@ -57,6 +58,7 @@ export class GraphicsEntitySystem {
       * @param {string} entityId The entity will be created using the given uuid. 
       * @param {string} type Type of entity
       * @param {object} data Data related to the entity in object form.
+      * @param {Array} skins A list of strings. All the skins of the entity. For ease of use when creating, use skin bundles in manifests/skin_manifest.js 
       */
     createGraphicsEntity(entityId, type, data, skins) {
         let entity = this.graphicsRegistry.createEntity(entityId, type, data, skins);
@@ -80,8 +82,8 @@ export class GraphicsEntitySystem {
     /**
      * Used to play an animation on a gfx entity.
      * @param {string} entityId The uuid of the gfx entity that should play the given animation. 
-     * @param {string} actionId The id of the animation to be played.
-     * @param {object} actionData Data related to the animation in object form.
+     * @param {string} animationId The id of the animation to be played.
+     * @param {object} animationData Data related to the animation in object form.
      */
     doAction(entityId, animationId, animationData) {
         let entity = this.getGraphicsEntity(entityId);
@@ -99,7 +101,7 @@ export class GraphicsEntitySystem {
     }
 
     /**
-     * @returns Main grid object
+     * @returns Main grid object of type GridEntity.
      */
     getMainGridObject() {
         return this.getGraphicsEntity(this.mainGridEntityUUID);
@@ -121,12 +123,18 @@ export class GraphicsEntitySystem {
         });
     }
 
+    /**
+     * Skips and finishes all currently running animations. Used to skip animations to be able to run next command.
+     */
     skipAnimationsAndFinish() {
         this.entityDict.forEach((value) => {
             value.finishAnimationsInstantly();
         });
     }
 
+    /**
+     * Destroys all entities of type "textbox". Used to remove unwanted speech bubbles and the like.
+     */
     destroyTextBoxes() {
         this.entityDict.forEach((value, key) => {
             if (value.type === "textbox"){
@@ -135,6 +143,11 @@ export class GraphicsEntitySystem {
         });
     }
     
+    /**
+     * Sets the skin of all entities to follow given theme. If the entity 
+     * doesn't have a skin of the corresponding theme, this instruction is ignored.
+     * @param {string} theme The theme to be selected. Themes of skins are defined in the skin manifest, under the theme variable.
+     */
     setEntityThemes(theme) {
         this.entityDict.forEach((value) => {
             value.setTheme(theme);
