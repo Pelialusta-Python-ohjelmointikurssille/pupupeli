@@ -53,23 +53,22 @@ function addEventToButton(id, func) {
 function onResetButtonClick() {
     inputToWorker(Constants.PYODIDE_INTERRUPT_INPUT); //Special str that interrupt pyodide if it's in handleInput()
     if (_buttonsState === States.INITIAL) return; //No need to reset
-    _buttonsState = States.INITIAL;
     nextStepButton.disabled = false;
     startAndPauseButton.disabled = false;
-    runButtonUpdateImg();
+    runButtonSetVisualsToInitial();
     resetErrorText();
     hideAndClearInputBox();
     resetCelebrationBox();
     resetWorker();
     resetGame();
+    _buttonsState = States.INITIAL;
+    setMessagePassingState({ paused: false });
 }
 
-function runButtonUpdateImg() {
-    if (_buttonsState === States.INITIAL) {
-        let img = startAndPauseButton.querySelector('img');
-        img.src = "src/static/runbutton.png";
-        startAndPauseButton.querySelector('#runButtonText').textContent = 'Suorita';
-    }
+function runButtonSetVisualsToInitial() {
+    let img = startAndPauseButton.querySelector('img');
+    img.src = "src/static/runbutton.png";
+    startAndPauseButton.querySelector('#runButtonText').textContent = 'Suorita';
 }
 
 function resetCelebrationBox() {
@@ -91,10 +90,16 @@ function resetErrorText() {
  * Changes state to pause if running and runs a single command.
  */
 function onNextStepButtonClick() {
-    if (_buttonsState === States.RUNNING || _buttonsState === States.INITIAL) {
+    if (_buttonsState === States.INITIAL) { //press twice to start and pause
+        onRunButtonClick();
+        onRunButtonClick();
+    }
+    if (_buttonsState === States.RUNNING) {
         onRunButtonClick(); //changes state to paused
     }
-    runSingleCommand();
+    if (_buttonsState == States.PAUSED) {
+        runSingleCommand();
+    }
 }
 
 /**
@@ -137,7 +142,6 @@ function onRunButtonClick() {
     switch (_buttonsState) {
         case States.INITIAL:
             postMessage({ type: 'start', details: getEditor().getValue() });
-            setMessagePassingState({ paused: true });
             break;
         case States.RUNNING:
             setMessagePassingState({ paused: true });
@@ -147,16 +151,16 @@ function onRunButtonClick() {
             break;
 
     }
-    setButtonState(img, runButtonText);
+    setRunButtonStateWhenItsPressed(img, runButtonText);
 }
 
 /**
- * sets run button's state
+ * sets run button's state depending on what state it's currently in.
  * @param {image} img - a html image element
  * @param {string} state 
  * @param {object} runButtonText - html element
  */
-function setButtonState(img, runButtonText) {
+function setRunButtonStateWhenItsPressed(img, runButtonText) {
     switch (_buttonsState) {
         case States.INITIAL:
             img.src = "src/static/pausebutton.png";

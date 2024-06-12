@@ -176,7 +176,6 @@ async function checkClearedConditions(codeString) {
 
 function addLineNumberOutputs(codeString) {
     if (codeString === undefined) return;
-    console.log(codeString);
     let lines = codeString.split('\n');
     let lastIndentation = '';
     lines = lines.map((line, index) => {
