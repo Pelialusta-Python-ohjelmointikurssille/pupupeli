@@ -1,5 +1,3 @@
-// testi, ei tarkoitus käyttää
-
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
 const apiUrl = 'http://localhost:3000/api/';
