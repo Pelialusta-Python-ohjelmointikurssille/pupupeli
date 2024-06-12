@@ -1,4 +1,9 @@
-async function getCompletedTasks(token) {
+async function getCompletedTasks() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        throw new Error('No authorization token found. Please login first.');
+    }
+    
     const response = await fetch(`https://tie.koodariksi.fi/api/list?token=${token}`, {
         method: 'GET'
     });
@@ -30,5 +35,7 @@ async function login(username, password) {
         throw new Error('Login failed');
     }
 }
+
+
 
 
