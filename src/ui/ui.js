@@ -6,10 +6,13 @@ import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame } from "../game/game_controller.js";
 
+/* global ace */
+
 let eventHandler;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
+let currentMarker;
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
@@ -84,8 +87,16 @@ async function initPage() {
     let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
     if (globals.task.getMultipleChoiceQuestions().length > 0) {
         multipleChoiceContainer.classList.remove("is-hidden");
-        globals.task.getMultipleChoiceQuestions().forEach((question) => {
-            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question'>${question.question}</div>`);
+        let optionIdCounter = 0;
+        globals.task.getMultipleChoiceQuestions().forEach((option) => {
+            const optionId = `option-${optionIdCounter++}`;
+            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
+
+            // if option is correct, add eventlistener which calls onTaskComplete
+            if (option.isCorrectAnswer === true) {
+                let questionButton = document.getElementById(optionId);
+                questionButton.addEventListener("click", onTaskComplete, false);
+               }
         });
     }
     // set editor code
@@ -263,6 +274,13 @@ export function displayErrorMessage(error) {
     errorContainer.classList.toggle("show-error");
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
     disablePlayButton("error");
+}
+
+export function highlightCurrentLine(lineNumber) {
+    if (currentMarker !== undefined) {
+        editor.getEditor().session.removeMarker(currentMarker);
+    }
+    currentMarker = editor.getEditor().session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "executing-line", "fullLine");
 }
 
 await main();

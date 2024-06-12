@@ -10,6 +10,7 @@ let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for 
 let isMessagePassingPaused = false; //keep as default, trust me bro
 let sharedArray; //array shared with worker
 let syncArray;
+let userInputs = []
 /**
  * Creates a new worker
  */
@@ -28,12 +29,15 @@ export function initWorker() {
                 globals.setCurrentSAB(message.sab);
                 gameController.giveCommand({ data: message.details, sab: message.sab });
                 break;
-            case "conditionCleared":
+            case "conditionsCleared":
                 globals.addClearedCondition(message.details);
                 break;
             case "finish":
                 disablePlayButton();
                 console.log("Last command finished");
+                break;
+            case "line":
+                ui.highlightCurrentLine(message.details);
                 break;
             case "error":
                 displayErrorMessage(message.error);
@@ -97,9 +101,17 @@ export function runSingleCommand() {
  */
 export function sendUserInputToWorker(event) {
     if (event.key === 'Enter') {
+        addInputToUserInputs(word);
         word = getInputBoxValue();
         hideAndClearInputBox();
         inputToWorker(word);
+    }
+}
+
+function addInputToUserInputs() {
+    if (word) {
+        userInputs.push(this.word);
+        displayPreviousInputs();
     }
 }
 
@@ -146,4 +158,20 @@ function postMessageToWorker(message) {
  */
 function saveLastMessage(message) {
     lastMessage = message;
+}
+
+displayPreviousInputs() {
+    const inputContainer = document.getElementById('input-container')
+    inputContainer.innerHTML = '';
+    this.userInputs.forEach(input => {
+        const inputElement = document.createElement('div');
+        inputElement.textContent = input;
+        inputContainer.appendChild(inputElement);
+    })
+}
+resetUserInputs() {
+    userInputs = [];
+    displayPreviousInputs();
+    resetWorker();
+    setMessagePassingState({ paused: false });
 }

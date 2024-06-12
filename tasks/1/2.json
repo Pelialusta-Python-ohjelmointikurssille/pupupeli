@@ -2,7 +2,28 @@
   "description": [
     "Kuinka monta kertaa pupun pitää hypätä päästäkseen oikeaan alakulmaan mahdollisimman pienellä määrällä hyppyjä?"
   ],
-  "editorCode": [],
+  "editorCode": [
+    "pupu.liiku(\"alas\")",
+    "pupu.liiku(\"oikea\")",
+    "",
+    "for i in range(7):",
+    "    pupu.liiku(\"vasen\")",
+    "",
+    "for i in range(7):",
+    "    pupu.liiku(\"ylös\")",
+    "",
+    "for i in range(3):",
+    "    pupu.liiku(\"oikea\")",
+    "",
+    "for i in range(3):",
+    "    pupu.liiku(\"alas\")",
+    "",
+    "for i in range(4):",
+    "    pupu.liiku(\"oikea\")",
+    "",
+    "for i in range(3):",
+    "    pupu.liiku(\"ylös\")"
+  ],
   "multipleChoiceQuestions": [
     {
       "question": "2",
@@ -34,11 +55,11 @@
   "conditions": [
     {
       "condition": "conditionUsedWhile",
-      "parameter": true
+      "parameter": false
     },
     {
       "condition": "conditionUsedFor",
-      "parameter": false
+      "parameter": true
     },
     {
       "condition": "conditionUsedInput",
@@ -46,7 +67,7 @@
     },
     {
       "condition": "conditionMaxLines",
-      "parameter": false
+      "parameter": 6
     }
   ]
 }
