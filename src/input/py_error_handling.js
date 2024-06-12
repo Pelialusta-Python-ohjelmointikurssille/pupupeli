@@ -25,6 +25,11 @@ export function extractErrorDetails(errorMessage) {
     }
 }
 
+/**
+ * Returns Finnish translation explaining the type of error (SyntaxError -> kirjoitusvirhe)
+ * @param {string} errorType 
+ * @returns {string}
+ */
 export function translateErrorType(errorType) {
     if (!errorType) {
         return errorType;
