@@ -5,13 +5,14 @@ import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
 import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
+import { GameModeGetCollectibles, GameModeMultipleChoice } from "./gameModes.js";
 
 export class Game {
     constructor() {
         //getGameTask() returns object containing the grid and the gamemode
         let gameTask = getGameTask();
         this.grid = gameTask.grid;
-        this.gameMode = this.initGameMode(gameTask);
+        this.gameMode = this.initGameMode(gameTask.gameMode);
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
@@ -26,6 +27,11 @@ export class Game {
         });
     }
 
+    /**
+     * Returns gameMode object and adds event listener to eventTarget if mode is GetCollectibles 
+     * @param {gameTask} gameTask object {grid, gameMode}
+     * @returns {GameModeGetCollectibles|GameModeMultipleChoice} object of correct game mode class
+     */
     initGameMode(gameTask) {
         let gameMode = gameTask.gameMode;
         if (gameMode.name === "GetCollectibles") {
