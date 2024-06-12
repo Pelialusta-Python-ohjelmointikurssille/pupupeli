@@ -109,7 +109,7 @@ async function logout(url) {
 
 async function sendFakeTask(url) {
     const token = localStorage.getItem("token");
-    const task =  document.getElementById("fake-task").value;
+    const task =  document.getElementById("fake-task-push").value;
     const data = "fake_data";
     const result = 1;
     const dataobj = {
@@ -123,7 +123,7 @@ async function sendFakeTask(url) {
 
 async function getFakeTask(url) {
     const token = localStorage.getItem("token");
-    const task = "fake_task"
+    const task = document.getElementById("fake-task-get").value;
     const params = {
         token: token,
         task: task
