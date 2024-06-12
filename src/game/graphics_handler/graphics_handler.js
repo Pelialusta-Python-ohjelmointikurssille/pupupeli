@@ -2,7 +2,9 @@ import { PixiRenderer } from "./pixi_renderer.js";
 import { GraphicsEntitySystem } from "./graphics_entity_handler.js";
 import { Vector2 } from "../vector.js";
 import { GraphicsRegistry } from "./graphics_registry.js";
-import { ENTITIES, ANIMATIONS, ENTITY_SKINS, SKIN_BUNDLES } from "./graphics_manifest.js";
+import { ENTITIES } from "./manifests/entity_manifest.js";
+import { ENTITY_SKINS, SKIN_BUNDLES } from "./manifests/skin_manifest.js";
+import { ANIMATIONS } from "./manifests/animation_manifest.js";
 
 /**
  * Used for handling pixiJS integration and drawing/animating sprites.

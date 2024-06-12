@@ -5,7 +5,7 @@ import { MoveCommand, SayCommand } from "./commands.js";
 import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
-import { SKIN_BUNDLES } from "./graphics_handler/graphics_manifest.js";
+import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 
 export class Game {
     constructor() {
