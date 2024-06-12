@@ -6,8 +6,6 @@ import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame } from "../game/game_controller.js";
 
-/* global ace */
-
 let eventHandler;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();

@@ -1,9 +1,12 @@
 import { ace_version } from "../util/version_strings.js";
 
+/* global ace */
+
 let editor;
 let currentLineMarker; //the line that is currently executing
 //line resets from reset button:
 document.getElementById("editor-stop-button").addEventListener("click", resetLineHighlight, false);
+//Currently works inconsistently, as sometimes after resetting, a line highlight is still called.
 
 const aceEditorScript = document.createElement('script');
 aceEditorScript.src = `https://cdnjs.cloudflare.com/ajax/libs/ace/${ace_version}/ace.js`;
