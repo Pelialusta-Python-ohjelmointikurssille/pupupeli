@@ -141,7 +141,7 @@ async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
-    console.log("Running code: " + codeStringLined);
+    console.log("Started running code...");
     self.continuePythonExecution = pyodide.runPythonAsync(codeStringLined);
 
     try {
@@ -175,6 +175,7 @@ async function checkClearedConditions(codeString) {
 }
 
 function addLineNumberOutputs(codeString) {
+    if (codeString === undefined) return;
     let lines = codeString.split('\n');
     let lastIndentation = '';
     lines = lines.map((line, index) => {

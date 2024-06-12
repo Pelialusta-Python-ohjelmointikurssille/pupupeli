@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param {*} errorMessage 
+ * @returns returns the error message in a readable form to a beginner programmer.
+ */
 export function extractErrorDetails(errorMessage) {
     const regex = /File .*?, line (\d+)/g;
     let match;

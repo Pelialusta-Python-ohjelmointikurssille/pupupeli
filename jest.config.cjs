@@ -28,7 +28,6 @@ module.exports = {
         "!src/input/worker.js",
         "!src/event_handler.js",
         "!src/**/index.js",
-        "!src/**/ui.js",
         "!src/**/game.js",
         "!src/**/editor.js",
         "!src/**/graphics_camera_entity.js", // some of these can be mock tested
@@ -42,6 +41,7 @@ module.exports = {
         "!src/**/graphics_handler/entities/**",
         "!src/**/graphics_handler/animations/**", // can be mock tested
         "!src/**/tests/**",
+        "!src/**/ui/**",
         "!src/util/globals.js"
     ]
 };

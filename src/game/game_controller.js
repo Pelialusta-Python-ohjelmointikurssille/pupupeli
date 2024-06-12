@@ -1,5 +1,6 @@
-import { getEventHandler, onTaskComplete } from "../ui.js";
+import { onTaskComplete } from "../ui/ui.js";
 import { Game } from "./game.js";
+import { postMessage } from "../event_handler.js";
 
 //This file controls game. 
 // - Creates new game instances (Game contains both logic and rendering)
@@ -7,13 +8,11 @@ import { Game } from "./game.js";
 
 var game;
 var currentCommand;
-var eventHandler;
 
 
 export async function initGame() {
     game = new Game();
     await game.init();
-    eventHandler = getEventHandler();
     return game.getCanvas();
 }
 
@@ -33,7 +32,7 @@ export function commandsDone() {
         console.error("current command undefined");
         return;
     }
-    eventHandler.postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
+    postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
 }
 
 export function getCanvas() {
@@ -42,7 +41,6 @@ export function getCanvas() {
 
 export function resetGame() {
     game.resetGame();
-    eventHandler = getEventHandler();
 }
 
 export function notifyGameWon() {
