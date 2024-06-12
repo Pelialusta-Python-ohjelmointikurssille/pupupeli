@@ -1,5 +1,5 @@
 import { Vector2 } from "../vector.js";
-import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
+import { GraphicsCamera } from "./graphics_camera.js";
 
 /**
  * Manages all instantiated gfx entities.
@@ -50,7 +50,7 @@ export class GraphicsEntitySystem {
      * Creates the camera object.
      */
     createCamera() {
-        this.camera = new GraphicsCameraEntity(this.renderer.cameraWorldContainer, this.renderer.pixiApp.screen, new Vector2(0, 0));
+        this.camera = new GraphicsCamera(this.renderer.cameraWorldContainer, this.renderer.pixiApp.screen, new Vector2(0, 0));
     }
 
     /**
