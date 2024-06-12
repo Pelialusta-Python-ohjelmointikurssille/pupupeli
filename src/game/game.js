@@ -5,7 +5,6 @@ import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
 import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
-import { GameModeGetCollectibles, GameModeMultipleChoice } from "./gameModes.js";
 
 export class Game {
     constructor() {
