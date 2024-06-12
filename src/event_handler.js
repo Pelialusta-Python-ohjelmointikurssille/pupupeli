@@ -4,6 +4,7 @@ import { disablePlayButton } from './ui/ui_editor_buttons.js'
 import { displayErrorMessage } from './ui/ui.js';
 import * as globals from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
+import { highlightCurrentLine } from './ui/ui.js';
 
 let worker;
 let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
@@ -30,14 +31,14 @@ export function initWorker() {
                 gameController.giveCommand({ data: message.details, sab: message.sab });
                 break;
             case "conditionsCleared":
-                globals.addClearedCondition(message.details);
+                globals.addClearedConditions(message.details);
                 break;
             case "finish":
                 disablePlayButton();
                 console.log("Last command finished");
                 break;
             case "line":
-                ui.highlightCurrentLine(message.details);
+                highlightCurrentLine(message.details);
                 break;
             case "error":
                 displayErrorMessage(message.error);
@@ -160,7 +161,8 @@ function saveLastMessage(message) {
     lastMessage = message;
 }
 
-displayPreviousInputs() {
+//move to ui!
+function displayPreviousInputs() {
     const inputContainer = document.getElementById('input-container')
     inputContainer.innerHTML = '';
     this.userInputs.forEach(input => {
@@ -169,7 +171,8 @@ displayPreviousInputs() {
         inputContainer.appendChild(inputElement);
     })
 }
-resetUserInputs() {
+
+function resetUserInputs() {
     userInputs = [];
     displayPreviousInputs();
     resetWorker();

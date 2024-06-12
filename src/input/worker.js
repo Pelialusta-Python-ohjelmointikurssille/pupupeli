@@ -141,7 +141,7 @@ async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
-    console.log("Running code: " + codeStringLined);
+    console.log("Started running code...");
     self.continuePythonExecution = pyodide.runPythonAsync(codeStringLined);
 
     try {

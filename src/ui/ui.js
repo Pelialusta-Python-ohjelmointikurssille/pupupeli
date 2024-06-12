@@ -96,7 +96,7 @@ async function initPage() {
             if (option.isCorrectAnswer === true) {
                 let questionButton = document.getElementById(optionId);
                 questionButton.addEventListener("click", onTaskComplete, false);
-               }
+            }
         });
     }
     // set editor code
@@ -278,9 +278,9 @@ export function displayErrorMessage(error) {
 
 export function highlightCurrentLine(lineNumber) {
     if (currentMarker !== undefined) {
-        editor.getEditor().session.removeMarker(currentMarker);
+        getEditor().session.removeMarker(currentMarker);
     }
-    currentMarker = editor.getEditor().session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "executing-line", "fullLine");
+    currentMarker = getEditor().session.addMarker(new ace.Range(lineNumber - 1, 4, lineNumber - 1, 5), "executing-line", "fullLine");
 }
 
 await main();
