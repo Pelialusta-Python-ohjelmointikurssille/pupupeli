@@ -12,6 +12,7 @@ export class EventHandler {
         this.lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
         this.sendUserInputToWorker = this.sendUserInputToWorker.bind(this);
         this.isMessagePassingPaused = false; //keep as default, trust me bro
+        this.userInputs = []
         // receives messages from worker
         this.worker.onmessage = (message) => {
             message = message.data;
@@ -35,7 +36,8 @@ export class EventHandler {
                     ui.displayErrorMessage(message.error);
                     break;
             }
-        }
+        };
+        document.getElementById('editor-stop-button').addEventListener('click', this.resetUserInputs.bind(this));
     }
 
     /**
@@ -88,6 +90,10 @@ export class EventHandler {
     sendUserInputToWorker(event) {
         if (event.key === 'Enter') {
             this.word = ui.promptUserInput({ inputBoxHidden: false });
+            if (this.word) {
+                this.userInputs.push(this.word);
+                this.displayPreviousInputs();
+            }
             this.inputToWorker(this.word);
         }
     }
@@ -135,5 +141,21 @@ export class EventHandler {
      */
     #saveLastMessage(message) {
         this.lastMessage = message;
+    }
+
+    displayPreviousInputs() {
+        const inputContainer = document.getElementById('input-container')
+        inputContainer.innerHTML = '';
+        this.userInputs.forEach(input => {
+            const inputElement = document.createElement('div');
+            inputElement.textContent = input;
+            inputContainer.appendChild(inputElement);
+        })
+    }
+    resetUserInputs() {
+        this.userInputs = [];
+        this.displayPreviousInputs();
+        this.resetWorker();
+        this.setMessagePassingState({ paused: false });
     }
 }
