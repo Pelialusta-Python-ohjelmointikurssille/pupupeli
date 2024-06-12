@@ -1,4 +1,4 @@
-import { AnimationProgress } from "../animation_progress.js";
+import { AnimationProgress } from "./tweener/animation_progress.js";
 import { Vector2 } from "../../vector.js";
 import { Constants } from "../../commonstrings.js";
 
