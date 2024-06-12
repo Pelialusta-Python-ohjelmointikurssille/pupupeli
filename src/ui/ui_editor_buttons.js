@@ -88,12 +88,13 @@ function resetErrorText() {
 }
 
 /**
- * Changes state to paused, runs single command, changes state to running
+ * Changes state to pause if running and runs a single command.
  */
 function onNextStepButtonClick() {
-    onRunButtonClick();
+    if (_buttonsState === States.RUNNING || _buttonsState === States.INITIAL) {
+        onRunButtonClick(); //changes state to paused
+    }
     runSingleCommand();
-    if (_buttonsState === States.RUNNING) onRunButtonClick();
 }
 
 /**
@@ -136,6 +137,7 @@ function onRunButtonClick() {
     switch (_buttonsState) {
         case States.INITIAL:
             postMessage({ type: 'start', details: getEditor().getValue() });
+            setMessagePassingState({ paused: true });
             break;
         case States.RUNNING:
             setMessagePassingState({ paused: true });
@@ -145,7 +147,7 @@ function onRunButtonClick() {
             break;
 
     }
-    setButtonState(img, _buttonsState, runButtonText);
+    setButtonState(img, runButtonText);
 }
 
 /**
@@ -154,7 +156,7 @@ function onRunButtonClick() {
  * @param {string} state 
  * @param {object} runButtonText - html element
  */
-function setButtonState(img, state, runButtonText) {
+function setButtonState(img, runButtonText) {
     switch (_buttonsState) {
         case States.INITIAL:
             img.src = "src/static/pausebutton.png";
