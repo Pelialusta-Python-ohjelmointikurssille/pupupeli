@@ -25,8 +25,8 @@ export class MoveAnimation {
         if (this.inProgress === false) return;
         this.progress.increment(deltaTime);
         this.pawnEntity.fakeZPosition = this.getJumpHeight(this.progress.value);
-        this.pawnEntity.container.x = this.pawnEntity.screenPosition.x + (this.progress.value * this.moveDirection.x * this.pawnEntity.gridReference.gridScale);
-        this.pawnEntity.container.y = this.pawnEntity.screenPosition.y + this.pawnEntity.fakeZPosition + (this.progress.value * this.moveDirection.y * this.pawnEntity.gridReference.gridScale);
+        this.pawnEntity.container.x = this.pawnEntity.screenPosition.x + (this.progress.value * 0.01 * this.moveDirection.x * this.pawnEntity.gridReference.gridScale);
+        this.pawnEntity.container.y = this.pawnEntity.screenPosition.y + this.pawnEntity.fakeZPosition + (this.progress.value * 0.01 * this.moveDirection.y * this.pawnEntity.gridReference.gridScale);
     }
 
     stop() {
@@ -52,8 +52,8 @@ export class MoveAnimation {
     }
 
     getJumpHeight(progress) {
-        if (progress >= 1) progress = 1;
-        return -(Math.sin(Math.PI * progress) ** 0.75) * this.pawnEntity.gridReference.gridScale * 0.5;
+        if (progress >= 100) progress = 100;
+        return -(Math.sin(Math.PI * progress * 0.01) ** 0.75) * this.pawnEntity.gridReference.gridScale * 0.5;
     }
 
 }

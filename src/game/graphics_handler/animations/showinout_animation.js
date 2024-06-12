@@ -9,8 +9,8 @@ export class ShowInOutAnimation {
         this.name = name;
         this.currentAnimation = null;
 
-        this.scaleStart = 0.05;
-        this.scaleEnd = 0.95;
+        this.scaleStart = 5;
+        this.scaleEnd = 95;
     }
 
     start() {

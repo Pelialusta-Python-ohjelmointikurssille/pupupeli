@@ -20,9 +20,9 @@ export class HideAnimation {
     increment(deltaTime) {
         if (this.inProgress === false) return;
         this.progress.increment(deltaTime);
-        if (this.progress.value > 0.5) {
+        if (this.progress.value > 50) {
             this.gridObject.container.rotation += 10 * deltaTime;
-            this.gridObject.container.scale = 1 - ((this.progress.value - 0.5) * 2);
+            this.gridObject.container.scale = 1 - ((this.progress.value * 0.01 - 0.5) * 2);
         }
     }
 
@@ -52,8 +52,8 @@ export class HideAnimation {
     }
 
     getJumpHeight(progress) {
-        if (progress >= 1) progress = 1;
-        return -(Math.sin(Math.PI * progress)**0.75) * this.gridObject.gridReference.gridScale * 0.5;
+        if (progress >= 100) progress = 100;
+        return -(Math.sin(Math.PI * progress * 0.01)**0.75) * this.gridObject.gridReference.gridScale * 0.5;
     }
     
 }

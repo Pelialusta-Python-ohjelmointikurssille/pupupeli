@@ -24,13 +24,13 @@ export class FailMoveAnimation {
         if (this.inProgress === false) return;
         this.progress.increment(deltaTime);
         this.pawnEntity.fakeZPosition = this.getJumpHeight(this.progress.value);
-        if (this.progress.value < 0.5) {
-            this.pawnEntity.container.x = this.pawnEntity.screenPosition.x + (this.progress.value * 0.75 * this.moveDirection.x * this.pawnEntity.gridReference.gridScale);
-            this.pawnEntity.container.y = this.pawnEntity.screenPosition.y + this.pawnEntity.fakeZPosition + (this.progress.value * 0.75 * this.moveDirection.y * this.pawnEntity.gridReference.gridScale);   
+        if (this.progress.value < 50) {
+            this.pawnEntity.container.x = this.pawnEntity.screenPosition.x + (this.progress.value * 0.01 * 0.75 * this.moveDirection.x * this.pawnEntity.gridReference.gridScale);
+            this.pawnEntity.container.y = this.pawnEntity.screenPosition.y + this.pawnEntity.fakeZPosition + (this.progress.value * 0.01 * 0.75 * this.moveDirection.y * this.pawnEntity.gridReference.gridScale);   
         }
-        if (this.progress.value > 0.5 && this.progress.value < 1) {
-            this.pawnEntity.container.x = this.pawnEntity.screenPosition.x + ((1 - this.progress.value) * 0.75 * this.moveDirection.x * this.pawnEntity.gridReference.gridScale);
-            this.pawnEntity.container.y = this.pawnEntity.screenPosition.y + this.pawnEntity.fakeZPosition + ((1 - this.progress.value) * 0.75 * this.moveDirection.y * this.pawnEntity.gridReference.gridScale);   
+        if (this.progress.value > 50 && this.progress.value < 100) {
+            this.pawnEntity.container.x = this.pawnEntity.screenPosition.x + ((100 - this.progress.value) * 0.01 * 0.75 * this.moveDirection.x * this.pawnEntity.gridReference.gridScale);
+            this.pawnEntity.container.y = this.pawnEntity.screenPosition.y + this.pawnEntity.fakeZPosition + ((100 - this.progress.value)  * 0.01 * 0.75 * this.moveDirection.y * this.pawnEntity.gridReference.gridScale);   
         }
     }
 
@@ -54,8 +54,8 @@ export class FailMoveAnimation {
     }
 
     getJumpHeight(progress) {
-        if (progress >= 1) progress = 1;
-        return -(Math.sin(Math.PI * progress)**0.75) * this.pawnEntity.gridReference.gridScale * 0.3;
+        if (progress >= 100) progress = 100;
+        return -(Math.sin(Math.PI * progress * 0.01)**0.75) * this.pawnEntity.gridReference.gridScale * 0.3;
     }
     
 }

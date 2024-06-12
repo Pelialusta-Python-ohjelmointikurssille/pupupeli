@@ -15,17 +15,17 @@ export class AnimationProgress {
     }
 
     increment(delta) {
-        if (this.value < 1 && this.inProgress === true) {
-            this.value += delta / this.time;
-        } else if (this.value >= 1) {
-            this.value = 1;
+        if (this.value < 100 && this.inProgress === true) {
+            this.value += delta / this.time * 100;
+        } else if (this.value >= 100) {
+            this.value = 100;
             this.stop();
             this.finishfunc.call(this.context, this.name);
         }
     }
 
     skipToEnd() {
-        this.value = 1;
+        this.value = 100;
         this.stop();
         this.finishfunc.call(this.context, this.name);
     }
