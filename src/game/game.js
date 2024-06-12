@@ -12,7 +12,7 @@ export class Game {
         //getGameTask() returns object containing the grid and the gamemode
         let gameTask = getGameTask();
         this.grid = gameTask.grid;
-        this.gameMode = this.initGameMode(gameTask.gameMode);
+        this.gameMode = this.initGameMode(gameTask);
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
