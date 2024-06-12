@@ -15,7 +15,7 @@ export class GraphicsEntity {
         this.currentSkin = this.skins.keys().next().value;
         this.swapTextureToMoveDir(this.direction);
         this.type = "generic";
-        this.direction = Direction.Up;
+        this.direction = Direction.Down;
         this.fakeZPosition = 0;
         this.currentAnimation = null;
         this.isReady = true;
