@@ -142,7 +142,6 @@ export function createBackground(entityUUID, entityData, graphicsEntityHandler, 
 }
 
 export function createTextBox(entityUUID, entityData, graphicsEntityHandler, skins) {
-    console.log(skins)
     let sprite = new PIXI.NineSliceSprite({
         texture: skins.values().next().value.defaultTexture,
         leftWidth: 64,
