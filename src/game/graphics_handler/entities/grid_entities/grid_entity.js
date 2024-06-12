@@ -33,7 +33,7 @@ export class GridEntity extends GraphicsEntity {
             .rect(i*linexgap-(this.lineWidth/2), 0, this.lineWidth, this.sizeOnScreen.y)
             .fill({color: this.lineColor});
             if (i == linexcount-1) continue;
-            let textObject = new PIXI.Text({ text: `${i+1}`, style: { fontFamily: this.font, fontSize: 16, fill : this.lineColor } });
+            let textObject = new PIXI.Text({ text: `${i+1}`, style: { fontFamily: this.font, fontSize: 32, fill : this.lineColor } });
             textObject.x = i*linexgap + (linexgap / 2);
             textObject.y = 4;
             textObject.anchor.set(0.5, 0);
@@ -44,7 +44,7 @@ export class GridEntity extends GraphicsEntity {
             .rect(0, i*lineygap-(this.lineWidth/2), this.sizeOnScreen.x, this.lineWidth)
             .fill({color: this.lineColor});
             if (i == lineycount-1) continue;
-            let textObject = new PIXI.Text({ text: `${i+1}`, style: { fontFamily: this.font, fontSize: 16, fill : this.lineColor } });
+            let textObject = new PIXI.Text({ text: `${i+1}`, style: { fontFamily: this.font, fontSize: 32, fill : this.lineColor } });
             textObject.x = 4;
             textObject.y = i*lineygap + (lineygap / 2);
             textObject.anchor.set(0, 0.5);
