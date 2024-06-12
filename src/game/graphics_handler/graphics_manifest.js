@@ -4,7 +4,9 @@ import
     createGenericEntity,
     createGridObject,
     createGrid,
-    createTextBox
+    createTextBox,
+    createPlayer,
+    createCollectible
 } from "./entities/entity_factories.js";
 
 import {
@@ -154,7 +156,7 @@ export const ENTITIES = [
     },
     {
         typeName: "player",
-        factoryFunction: createGridObject
+        factoryFunction: createPlayer
     },
     {
         typeName: "obstacle",
@@ -162,7 +164,7 @@ export const ENTITIES = [
     },
     {
         typeName: "collectible",
-        factoryFunction: createGridObject
+        factoryFunction: createCollectible
     }
 ]
 

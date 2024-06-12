@@ -20,7 +20,6 @@ export class TextBoxEntity extends GraphicsEntity {
         this.container.addChild(this.lineGraphic);
         this.container.addChild(this.textboxSprite);
         this.container.addChild(this.textObject);
-        this.container.zIndex = 1000;
         
         this.setDynamicallyPosition();
         
