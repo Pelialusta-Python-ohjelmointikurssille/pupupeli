@@ -2,7 +2,7 @@ import { getNewGridObject } from "./gridobject.js";
 import { Grid } from "./grid.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
-import { GameModeGetCollectibles } from "./gameModes.js";
+import { GameModeGetCollectibles, GameModeMultipleChoice } from "./gameModes.js";
 
 /**
  * 
@@ -23,7 +23,12 @@ export function getGameTask() {
     buildGrid(gridIntTable, newGrid, gridWidth, gridHeight);
     newGrid.saveCurrentStateForReset(); //Important!
     //make new gamemode last, make it here cause the info on gamemode is contained in the json?
-    let currentGameMode = new GameModeGetCollectibles(newGrid);
+    let currentGameMode;
+    if (task.getMultipleChoiceQuestions().length > 0) {
+        currentGameMode = new GameModeMultipleChoice(newGrid);
+    } else {
+        currentGameMode = new GameModeGetCollectibles(newGrid);
+    }
     //Send the grid and the gamemode
     return { grid: newGrid, gameMode: currentGameMode };
 };
