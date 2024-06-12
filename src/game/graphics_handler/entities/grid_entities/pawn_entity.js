@@ -19,6 +19,8 @@ export class PawnEntity extends GraphicsEntity {
         this.gridReference = entityHandler.getMainGridObject();
         this.gridPosition = new Vector2(0, 0);
         this.gridStartPosition = new Vector2(0, 0);
+        this.fakeZPosition = 0;
+        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridPosition);
         this.sizeWithinCellMultiplier = 0.9;
         this.sprite.anchor.set(0.5);
     }
@@ -72,6 +74,6 @@ export class PawnEntity extends GraphicsEntity {
         this.sprite.width = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridPosition);
         this.container.x = this.screenPosition.x;
-        this.container.y = this.screenPosition.y;
+        this.container.y = this.screenPosition.y + this.fakeZPosition;
     }
 }

@@ -28,7 +28,6 @@ export class GraphicsEntity {
         this.swapTextureToMoveDir(this.direction);
         this.type = "generic";
         this.direction = Direction.Down;
-        this.fakeZPosition = 0;
         this.currentAnimation = null;
         this.isReady = true;
     }
