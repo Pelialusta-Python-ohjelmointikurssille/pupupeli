@@ -4,7 +4,7 @@ import { disablePlayButton } from './ui/ui_editor_buttons.js'
 import { displayErrorMessage } from './ui/ui.js';
 import * as globals from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
-import { highlightCurrentLine } from './ui/ui.js';
+import { highlightCurrentLine } from './input/editor.js';
 
 let worker;
 let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot

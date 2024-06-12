@@ -74,7 +74,9 @@ function handleInput() {
     //KeyboardInterrupt should probably be handled somehow. 
     if (word === PYODIDE_INTERRUPT_INPUT) {
         interruptBuffer[0] = 2;
+        console.log("v Intended error: pyodide interrupted while in stdin v");
         pyodide.checkInterrupt();
+        console.log("^ Intended error: pyodide interrupted while in stdin ^")
         postMessage({ type: 'finish' });
     }
     return word;
