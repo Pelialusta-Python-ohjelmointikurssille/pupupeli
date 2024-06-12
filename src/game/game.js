@@ -29,7 +29,7 @@ export class Game {
     }
 
     createGridEntityForRendering(gridObject) {
-        let data = { position: gridObject.getVector2Position() };
+        let data = { gridPosition: gridObject.getVector2Position() };
         let skins = SKIN_BUNDLES[gridObject.type];
         this.gh.createEntity(gridObject.id, gridObject.type, data, skins);
     }

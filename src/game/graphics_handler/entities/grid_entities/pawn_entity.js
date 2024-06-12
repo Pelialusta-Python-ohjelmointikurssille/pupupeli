@@ -5,27 +5,22 @@ export class PawnEntity extends GraphicsEntity {
     constructor(entityId, entityHandler, container, sprite, data, skins) {
         super(entityId, entityHandler, container, sprite, data, skins);
         this.gridReference = entityHandler.getMainGridObject();
-        this.gridCellPosition = new Vector2(0, 0);
+        this.gridPosition = new Vector2(0, 0);
+        this.gridStartPosition = new Vector2(0, 0);
         this.sizeWithinCellMultiplier = 0.9;
-        this.currentAnimation = null;
         if (data != null) {
-            if (data.position != null) {
-                this.gridCellPosition = data.position;
+            if (data.gridPosition != null) {
+                this.gridPosition = data.gridPosition;
+                this.gridStartPosition = new Vector2(this.gridPosition.x, this.gridPosition.y);
             }
         }
-        this.startPosition = new Vector2(this.gridCellPosition.x, this.gridCellPosition.y);
-        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
-        this.dirTexMap = new Map();
+        
+        this.sprite.anchor.set(0.5);
+        this.updatePosition();
     }
 
     onCreate() {
         super.onCreate();
-        this.sprite.anchor.set(0.5);
-        this.sprite.height = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
-        this.sprite.width = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
-        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
-        this.container.x = this.screenPosition.x;
-        this.container.y = this.screenPosition.y;
     }
 
     onUpdate(deltaTime) {
@@ -46,17 +41,19 @@ export class PawnEntity extends GraphicsEntity {
 
     finishAnimationsInstantly() {
         super.finishAnimationsInstantly();
-        this.sprite.height = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
-        this.sprite.width = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
-        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
-        this.container.x = this.screenPosition.x;
-        this.container.y = this.screenPosition.y;
+        this.updatePosition();
     }
 
     reset() {
         super.reset();
-        this.gridCellPosition = new Vector2(this.startPosition.x, this.startPosition.y);
-        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridCellPosition);
+        this.gridPosition = new Vector2(this.gridStartPosition.x, this.gridStartPosition.y);
+        this.updatePosition();
+    }
+
+    updatePosition() {
+        this.sprite.height = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
+        this.sprite.width = this.sizeWithinCellMultiplier * this.gridReference.gridScale;
+        this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridPosition);
         this.container.x = this.screenPosition.x;
         this.container.y = this.screenPosition.y;
     }
