@@ -2,50 +2,59 @@ import { GraphicsEntity } from "../graphics_entity.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 export class TextBoxEntity extends GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite, data, skins) {
-        super(entityId, entityHandler, container, sprite, data, skins);
+    constructor(entityId, entityHandler, container, sprite, entityData, skins) {
+        super(entityId, entityHandler, container, sprite, entityData, skins);
         this.lineGraphic = new PIXI.Graphics();
-        this.sprite.leftWidth = 64;
-        this.sprite.topHeight = 64;
-        this.sprite.rightWidth = 64;
-        this.sprite.bottomHeight = 64;
-
+        this.targetPosition = null;
+        this.textContent = "";
         this.textObject = new PIXI.Text({ text: "", style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0x000000 } });       
-        this.initTextObject();
-        this.initBoxSprite();
         this.container.addChild(this.lineGraphic);
         this.container.addChild(this.textObject);
-        
-        this.setDynamicallyPosition();
-        
+    }
+
+    applyEntityData() {
+        super.applyEntityData();
+        if (this.entityData.text != null) {
+            this.textContent = this.entityData.text;
+            this.textObject.text = this.textContent;
+        }
+        if (this.entityData.targetPosition != null) {
+            this.targetPosition = this.entityData.targetPosition;
+        }
+        if (this.entityData.size == null) {
+            this.sprite.width = this.textObject.width + 64;
+            this.sprite.height = this.textObject.height + 64;
+        }
+        if (this.entityData.textColor != null) {
+            this.textObject.style.fill = this.entityData.textColor;
+        }
+        if (this.entityData.fontSize != null) {
+            this.textObject.style.fontSize = this.entityData.fontSize;
+        }
+        if (this.entityData.font != null) {
+            this.textObject.style.fontFamily = this.entityData.font;
+        }
+    }
+
+    onCreate() {
+        super.onCreate();
+        this.initTextObject();
+        this.initBoxSprite();
         if (this.targetPosition != null) {
+            this.setDynamicallyPosition();
             this.createTargetArrow();
         }
     }
 
     initTextObject() {
         this.textObject.anchor.set(0.5);
-        this.textContent = "";
-        if (this.data.text != null) {
-            this.textContent = this.data.text;
-        }
-        this.textObject.text = this.textContent;
-
-        if (this.data.size != null) {
-            this.sprite.width = this.data.size.x;
-            this.sprite.height = this.data.size.y;
-        } else {
-            this.sprite.width = this.textObject.width + 64;
-            this.sprite.height = this.textObject.height + 64;
-        }
-
-        this.targetPosition = null;
-        if (this.data.targetPosition != null) {
-            this.targetPosition = this.data.targetPosition;
-        }
     }
 
     initBoxSprite() {
+        this.sprite.leftWidth = 64;
+        this.sprite.topHeight = 64;
+        this.sprite.rightWidth = 64;
+        this.sprite.bottomHeight = 64;
         this.sprite.pivot.x = this.sprite.width / 2;
         this.sprite.pivot.y = this.sprite.height / 2;
         this.container.pivot.x = 0;
@@ -65,32 +74,11 @@ export class TextBoxEntity extends GraphicsEntity {
         this.lineGraphic.fill(0xffffff);
     }
 
-
-    onUpdate(deltaTime) {
-        super.onUpdate(deltaTime);
-    }
-
-    onStartAnimation(name) {
-        super.onStartAnimation(name);
-    }
-
-    onFinishAnimation(name) {
-        super.onFinishAnimation(name);
-    }
-
-    doAnimation(animation) {
-        super.doAnimation(animation);
-    }
-
-    finishAnimationsInstantly() {
-        super.finishAnimationsInstantly();
-    }
-
     setDynamicallyPosition() {
-        if (this.data.position != null) {
-            this.container.x = this.data.position.x;
-            this.container.y = this.data.position.y;
-        } else if (this.data.targetPosition != null){
+        if (this.entityData.position != null) {
+            this.container.x = this.entityData.position.x;
+            this.container.y = this.entityData.position.y;
+        } else if (this.entityData.targetPosition != null){
             if (this.targetPosition.x >= 512){
                 this.container.x = this.targetPosition.x - (this.sprite.width / 2 + 64);
             }

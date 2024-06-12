@@ -2,41 +2,26 @@ import { Vector2 } from "../../../vector.js";
 import { GraphicsEntity } from "../graphics_entity.js";
 
 export class PawnEntity extends GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite, data, skins) {
-        super(entityId, entityHandler, container, sprite, data, skins);
+    constructor(entityUUID, entityHandler, container, sprite, entityData, skins) {
+        super(entityUUID, entityHandler, container, sprite, entityData, skins);
         this.gridReference = entityHandler.getMainGridObject();
         this.gridPosition = new Vector2(0, 0);
         this.gridStartPosition = new Vector2(0, 0);
         this.sizeWithinCellMultiplier = 0.9;
-        if (data != null) {
-            if (data.gridPosition != null) {
-                this.gridPosition = data.gridPosition;
-                this.gridStartPosition = new Vector2(this.gridPosition.x, this.gridPosition.y);
-            }
-        }
-        
         this.sprite.anchor.set(0.5);
-        this.updatePosition();
+    }
+
+    applyEntityData(){
+        super.applyEntityData();
+        if (this.entityData.gridPosition != null) {
+            this.gridPosition = this.entityData.gridPosition;
+        }
     }
 
     onCreate() {
         super.onCreate();
-    }
-
-    onUpdate(deltaTime) {
-        super.onUpdate(deltaTime);
-    }
-
-    onStartAnimation(name) {
-        super.onStartAnimation(name);
-    }
-
-    onFinishAnimation(name) {
-        super.onFinishAnimation(name);
-    }
-
-    doAnimation(animation) {
-        super.doAnimation(animation);
+        this.gridStartPosition = new Vector2(this.gridPosition.x, this.gridPosition.y);
+        this.updatePosition();
     }
 
     finishAnimationsInstantly() {

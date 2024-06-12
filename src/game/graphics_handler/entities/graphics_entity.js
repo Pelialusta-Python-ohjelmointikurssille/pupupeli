@@ -2,26 +2,53 @@ import { Direction } from "../../direction.js";
 
 export class GraphicsEntity {
     constructor(entityUUID, entityHandler, pixiContainer, sprite, entityData, skins) {
-        this.entityId = entityUUID;
+        this.entityUUID = entityUUID;
         this.entityHandler = entityHandler;
         this.container = pixiContainer;
         this.sprite = sprite;
-        this.isReady = true;
-        this.data = entityData;
-        this.type = "generic";
-        this.direction = "down";
+        if (this.sprite != null) {
+            this.container.addChild(this.sprite);
+        }
+        this.entityData = entityData;
         this.skins = skins;
-        this.fakeZPosition = 0;
         this.currentSkin = null;
         this.currentSkin = this.skins.keys().next().value;
         this.swapTextureToMoveDir(this.direction);
+        this.type = "generic";
+        this.direction = Direction.Up;
+        this.fakeZPosition = 0;
         this.currentAnimation = null;
-        if (this.sprite !== null) {
-            this.container.addChild(this.sprite);
+        this.isReady = true;
+    }
+
+    applyEntityData() {
+        if (this.entityData != null) {
+            if (this.entityData.position != null) {
+                this.container.position.x = this.entityData.position.x;
+                this.container.position.y = this.entityData.position.y;
+            }
+            
+            if (this.entityData.rotation != null) {
+                this.container.rotation = this.entityData.rotation;
+            }
+            
+            if (this.entityData.scale != null) {
+                this.container.scale = this.entityData.scale;
+            }
+            
+            if (this.entityData.direction != null) {
+                this.direction = this.entityData.direction;
+            }
+            
+            if (this.entityData.size != null && this.sprite != null) {
+                this.sprite.width = this.entityData.size.x;
+                this.sprite.height = this.entityData.size.y;
+            }
         }
     }
-    onCreate() {
 
+    onCreate() {
+        this.applyEntityData();
     }
 
     onUpdate(deltaTime) {
@@ -32,7 +59,6 @@ export class GraphicsEntity {
     }
     
     onDestroy() {
-
 
     }
     
@@ -65,6 +91,7 @@ export class GraphicsEntity {
         this.container.alpha = 1;
         this.isReady = true;
         this.currentAnimation = null;
+        this.direction = Direction.Up;
     }
 
     swapTextureToMoveDir(dir) {
@@ -72,7 +99,6 @@ export class GraphicsEntity {
             this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
         }
         else {
-            console.log(this.type);
             return;
         }
         

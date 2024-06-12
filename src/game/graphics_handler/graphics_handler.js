@@ -59,7 +59,7 @@ export class GraphicsHandler {
         this.createGrid();
 
         // TODO: create proper grid scaling?
-        this.createEntity("bgtest", "background", { bgWidth: this.gridWidth * 128, bgHeight: this.gridHeight * 128}, SKIN_BUNDLES["background"]);
+        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 128, this.gridHeight * 128) } , SKIN_BUNDLES["background"]);
 
         let t2 = new Date().getTime();
         console.log(`Loading graphics engine took ${t2-t1}ms`);

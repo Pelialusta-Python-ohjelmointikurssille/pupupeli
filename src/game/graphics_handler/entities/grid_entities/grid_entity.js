@@ -4,24 +4,46 @@ import { GridVectorToScreenVector } from "../../coord_helper.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 export class GridEntity extends GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite, data, skins) {
-        super(entityId, entityHandler, container, sprite, data, skins);
-        this.gridSize = data.gridSize;
-        this.sizeOnScreen = new Vector2(this.gridSize.x * 128, this.gridSize.y * 128)
+    constructor(entityUUID, entityHandler, container, sprite, entityData, skins) {
+        super(entityUUID, entityHandler, container, sprite, entityData, skins);
+        this.lineGraphics = new PIXI.Graphics()
         this.lineGraphicsList =  [];
         this.lineColor = 0x000000;
         this.lineWidth = 2;
-        this.lineGraphics = new PIXI.Graphics()
+        this.fontSize = 32;
         this.font = "Roboto Light";
-        
-        this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
-
+        this.gridSize = new Vector2(4, 4);
         this.areLinesEnabled = true;
+        this.sizeOnScreen = new Vector2(512, 512);
+        this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
     }
 
+    applyEntityData() {
+        super.applyEntityData();
+        if (this.entityData.gridSize != null) {
+            this.gridSize = this.entityData.gridSize;
+        }
+        if (this.entityData.areLinesEnabled != null) {
+            this.areLinesEnabled = this.entityData.areLinesEnabled;
+        }
+        if (this.entityData.lineColor != null) {
+            this.lineColor = this.entityData.lineColor;
+        }
+        if (this.entityData.lineWidth != null) {
+            this.lineWidth = this.entityData.lineWidth;
+        }
+        if (this.entityData.font != null) {
+            this.font = this.entityData.font;
+        }
+        if (this.entityData.fontSize != null) {
+            this.fontSize = this.entityData.fontSize;
+        }
+    }
     
     onCreate() {
         super.onCreate();
+        this.sizeOnScreen = new Vector2(this.gridSize.x * 128, this.gridSize.y * 128)
+        this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
         this.createLines();
     }
 
@@ -36,7 +58,7 @@ export class GridEntity extends GraphicsEntity {
             .rect(i*linexgap-(this.lineWidth/2), 0, this.lineWidth, this.sizeOnScreen.y)
             .fill({color: this.lineColor});
             if (i == linexcount-1) continue;
-            let textObject = new PIXI.Text({ text: `${i+1}`, style: { fontFamily: this.font, fontSize: 32, fill : this.lineColor } });
+            let textObject = new PIXI.Text({ text: `${i+1}`, style: { fontFamily: this.font, fontSize: this.fontSize, fill : this.lineColor } });
             textObject.x = i*linexgap + (linexgap / 2);
             textObject.y = 4;
             textObject.anchor.set(0.5, 0);

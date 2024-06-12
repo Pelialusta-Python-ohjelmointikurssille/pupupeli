@@ -15,7 +15,7 @@ export class MoveAnimation {
     }
 
     start() {
-        this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridCellPosition);
+        this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridPosition);
         this.gridObject.container.x = this.gridObject.screenPosition.x + this.gridObject.fakeZPosition;
         this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition;
         this.progress.start();
@@ -45,9 +45,9 @@ export class MoveAnimation {
     }
 
     onFinish() {
-        this.gridObject.gridCellPosition.x += this.moveDirection.x;
-        this.gridObject.gridCellPosition.y += this.moveDirection.y;
-        this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridCellPosition);
+        this.gridObject.gridPosition.x += this.moveDirection.x;
+        this.gridObject.gridPosition.y += this.moveDirection.y;
+        this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridPosition);
         this.gridObject.container.x = this.gridObject.screenPosition.x + this.gridObject.fakeZPosition;
         this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition;
         this.inProgress = false;

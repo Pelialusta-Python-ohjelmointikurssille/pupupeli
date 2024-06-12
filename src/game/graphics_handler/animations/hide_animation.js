@@ -12,7 +12,7 @@ export class HideAnimation {
     start() {
         this.progress.start();
         this.inProgress = true;
-        this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridCellPosition);
+        this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridPosition);
         this.gridObject.container.x = this.gridObject.screenPosition.x + this.gridObject.fakeZPosition;
         this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition;
     }
