@@ -27,7 +27,7 @@ export function createObstacleRockSkin(skinName, theme, assets) {
 
 export function createBackgroundGrassSkin(skinName, theme, assets) {
     let skinOptions = {
-        defaultTexture: assets.backgrounds.background_grass,
+        defaultTexture: assets.backgrounds.grass,
     }
     return new EntitySkin(skinName, theme, skinOptions);
 }

@@ -41,11 +41,11 @@ export const ASSETS = {
             name: "backgrounds",
             assets: [
                 {
-                    alias: "background_grass",
+                    alias: "grass",
                     src: "src/static/game_assets/background_grass.png"
                 },
                 {
-                    alias: "background_metal",
+                    alias: "metal",
                     src: "src/static/game_assets/background_metal.png"
                 }
             ]
