@@ -6,6 +6,8 @@ import * as errorHandler from "./input/py_error_handling.js";
 import { EventHandler } from "./event_handler.js";
 import { Constants } from "./game/commonstrings.js";
 
+/* global ace */
+
 let eventHandler;
 let state = { current: "initial" };
 let worker = new Worker('/src/input/worker.js');
@@ -13,6 +15,7 @@ let initialized = false;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/"+globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
+let currentMarker;
 // const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
@@ -472,6 +475,13 @@ export function promptUserInput(inputBoxState) {
         inputBox.removeEventListener("keydown", eventHandler.sendUserInputToWorker);
         return inputValue;
     }
+}
+
+export function highlightCurrentLine(lineNumber) {
+    if (currentMarker !== undefined) {
+        editor.getEditor().session.removeMarker(currentMarker);
+    }
+    currentMarker = editor.getEditor().session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "executing-line", "fullLine");
 }
 
 await main();

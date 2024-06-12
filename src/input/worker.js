@@ -127,15 +127,23 @@ function runCommand(command, parameters) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
+function sendLine(line) {
+    self.postMessage({ type: 'line', details: line });
+}
+
 /**
  * Runs python code on pyodide.
  * @param {object} pyodide The pyodide object initialized in initializePyodide().
  * @param {string} codeString The input from the editor on the website.
  */
 async function runPythonCode(pyodide, codeString) {
+    let codeStringLined;
     pyodide.runPython(pythonFileStr);
+    codeStringLined = addLineNumberOutputs(codeString);
+    console.log("Running code: " + codeStringLined);
+    self.continuePythonExecution = pyodide.runPythonAsync(codeStringLined);
 
-    self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
         await self.continuePythonExecution;
         await checkClearedConditions(codeString);
@@ -164,6 +172,25 @@ async function checkClearedConditions(codeString) {
     clearedConditions.push({ condition: "conditionMaxLines", parameter: codeString.split("\n").filter(line => line.trim() !== "").length });
     clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
     self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
+}
+
+function addLineNumberOutputs(codeString) {
+    let lines = codeString.split('\n');
+    let lastIndentation = '';
+    lines = lines.map((line, index) => {
+        const indentation = line.match(/^\s*/)[0];
+        // Check if the line is empty, contains only whitespace, or is a comment
+        if (line.trim() === '' || line.trim().startsWith('#')) {
+            // Use the last non-empty line's indentation for empty lines and comment lines
+            return `${lastIndentation}pupu.rivi(${index + 1})\n${line}`;
+        } else {
+            // Update the last non-empty line's indentation
+            lastIndentation = indentation;
+            return `${indentation}pupu.rivi(${index + 1})\n${line}`;
+        }
+    });
+    codeString = lines.join('\n');
+    return codeString;
 }
 
 function setResetFlag(value) {

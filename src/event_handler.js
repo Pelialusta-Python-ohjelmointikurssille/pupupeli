@@ -32,6 +32,9 @@ export class EventHandler {
                 case "finish":
                     ui.onFinishLastCommand();
                     break;
+                case "line":
+                    ui.highlightCurrentLine(message.details);
+                    break;
                 case "error":
                     ui.displayErrorMessage(message.error);
                     break;
