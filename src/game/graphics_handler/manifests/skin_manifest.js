@@ -4,7 +4,7 @@ import
     createCharacterBunnySkin,
     createCollectibleCarrotSkin,
     createObstacleRockSkin
-} from "../entity_skins/entity_skin_factories.js";
+} from "../entity_skins/factories/entity_skin_factories.js";
 
 export const ENTITY_SKINS = [
     {

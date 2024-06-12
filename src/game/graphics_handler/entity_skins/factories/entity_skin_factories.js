@@ -1,4 +1,4 @@
-import { EntitySkin } from "./entity_skin.js";
+import { EntitySkin } from "../entity_skin.js";
 
 export function createCharacterBunnySkin(skinName, theme, assets) {
     let skinOptions = {

@@ -4,7 +4,7 @@ import {
     createPawnFailMoveAnimation,
     createPawnMoveAnimation,
     createUnHideAnimation
-} from "../animations/animation_factories.js";
+} from "../animations/factories/animation_factories.js";
 
 export const ANIMATIONS = [
     {

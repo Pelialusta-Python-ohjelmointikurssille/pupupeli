@@ -1,8 +1,8 @@
-import { FailMoveAnimation } from "./fail_move_animation.js";
-import { HideAnimation } from "./hide_animation.js";
-import { MoveAnimation } from "./move_animation.js";
-import { ShowInOutAnimation } from "./showinout_animation.js";
-import { UnhideAnimation } from "./unhide_animation.js";
+import { FailMoveAnimation } from "../fail_move_animation.js";
+import { HideAnimation } from "../hide_animation.js";
+import { MoveAnimation } from "../move_animation.js";
+import { ShowInOutAnimation } from "../showinout_animation.js";
+import { UnhideAnimation } from "../unhide_animation.js";
 
 export function createPawnMoveAnimation(animationId, entity, data) {
     return new MoveAnimation(entity, animationId, data);

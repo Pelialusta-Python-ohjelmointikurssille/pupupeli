@@ -7,7 +7,7 @@ import
     createTextBox,
     createPlayer,
     createCollectible
-} from "../entities/entity_factories.js";
+} from "../entities/factories/entity_factories.js";
 
 export const ENTITIES = [
     {
