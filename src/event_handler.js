@@ -109,7 +109,7 @@ export function sendUserInputToWorker(event) {
     }
 }
 
-function addInputToUserInputs() {
+function addInputToUserInputs(word) {
     if (word) {
         userInputs.push(word);
         displayPreviousInputs();
@@ -132,6 +132,8 @@ export function inputToWorker(word) {
  * so that the worker knows to not run any more python code.
  */
 export function resetWorker() {
+    userInputs = [];
+    displayPreviousInputs(); //user input handling should move somewhere else
     if (globals.getCurrentSAB() === undefined) return;
     const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
     Atomics.store(waitArray, 0, 1); // this is for stopping the wait
@@ -165,16 +167,9 @@ function saveLastMessage(message) {
 function displayPreviousInputs() {
     const inputContainer = document.getElementById('input-container')
     inputContainer.innerHTML = '';
-    this.userInputs.forEach(input => {
+    userInputs.forEach(input => {
         const inputElement = document.createElement('div');
         inputElement.textContent = input;
         inputContainer.appendChild(inputElement);
     })
-}
-
-function resetUserInputs() {
-    userInputs = [];
-    displayPreviousInputs();
-    resetWorker();
-    setMessagePassingState({ paused: false });
 }
