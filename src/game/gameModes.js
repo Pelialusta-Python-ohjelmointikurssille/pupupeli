@@ -53,6 +53,10 @@ export class GameModeGetCollectibles {
     }
 }
 
+/**
+ * Game mode where you win by clicking correct multiple choice option.
+ * Winning happens in ui so this class does not have checkIfGameWon.
+ */
 export class GameModeMultipleChoice {
     constructor(grid) {
         this.name = "GetMultipleChoice"
