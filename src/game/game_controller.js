@@ -21,16 +21,18 @@ export async function initGame() {
 // "{ data: data, sab: sab })" 
 // where data is ? and sab is an SharedArrayBuffer.
 export function giveCommand(dirtyCommand) {
+    currentCommand = dirtyCommand; //Do this first, always. Thank you.
     game.receiveInput(dirtyCommand.data.command, dirtyCommand.data.parameters);
-    currentCommand = dirtyCommand;
 }
 
 /**
  * Called by the Game class when game commands are done. 
  */
 export function commandsDone() {
-    console.log("command: " + currentCommand);
-    if (currentCommand == null) return;
+    if (currentCommand === undefined) {
+        console.error("current command undefined");
+        return;
+    }
     eventHandler.postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
 }
 
@@ -48,5 +50,9 @@ export function notifyGameWon() {
 }
 
 export function setTheme(theme) {
-    game.setTheme(theme);
+    game.setTheme(theme); 
+}
+
+export function toggleGrid() {
+    game.toggleGrid();
 }

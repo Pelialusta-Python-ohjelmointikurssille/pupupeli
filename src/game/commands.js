@@ -79,13 +79,46 @@ export class SayCommand {
     execute() {
         // TEMPORARY HACK!! REPLACE THIS!
         //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
+
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = crypto.randomUUID().toString();
-        this.graphicsHandler.createEntity(textboxId, "textbox", {
-            //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
-            targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
-            text: this.sayString
-        }, SKIN_BUNDLES["speech_bubble"]);
+        this.graphicsHandler.createEntity(
+            textboxId,
+            "textbox",
+            {
+                targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
+                text: this.sayString
+            },
+            SKIN_BUNDLES["speech_bubble"]
+        );
         this.graphicsHandler.doAction(textboxId, "appear_hide", { time: 2 });
+    }
+}
+
+export class AskCommand {
+    constructor(gridObject, graphicsHandler, askString) {
+        this.gridObject = gridObject;
+        this.graphicsHandler = graphicsHandler;
+        this.time = 0.1;
+        this.askString = askString;
+    }
+
+    execute() {
+        // TEMPORARY HACK!! REPLACE THIS!
+        //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
+        this.graphicsHandler.destroyTextBoxes();
+        let textboxId = crypto.randomUUID().toString();
+        this.graphicsHandler.createEntity(
+            textboxId,
+            "textbox",
+            {
+                position: new Vector2(512, 980),
+                size: new Vector2(1000, 200),
+                targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
+                text: this.askString
+            },
+            SKIN_BUNDLES["speech_bubble"]
+        );
+        //this.graphicsHandler.doAction(textboxId, "ask", { time: 2 });
     }
 }

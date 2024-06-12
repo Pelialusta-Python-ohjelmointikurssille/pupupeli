@@ -32,6 +32,7 @@ export class GraphicsEntity {
     
     onDestroy() {
 
+
     }
     
     finishAnimationsInstantly() {
@@ -46,6 +47,7 @@ export class GraphicsEntity {
 
     onFinishAnimation() {
         this.isReady = true;
+
         this.currentAnimation = null;
     }
 

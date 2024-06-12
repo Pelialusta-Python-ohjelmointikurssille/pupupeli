@@ -143,5 +143,16 @@ export class GraphicsHandler {
     setEntityThemes(theme) {
         this.graphicsEntityHandler.setEntityThemes(theme);
     }
+    
+    setGridState(isActive) {
+        let grid = this.graphicsEntityHandler.getMainGridObject();
+        if (isActive === true) {
+            if (grid.areLinesEnabled === false) {
+                grid.createLines();
+            }
+        } else {
+            grid.removeLines();
+        }
+    }
 }
 

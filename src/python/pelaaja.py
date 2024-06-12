@@ -10,6 +10,15 @@ def check_while_usage(source_code):
 
     return False
 
+def check_for_usage(source_code):
+    tree = ast.parse(source_code)
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.For):
+            return True
+
+    return False
+
 class Pelaaja:
     def __init__(self, name="pupu"):
         self.__name = name
@@ -27,5 +36,17 @@ class Pelaaja:
 #        if reset_flag:
 #            raise Exception("Interpreter was reset")
         js.runCommand("say", sentence)
+    
+    def puhu(self, sentence: str):
+        self.sano(sentence)
+    
+    def kysy(self, question: str = "?"):
+#        if reset_flag:
+#            raise Exception("Interpreter was reset")
+        js.runCommand("ask", question)
+        return input()
+    
+    def rivi(self, line: int):
+        js.sendLine(line)
 
 pupu = Pelaaja()

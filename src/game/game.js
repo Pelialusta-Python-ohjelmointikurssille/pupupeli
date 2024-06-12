@@ -1,7 +1,7 @@
 import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
-import { MoveCommand, SayCommand } from "./commands.js";
+import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
 import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
@@ -17,6 +17,8 @@ export class Game {
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
+
+        this.isGridEnabled = true;
     }
 
     async init() {
@@ -37,47 +39,55 @@ export class Game {
     }
 
     receiveInput(commandName, commandParameter) {
-        //If we are already executing a command, (animation not finished),
-        //we have the option of waiting for the current one finishing, 
-        //OR, quickly finishing the current one. 
-        //Because of how the logic works, I will for now opt into quickly finishing the current ones.
         if (!this.gh.isReady) {
             this.gh.finishAnimationsImmediately();
         }
-        //-----------------------------------------------
-        //Do a new command:
+        this.gh.destroyTextBoxes();
         if (commandName === Constants.MOVE_STR) {
-            this.MakeMoveCommand(commandParameter);
+            this.makeMoveCommand(commandParameter);
         } else if (commandName === Constants.SAY_STR) {
-            this.MakeSayCommand(commandParameter);
+            this.makeSayCommand(commandParameter);
+        } else if (commandName === Constants.ASK_STR) {
+            this.makeAskCommand(commandParameter);
         }
     }
 
     /**
-     * Calls game_controller.commandsDone. if gameWon is true, calls game_controller.notifyGameWon
+     * Calls game_controller.commandsDone. if gameWon is true, calls game_controller.notifyGameWon.
+     * This.gameWon is changed to FALSE after this method, to reset that state without initialising new game entirely.
+     * This is necessary to not call gamewon and display celebration box after inputting wrong code after a succesful pass.
      */
     onAnimsReady() {
         if (this.gameWon === true) {
             notifyGameWon();
         }
         commandsDone();
+        this.gameWon = false;
     }
 
-    MakeMoveCommand(commandParameter) {
+    makeMoveCommand(commandParameter) {
         let dir = translatePythonMoveStringToDirection(commandParameter);
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
     }
 
-    MakeSayCommand(commandParameter) {
+    makeSayCommand(commandParameter) {
         let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
         sayCommand.execute();
     }
 
+    makeAskCommand(commandParameter) {
+        let moveCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
+        moveCommand.execute();
+        this.onAnimsReady();
+    }
+
     resetGame() {
+        this.gh.destroyTextBoxes();
         this.grid.resetGrid();
         this.gh.resetGridObjects();
+        this.gh.destroyTextBoxes();
         this.gameMode.reset();
         this.gh.destroyTextBoxes();
     }
@@ -97,6 +107,16 @@ export class Game {
         }
         if (theme === "Robo") {
             this.gh.setEntityThemes("robot");
+        }
+    }
+    
+    toggleGrid() {
+        if (this.isGridEnabled === true) {
+            this.isGridEnabled = false;
+            this.gh.setGridState(false);
+        } else {
+            this.isGridEnabled = true;
+            this.gh.setGridState(true);
         }
     }
 }

@@ -1,5 +1,5 @@
 import exp from "constants";
-import { tryGetFileAsJson, tryGetFileAsText } from "../file_reader.js"
+import { tryGetFileAsJson, tryGetFileAsText, countForTaskFilesInDirectory, checkIfFileExists} from "../file_reader.js"
 import XMLHttpRequestMock from "./mocks/XMLHttpRequestMock.js";
 
 const fs = require('fs');
@@ -148,4 +148,39 @@ describe('tryGetFileAsJson', () => {
         expect(result.grid).toEqual(expectedGrid);
         expect(result.conditions).toEqual(expectedConditions);
     });
+});
+
+describe('countForTaskFilesInDirectory', () => {
+  beforeEach(() => {
+      global.XMLHttpRequest = XMLHttpRequestMock;
+  });
+
+  test('should return file count 2', () => {
+    const dirPath = path.resolve(__dirname, './mocks/mock_tasks/countfortaskfiles');
+    const expectedOutput = 2;
+    let fileNumber = countForTaskFilesInDirectory(dirPath);
+    expect(fileNumber).toEqual(expectedOutput);
+  });
+});
+
+describe('checkIfFileExists', () => {
+  beforeEach(() => {
+      global.XMLHttpRequest = XMLHttpRequestMock;
+  });
+
+  test('should return null if doesnt exist', () => {
+    const filePath = path.resolve(__dirname, './mocks/mock_tasks/countfortaskfiles/3.json');
+    const expectedOutput = null;
+    let result = checkIfFileExists(filePath);
+    expect(result).toEqual(expectedOutput);
+  });
+
+  test('should return result if exists', () => {
+    const filePath = path.resolve(__dirname, './mocks/mock_tasks/countfortaskfiles/2.json');
+    const expectedOutput = { "hi": "moi"};
+    let result = checkIfFileExists(filePath);
+    expect(result).not.toEqual(null);
+    expect(result).toEqual(expectedOutput);
+    expect(result.hi).toEqual("moi");
+  });
 });

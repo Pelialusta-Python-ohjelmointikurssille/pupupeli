@@ -88,3 +88,33 @@ Retrospektiivi
 
 
 ### LESS OF vähemmän
+
+
+
+## Retro 4, 10.6.2024
+
+### START aloitetaan
+- kysy voiko auttaa jos loppuu tekeminen
+- backlogi sheetsiin ja voidaan käyttää issues edelleen
+- user story issue backlogiin, taskit issueiksi ja niihin (esim user story #110)
+- backlog grooming
+- defnition of done noudattaminen <- testaus ja toisten tsekkaama
+
+### STOP lopetetaan
+- eteenpäin siirtyminen ilman testejä jne
+
+### CONTINUE jatketaan
+- JSDOCIT grafiikkafunktioihin
+- pidetään mainista huolta
+- kommunikointia
+- feature branch / pull request
+- pullarikatselmointi
+- taskit: harjoittelija kirjoittaa ja ohjaaja auttaa
+
+### MORE OF lisää
+- kysy voiko auttaa jos loppuu tekeminen
+- enemmän läpinäkyvyyttä taskeissa
+- tehtävien jakaminen
+
+
+### LESS OF vähemmän

@@ -11,7 +11,7 @@ body {
     margin: 1rem 0.5rem 1rem 1rem;
 }
 
-#app, #game, #editor-button {
+#app, #game, #editor-button, #header-container, #task-selector-container {
     margin: 1rem;
 }
 
@@ -47,6 +47,49 @@ body {
 
 .is-hidden {
     display: none !important;
+}
+
+#header {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#header-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(var(--canvas-width) * 2.5 - 2rem);
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    margin-bottom: 0rem;
+    background-color: #ddd;
+    border-radius: 8px;
+    border: 1px solid black;
+}
+
+#chapter-selector-text {
+    margin-top: 0px;
+}
+
+#user-container {
+    height: 30px;
+}
+
+#user-name {
+    display: flex;
+    font-size: 20px;
+    margin-right: 1rem;
+    height: 30px;
+}
+
+#header-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    margin-bottom: 0rem;
 }
 
 #app {
@@ -161,6 +204,15 @@ h1 {
     margin: unset;
 }
 
+p {
+    display: block;
+    margin-block-start: 5px;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
+
 button {
     display: inline-flex;
     align-items: center;
@@ -202,6 +254,46 @@ button:hover {
 
 .multiple-choice-question:hover {
     background-color: rgba(255, 255, 255, 0.5);
+}
+
+.ace_marker-layer .executing-line {
+    background: rgba(255, 255, 0, 0.5);
+    position: absolute; /* without this positions will be erong */
+    z-index: 1000; /* in front of all other markers */ 
+}
+
+#celebration {
+    position: fixed;
+    top: 15%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    padding: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
+}
+
+#input-container {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#input-container div {
+    padding: 0.25rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+#input-container div:last-child {
+    border-bottom: none;
 }
 
 @media (max-width: calc((640px * 2) + 3rem)) {

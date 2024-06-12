@@ -1,9 +1,12 @@
+const PYODIDE_INTERRUPT_INPUT = "pyodide_interrupt_input_666"
 let pyodide;
 let pythonFileStr;
 let continuePythonExecution;
-let ctr = 0;
-let state;
+let saveState;
 let resetFlag = false;
+let interruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
+//remember to update this when new commands are added
+const validCommands = ["move", "say", "ask"];
 
 // eslint-disable-next-line no-undef
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
@@ -38,7 +41,7 @@ async function initializePyodide(pythonCode) {
     if (pyodide === undefined) {
         // eslint-disable-next-line no-undef
         pyodide = await loadPyodide();
-        state = pyodide.pyodide_py._state.save_state(); // we save pyodide initial state to restore if needed
+        saveState = pyodide.pyodide_py._state.save_state(); // we save pyodide initial state to restore if needed
 
         pyodide.setStdin({
             stdin: () => {
@@ -46,6 +49,7 @@ async function initializePyodide(pythonCode) {
             }
         });
         pythonFileStr = pythonCode;
+        pyodide.setInterruptBuffer(interruptBuffer);
         console.log("Initialized pyodide worker");
     }
 }
@@ -61,14 +65,28 @@ function handleInput() {
 
     postMessage({ type: 'input', details: "", sab: sab });
     Atomics.wait(syncArray, 0, 0);
+    let word = getStringFromSharedArray(sharedArray);
+    console.log("worker received word: " + word);
+    //special case where we want to reset python if it's waiting for input.
+    //We interrupt pyodide and and send message that we are finished.
+    //This sends out an error but it's a friend, not an enemy.
+    //https://pyodide.org/en/stable/usage/streams.html#handling-keyboard-interrupts
+    //KeyboardInterrupt should probably be handled somehow. 
+    if (word === PYODIDE_INTERRUPT_INPUT) {
+        interruptBuffer[0] = 2;
+        pyodide.checkInterrupt();
+        postMessage({ type: 'finish' });
+    }
+    return word;
+}
 
+function getStringFromSharedArray(sharedArray) {
     let word = '';
     for (let i = 0; i < sharedArray.length; i++) {
         if (sharedArray[i] === 0) break;
         word += String.fromCharCode(sharedArray[i]);
     }
-
-    return word
+    return word;
 }
 
 /**
@@ -83,20 +101,13 @@ function handleInput() {
 function runCommand(command, parameters) {
     const sab = new SharedArrayBuffer(8);
     const waitArray = new Int32Array(sab, 0, 2);
-
-    switch (command) {
-        case "move":
-            self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
-            break;
-        case "say":
-            self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
-            break;
-        default:
-            postError(`Command '${command}' is not a valid command.`);
+    if (validCommands.includes(command)) {
+        //Posted to eventHandler
+        self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
+    } else {
+        postError(`Command '${command}' is not a valid command.`);
     }
     Atomics.wait(waitArray, 0, 0);
-    ctr++;
-    console.log(ctr + " hyppyä");
 
     // waitarray[1] will be "1" if resetWorker() is called in event handler, otherwise 0
     if (waitArray[1] === 0) {
@@ -106,6 +117,7 @@ function runCommand(command, parameters) {
             postError(error.message);
         }
     } else {
+        console.log("Worker on resetattu!");
         try {
             setResetFlag(true);
             continuePythonExecution;
@@ -115,22 +127,31 @@ function runCommand(command, parameters) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
+function sendLine(line) {
+    self.postMessage({ type: 'line', details: line });
+}
+
 /**
  * Runs python code on pyodide.
  * @param {object} pyodide The pyodide object initialized in initializePyodide().
  * @param {string} codeString The input from the editor on the website.
  */
 async function runPythonCode(pyodide, codeString) {
+    let codeStringLined;
     pyodide.runPython(pythonFileStr);
+    codeStringLined = addLineNumberOutputs(codeString);
+    console.log("Running code: " + codeStringLined);
+    self.continuePythonExecution = pyodide.runPythonAsync(codeStringLined);
 
-    self.continuePythonExecution = pyodide.runPythonAsync(codeString);
     try {
         await self.continuePythonExecution;
-        await pyodide.runPythonAsync(`print(check_while_usage("""${codeString}"""))`);
+        await checkClearedConditions(codeString);
 
         try {
             // reset pyodide state to where we saved it earlier after all commands are done
-            pyodide.pyodide_py._state.restore_state(state);
+            interruptBuffer[0] = 0;
+            pyodide.pyodide_py._state.restore_state(saveState);
         } catch (error) {
             postError(error.message);
         }
@@ -139,9 +160,37 @@ async function runPythonCode(pyodide, codeString) {
         postMessage({ type: 'finish' });
     } catch (error) {
         // also reset pyodide state on errors/exceptions such as when we reset the game mid-execution
-        pyodide.pyodide_py._state.restore_state(state);
+        pyodide.pyodide_py._state.restore_state(saveState);
         postError(error.message);
     }
+}
+
+async function checkClearedConditions(codeString) {
+    let clearedConditions = [];
+    clearedConditions.push({ condition: "conditionUsedWhile", parameter: await pyodide.runPythonAsync(`check_while_usage("""${codeString}""")`) });
+    clearedConditions.push({ condition: "conditionUsedFor", parameter: await pyodide.runPythonAsync(`check_for_usage("""${codeString}""")`) });
+    clearedConditions.push({ condition: "conditionMaxLines", parameter: codeString.split("\n").filter(line => line.trim() !== "").length });
+    clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
+    self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
+}
+
+function addLineNumberOutputs(codeString) {
+    let lines = codeString.split('\n');
+    let lastIndentation = '';
+    lines = lines.map((line, index) => {
+        const indentation = line.match(/^\s*/)[0];
+        // Check if the line is empty, contains only whitespace, or is a comment
+        if (line.trim() === '' || line.trim().startsWith('#')) {
+            // Use the last non-empty line's indentation for empty lines and comment lines
+            return `${lastIndentation}pupu.rivi(${index + 1})\n${line}`;
+        } else {
+            // Update the last non-empty line's indentation
+            lastIndentation = indentation;
+            return `${indentation}pupu.rivi(${index + 1})\n${line}`;
+        }
+    });
+    codeString = lines.join('\n');
+    return codeString;
 }
 
 function setResetFlag(value) {

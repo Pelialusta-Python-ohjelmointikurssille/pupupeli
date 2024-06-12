@@ -15,6 +15,8 @@ export class GridEntity extends GraphicsEntity {
         this.font = "Roboto Light";
         
         this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
+
+        this.areLinesEnabled = true;
     }
 
     
@@ -24,6 +26,7 @@ export class GridEntity extends GraphicsEntity {
     }
 
     createLines () {
+        this.areLinesEnabled = true;
         let linexcount = this.gridSize.x + 1;
         let lineycount = this.gridSize.y + 1;
         let linexgap = this.sizeOnScreen.x / this.gridSize.x;
@@ -54,6 +57,7 @@ export class GridEntity extends GraphicsEntity {
     }
 
     removeLines () {
+        this.areLinesEnabled = false;
         this.lineGraphics.clear();
         this.container.removeChildren();
     }
