@@ -57,5 +57,9 @@ export function translateErrorType(errorType) {
         return "Tarkista, että käyttämäsi arvot ovat oikeaa tyyppiä";
     }
 
+    if (errorType.startsWith("AttributeError:")) {
+        return "Hahmollasi ei ole ominaisuutta, jota yrität käyttää";
+    }
+
     return translations[errorType] || errorType;
 }
