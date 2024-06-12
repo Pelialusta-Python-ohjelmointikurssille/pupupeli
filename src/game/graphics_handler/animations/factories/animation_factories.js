@@ -1,4 +1,3 @@
-import { AskAnimation } from "../ask_animation.js";
 import { FailMoveAnimation } from "../fail_move_animation.js";
 import { HideAnimation } from "../hide_animation.js";
 import { MoveAnimation } from "../move_animation.js";
@@ -23,8 +22,4 @@ export function createUnHideAnimation(animationId, entity, data) {
 
 export function createAppearHideAnimation(animationId, entity, data) {
     return new ShowInOutAnimation(entity, animationId, data);
-}
-
-export function createAskAnimation(animationId, entity, data) {
-    return new AskAnimation(entity, animationId, data);
 }

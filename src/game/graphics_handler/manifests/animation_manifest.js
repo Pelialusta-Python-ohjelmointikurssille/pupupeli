@@ -1,6 +1,5 @@
 import {
     createAppearHideAnimation,
-    createAskAnimation,
     createHideAnimation,
     createPawnFailMoveAnimation,
     createPawnMoveAnimation,
@@ -32,10 +31,5 @@ export const ANIMATIONS = [
         typeName: "appear_hide",
         compatibleEntities: [],
         factoryFunction: createAppearHideAnimation
-    },
-    {
-        typeName: "ask",
-        compatibleEntities: [],
-        factoryFunction: createAskAnimation
     }
 ]
