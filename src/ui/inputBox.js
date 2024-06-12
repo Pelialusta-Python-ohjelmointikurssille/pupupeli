@@ -1,4 +1,4 @@
-import { sendUserInputToWorker } from "../event_handler.js";
+import { onUserSendInputToWorker } from "../event_handler.js";
 let inputBox = document.getElementById("input-box");
 
 /**
@@ -26,11 +26,11 @@ export function getInputBoxValue() {
 function setUserInputBoxVisibility(isVisible) {
     if (isVisible) {
         inputBox.classList.remove("is-invisible");
-        inputBox.addEventListener("keydown", sendUserInputToWorker);
+        inputBox.addEventListener("keydown", onUserSendInputToWorker);
         return;
     }
     inputBox.classList.add("is-invisible");
-    inputBox.removeEventListener("keydown", sendUserInputToWorker);
+    inputBox.removeEventListener("keydown", onUserSendInputToWorker);
 }
 
 /**

@@ -100,7 +100,7 @@ export function runSingleCommand() {
  * @param {*} event The event when the user inputs something in the input box,
  * in this case, the relevant part is the key the user inputs.
  */
-export function sendUserInputToWorker(event) {
+export function onUserSendInputToWorker(event) {
     if (event.key === 'Enter') {
         let word = getInputBoxValue();
         addInputToUserInputs(word);
