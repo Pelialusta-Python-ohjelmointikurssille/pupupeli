@@ -1,4 +1,3 @@
-import { getEventHandler } from "./ui.js";
 import { sendUserInputToWorker } from "../event_handler.js";
 let inputBox = document.getElementById("input-box");
 
