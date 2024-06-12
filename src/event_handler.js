@@ -102,16 +102,16 @@ export function runSingleCommand() {
  */
 export function sendUserInputToWorker(event) {
     if (event.key === 'Enter') {
+        let word = getInputBoxValue();
         addInputToUserInputs(word);
-        word = getInputBoxValue();
-        hideAndClearInputBox();
         inputToWorker(word);
+        hideAndClearInputBox();
     }
 }
 
 function addInputToUserInputs() {
     if (word) {
-        userInputs.push(this.word);
+        userInputs.push(word);
         displayPreviousInputs();
     }
 }

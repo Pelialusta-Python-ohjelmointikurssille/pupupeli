@@ -8,7 +8,6 @@ import { resetGame } from "../game/game_controller.js";
 let _buttonsState;
 let startAndPauseButton;
 let nextStepButton;
-let resetButton;
 let celebrationBox;
 
 //Button states as const strings:
@@ -30,7 +29,6 @@ export function initializeEditorButtons() {
     addEventToButton("grid-toggle-button", toggleGrid);
     nextStepButton = document.getElementById("editor-skip-button");
     startAndPauseButton = document.getElementById("editor-run-pause-button");
-    resetButton = document.getElementById("editor-stop-button");
     celebrationBox = document.getElementById("celebration");
 
 }
