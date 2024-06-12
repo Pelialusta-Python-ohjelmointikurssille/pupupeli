@@ -49,7 +49,7 @@ export function translateErrorType(errorType) {
         return "Yritit käyttää moduulia, jota ei löydy. Tarkista moduulin nimi";
     }
 
-    if (errorType.startsWith("IndentationError: expected an indented block")) {
+    if (errorType.startsWith("IndentationError:")) {
         return "Tarkista, että jätät rivin alkuun tyhjää tilaa";
     }
 
