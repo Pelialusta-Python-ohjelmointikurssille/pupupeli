@@ -14,7 +14,7 @@ async function postData(url = '', data = {}) {
     return response.json();
 }
 
-const apiUrl = 'https://tie.koodariksi.fi/api/login';
+const apiUrl = 'http://localhost:3000/api/login';
 const formData = {
     username: 'puputesti',
     password: 'porkkana'
