@@ -49,4 +49,27 @@ class Pelaaja:
     def rivi(self, line: int):
         js.sendLine(line)
 
-pupu = Pelaaja()
+class ErrorCheck:
+    def __init__(self, name="pupu"):
+        self.__name = name
+        self.__directions =  ["oikea", "vasen", "ylös", "alas"]
+
+    def liiku(self, direction: str):
+        if direction in self.__directions:
+            return
+        else:
+            raise ValueError("Virheellinen suunta")
+        
+    def sano(self, sentence: str):
+        return
+    
+    def puhu(self, sentence: str):
+        return
+    
+    def kysy(self, question: str = "?"):
+        return
+    
+    def rivi(self, line: int):
+        return
+
+pupu = ErrorCheck()

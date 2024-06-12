@@ -2,16 +2,23 @@ export function extractErrorDetails(errorMessage) {
     const regex = /File .*?, line (\d+)/g;
     let match;
     let lastLineReference;
+    let lastToLastLineReference;
+    let lineNumberMatch;
 
     const lines = errorMessage.split('\n');
     const errorTypeMatch = lines[lines.length - 2].trim();
 
     while ((match = regex.exec(errorMessage)) !== null) {
+        lastToLastLineReference = lastLineReference;
         lastLineReference = match[1];
     }
 
-    const lineNumberMatch = lastLineReference || "Tuntematon rivi";
     const translatedErrorType = translateErrorType(errorTypeMatch);
+    if (translatedErrorType === "Antamasi suunta ei ole kirjoitettu oikein") {
+        lineNumberMatch = lastToLastLineReference || "Tuntematon rivi";
+    } else {
+        lineNumberMatch = lastLineReference || "Tuntematon rivi";
+    }
 
     if (translatedErrorType) {
         return { text: translatedErrorType, line: lineNumberMatch };

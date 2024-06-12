@@ -141,8 +141,7 @@ async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
-    console.log("Running code: " + codeStringLined);
-    self.continuePythonExecution = pyodide.runPythonAsync(codeStringLined);
+    self.continuePythonExecution = pyodide.runPythonAsync(codeString + '\n' + codeStringLined);
 
     try {
         await self.continuePythonExecution;
@@ -190,6 +189,8 @@ function addLineNumberOutputs(codeString) {
         }
     });
     codeString = lines.join('\n');
+    // Prepend the new line of text to codeString
+    codeString = "pupu = Pelaaja()\n" + codeString;
     return codeString;
 }
 
