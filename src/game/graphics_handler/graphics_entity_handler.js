@@ -37,8 +37,8 @@ export class GraphicsEntitySystem {
             }
         });
         // Checks if transitioned from or to the ready state.
-        if (this.isReady === true && maybeReady === false) {
-        }
+        //if (this.isReady === true && maybeReady === false) {
+        //}
         if (this.isReady === false && maybeReady === true) {
             this.onEntitiesReady();
         }

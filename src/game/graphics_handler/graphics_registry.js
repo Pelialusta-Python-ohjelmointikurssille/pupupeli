@@ -6,6 +6,7 @@ export class GraphicsRegistry {
         this.registeredEntitySkins = new Map();
         this.registeredSkinInstances = new Map();
         this.registeredThemes = new Map();
+        this.animationCompatability = new Map();
         this.graphicsHandler = graphicsHandler;
     }
 
@@ -37,6 +38,11 @@ export class GraphicsRegistry {
 
     registerAnimation(animationType, factoryFunction, compatibleEntities) {
         this.registeredAnimations.set(animationType, factoryFunction);
+        if (this.animationCompatability.has(animationType)) {
+            this.animationCompatability.set(animationType, this.animationCompatability.get(animationType).concat(compatibleEntities));
+        } else {
+            this.animationCompatability.set(animationType, compatibleEntities);
+        }
     }
 
     deRegisterAnimation(animationType) {
@@ -71,6 +77,7 @@ export class GraphicsRegistry {
 
     createAnimation(animationType, animationData, entity) {
         if (this.registeredAnimations.has(animationType) === false) return;
+        if (this.animationCompatability.get(animationType).includes(entity) === false && this.animationCompatability.get(animationType) > 0) return;
         let animation = this.registeredAnimations.get(animationType).call(this, animationType, entity, animationData);
         return animation;
     }
