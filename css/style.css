@@ -72,14 +72,12 @@ body {
 }
 
 #user-container {
-    height: 30px;
+    min-height: 32px;
 }
 
-#user-name {
-    display: flex;
-    font-size: 20px;
-    margin-right: 1rem;
-    height: 30px;
+#username, #password {
+    min-height: 100%;
+    margin: 0 0.5rem;
 }
 
 #header-buttons {
@@ -156,12 +154,16 @@ body {
     width: calc(100% - 2rem);
 }
 
-#grid-toggle-button, #theme-select {
+#grid-toggle-button, #theme-select, #login-button {
     float: right;
     min-height: 32px;
     min-width: calc(10% - 1rem);
     margin: 0 0.5rem;
     border-radius: 5px;
+}
+
+#logout-button {
+    margin-bottom: 0;
 }
 
 #task-selector-box button {

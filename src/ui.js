@@ -164,47 +164,9 @@ function addButtonEvents() {
 }
 
 function isUserLoggedIn() {
-    let userNameContainer = document.getElementById('user-name');
-    let userLogContainer = document.getElementById('log-button');
-    userNameContainer.innerHTML = ''; // Clear the userContainer
-    userLogContainer.innerHTML = ''; // Clear the userContainer
-    if (localStorage.getItem("username") !== null) {
-        let usernameElement = document.createElement('p');
-        userNameContainer.style.width = "300px";
-        usernameElement.textContent = "Käyttäjä: " + localStorage.getItem("username");
-        let logoutButton = document.createElement('button');
-        logoutButton.textContent = "Kirjaudu ulos";
-        logoutButton.style.marginBottom = "0px";
-        logoutButton.style.height = "30px";
-        logoutButton.addEventListener('click', () => {
-            localStorage.removeItem("username");
-            usernameElement.textContent = "";
-            isUserLoggedIn()
-        });
-        userNameContainer.appendChild(usernameElement) // Append the usernameElement
-        userLogContainer.appendChild(logoutButton);
-    } else {
-        // Create the input elements
-        let userInput = document.createElement('input');
-        let submitButton = document.createElement('button');
-        userNameContainer.style.width = "150px";
-        // Set the attributes for the user input
-        userInput.setAttribute('type', 'text');
-        userInput.setAttribute('id', 'user-input');
-        userInput.setAttribute('placeholder', 'Enter user name');
-
-        // Set the attributes for the submit button
-        submitButton.style.marginBottom = "0px";
-        submitButton.textContent = "Kirjaudu sisään";
-        submitButton.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent the form from being submitted
-            localStorage.setItem("username", userInput.value);
-            isUserLoggedIn()
-        });
-
-        // Append the elements to the user container
-        userNameContainer.appendChild(userInput);
-        userLogContainer.appendChild(submitButton);
+    if (localStorage.getItem("token") !== null) {
+        document.getElementById("user-container").classList.add("is-hidden");
+        document.getElementById("logout-button").classList.remove("is-hidden");
     }
 }
 

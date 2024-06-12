@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
     <script type="module" src="src/ui.js"></script>
+    <script type="module" src="src/api/api.js"></script>
 </head>
 
 <body>
@@ -23,9 +24,11 @@
         </div>
             <div id="header-buttons" class="is-flex">
                 <div id="user-container" class="is-flex">
-                        <div id="user-name"></div>
-                        <div id="log-button"></div>
+                    <input id="username" placeholder="username">
+                    <input id="password" placeholder="********">
+                    <button id="login-button" value="login">Kirjaudu sisään</button>
                 </div>
+                <button id="logout-button" class="is-hidden" value="logout">Kirjaudu ulos</button>
             </div>
         </div>
 
