@@ -38,7 +38,6 @@ export class GraphicsEntitySystem {
         });
         // Checks if transitioned from or to the ready state.
         if (this.isReady === true && maybeReady === false) {
-            this.onEntitiesNotReady();
         }
         if (this.isReady === false && maybeReady === true) {
             this.onEntitiesReady();
@@ -104,13 +103,6 @@ export class GraphicsEntitySystem {
      */
     getMainGridObject() {
         return this.getGraphicsEntity(this.mainGridEntityUUID);
-    }
-
-    /**
-     * Called when entity handler enters the "not ready" state.
-     */
-    onEntitiesNotReady() {
-        this.graphicsHandler.onEntitiesNotReady();
     }
 
     /**
