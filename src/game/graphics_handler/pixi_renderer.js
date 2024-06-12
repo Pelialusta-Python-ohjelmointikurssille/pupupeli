@@ -38,13 +38,6 @@ export class PixiRenderer {
         console.log(`Loading assets took ${t2 - t1}ms`);
     }
 
-    // used to potentially load assets from other sources than builtin assets
-    // that are loaded at init
-    // does nothing right now
-    async loadAssetBundle() {
-
-    }
-
     renderLoop(time) {
         if (this.renderLoopFunctions == null || this.renderLoopFunctions.length <= 0) return;
         this.renderLoopFunctions.forEach(loopObject => {
