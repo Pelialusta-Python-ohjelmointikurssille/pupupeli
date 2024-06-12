@@ -59,7 +59,7 @@ export class GameModeGetCollectibles {
  */
 export class GameModeMultipleChoice {
     constructor(grid) {
-        this.name = "GetMultipleChoice"
+        this.name = "MultipleChoice"
         grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
         this.startScore = globals.collectibles.current;
     }

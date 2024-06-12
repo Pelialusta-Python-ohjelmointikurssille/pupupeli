@@ -12,7 +12,6 @@ export class Game {
         let gameTask = getGameTask();
         this.grid = gameTask.grid;
         this.gameMode = this.initGameMode(gameTask);
-        // this.gameMode.eventTarget.addEventListener("victory", this.gameHasBeenWon.bind(this));
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
