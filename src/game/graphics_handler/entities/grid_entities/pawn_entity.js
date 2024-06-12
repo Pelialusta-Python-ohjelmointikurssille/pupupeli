@@ -1,8 +1,8 @@
-import { Vector2 } from "../../vector.js";
-import { GraphicsEntity } from "./graphics_entity.js";
-import { Constants } from "../../commonstrings.js";
+import { Vector2 } from "../../../vector.js";
+import { GraphicsEntity } from "../graphics_entity.js";
+import { Constants } from "../../../commonstrings.js";
 
-export class GridObjectEntity extends GraphicsEntity {
+export class PawnEntity extends GraphicsEntity {
     constructor(entityId, entityHandler, container, sprite, data, skins) {
         super(entityId, entityHandler, container, sprite, data, skins);
         this.gridReference = entityHandler.getMainGridObject();

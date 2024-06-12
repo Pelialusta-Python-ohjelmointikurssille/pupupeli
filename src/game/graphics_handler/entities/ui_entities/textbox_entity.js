@@ -1,4 +1,4 @@
-import { GraphicsEntity } from "./graphics_entity.js";
+import { GraphicsEntity } from "../graphics_entity.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 export class TextBoxEntity extends GraphicsEntity {

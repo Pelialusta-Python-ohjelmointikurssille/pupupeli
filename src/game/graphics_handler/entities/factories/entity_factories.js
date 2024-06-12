@@ -1,9 +1,9 @@
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
-import { GridEntity } from "../grid_entity.js";
+import { GridEntity } from "../grid_entities/grid_entity.js";
 import { GraphicsEntity } from "../graphics_entity.js";
 import { BackgroundEntity } from "../background_entity.js";
-import { GridObjectEntity } from "../grid_object_entity.js";
-import { TextBoxEntity } from "../textbox_entity.js";
+import { PawnEntity } from "../grid_entities/pawn_entity.js";
+import { TextBoxEntity } from "../ui_entities/textbox_entity.js";
 
 /**
  * @private
@@ -32,11 +32,11 @@ export function createGenericEntity(entityUUID, entityData, graphicsEntityHandle
  * @private
  * @param {string} entityUUID 
  * @param {*} entityData 
- * @returns {GridObjectEntity} Player object
+ * @returns {PawnEntity} Player object
  */
 export function createGridObject(entityUUID, entityData, graphicsEntityHandler, skins) {
     let sprite = new PIXI.Sprite();
-    let entity = new GridObjectEntity(
+    let entity = new PawnEntity(
         entityUUID,
         graphicsEntityHandler,
         new PIXI.Container(),
@@ -54,7 +54,7 @@ export function createGridObject(entityUUID, entityData, graphicsEntityHandler, 
 
 export function createPlayer(entityUUID, entityData, graphicsEntityHandler, skins) {
     let sprite = new PIXI.Sprite();
-    let entity = new GridObjectEntity(
+    let entity = new PawnEntity(
         entityUUID,
         graphicsEntityHandler,
         new PIXI.Container(),
@@ -72,7 +72,7 @@ export function createPlayer(entityUUID, entityData, graphicsEntityHandler, skin
 
 export function createCollectible(entityUUID, entityData, graphicsEntityHandler, skins) {
     let sprite = new PIXI.Sprite();
-    let entity = new GridObjectEntity(
+    let entity = new PawnEntity(
         entityUUID,
         graphicsEntityHandler,
         new PIXI.Container(),
