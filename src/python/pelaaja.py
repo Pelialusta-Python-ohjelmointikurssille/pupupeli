@@ -19,6 +19,9 @@ def check_for_usage(source_code):
 
     return False
 
+def mock_input(prompt=""):
+    return
+
 class Pelaaja:
     def __init__(self, name="pupu"):
         self.__name = name

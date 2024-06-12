@@ -139,9 +139,11 @@ function sendLine(line) {
  */
 async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
+    let codeStringTest;
+    codeStringTest = removeInputs(codeString);
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
-    self.continuePythonExecution = pyodide.runPythonAsync(codeString + '\n' + codeStringLined);
+    self.continuePythonExecution = pyodide.runPythonAsync(codeStringTest + '\n' + codeStringLined);
 
     try {
         await self.continuePythonExecution;
@@ -171,6 +173,10 @@ async function checkClearedConditions(codeString) {
     clearedConditions.push({ condition: "conditionMaxLines", parameter: codeString.split("\n").filter(line => line.trim() !== "").length });
     clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
     self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
+}
+
+function removeInputs(codeString) {
+    return codeString.replace(/input\(/g, 'mock_input(');
 }
 
 function addLineNumberOutputs(codeString) {
