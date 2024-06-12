@@ -90,4 +90,13 @@ export class Game {
         console.log("Loppupisteesi on: " + globals.collectibles.current);
         this.gameWon = true;
     }
+
+    setTheme(theme) {
+        if (theme === "Pupu") {
+            this.gh.setEntityThemes("bunny");
+        }
+        if (theme === "Robo") {
+            this.gh.setEntityThemes("robot");
+        }
+    }
 }

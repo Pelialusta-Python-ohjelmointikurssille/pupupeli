@@ -158,5 +158,9 @@ export class GraphicsHandler {
     finishAnimationsImmediately() {
         this.graphicsEntityHandler.skipAnimationsAndFinish();
     }
+
+    setEntityThemes(theme) {
+        this.graphicsEntityHandler.setEntityThemes(theme);
+    }
 }
 

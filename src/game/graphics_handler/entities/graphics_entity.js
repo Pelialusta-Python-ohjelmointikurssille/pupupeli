@@ -8,12 +8,11 @@ export class GraphicsEntity {
         this.isReady = true;
         this.data = entityData;
         this.type = "generic";
+        this.direction = "down";
         this.skins = skins;
         this.currentSkin = null;
-        if (this.skins != null && this.skins.size > 0) {
-            this.currentSkin = this.skins.keys().next().value;
-            this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
-        }
+        this.currentSkin = this.skins.keys().next().value;
+        this.swapTextureToMoveDir(this.direction);
         this.currentAnimation = null;
         if (this.sprite !== null) {
             this.container.addChild(this.sprite);
@@ -65,22 +64,50 @@ export class GraphicsEntity {
     }
 
     swapTextureToMoveDir(dir) {
+        if (this.skins != null && this.skins.size > 0) {
+            this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
+        }
+        else {
+            console.log(this.type);
+            return;
+        }
+        
         let tex;
         if (dir === "up" && this.skins.get(this.currentSkin).upTexture != null) {
             tex = this.skins.get(this.currentSkin).upTexture;
         }
-        if (dir === "down" && this.skins.get(this.currentSkin).upTexture != null) {
+        if (dir === "down" && this.skins.get(this.currentSkin).downTexture != null) {
             tex = this.skins.get(this.currentSkin).downTexture;
         }
-        if (dir === "left" && this.skins.get(this.currentSkin).upTexture != null) {
+        if (dir === "left" && this.skins.get(this.currentSkin).leftTexture != null) {
             tex = this.skins.get(this.currentSkin).leftTexture;
         }
-        if (dir === "right" && this.skins.get(this.currentSkin).upTexture != null) {
+        if (dir === "right" && this.skins.get(this.currentSkin).rightTexture != null) {
             tex = this.skins.get(this.currentSkin).rightTexture;
         }
         if (tex !== undefined) {
             this.sprite.texture = tex;
         }
+        this.direction = dir;
     }
 
+    hasTheme(theme) {
+        let hasThemedSkin = false;
+        this.skins.forEach((value) => {
+            if (value.theme === theme) {
+                hasThemedSkin = true;
+            }
+        });
+        return hasThemedSkin;
+    }
+    
+    setTheme(theme) {
+        if (this.hasTheme(theme) === false) return;
+        this.skins.forEach((value, key) => {
+            if (value.theme === theme) {
+                this.currentSkin = key;
+            }
+        });
+        this.swapTextureToMoveDir(this.direction);
+    }
 }

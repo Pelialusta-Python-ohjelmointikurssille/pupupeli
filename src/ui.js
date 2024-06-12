@@ -49,6 +49,7 @@ async function initGame() {
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
+    game.setTheme(localStorage.getItem("theme"));
 }
 
 /**
@@ -111,7 +112,8 @@ async function initPage() {
     themeSelectDropdown.addEventListener('change', function(event) {
         let selectedValue = event.target.value;
         localStorage.setItem("theme", selectedValue);
-        window.location.reload();
+        game.setTheme(selectedValue);
+        //window.location.reload();
     });
     console.log(globals.theme);
 }
