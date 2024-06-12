@@ -3,7 +3,8 @@ import
     createBackgroundGrassSkin,
     createCharacterBunnySkin,
     createCollectibleCarrotSkin,
-    createObstacleRockSkin
+    createObstacleRockSkin,
+    createSpeechBubbleSkin
 } from "../entity_skins/factories/entity_skin_factories.js";
 
 export const ENTITY_SKINS = [
@@ -26,6 +27,11 @@ export const ENTITY_SKINS = [
         typeName: "skin_background_grass",
         theme: "bunny",
         factoryFunction: createBackgroundGrassSkin
+    },
+    {
+        typeName: "skin_ui_speechbubble",
+        theme: "bunny",
+        factoryFunction: createSpeechBubbleSkin
     }
 ]
 
@@ -33,5 +39,6 @@ export const SKIN_BUNDLES = {
     "player": ["skin_character_bunny"],
     "obstacle": ["skin_obstacle_rock"],
     "collectible": ["skin_collectible_carrot"],
-    "background": ["skin_background_grass"]
+    "background": ["skin_background_grass"],
+    "speech_bubble": ["skin_ui_speechbubble"]
 }

@@ -136,7 +136,7 @@ export class GraphicsEntitySystem {
     }
     destroyTextBoxes() {
         this.entityDict.forEach((value, key) => {
-            if (value.type === "ui_textbox"){
+            if (value.type === "textbox"){
                 this.destroyGraphicsEntity(key);
             }
         });

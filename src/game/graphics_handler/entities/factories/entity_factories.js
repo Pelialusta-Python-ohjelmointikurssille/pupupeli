@@ -49,6 +49,7 @@ export function createGridObject(entityUUID, entityData, graphicsEntityHandler, 
     } else {
         entity.container.zIndex = 5;
     }
+    entity.type = "generic";
     return entity;
 }
 
@@ -67,6 +68,7 @@ export function createPlayer(entityUUID, entityData, graphicsEntityHandler, skin
     } else {
         entity.container.zIndex = 10;
     }
+    entity.type = "pawn";
     return entity;
 }
 
@@ -85,6 +87,7 @@ export function createCollectible(entityUUID, entityData, graphicsEntityHandler,
     } else {
         entity.container.zIndex = 15;
     }
+    entity.type = "pawn";
     return entity;
 }
 
@@ -109,6 +112,7 @@ export function createGrid(entityUUID, entityData, graphicsEntityHandler, skins)
     } else {
         entity.container.zIndex = -10;
     }
+    entity.type = "grid";
     return entity;
 }
 
@@ -133,17 +137,25 @@ export function createBackground(entityUUID, entityData, graphicsEntityHandler, 
     } else {
         entity.container.zIndex = -20;
     }
+    entity.type = "background";
     return entity;
 }
 
 export function createTextBox(entityUUID, entityData, graphicsEntityHandler, skins) {
+    console.log(skins)
+    let sprite = new PIXI.NineSliceSprite({
+        texture: skins.values().next().value.defaultTexture,
+        leftWidth: 64,
+        topHeight: 64,
+        rightWidth: 64,
+        bottomHeight: 64,
+    });
     let entity = new TextBoxEntity(
         entityUUID,
         graphicsEntityHandler,
         new PIXI.Container(),
-        null,
+        sprite,
         entityData,
-        null,
         skins
     );
     if (entityData.zIndex != null) {
@@ -151,5 +163,6 @@ export function createTextBox(entityUUID, entityData, graphicsEntityHandler, ski
     } else {
         entity.container.zIndex = 1000;
     }
+    entity.type = "textbox";
     return entity;
 }

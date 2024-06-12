@@ -79,6 +79,7 @@ export class Game {
         this.grid.resetGrid();
         this.gh.resetGridObjects();
         this.gameMode.reset();
+        this.gh.destroyTextBoxes();
     }
 
     /**

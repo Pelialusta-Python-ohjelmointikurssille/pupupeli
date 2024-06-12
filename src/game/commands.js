@@ -1,4 +1,5 @@
 import { Constants, GetDirectionAsString } from "./commonstrings.js";
+import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { Vector2 } from "./vector.js";
 //implements the interface Command. That just means that all these classes have the function "execute()" (and can easily implement "undo()").
 //Stuff to read if interested: 
@@ -84,7 +85,7 @@ export class SayCommand {
             //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
             targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
             text: this.sayString
-        });
+        }, SKIN_BUNDLES["speech_bubble"]);
         this.graphicsHandler.doAction(textboxId, "appear_hide", { time: 2 });
     }
 }

@@ -8,7 +8,6 @@ export class BackgroundEntity extends GraphicsEntity {
         this.container = container;
         this.sprite = sprite;
         this.isReady = true;
-        this.type = "background";
         if (this.sprite !== null) {
             this.container.addChild(this.sprite);
             this.sprite.width = data.bgWidth;

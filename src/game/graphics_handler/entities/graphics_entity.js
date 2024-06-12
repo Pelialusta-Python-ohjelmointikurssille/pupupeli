@@ -7,7 +7,7 @@ export class GraphicsEntity {
         this.sprite = sprite;
         this.isReady = true;
         this.data = entityData;
-        this.type = "null";
+        this.type = "generic";
         this.skins = skins;
         this.currentSkin = null;
         if (this.skins != null && this.skins.size > 0) {

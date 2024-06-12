@@ -2,23 +2,19 @@ import { GraphicsEntity } from "../graphics_entity.js";
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 export class TextBoxEntity extends GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite, data, texture, skins) {
+    constructor(entityId, entityHandler, container, sprite, data, skins) {
         super(entityId, entityHandler, container, sprite, data, skins);
-        this.textboxSprite = new PIXI.NineSliceSprite({
-            texture: texture,
-            leftWidth: 64,
-            topHeight: 64,
-            rightWidth: 64,
-            bottomHeight: 64,
-        });
-
+        console.log(this.sprite)
         this.lineGraphic = new PIXI.Graphics();
+        this.sprite.leftWidth = 64;
+        this.sprite.topHeight = 64;
+        this.sprite.rightWidth = 64;
+        this.sprite.bottomHeight = 64;
 
         this.textObject = new PIXI.Text({ text: "", style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0x000000 } });       
         this.initTextObject();
         this.initBoxSprite();
         this.container.addChild(this.lineGraphic);
-        this.container.addChild(this.textboxSprite);
         this.container.addChild(this.textObject);
         
         this.setDynamicallyPosition();
@@ -37,11 +33,11 @@ export class TextBoxEntity extends GraphicsEntity {
         this.textObject.text = this.textContent;
 
         if (this.data.size != null) {
-            this.textboxSprite.width = this.data.size.x;
-            this.textboxSprite.height = this.data.size.y;
+            this.sprite.width = this.data.size.x;
+            this.sprite.height = this.data.size.y;
         } else {
-            this.textboxSprite.width = this.textObject.width + 64;
-            this.textboxSprite.height = this.textObject.height + 64;
+            this.sprite.width = this.textObject.width + 64;
+            this.sprite.height = this.textObject.height + 64;
         }
 
         this.targetPosition = null;
@@ -51,14 +47,14 @@ export class TextBoxEntity extends GraphicsEntity {
     }
 
     initBoxSprite() {
-        this.textboxSprite.pivot.x = this.textboxSprite.width / 2;
-        this.textboxSprite.pivot.y = this.textboxSprite.height / 2;
+        this.sprite.pivot.x = this.sprite.width / 2;
+        this.sprite.pivot.y = this.sprite.height / 2;
         this.container.pivot.x = 0;
         this.container.pivot.y = 0;
     }
 
     createTargetArrow() {
-        let triWidth = this.textboxSprite.width / 10 + 20;
+        let triWidth = this.sprite.width / 10 + 20;
         let path = [
             -triWidth, 0,
             triWidth, 0,
@@ -96,16 +92,16 @@ export class TextBoxEntity extends GraphicsEntity {
             this.container.y = this.data.position.y;
         } else if (this.data.targetPosition != null){
             if (this.targetPosition.x >= 512){
-                this.container.x = this.targetPosition.x - (this.textboxSprite.width / 2 + 64);
+                this.container.x = this.targetPosition.x - (this.sprite.width / 2 + 64);
             }
             else {
-                this.container.x = this.targetPosition.x + (this.textboxSprite.width / 2 + 64);
+                this.container.x = this.targetPosition.x + (this.sprite.width / 2 + 64);
             }
             if (this.targetPosition.y >= 512){
-                this.container.y = this.targetPosition.y - (this.textboxSprite.height / 2 + 64);
+                this.container.y = this.targetPosition.y - (this.sprite.height / 2 + 64);
             }
             else {
-                this.container.y = this.targetPosition.y + (this.textboxSprite.height / 2 + 64);
+                this.container.y = this.targetPosition.y + (this.sprite.height / 2 + 64);
             }
         }
     }

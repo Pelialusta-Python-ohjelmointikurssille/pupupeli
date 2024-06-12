@@ -31,3 +31,10 @@ export function createBackgroundGrassSkin(skinName, theme, assets) {
     }
     return new EntitySkin(skinName, theme, skinOptions);
 }
+
+export function createSpeechBubbleSkin(skinName, theme, assets) {
+    let skinOptions = {
+        defaultTexture: assets.ui.speech_bubble,
+    }
+    return new EntitySkin(skinName, theme, skinOptions);
+}
