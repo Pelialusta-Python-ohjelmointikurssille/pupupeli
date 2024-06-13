@@ -1,6 +1,6 @@
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 import { ASSETS } from "./manifests/asset_manifest.js";
-
+import { drawTrail } from "./mousetrailTest.js";
 
 export class PixiRenderer {
     constructor() {
@@ -26,6 +26,7 @@ export class PixiRenderer {
         this.cameraWorldContainer = new PIXI.Container();
         this.cameraWorldContainer.sortDirty = true;
         this.pixiApp.stage.addChild(this.cameraWorldContainer);
+        drawTrail(this.pixiApp);
     }
 
     async loadAssetBuiltinBundles() {
