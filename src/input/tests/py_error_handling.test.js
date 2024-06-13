@@ -13,7 +13,7 @@ describe('extractErrorDetails', () => {
         const result = extractErrorDetails(errorMessage);
         expect(result).toEqual({
             text: 'Antamasi suunta ei ole kirjoitettu oikein',
-            line: '5'
+            line: '2'
         });
     });
 

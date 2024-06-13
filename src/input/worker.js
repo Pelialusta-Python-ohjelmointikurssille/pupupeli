@@ -141,10 +141,12 @@ function sendLine(line) {
  */
 async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
+    let codeStringTest;
+    codeStringTest = removeInputs(codeString);
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
     console.log("Started running code...");
-    self.continuePythonExecution = pyodide.runPythonAsync(codeStringLined);
+    self.continuePythonExecution = pyodide.runPythonAsync(codeStringTest + '\n' + codeStringLined);
 
     try {
         await self.continuePythonExecution;
@@ -176,6 +178,10 @@ async function checkClearedConditions(codeString) {
     self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
 }
 
+function removeInputs(codeString) {
+    return codeString.replace(/input\(/g, 'mock_input(');
+}
+
 function addLineNumberOutputs(codeString) {
     if (codeString === undefined) return;
     let lines = codeString.split('\n');
@@ -193,6 +199,8 @@ function addLineNumberOutputs(codeString) {
         }
     });
     codeString = lines.join('\n');
+    // Prepend the new line of text to codeString
+    codeString = "pupu = Pelaaja()\n" + codeString;
     return codeString;
 }
 
