@@ -1,8 +1,8 @@
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
-let fakeSendTaskButton = document.getElementById("fakeSendTaskButton");
-let fakeGetTaskButton = document.getElementById("fakeGetTaskButton");
-let getAllTasksButton = document.getElementById("getAllTasksButton");
+let sendTaskButton = document.getElementById("sendTaskButton");
+let getTaskButton = document.getElementById("getTaskButton");
+let getCompletedTasksButton = document.getElementById("getCompletedTasksButton");
 const apiUrl = 'http://localhost:3000/api/';
 
 loginButton.addEventListener("click", () => {
@@ -27,8 +27,8 @@ logoutButton.addEventListener("click", () => {
         });
 });
 
-fakeSendTaskButton.addEventListener("click", () => {
-    sendFakeTask(apiUrl + "put")
+sendTaskButton.addEventListener("click", () => {
+    sendTask(apiUrl + "put")
         .then(data => {
             console.log("put", data);
         })
@@ -37,8 +37,8 @@ fakeSendTaskButton.addEventListener("click", () => {
         });
 });
 
-fakeGetTaskButton.addEventListener("click", () => {
-    getFakeTask(apiUrl + "get")
+getTaskButton.addEventListener("click", () => {
+    getTask(apiUrl + "get")
         .then(data => {
             console.log("get", data);
         })
@@ -47,8 +47,8 @@ fakeGetTaskButton.addEventListener("click", () => {
         });
 });
 
-getAllTasksButton.addEventListener("click", () => {
-    getAllTasks(apiUrl + "list")
+getCompletedTasksButton.addEventListener("click", () => {
+    getCompletedTasks(apiUrl + "list")
         .then(data => {
             console.log("list", data);
         })
@@ -107,11 +107,11 @@ async function logout(url) {
     return sendPostRequest(url, data);
 }
 
-async function sendFakeTask(url) {
+async function sendTask(url) {
     const token = localStorage.getItem("token");
-    const task =  document.getElementById("fake-task-push").value;
+    const task =  document.getElementById("task-send-input").value;
     const data = "fake_data";
-    const result = 1;
+    const result = 0;
     const dataobj = {
         token: token,
         task: task,
@@ -121,9 +121,9 @@ async function sendFakeTask(url) {
     return sendPostRequest(url, dataobj);
 }
 
-async function getFakeTask(url) {
+async function getTask(url) {
     const token = localStorage.getItem("token");
-    const task = document.getElementById("fake-task-get").value;
+    const task = document.getElementById("task-get-input").value;
     const params = {
         token: token,
         task: task
@@ -132,7 +132,7 @@ async function getFakeTask(url) {
     return sendGetRequest(getUrl);
 }
 
-async function getAllTasks(url) {
+async function getCompletedTasks(url) {
     const token = localStorage.getItem("token");
     const params = {
         token: token
