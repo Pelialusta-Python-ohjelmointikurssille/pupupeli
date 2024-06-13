@@ -104,8 +104,8 @@ export async function logout(url) {
 export async function sendTask(url, taskIdentifier) {
     console.log(url, taskIdentifier);
     const token = localStorage.getItem("token");
-    const task =  taskIdentifier
-    const data = "testi"
+    const task =  taskIdentifier;
+    const data = getEditor().getValue();
     const result = globals.isGameWon;
     const dataobj = {
         token: token,
