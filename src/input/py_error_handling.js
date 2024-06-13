@@ -81,6 +81,6 @@ export function setCurrentLine(line) {
     currentLine = line;
 }
 
-function getCurrentLine() {
+export function getCurrentLine() {
     return currentLine;
 }
