@@ -50,6 +50,7 @@ export class PawnEntity extends GraphicsEntity {
         super.onCreate();
         this.gridStartPosition = new Vector2(this.gridPosition.x, this.gridPosition.y);
         this.updatePosition();
+        this.onFinishMove();
     }
 
     /**
@@ -72,6 +73,7 @@ export class PawnEntity extends GraphicsEntity {
         this.lineDrawer?.onPawnEntityReset();
         this.fakeZPosition = 0;
         this.updatePosition();
+        this.onFinishMove();
     }
 
     /**
@@ -83,6 +85,10 @@ export class PawnEntity extends GraphicsEntity {
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridPosition);
         this.container.x = this.screenPosition.x;
         this.container.y = this.screenPosition.y + this.fakeZPosition;
-        if (this.lineDrawer !== null) this.lineDrawer.onUpdatePawnEntityPosition(this.container.x, this.container.y);
+    }
+
+    onFinishMove() {
+        this.updatePosition();
+        if (this.lineDrawer !== null) this.lineDrawer.onUpdatePawnEntityPosition(this.screenPosition.x, this.screenPosition.y);
     }
 }
