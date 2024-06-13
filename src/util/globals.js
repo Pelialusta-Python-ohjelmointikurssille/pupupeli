@@ -32,11 +32,20 @@ export let currentSAB;
 export let currentGameMode;
 
 export let isGameWon = 0;
+export let multipleChoiceCorrect = false
 
 export const theme = localStorage.getItem("theme");
 
 export function setGameAsWon() {
     isGameWon = 1;
+}
+
+export function setMultipleChoiceCorrect() {
+    multipleChoiceCorrect = true;
+}
+
+export function getMultipleChoiceCorrect() {
+    return multipleChoiceCorrect
 }
 
 export function setCurrentSAB(sab) {
@@ -67,6 +76,7 @@ export function addClearedConditions(conditionsFromEventHandler) {
 }
 
 export function allConditionsCleared() {
+    console.log(conditionChecker(conditions, conditionsCleared), collectibles.current === collectibles.total)
     return conditionChecker(conditions, conditionsCleared) && collectibles.current === collectibles.total;
 }
 

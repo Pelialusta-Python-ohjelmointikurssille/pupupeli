@@ -93,7 +93,7 @@ async function initPage() {
             // if option is correct, add eventlistener which calls onTaskComplete
             if (option.isCorrectAnswer === true) {
                 let questionButton = document.getElementById(optionId);
-                questionButton.addEventListener("click", onTaskComplete, false);
+                questionButton.addEventListener("click", globals.setMultipleChoiceCorrect, false);
             }
         });
     }
