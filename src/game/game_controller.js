@@ -48,9 +48,13 @@ export function notifyGameWon() {
 }
 
 export function setTheme(theme) {
-    game.setTheme(theme); 
+    game.setTheme(theme);
 }
 
 export function toggleGrid() {
     game.toggleGrid();
+}
+
+export function toggleTrail() {
+    game.toggleTrail();
 }

@@ -109,7 +109,7 @@ export class Game {
             this.gh.setEntityThemes("robot");
         }
     }
-    
+
     toggleGrid() {
         if (this.isGridEnabled === true) {
             this.isGridEnabled = false;
@@ -118,5 +118,11 @@ export class Game {
             this.isGridEnabled = true;
             this.gh.setGridState(true);
         }
+    }
+
+    toggleTrail() {
+        let id = this.grid.player.id;
+        let playerGraphicsPawn = this.gh.getEntity(id);
+        playerGraphicsPawn.lineDrawer?.toggle();
     }
 }

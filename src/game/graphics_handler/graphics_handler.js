@@ -170,5 +170,9 @@ export class GraphicsHandler {
             grid.removeLines();
         }
     }
+
+    getEntity(id) {
+        return this.graphicsEntityHandler.getGraphicsEntity(id);
+    }
 }
 

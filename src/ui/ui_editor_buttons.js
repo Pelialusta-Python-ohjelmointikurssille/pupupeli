@@ -1,9 +1,8 @@
 import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
-import { toggleGrid } from "../game/game_controller.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker } from "../event_handler.js";
 import { getEditor } from "../input/editor.js";
-import { resetGame } from "../game/game_controller.js";
+import { resetGame, toggleGrid, toggleTrail } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 
 let _buttonsState;
@@ -28,10 +27,10 @@ export function initializeEditorButtons() {
     addEventToButton("editor-stop-button", onResetButtonClick);
     addEventToButton("editor-skip-button", onNextStepButtonClick);
     addEventToButton("grid-toggle-button", toggleGrid);
+    addEventToButton("trail-toggle-button", toggleTrail);
     nextStepButton = document.getElementById("editor-skip-button");
     startAndPauseButton = document.getElementById("editor-run-pause-button");
     celebrationBox = document.getElementById("celebration");
-
 }
 
 /**

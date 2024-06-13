@@ -4,8 +4,9 @@ export class PawnEntityLineDrawer {
     constructor(graphics) {
         this.graphics = graphics;
         this.moveHistory = [];
+        this.isEnabled = true;
     }
-    
+
     onUpdatePawnEntityPosition(x, y) {
         this.moveHistory.push(new Vector2(x, y));
         if (this.moveHistory.length < 2) {
@@ -18,6 +19,21 @@ export class PawnEntityLineDrawer {
 
     onPawnEntityReset() {
         this.moveHistory = [];
+        this.clear();
+    }
+
+    clear() {
         this.graphics.clear();
+    }
+
+    toggle() {
+        if (this.isEnabled) {
+            this.isEnabled = false;
+            this.graphics.alpha = 0;
+        } else {
+            this.isEnabled = true;
+            this.graphics.alpha = 1;
+        }
+        console.log("is trail enabled? : " + this.isEnabled);
     }
 }
