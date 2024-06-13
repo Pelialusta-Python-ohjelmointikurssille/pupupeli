@@ -30,8 +30,6 @@ export const conditionsCleared = [];
 
 export let currentSAB;
 
-export let currentLine = null;
-
 export const theme = localStorage.getItem("theme");
 
 export function setCurrentSAB(sab) {
@@ -55,14 +53,6 @@ export function addClearedConditions(conditionsFromEventHandler) {
 
 export function allConditionsCleared() {
     return conditionChecker(conditions, conditionsCleared);
-}
-
-export function setCurrentLine(line) {
-    currentLine = line;
-}
-
-export function getCurrentLine() {
-    return currentLine;
 }
 
 /**

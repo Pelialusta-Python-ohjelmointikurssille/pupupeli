@@ -1,5 +1,3 @@
-import { getCurrentLine } from "../util/globals.js";
-
 export function extractErrorDetails(errorMessage) {
     const regex = /File .*?, line (\d+)/g;
     let match;
@@ -16,7 +14,7 @@ export function extractErrorDetails(errorMessage) {
     }
 
     const translatedErrorType = translateErrorType(errorTypeMatch);
-    if ( getCurrentLine() ) {
+    if ( currentLine !== null) {
         lineNumberMatch = getCurrentLine() || "Tuntematon rivi";
     } else {
         if (translatedErrorType === "Antamasi suunta ei ole kirjoitettu oikein") {
@@ -61,4 +59,14 @@ export function translateErrorType(errorType) {
     }
 
     return translations[errorType] || errorType;
+}
+
+let currentLine = null;
+
+export function setCurrentLine(line) {
+    currentLine = line;
+}
+
+function getCurrentLine() {
+    return currentLine;
 }
