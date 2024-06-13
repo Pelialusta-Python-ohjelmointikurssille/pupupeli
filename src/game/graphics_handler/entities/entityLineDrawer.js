@@ -4,7 +4,8 @@ export class PawnEntityLineDrawer {
     constructor(graphics) {
         this.graphics = graphics;
         this.moveHistory = [];
-        this.isEnabled = true;
+        this.isEnabled = false;
+        this.graphics.alpha = 0;
     }
 
     onUpdatePawnEntityPosition(x, y) {
