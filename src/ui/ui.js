@@ -230,6 +230,10 @@ export function onTaskComplete() {
 
     celebrationBox.classList.remove("is-invisible");
 
+    setTimeout(() => {
+        celebrationBox.classList.add('is-invisible');
+    }, 3000);
+
     if (button.getAttribute("class") == "button-incompleted") {
         if (localStorage.getItem("completedTasks") === null) {
             createEmptyTasksCompletedJson()
