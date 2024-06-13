@@ -42,6 +42,7 @@ module.exports = {
         //"!src/**/graphics_handler/animations/**", // can be mock tested
         "!src/**/tests/**",
         "!src/**/ui/**",
-        "!src/util/globals.js"
+        "!src/util/globals.js",
+        "!src/**/commonstrings.js", //no need to test, no need to check if a constant string is what it is declared to be when it doesn't even matter
     ]
 };
