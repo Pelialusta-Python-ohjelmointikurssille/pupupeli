@@ -7,7 +7,7 @@
     <title>Pupupeli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
-    <script type="module" src="src/ui.js"></script>
+    <script type="module" src="src/ui/ui.js"></script>
     <script type="module" src="src/api/api.js"></script>
 </head>
 
@@ -15,13 +15,13 @@
 
     <div id="header" class="is-flex">
         <div id="header-container" class="is-flex">
-        <h1>Pupupeli</h1>
-        <div id="chapter-selector-container" class="is-flex">
-            <div id="chapter-selector-box" class="is-flex">
-                <p id="chapter-selector-text">Valitse tehtäväsarja:</p>
-                <select id="chapterbuttontable" class="dropdown"></select>
+            <h1>Pupupeli</h1>
+            <div id="chapter-selector-container" class="is-flex">
+                <div id="chapter-selector-box" class="is-flex">
+                    <p id="chapter-selector-text">Valitse tehtäväsarja:</p>
+                    <select id="chapterbuttontable" class="dropdown"></select>
+                </div>
             </div>
-        </div>
             <div id="header-buttons" class="is-flex">
                 <div id="user-container" class="is-flex">
                     <input id="username" placeholder="username">
@@ -47,7 +47,9 @@
                 <div id="task-container">
                     <div>
                         <h1>
-                            <a id="prev-task-link" href="/?task=1" style="text-decoration:none;">< </a>Tehtävä <span id="task-id"></span><a id="next-task-link" href="/?task=2" style="text-decoration:none;"> ></a>
+                            <a id="prev-task-link" href="/?task=1" style="text-decoration:none;">
+                                < </a>Tehtävä <span id="task-id"></span><a id="next-task-link" href="/?task=2"
+                                        style="text-decoration:none;"> ></a>
                         </h1>
                         <button id="grid-toggle-button" type="button">Ruudukko</button>
                         <select id="theme-select" type="button">
@@ -74,20 +76,21 @@
                             <image id="run-icon" src="src/static/skipbutton.png"></image>
                             <span id="buttonText">Seuraava askel</span>
                         </button>
-                        <input type="text" id="input-box" class="is-margin-half-rem-x is-flex-1 is-invisible" placeholder="Syöte">
+                        <input type="text" id="input-box" class="is-margin-half-rem-x is-flex-1 is-invisible"
+                            placeholder="Syöte">
                         <button id="editor-stop-button" class="is-margin-half-rem-x" type="button">
                             <image id="run-icon" src="src/static/resetbutton2.png"></image>
                             <span id="buttonText">Resetoi</span>
                         </button>
 
                     </div>
-                    <div id="input-container" class="is-margin-half-rem-x is-flex-1"></div>
+                    <div id="input-container" class="is-margin-half-rem-x is-flex-1 is-hidden"></div>
                 </div>
             </div>
         </div>
     </div>
     <div id="task-selector-container" class="is-flex">
-        <div id="task-selector-box" class="is-flex"> 
+        <div id="task-selector-box" class="is-flex">
             <div id="buttonTable"></div>
         </div>
     </div>

@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param {*} errorMessage 
+ * @returns returns the error message in a readable form to a beginner programmer.
+ */
 export function extractErrorDetails(errorMessage) {
     const regex = /File .*?, line (\d+)/g;
     let match;
@@ -20,6 +25,11 @@ export function extractErrorDetails(errorMessage) {
     }
 }
 
+/**
+ * Returns Finnish translation explaining the type of error (SyntaxError -> kirjoitusvirhe)
+ * @param {string} errorType 
+ * @returns {string}
+ */
 export function translateErrorType(errorType) {
     if (!errorType) {
         return errorType;
@@ -39,12 +49,16 @@ export function translateErrorType(errorType) {
         return "Yritit käyttää moduulia, jota ei löydy. Tarkista moduulin nimi";
     }
 
-    if (errorType.startsWith("IndentationError: expected an indented block")) {
+    if (errorType.startsWith("IndentationError:")) {
         return "Tarkista, että jätät rivin alkuun tyhjää tilaa";
     }
 
     if (errorType.startsWith("TypeError:")) {
         return "Tarkista, että käyttämäsi arvot ovat oikeaa tyyppiä";
+    }
+
+    if (errorType.startsWith("AttributeError:")) {
+        return "Hahmollasi ei ole ominaisuutta, jota yrität käyttää";
     }
 
     return translations[errorType] || errorType;
