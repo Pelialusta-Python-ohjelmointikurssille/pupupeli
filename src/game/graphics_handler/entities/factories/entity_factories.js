@@ -64,7 +64,8 @@ export function createPlayer(entityUUID, entityData, graphicsEntityHandler, skin
         entityData,
         skins
     );
-    entity.lineDrawer = new PawnEntityLineDrawer();
+    let lineDrawer = new PawnEntityLineDrawer(new PIXI.Graphics(), new PIXI.Container());
+    entity.addLineDrawer(lineDrawer);
     if (entityData.zIndex != null) {
         entity.container.zIndex = entityData.zIndex;
     } else {

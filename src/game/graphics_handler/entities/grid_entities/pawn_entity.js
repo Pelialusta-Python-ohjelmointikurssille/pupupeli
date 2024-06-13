@@ -26,6 +26,11 @@ export class PawnEntity extends GraphicsEntity {
         this.lineDrawer = null; //given if needed at creation
     }
 
+    addLineDrawer(lineDrawer) {
+        this.lineDrawer = lineDrawer;
+        this.entityHandler.renderer.addToStage(this.lineDrawer.graphics);
+    }
+
     /**
      * Called when onCreate is called. Handles setting override variables if given using entityData.
      * Extended from base class.
@@ -76,6 +81,6 @@ export class PawnEntity extends GraphicsEntity {
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridPosition);
         this.container.x = this.screenPosition.x;
         this.container.y = this.screenPosition.y + this.fakeZPosition;
-        if (this.lineDrawer !== null) this.lineDrawer.onUpdatePawnEntityPosition();
+        if (this.lineDrawer !== null) this.lineDrawer.onUpdatePawnEntityPosition(this.container.x, this.container.y);
     }
 }
