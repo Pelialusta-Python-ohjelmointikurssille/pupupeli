@@ -133,7 +133,7 @@ export class GraphicsEntity {
         this.container.alpha = 1;
         this.isReady = true;
         this.currentAnimation = null;
-        this.direction = Direction.Up;
+        this.direction = Direction.Down;
     }
 
     swapTextureToMoveDir(dir) {

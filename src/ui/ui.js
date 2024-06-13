@@ -4,7 +4,7 @@ import { getEditor } from "../input/editor.js"
 import { initWorker } from "../event_handler.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
-import { initGame } from "../game/game_controller.js";
+import { initGame, setTheme } from "../game/game_controller.js";
 
 let eventHandler;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
@@ -32,6 +32,7 @@ async function initGameAndCanvas() {
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
+    setTheme(localStorage.getItem("theme"));
 }
 
 /**

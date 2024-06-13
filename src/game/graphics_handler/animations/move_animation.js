@@ -55,6 +55,7 @@ export class MoveAnimation {
         this.pawnEntity.updatePosition();
         this.inProgress = false;
         
+        this.pawnEntity.onFinishMove();
         this.pawnEntity.onFinishAnimation(this.name);
     }
 
