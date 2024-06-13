@@ -75,6 +75,7 @@ export function countForTaskFilesInDirectory(dirPath) {
 export function countForChaptersInDirectory(env="") {
     let chapterNumber = 1
     if (env === "test") {
+        // eslint-disable-next-line no-undef
         while (checkIfFileExists(__dirname + `/tests/mocks/chapter_mock/${chapterNumber}/1.json`) !== null) {
             chapterNumber ++;
         }
