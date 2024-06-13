@@ -57,7 +57,6 @@ async function initPage() {
     } else {
         prevTaskLink.style.display = 'none'; // Hide if on the first task
     }
-    const totalTasks = fileReader.countForTaskFilesInDirectory(`/tasks/${globals.chapterIdentifier}`);
     // Changes href of nexttasklink and hides it if no prev task exists
     if (taskIdentifier < totalTasks) {
         nextTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier + 1}`;
