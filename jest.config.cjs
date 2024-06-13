@@ -23,23 +23,23 @@ module.exports = {
     ],
     collectCoverageFrom: [
         "src/**/*.js",
-        "!src/**/rendering.js", // Exclude specific file
+        //"!src/**/rendering.js", // Exclude specific file
         "!src/util/version_strings.js",
         "!src/input/worker.js",
         "!src/event_handler.js",
         "!src/**/index.js",
         "!src/**/game.js",
         "!src/**/editor.js",
-        "!src/**/graphics_camera_entity.js", // some of these can be mock tested
-        "!src/**/graphics_entity_factory.js",
-        "!src/**/graphics_entity_handler.js",
-        "!src/**/graphics_handler.js",
-        "!src/**/animation_progress.js",
+        //"!src/**/graphics_camera_entity.js", // some of these can be mock tested
+        //"!src/**/graphics_entity_factory.js",
+        //"!src/**/graphics_entity_handler.js",
+        //"!src/**/graphics_handler.js",
+        //"!src/**/animation_progress.js",
         "!src/**/pixi_renderer.js",
         "!src/**/example/**", // Exclude all files in specific directory
         "!src/**/objects/**",
-        "!src/**/graphics_handler/entities/**",
-        "!src/**/graphics_handler/animations/**", // can be mock tested
+        //"!src/**/graphics_handler/entities/**",
+        //"!src/**/graphics_handler/animations/**", // can be mock tested
         "!src/**/tests/**",
         "!src/**/ui/**",
         "!src/util/globals.js"

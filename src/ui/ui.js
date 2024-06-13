@@ -32,7 +32,6 @@ async function initGameAndCanvas() {
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
-    game.setTheme(localStorage.getItem("theme"));
 }
 
 /**
@@ -104,18 +103,6 @@ async function initPage() {
     createTaskButtons();
     createChapterButtons();
     isUserLoggedIn();
-
-    // set theme eventlistener, but first set theme if not set
-    if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
-    let themeSelectDropdown = document.getElementById("theme-select");
-    themeSelectDropdown.value = localStorage.getItem("theme");
-    themeSelectDropdown.addEventListener('change', function (event) {
-        let selectedValue = event.target.value;
-        localStorage.setItem("theme", selectedValue);
-        game.setTheme(selectedValue);
-        //window.location.reload();
-    });
-    console.log(globals.theme);
 }
 
 function isUserLoggedIn() {

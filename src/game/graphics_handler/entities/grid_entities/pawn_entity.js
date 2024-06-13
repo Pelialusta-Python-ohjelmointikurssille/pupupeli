@@ -70,6 +70,7 @@ export class PawnEntity extends GraphicsEntity {
         super.reset();
         this.gridPosition = new Vector2(this.gridStartPosition.x, this.gridStartPosition.y);
         this.lineDrawer?.onPawnEntityReset();
+        this.fakeZPosition = 0;
         this.updatePosition();
     }
 
