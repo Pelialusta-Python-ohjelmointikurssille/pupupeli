@@ -25,12 +25,26 @@ export class FailMoveAnimation {
         this.progress.increment(deltaTime);
         this.pawnEntity.fakeZPosition = this.getJumpHeight(this.progress.value);
         if (this.progress.value < 50) {
-            this.pawnEntity.container.x = this.pawnEntity.screenPosition.x + (this.progress.value * 0.01 * 0.75 * this.moveDirection.x * this.pawnEntity.gridReference.gridScale);
-            this.pawnEntity.container.y = this.pawnEntity.screenPosition.y + this.pawnEntity.fakeZPosition + (this.progress.value * 0.01 * 0.75 * this.moveDirection.y * this.pawnEntity.gridReference.gridScale);   
+            this.pawnEntity.container.x = (
+                this.pawnEntity.screenPosition.x +
+                (this.progress.value * 0.01 * 0.75 * this.moveDirection.x * this.pawnEntity.gridReference.gridScale)
+            );
+            this.pawnEntity.container.y = (
+                this.pawnEntity.screenPosition.y +
+                this.pawnEntity.fakeZPosition +
+                (this.progress.value * 0.01 * 0.75 * this.moveDirection.y * this.pawnEntity.gridReference.gridScale)
+            );   
         }
         if (this.progress.value > 50 && this.progress.value < 100) {
-            this.pawnEntity.container.x = this.pawnEntity.screenPosition.x + ((100 - this.progress.value) * 0.01 * 0.75 * this.moveDirection.x * this.pawnEntity.gridReference.gridScale);
-            this.pawnEntity.container.y = this.pawnEntity.screenPosition.y + this.pawnEntity.fakeZPosition + ((100 - this.progress.value)  * 0.01 * 0.75 * this.moveDirection.y * this.pawnEntity.gridReference.gridScale);   
+            this.pawnEntity.container.x = (
+                this.pawnEntity.screenPosition.x +
+                ((100 - this.progress.value) * 0.01 * 0.75 * this.moveDirection.x * this.pawnEntity.gridReference.gridScale)
+            );
+            this.pawnEntity.container.y = (
+                this.pawnEntity.screenPosition.y +
+                this.pawnEntity.fakeZPosition +
+                ((100 - this.progress.value)  * 0.01 * 0.75 * this.moveDirection.y * this.pawnEntity.gridReference.gridScale)
+            );   
         }
     }
 
