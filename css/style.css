@@ -156,7 +156,7 @@ body {
     width: calc(100% - 2rem);
 }
 
-#grid-toggle-button, #theme-select {
+#grid-toggle-button, #theme-select, #trail-toggle-button {
     float: right;
     min-height: 32px;
     min-width: calc(10% - 1rem);
