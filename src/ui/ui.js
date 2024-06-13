@@ -93,8 +93,13 @@ async function initPage() {
             // if option is correct, add eventlistener which calls onTaskComplete
             if (option.isCorrectAnswer === true) {
                 let questionButton = document.getElementById(optionId);
-                questionButton.addEventListener("click", globals.setMultipleChoiceCorrect, false);
+                questionButton.addEventListener("click", selectMultipleChoiceQuestion, false);
             }
+        });
+        let questions = document.getElementsByClassName("multiple-choice-question");
+
+        Array.from(questions).forEach(question => {
+            question.addEventListener("click", colorSelectedChoice);
         });
     }
     // set editor code
@@ -123,6 +128,16 @@ function isUserLoggedIn() {
         document.getElementById("user-container").classList.add("is-hidden");
         document.getElementById("logout-button").classList.remove("is-hidden");
     }
+}
+
+function colorSelectedChoice(selectedChoice) {
+    let questions = document.getElementsByClassName("multiple-choice-question");
+
+    Array.from(questions).forEach(question => {
+        question.classList.remove("selected-choice");   
+    });
+
+    selectedChoice.target.classList.add("selected-choice");
 }
 
 /**
