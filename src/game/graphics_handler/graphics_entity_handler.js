@@ -1,6 +1,5 @@
 import { Vector2 } from "../vector.js";
 import { GraphicsCamera } from "./graphics_camera.js";
-import { GraphicsRegistry } from "./graphics_registry.js";
 
 /**
  * Manages all instantiated gfx entities.
