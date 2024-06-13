@@ -1,6 +1,6 @@
 import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
-import { toggleGrid } from "../game/game_controller.js";
+import { toggleGrid, setTheme } from "../game/game_controller.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker } from "../event_handler.js";
 import { getEditor } from "../input/editor.js";
 import { resetGame } from "../game/game_controller.js";
@@ -10,6 +10,7 @@ let _buttonsState;
 let startAndPauseButton;
 let nextStepButton;
 let celebrationBox;
+let themeSelectDropdown;
 
 //Button states as const strings:
 class States {
@@ -32,6 +33,7 @@ export function initializeEditorButtons() {
     startAndPauseButton = document.getElementById("editor-run-pause-button");
     celebrationBox = document.getElementById("celebration");
 
+    initThemeSelect();
 }
 
 /**
@@ -152,6 +154,17 @@ function onRunButtonClick() {
 
     }
     setRunButtonStateWhenItsPressed(img, runButtonText);
+}
+
+function initThemeSelect() {
+    if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
+    themeSelectDropdown = document.getElementById("theme-select");
+    themeSelectDropdown.value = localStorage.getItem("theme");
+    themeSelectDropdown.addEventListener('change', function (event) {
+        let selectedValue = event.target.value;
+        localStorage.setItem("theme", selectedValue);
+        setTheme(selectedValue);
+    });
 }
 
 /**
