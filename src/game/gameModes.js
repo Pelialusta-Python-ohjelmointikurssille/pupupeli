@@ -1,3 +1,4 @@
+import * as gameController from '../game/game_controller.js';
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 //Interface gamemode is used to track players progress in the level and know when player has beaten the level.
@@ -37,13 +38,16 @@ export class GameModeGetCollectibles {
         if (gridobject.type === Constants.COLLECTIBLE) {
             globals.incrementCollectibles();
             console.log("Score is: " + globals.collectibles.current);
-            this.checkIfGameWon();
         }
     }
 
+    // called by eventhandler after checking conditions
     checkIfGameWon() {
-        if (globals.collectibles.current >= globals.collectibles.total) {
+        if (globals.allConditionsCleared()) {
             this.eventTarget.dispatchEvent(new Event("victory"));
+            gameController.notifyGameWon(true);
+        } else {
+            gameController.notifyGameWon(false);
         }
     }
 

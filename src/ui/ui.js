@@ -1,5 +1,7 @@
 import * as globals from "../util/globals.js";
 import * as fileReader from "../file_reader.js";
+import * as api from "../api/api.js";
+
 import { getEditor } from "../input/editor.js"
 import { initWorker } from "../event_handler.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
@@ -184,24 +186,33 @@ function createChapterButtons() {
 /**
  * Turns task button green and saves completion status. The html button's class is changed and the task number is added to localStorage. 
  */
-export function onTaskComplete() {
+export function onTaskComplete(won) {
+    const chapterIdentifier = globals.chapterIdentifier;
     const taskIdentifier = globals.taskIdentifier;
-    const buttonid = `button-${taskIdentifier}`;
-    let button = document.getElementById(buttonid);
-    let celebrationBox = document.getElementById("celebration")
+    const apiTaskIdentifier = "chapter"+chapterIdentifier+"task"+taskIdentifier;
 
-    celebrationBox.classList.remove("is-invisible");
+    if (won) {
+        const buttonid = `button-${taskIdentifier}`;
+        let button = document.getElementById(buttonid);
+        let celebrationBox = document.getElementById("celebration")
 
-    setTimeout(() => {
-        celebrationBox.classList.add('is-invisible');
-    }, 3000);
+        celebrationBox.classList.remove("is-invisible");
 
-    if (button.getAttribute("class") == "button-incompleted") {
-        if (localStorage.getItem("completedTasks") === null) {
-            createEmptyTasksCompletedJson()
+        setTimeout(() => {
+            celebrationBox.classList.add('is-invisible');
+        }, 3000);
+
+        if (button.getAttribute("class") == "button-incompleted") {
+            if (localStorage.getItem("completedTasks") === null) {
+                createEmptyTasksCompletedJson()
+            }
+            addCompletedTaskToLocalStorage()
+            button.classList.replace("button-incompleted", "button-completed");
         }
-        addCompletedTaskToLocalStorage()
-        button.classList.replace("button-incompleted", "button-completed");
+        globals.setGameAsWon();
+        api.sendTask(api.apiUrl, apiTaskIdentifier);
+    } else {
+        api.sendTask(api.apiUrl, apiTaskIdentifier);
     }
 }
 

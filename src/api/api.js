@@ -1,9 +1,11 @@
+import * as globals from "../util/globals.js";
+import { getEditor } from "../input/editor.js";
+
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
-let sendTaskButton = document.getElementById("sendTaskButton");
 let getTaskButton = document.getElementById("getTaskButton");
 let getCompletedTasksButton = document.getElementById("getCompletedTasksButton");
-const apiUrl = 'http://localhost:3000/api/';
+export const apiUrl = 'http://localhost:3000/api/';
 
 loginButton.addEventListener("click", () => {
     login(apiUrl + "login")
@@ -21,16 +23,6 @@ logoutButton.addEventListener("click", () => {
         .then(data => {
             localStorage.removeItem("token");
             window.location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
-
-sendTaskButton.addEventListener("click", () => {
-    sendTask(apiUrl + "put")
-        .then(data => {
-            console.log("put", data);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -62,7 +54,7 @@ function buildUrl(url, params) {
     return `${url}?${queryString}`;
 }
 
-async function sendPostRequest(url, data) {
+export async function sendPostRequest(url, data) {
     const formData = new URLSearchParams();
     Object.keys(data).forEach(key => formData.append(key, data[key]));
 
@@ -76,21 +68,23 @@ async function sendPostRequest(url, data) {
     try {
         // try to parse response body as JSON
         const json = await response.json();
+        console.log(json);
         return json;
     } catch (error) {
         // if parsing fails, return the raw response
+        console.log(response);
         return response;
     }
 }
 
-async function sendGetRequest(url, data) {
+export async function sendGetRequest(url, data) {
     return fetch(url)
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(error => console.error('Error:', error));
 }
 
-async function login(url) {
+export async function login(url) {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
     const data = {
@@ -100,28 +94,29 @@ async function login(url) {
     return sendPostRequest(url, data);
 }
 
-async function logout(url) {
+export async function logout(url) {
     const data = {
         token: localStorage.getItem("token")
     };
     return sendPostRequest(url, data);
 }
 
-async function sendTask(url) {
+export async function sendTask(url, taskIdentifier) {
+    console.log(url, taskIdentifier);
     const token = localStorage.getItem("token");
-    const task =  document.getElementById("task-send-input").value;
-    const data = "fake_data";
-    const result = 0;
+    const task =  taskIdentifier
+    const data = "testi"
+    const result = globals.isGameWon;
     const dataobj = {
         token: token,
         task: task,
         data: data,
         result: result
     }
-    return sendPostRequest(url, dataobj);
+    return sendPostRequest(url+"put", dataobj);
 }
 
-async function getTask(url) {
+export async function getTask(url) {
     const token = localStorage.getItem("token");
     const task = document.getElementById("task-get-input").value;
     const params = {
@@ -132,7 +127,7 @@ async function getTask(url) {
     return sendGetRequest(getUrl);
 }
 
-async function getCompletedTasks(url) {
+export async function getCompletedTasks(url) {
     const token = localStorage.getItem("token");
     const params = {
         token: token

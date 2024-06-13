@@ -26,10 +26,6 @@ self.onmessage = async function (event) {
         setResetFlag(false);
         runPythonCode(pyodide, message.details);
     }
-    if (message.type === 'reset') {
-        console.log("This should never print");
-        // setResetFlag(true);
-    }
 }
 
 /**
