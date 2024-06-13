@@ -111,13 +111,8 @@ export class Game {
     }
 
     toggleGrid() {
-        if (this.isGridEnabled === true) {
-            this.isGridEnabled = false;
-            this.gh.setGridState(false);
-        } else {
-            this.isGridEnabled = true;
-            this.gh.setGridState(true);
-        }
+        this.isGridEnabled = !this.isGridEnabled;
+        this.gh.setGridState(this.isGridEnabled);
     }
 
     toggleTrail() {
