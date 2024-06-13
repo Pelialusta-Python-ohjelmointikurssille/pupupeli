@@ -4,6 +4,7 @@ import { GraphicsEntity } from "../graphics_entity.js";
 import { BackgroundEntity } from "../background_entity.js";
 import { PawnEntity } from "../grid_entities/pawn_entity.js";
 import { TextBoxEntity } from "../ui_entities/textbox_entity.js";
+import { PawnEntityLineDrawer } from "../entityLineDrawer.js";
 
 /**
  * @private
@@ -63,6 +64,7 @@ export function createPlayer(entityUUID, entityData, graphicsEntityHandler, skin
         entityData,
         skins
     );
+    entity.lineDrawer = new PawnEntityLineDrawer();
     if (entityData.zIndex != null) {
         entity.container.zIndex = entityData.zIndex;
     } else {

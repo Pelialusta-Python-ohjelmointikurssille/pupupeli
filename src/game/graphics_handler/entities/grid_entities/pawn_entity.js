@@ -23,13 +23,14 @@ export class PawnEntity extends GraphicsEntity {
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridPosition);
         this.sizeWithinCellMultiplier = 0.9;
         this.sprite.anchor.set(0.5);
+        this.lineDrawer = null; //given if needed at creation
     }
 
     /**
      * Called when onCreate is called. Handles setting override variables if given using entityData.
      * Extended from base class.
      */
-    applyEntityData(){
+    applyEntityData() {
         super.applyEntityData();
         if (this.entityData.gridPosition != null) {
             this.gridPosition = this.entityData.gridPosition;
@@ -75,5 +76,6 @@ export class PawnEntity extends GraphicsEntity {
         this.screenPosition = this.gridReference.gridToScreenCoordinates(this.gridPosition);
         this.container.x = this.screenPosition.x;
         this.container.y = this.screenPosition.y + this.fakeZPosition;
+        if (this.lineDrawer !== null) this.lineDrawer.onUpdatePawnEntityPosition();
     }
 }
