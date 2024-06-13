@@ -1,9 +1,8 @@
 import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
-import { toggleGrid, setTheme } from "../game/game_controller.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker } from "../event_handler.js";
 import { getEditor } from "../input/editor.js";
-import { resetGame, toggleGrid, toggleTrail } from "../game/game_controller.js";
+import { resetGame, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 
 let _buttonsState;
