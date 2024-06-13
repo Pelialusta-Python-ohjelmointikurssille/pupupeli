@@ -1,6 +1,4 @@
-import { Application, Assets, Point, MeshRope } from 'pixi.js';
-
-export async function drawTrail(app) {
+export async function drawTrail(app, Assets, Point, MeshRope) {
     // Load the texture for rope.
     const trailTexture = await Assets.load('https://pixijs.com/assets/trail.png');
 

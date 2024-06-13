@@ -26,7 +26,8 @@ export class PixiRenderer {
         this.cameraWorldContainer = new PIXI.Container();
         this.cameraWorldContainer.sortDirty = true;
         this.pixiApp.stage.addChild(this.cameraWorldContainer);
-        drawTrail(this.pixiApp);
+        //test
+        drawTrail(this.pixiApp, PIXI.Assets, PIXI.Point, PIXI.MeshRope);
     }
 
     async loadAssetBuiltinBundles() {
