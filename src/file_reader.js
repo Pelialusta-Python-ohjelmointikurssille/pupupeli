@@ -72,12 +72,17 @@ export function countForTaskFilesInDirectory(dirPath) {
 }
 
 
-export function countForChaptersInDirectory() {
+export function countForChaptersInDirectory(env="") {
     let chapterNumber = 1
-    while (checkIfFileExists(`/tasks/${chapterNumber}/1.json`) !== null) {
-        chapterNumber ++;
+    if (env === "test") {
+        while (checkIfFileExists(__dirname + `/tests/mocks/chapter_mock/${chapterNumber}/1.json`) !== null) {
+            chapterNumber ++;
+        }
+    } else {
+        while (checkIfFileExists(`/tasks/${chapterNumber}/1.json`) !== null) {
+            chapterNumber ++;
+        }
     }
-
     return chapterNumber - 1;
 }
 

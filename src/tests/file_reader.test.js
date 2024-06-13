@@ -1,5 +1,5 @@
 import exp from "constants";
-import { tryGetFileAsJson, tryGetFileAsText, countForTaskFilesInDirectory, checkIfFileExists} from "../file_reader.js"
+import { tryGetFileAsJson, tryGetFileAsText, countForTaskFilesInDirectory, checkIfFileExists, countForChaptersInDirectory} from "../file_reader.js"
 import XMLHttpRequestMock from "./mocks/XMLHttpRequestMock.js";
 
 const fs = require('fs');
@@ -182,5 +182,17 @@ describe('checkIfFileExists', () => {
     expect(result).not.toEqual(null);
     expect(result).toEqual(expectedOutput);
     expect(result.hi).toEqual("moi");
+  });
+});
+
+describe('countForTaskFilesInDirectory', () => {
+  beforeEach(() => {
+      global.XMLHttpRequest = XMLHttpRequestMock;
+  });
+
+  test('should return file count 2', () => {
+    const expectedOutput = 1;
+    let fileNumber = countForChaptersInDirectory("test");
+    expect(fileNumber).toEqual(expectedOutput);
   });
 });
