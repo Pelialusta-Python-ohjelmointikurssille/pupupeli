@@ -143,6 +143,10 @@ body {
     text-align: center;
 }
 
+.selected-choice {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
 .show-error {
     transition: 0.5s all ease-in-out;
     padding: 1rem !important;
@@ -252,6 +256,7 @@ button:hover {
     box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     padding: 0.5rem;
+    cursor: pointer;
 }
 
 .multiple-choice-question:hover {
