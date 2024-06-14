@@ -145,6 +145,10 @@ function colorSelectedChoice(selectedChoice) {
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
 function createTaskButtons() {
+    let completedTasksList = api.getCompletedTasks(api.apiUrl);
+    const chapter = globals.chapterIdentifier;
+    console.log(completedTasksList)
+
     const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
     if (localStorage.getItem("completedTasks") === null) {
@@ -153,21 +157,25 @@ function createTaskButtons() {
     let completedTasksStrRaw = localStorage.getItem("completedTasks");
     let completedTasksDict = JSON.parse(completedTasksStrRaw);
 
-    // Create and append buttons
-    for (let i = 0; i < numberOfButtons; i++) {
-        const button = document.createElement('button');
-        button.id = `button-${i + 1}`;
-        if (completedTasksDict[currentChapter].includes(i + 1)) {
-            button.classList.add("button-completed");
-        } else {
-            button.classList.add("button-incompleted");
+    completedTasksList.then(taskList => {
+        completedTasksList = taskList.tasks;
+        // Create and append buttons
+        for (let i = 0; i < numberOfButtons; i++) {
+            const button = document.createElement('button');
+            let buttonIdText = `chapter${chapter}task${i + 1}`;
+            button.id = buttonIdText
+            if (completedTasksList.includes(buttonIdText)) {
+                button.classList.add("button-completed");
+            } else {
+                button.classList.add("button-incompleted");
+            }
+            button.innerText = `${i + 1}`;
+            button.addEventListener('click', () => {
+                window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
+            });
+            buttonContainer.appendChild(button);
         }
-        button.innerText = `${i + 1}`;
-        button.addEventListener('click', () => {
-            window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
-        });
-        buttonContainer.appendChild(button);
-    }
+    })
 }
 
 function createEmptyTasksCompletedJson() {

@@ -30,7 +30,7 @@ logoutButton.addEventListener("click", () => {
 });
 
 getTaskButton.addEventListener("click", () => {
-    getTask(apiUrl + "get")
+    getTask(apiUrl)
         .then(data => {
             console.log("get", data);
         })
@@ -40,7 +40,7 @@ getTaskButton.addEventListener("click", () => {
 });
 
 getCompletedTasksButton.addEventListener("click", () => {
-    getCompletedTasks(apiUrl + "list")
+    getCompletedTasks(apiUrl)
         .then(data => {
             console.log("list", data);
         })
@@ -80,7 +80,6 @@ export async function sendPostRequest(url, data) {
 export async function sendGetRequest(url, data) {
     return fetch(url)
     .then(response => response.json())
-    .then(data => console.log(data))
     .catch(error => console.error('Error:', error));
 }
 
@@ -123,7 +122,7 @@ export async function getTask(url) {
         token: token,
         task: task
     }
-    const getUrl = buildUrl(url, params);
+    const getUrl = buildUrl(url+"get", params);
     return sendGetRequest(getUrl);
 }
 
@@ -132,7 +131,7 @@ export async function getCompletedTasks(url) {
     const params = {
         token: token
     }
-    const getUrl = buildUrl(url, params);
+    const getUrl = buildUrl(url+"list", params);
     return sendGetRequest(getUrl);
 }
 
