@@ -196,7 +196,7 @@ function addLineNumberOutputs(codeString) {
         const indentation = line.match(/^\s*/)[0];
         const trimmedLine = line.trim();
 
-        // Check if the line starts with 'else:' or 'elif:'
+        // Check if the line starts with 'else:' or 'elif:' or 'except' or 'finally'
         if (trimmedLine.startsWith('else:') || trimmedLine.startsWith('elif:') || trimmedLine.startsWith('except') || trimmedLine.startsWith('finally')){
             return line;
         }
@@ -204,7 +204,6 @@ function addLineNumberOutputs(codeString) {
         else if (trimmedLine === '' || trimmedLine.startsWith('#')) {
             return line;
         } else {
-            // Update the last non-empty line's indentation
             return `${indentation}pupu.rivi(${index + 1})\n${line}`;
         }
     });
