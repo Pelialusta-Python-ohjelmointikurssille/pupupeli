@@ -1,4 +1,5 @@
 import { Direction } from "../../direction.js";
+import { Vector2 } from "../../vector.js";
 import { GraphicsEntity } from "../entities/graphics_entity.js";
 import { EntitySkin } from "../entity_skins/entity_skin.js";
 
@@ -22,7 +23,7 @@ describe("Testing GraphicsEntity", () => {
         skin3 = new EntitySkin("skin3_name", "theme3", { defaultTexture: dummyTexture3 });
         dummyContainer = { addChild: ()=>{}, position: { x: 0, y: 0 }, rotation: 0, scale: 1 , alpha: 1 };
         skinBundle = new Map([["skin1_name", skin1], ["skin2_name", skin2], ["skin3_name", skin3]]);
-        gfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, null, skinBundle);
+        gfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null, width: 64, height: 64 }, null, skinBundle);
     });
 
     test("If when initialized, first theme is current skin", () => {
@@ -77,5 +78,64 @@ describe("Testing GraphicsEntity", () => {
 
         expect(gfxEntity.isReady).toBe(startIsReady);
         expect(gfxEntity.direction).toBe(startDirection);
+    });
+
+    test("If given no entitydata, then values remain default", () => {
+        let defaultStartDirection = Direction.Down;
+        let dummyEntityData = null;
+        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        newGfxEntity.onCreate();
+        expect(newGfxEntity.container.position.x).toBe(0);
+        expect(newGfxEntity.container.position.y).toBe(0);
+        expect(newGfxEntity.container.scale).toBe(1);
+        expect(newGfxEntity.container.rotation).toBe(0);
+        expect(newGfxEntity.direction).toBe(defaultStartDirection);
+    });
+
+    test("If given an entitydata position, then sets position correctly", () => {
+        let defaultStartDirection = Direction.Down;
+        let dummyEntityData = { position: new Vector2(32, 32) };
+        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        newGfxEntity.onCreate();
+        expect(newGfxEntity.container.position.x).toBe(32);
+        expect(newGfxEntity.container.position.y).toBe(32);
+        expect(newGfxEntity.container.scale).toBe(1);
+        expect(newGfxEntity.container.rotation).toBe(0);
+        expect(newGfxEntity.direction).toBe(defaultStartDirection);
+    });
+
+    test("If given an entitydata rotation, then sets rotation correctly", () => {
+        let defaultStartDirection = Direction.Down;
+        let dummyEntityData = { rotation: 90 };
+        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        newGfxEntity.onCreate();
+        expect(newGfxEntity.container.position.x).toBe(0);
+        expect(newGfxEntity.container.position.y).toBe(0);
+        expect(newGfxEntity.container.scale).toBe(1);
+        expect(newGfxEntity.container.rotation).toBe(90);
+        expect(newGfxEntity.direction).toBe(defaultStartDirection);
+    });
+
+    test("If given an entitydata scale, then sets scale correctly", () => {
+        let defaultStartDirection = Direction.Down;
+        let dummyEntityData = { scale: 2.3 };
+        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        newGfxEntity.onCreate();
+        expect(newGfxEntity.container.position.x).toBe(0);
+        expect(newGfxEntity.container.position.y).toBe(0);
+        expect(newGfxEntity.container.scale).toBe(2.3);
+        expect(newGfxEntity.container.rotation).toBe(0);
+        expect(newGfxEntity.direction).toBe(defaultStartDirection);
+    });
+
+    test("If given an entitydata direction, then sets direction correctly", () => {
+        let dummyEntityData = { direction: Direction.Left };
+        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        newGfxEntity.onCreate();
+        expect(newGfxEntity.container.position.x).toBe(0);
+        expect(newGfxEntity.container.position.y).toBe(0);
+        expect(newGfxEntity.container.scale).toBe(1);
+        expect(newGfxEntity.container.rotation).toBe(0);
+        expect(newGfxEntity.direction).toBe(Direction.Left);
     });
 });
