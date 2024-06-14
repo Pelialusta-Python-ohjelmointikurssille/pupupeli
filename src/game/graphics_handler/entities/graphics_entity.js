@@ -29,7 +29,9 @@ export class GraphicsEntity {
         this.entityData = entityData;
         this.skins = skins;
         this.currentSkin = null;
-        this.currentSkin = this.skins.keys().next().value;
+        if (this.skins != null && this.skins.size >= 1) {
+            this.currentSkin = this.skins.keys().next().value;
+        }
         this.type = "generic";
         this.direction = Direction.Down;
         this.currentAnimation = null;
