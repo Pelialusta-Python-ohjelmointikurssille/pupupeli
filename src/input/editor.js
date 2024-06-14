@@ -29,20 +29,15 @@ aceEditorScript.onload = () => {
 
         // eslint-disable-next-line no-undef
         ace.require("ace/ext/language_tools");
-        editor.setOptions({
-            enableBasicAutocompletion: true,
-            enableSnippets: true,
-            enableLiveAutocompletion: true
-        });
 
         editor.setOptions({
             fontSize: "12pt",
             showLineNumbers: true,
             showGutter: true,
             vScrollBarAlwaysVisible: true,
-            enableBasicAutocompletion: true,
-            enableSnippets: true,
-            enableLiveAutocompletion: true,
+            enableBasicAutocompletion: false,
+            enableSnippets: false,
+            enableLiveAutocompletion: false,
         });
     };
 };
