@@ -147,7 +147,7 @@ export class GraphicsEntity {
     }
 
     updateTextures() {
-        if (this.skins == null || this.skins.size <= 0) return;
+        if (this.skins == null || this.skins.size <= 0 || this.sprite == null) return;
 
         let tex;
         this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
