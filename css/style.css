@@ -290,7 +290,7 @@ button:hover {
     z-index: 1000;
 }
 
-#streamer-container {
+#celebration-streamer-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -301,7 +301,7 @@ button:hover {
     z-index: 1000; /* Ensures the streamers appear on top of other content */
 }
 
-.streamer {
+.celebration-streamer {
     position: absolute;
     top: -10px;
     width: 10px;
