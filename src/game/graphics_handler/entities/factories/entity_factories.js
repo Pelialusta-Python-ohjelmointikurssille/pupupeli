@@ -115,6 +115,7 @@ export function createGrid(entityUUID, entityData, graphicsEntityHandler, skins)
     } else {
         entity.container.zIndex = -10;
     }
+    entity.lineGraphics = new PIXI.Graphics();
     entity.type = "grid";
     return entity;
 }
