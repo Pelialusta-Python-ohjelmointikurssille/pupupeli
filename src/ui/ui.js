@@ -145,17 +145,11 @@ function colorSelectedChoice(selectedChoice) {
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
 function createTaskButtons() {
-    let completedTasksList = api.getCompletedTasks(api.apiUrl);
+    let completedTasksList = api.getCompletedTasks();
     const chapter = globals.chapterIdentifier;
-    console.log(completedTasksList)
 
     const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
-    if (localStorage.getItem("completedTasks") === null) {
-        createEmptyTasksCompletedJson()
-    }
-    let completedTasksStrRaw = localStorage.getItem("completedTasks");
-    let completedTasksDict = JSON.parse(completedTasksStrRaw);
 
     completedTasksList.then(taskList => {
         completedTasksList = taskList.tasks;

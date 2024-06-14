@@ -49,9 +49,9 @@ getCompletedTasksButton.addEventListener("click", () => {
         });
 });
 
-function buildUrl(params) {
+function buildURL(baseURL, params) {
     const queryString = new URLSearchParams(params).toString();
-    return `${url}?${queryString}`;
+    return `${baseURL}?${queryString}`;
 }
 
 async function sendPostRequest(url, data) {
@@ -121,8 +121,8 @@ export async function getTask() {
         token: token,
         task: task
     }
-    const getUrl = buildUrl(url+"get", params);
-    return sendGetRequest(getUrl);
+    const getURL = buildURL(url+"get", params);
+    return sendGetRequest(getURL);
 }
 
 export async function getCompletedTasks() {
@@ -130,7 +130,8 @@ export async function getCompletedTasks() {
     const params = {
         token: token
     }
-    const getUrl = buildUrl(url+"list", params);
-    return sendGetRequest(getUrl);
+    const getURL = buildURL(url+"list", params);
+    console.log(getURL);
+    return sendGetRequest(getURL);
 }
 
