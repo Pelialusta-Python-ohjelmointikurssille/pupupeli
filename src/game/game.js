@@ -2,7 +2,7 @@ import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
-import { commandsDone, notifyGameWon } from "./game_controller.js";
+import { commandsDone } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 

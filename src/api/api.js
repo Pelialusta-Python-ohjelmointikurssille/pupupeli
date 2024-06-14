@@ -23,6 +23,7 @@ loginButton.addEventListener("click", () => {
 logoutButton.addEventListener("click", () => {
     logout(url)
         .then(data => {
+            console.log(data);
             localStorage.removeItem("token");
             window.location.reload();
         })
@@ -85,6 +86,7 @@ async function sendPostRequest(url, params) {
         return json;
     } catch (error) {
         // if parsing fails, return the raw response
+        console.log(error);
         return response;
     }
 }

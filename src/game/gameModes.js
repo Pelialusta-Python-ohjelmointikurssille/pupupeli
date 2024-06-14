@@ -78,11 +78,9 @@ export class GameModeMultipleChoice {
     // called by eventhandler after checking conditions
     checkIfGameWon() {
         if (globals.allConditionsCleared() && globals.getMultipleChoiceCorrect()) {
-            console.log("you are winner")
             this.eventTarget.dispatchEvent(new Event("victory"));
             gameController.notifyGameWon(true);
         } else {
-            console.log("you are not winner")
             gameController.notifyGameWon(false);
         }
     }

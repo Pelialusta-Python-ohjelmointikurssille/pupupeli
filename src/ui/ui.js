@@ -8,11 +8,9 @@ import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame } from "../game/game_controller.js";
 
-let eventHandler;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
-// const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
  * Runs ui initialisation functions + atm the event_handlers worker
@@ -22,8 +20,6 @@ async function main() {
     initPage();
     initializeEditorButtons();
     await initGameAndCanvas();
-
-    // Create chapter buttons
 }
 
 /**
@@ -93,7 +89,7 @@ async function initPage() {
             // if option is correct, add eventlistener which calls onTaskComplete
             if (option.isCorrectAnswer === true) {
                 let questionButton = document.getElementById(optionId);
-                questionButton.addEventListener("click", globals.setMultipleChoiceCorrect, false);
+                questionButton.dataset.correct = true;
             }
         });
         let questions = document.getElementsByClassName("multiple-choice-question");
@@ -105,7 +101,7 @@ async function initPage() {
     // set editor code
     window.addEventListener('load', function () {
         getEditor().setValue(globals.task.getEditorCode());
-        createTaskButtons(); // must be called here to avoid race condition
+        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
     });
 
     createChapterButtons();
@@ -120,7 +116,6 @@ async function initPage() {
         localStorage.setItem("theme", selectedValue);
         window.location.reload();
     });
-    console.log(globals.theme);
 }
 
 function isUserLoggedIn() {
@@ -132,9 +127,10 @@ function isUserLoggedIn() {
 
 function colorSelectedChoice(selectedChoice) {
     let questions = document.getElementsByClassName("multiple-choice-question");
+    globals.setMultipleChoiceCorrect(selectedChoice);
 
     Array.from(questions).forEach(question => {
-        question.classList.remove("selected-choice");   
+        question.classList.remove("selected-choice");
     });
 
     selectedChoice.target.classList.add("selected-choice");
@@ -145,18 +141,14 @@ function colorSelectedChoice(selectedChoice) {
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
 function createTaskButtons() {
-    let completedTasksList = api.getCompletedTasks();
-    const chapter = globals.chapterIdentifier;
-
-    const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
 
-    completedTasksList.then(taskList => {
-        completedTasksList = taskList.tasks;
+    api.getCompletedTasks().then(taskList => {
+        let completedTasksList = taskList.tasks;
         // Create and append buttons
-        for (let i = 0; i < numberOfButtons; i++) {
+        for (let i = 0; i < totalTasks; i++) {
             const button = document.createElement('button');
-            let buttonIdText = `chapter${chapter}task${i + 1}`;
+            let buttonIdText = `chapter${currentChapter}task${i + 1}`;
             button.id = buttonIdText
             if (completedTasksList.includes(buttonIdText)) {
                 button.classList.add("button-completed");
@@ -169,22 +161,13 @@ function createTaskButtons() {
             });
             buttonContainer.appendChild(button);
         }
-    })
-}
-
-function createEmptyTasksCompletedJson() {
-    let tasksCompleted = {};
-    for (let i = 1; i <= totalChapters; i++) {
-        tasksCompleted[i] = [];
-    }
-    localStorage.setItem("completedTasks", JSON.stringify(tasksCompleted));
+    });
 }
 
 function createChapterButtons() {
-    const numberOfButtons = totalChapters;
     const selectContainer = document.getElementById('chapterbuttontable');
 
-    for (let i = 0; i < numberOfButtons; i++) {
+    for (let i = 0; i < totalChapters; i++) {
         const option = document.createElement('option');
         option.id = `chapter-option-${i + 1}`;
         option.value = i + 1;
@@ -201,29 +184,24 @@ function createChapterButtons() {
 }
 
 /**
- * Turns task button green and saves completion status. The html button's class is changed and the task number is added to localStorage. 
+ * a function that turns the current button green and sends a PUSH request to the api indicating the user has completed a task
+ * @param {boolean} won a boolean indicating whether the task was completed successfully or not
  */
 export function onTaskComplete(won) {
-    const chapterIdentifier = globals.chapterIdentifier;
-    const taskIdentifier = globals.taskIdentifier;
-    const apiTaskIdentifier = "chapter"+chapterIdentifier+"task"+taskIdentifier;
+    const apiTaskIdentifier = "chapter"+globals.chapterIdentifier+"task"+globals.taskIdentifier;
 
     if (won) {
-        const buttonid = `button-${taskIdentifier}`;
+        const buttonid = `${apiTaskIdentifier}`;
         let button = document.getElementById(buttonid);
         let celebrationBox = document.getElementById("celebration")
 
-        celebrationBox.classList.remove("is-invisible");
+        celebrationBox.classList.remove("is-hidden");
 
         setTimeout(() => {
-            celebrationBox.classList.add('is-invisible');
+            celebrationBox.classList.add('is-hidden');
         }, 3000);
 
         if (button.getAttribute("class") == "button-incompleted") {
-            if (localStorage.getItem("completedTasks") === null) {
-                createEmptyTasksCompletedJson()
-            }
-            addCompletedTaskToLocalStorage()
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
@@ -233,21 +211,6 @@ export function onTaskComplete(won) {
     }
 }
 
-function addCompletedTaskToLocalStorage() {
-    let completedTasksDict = JSON.parse(localStorage.getItem("completedTasks"));
-    completedTasksDict[currentChapter].push(globals.taskIdentifier);
-    localStorage.setItem("completedTasks", JSON.stringify(completedTasksDict));
-}
-
-
-/**
- * Used to get the event handler we are currently using.
- * @returns The event handler we're currently using.
- */
-export function getEventHandler() {
-    return eventHandler;
-}
-
 /**
  * Used to display an error message on the page.
  * @param {*} error The error to display on the page.
@@ -255,11 +218,7 @@ export function getEventHandler() {
 export function displayErrorMessage(error) {
     if (typeof error === "string") { console.log(error) } else { console.log(error.message) }
     let errorDetails = extractErrorDetails(error.message);
-    if (errorDetails.text === "KeyboardInterrupt") {
-        //KeyboardInterrupt error happens when pyodide is interrupted while doing "input()"
-        //Do not show this error to user, as it's working as intended.
-        return;
-    }
+    if (errorDetails.text === "KeyboardInterrupt") return; // intended error; do not display to user
     let errorContainer = document.getElementById("error-box");
     errorContainer.classList.toggle("show-error");
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
