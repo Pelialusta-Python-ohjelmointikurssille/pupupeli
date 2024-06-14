@@ -4,7 +4,7 @@ describe('extractErrorDetails', () => {
     test('should extract line number and translate error type', () => {
         const errorMessage = `
             Traceback (most recent call last):
-              File "script.py", line 2, in <module>
+              File "script.py", line 3, in <module>
                 main()
               File "script.py", line 5, in main
                 raise ValueError('Virheellinen suunta')
@@ -22,7 +22,7 @@ describe('extractErrorDetails', () => {
             Traceback (most recent call last):
               File "script.py", line 2, in <module>
                 main()
-              File "script.py", line 5, in main
+              File "script.py", line 6, in main
                 raise UnknownError('Tuntematon virhe')
             UnknownError: Tuntematon virhe
         `;
@@ -38,7 +38,7 @@ describe('extractErrorDetails', () => {
             Traceback (most recent call last):
               File "script.py", line 2, in <module>
                 main()
-              File "script.py", line 5, in main
+              File "script.py", line 6, in main
                 raise UnknownError('Tuntematon virhe')
             UnknownError: Tuntematon virhe
         `;

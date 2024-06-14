@@ -4,6 +4,7 @@ let pythonFileStr;
 let continuePythonExecution;
 let saveState;
 let resetFlag = false;
+let codeString;
 let interruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
 //remember to update this when new commands are added
 const validCommands = ["move", "say", "ask"];
@@ -183,10 +184,6 @@ async function checkClearedConditions(codeString) {
 
 function removeInputs(codeString) {
     return codeString.replace(/input\(/g, 'mock_input(');
-}
-
-function removeWhileTrue(codeString) {
-    return codeString.replace(/while True:/g, 'for _ in range(100):');
 }
 
 function indentString(str, indent = '    ') {  // Default indentation is 4 spaces

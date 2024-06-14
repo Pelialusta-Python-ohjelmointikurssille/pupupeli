@@ -1,5 +1,5 @@
 import { ace_version } from "../util/version_strings.js";
-import { getCurrentLine, setCurrentLine } from "./py_error_handling.js";
+import { setCurrentLine } from "./py_error_handling.js";
 
 let editor;
 let currentLineMarker; //the line that is currently executing
