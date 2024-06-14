@@ -23,13 +23,13 @@ export class Constants {
 export function GetDirectionAsString(direction) {
     switch (direction) {
         case Direction.Down:
-            return DOWN_STR;
+            return Constants.DOWN_STR;
         case Direction.Up:
-            return UP_STR;
+            return Constants.UP_STR;
         case Direction.Left:
-            return LEFT_STR;
+            return Constants.LEFT_STR;
         case Direction.Right:
-            return RIGHT_STR;
+            return Constants.RIGHT_STR;
     }
 }
 
