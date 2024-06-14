@@ -82,10 +82,9 @@ export class GraphicsEntity {
      * @param {*} deltaTime Time between frames in seconds. 
      */
     onUpdate(deltaTime) {
-        if (this.currentAnimation != null) {
-            if (this.currentAnimation.inProgress === false) return;
-            this.currentAnimation.increment(deltaTime);
-        }
+        if (this.currentAnimation == null) return;
+        if (this.currentAnimation.inProgress === false) return;
+        this.currentAnimation.increment(deltaTime);
     }
     
     /**
