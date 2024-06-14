@@ -138,4 +138,31 @@ describe("Testing GraphicsEntity", () => {
         expect(newGfxEntity.container.rotation).toBe(0);
         expect(newGfxEntity.direction).toBe(Direction.Left);
     });
+
+    test("If given a size for sprite, then sets sprite size correctly", () => {
+        let defaultStartDirection = Direction.Down;
+        let dummyEntityData = { size: new Vector2(32, 32) };
+        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null, width: 64, height: 64 }, dummyEntityData, skinBundle);
+        newGfxEntity.onCreate();
+        expect(newGfxEntity.container.position.x).toBe(0);
+        expect(newGfxEntity.container.position.y).toBe(0);
+        expect(newGfxEntity.container.scale).toBe(1);
+        expect(newGfxEntity.container.rotation).toBe(0);
+        expect(newGfxEntity.direction).toBe(defaultStartDirection);
+        expect(newGfxEntity.sprite.width).toBe(32);
+        expect(newGfxEntity.sprite.height).toBe(32);
+    });
+
+    test("If given a size for sprite and sprite is null, do nothing", () => {
+        let defaultStartDirection = Direction.Down;
+        let dummyEntityData = { size: new Vector2(32, 32) };
+        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, null, dummyEntityData, skinBundle);
+        newGfxEntity.onCreate();
+        expect(newGfxEntity.container.position.x).toBe(0);
+        expect(newGfxEntity.container.position.y).toBe(0);
+        expect(newGfxEntity.container.scale).toBe(1);
+        expect(newGfxEntity.container.rotation).toBe(0);
+        expect(newGfxEntity.direction).toBe(defaultStartDirection);
+        expect(newGfxEntity.sprite).toBe(null);
+    });
 });
