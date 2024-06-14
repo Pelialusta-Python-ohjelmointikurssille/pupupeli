@@ -34,6 +34,7 @@ function setUserInputBoxVisibility(isVisible) {
     if (isVisible) {
         inputBox.classList.remove("is-invisible");
         inputBox.addEventListener("keydown", addInputToUserInputs);
+        inputBox.focus();
         return;
     }
     inputBox.classList.add("is-invisible");
