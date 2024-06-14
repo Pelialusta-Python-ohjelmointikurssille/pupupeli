@@ -23,6 +23,18 @@ body {
     border-radius: 5px;
 }
 
+/* This one includes both task header and toggle buttons div, we want them on the same level */
+#task-name-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem; /* Optional: add some space below the task name div */
+}
+
+#toggle-buttons-div {
+    display: flex;
+}
+
 #left-container, #editor-container {
     flex-direction: column;
 }
