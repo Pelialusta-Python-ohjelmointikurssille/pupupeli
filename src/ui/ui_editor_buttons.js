@@ -1,7 +1,7 @@
 import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker } from "../event_handler.js";
-import { getEditor } from "../input/editor.js";
+import { getEditor, resetLineHighlight } from "../input/editor.js";
 import { resetGame, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 
@@ -64,6 +64,7 @@ function onResetButtonClick() {
     resetInputHistory();
     _buttonsState = States.INITIAL;
     setMessagePassingState({ paused: false });
+    resetLineHighlight();
 }
 
 function runButtonSetVisualsToInitial() {

@@ -220,6 +220,10 @@ export function onTaskComplete() {
 
     celebrationBox.classList.remove("is-invisible");
 
+    setTimeout(() => {
+        celebrationBox.classList.add('is-invisible');
+    }, 3000);
+
     if (button.getAttribute("class") == "button-incompleted") {
         if (localStorage.getItem("completedTasks") === null) {
             createEmptyTasksCompletedJson()
@@ -258,7 +262,7 @@ export function displayErrorMessage(error) {
     }
     let errorContainer = document.getElementById("error-box");
     errorContainer.classList.toggle("show-error");
-    errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
+    errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
     disablePlayButton("error");
 }
 
