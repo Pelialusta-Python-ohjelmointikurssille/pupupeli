@@ -1,3 +1,14 @@
+/* remove below before release */
+#devtaskbuttoncontainer {
+    max-height: 30px;
+    margin-right: 1rem;
+}
+
+#devtaskbuttoncontainer > input {
+    min-height: 26px;
+}
+/* remove above before elease */
+
 :root {
     --canvas-width: 640px;
     --canvas-height: var(--canvas-width);
@@ -84,14 +95,12 @@ body {
 }
 
 #user-container {
-    height: 30px;
+    min-height: 32px;
 }
 
-#user-name {
-    display: flex;
-    font-size: 20px;
-    margin-right: 1rem;
-    height: 30px;
+#username, #password {
+    min-height: 100%;
+    margin: 0 0.5rem;
 }
 
 #header-buttons {
@@ -158,6 +167,10 @@ body {
     text-align: center;
 }
 
+.selected-choice {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
 .show-error {
     transition: 0.5s all ease-in-out;
     padding: 1rem !important;
@@ -169,12 +182,16 @@ body {
     width: calc(100% - 2rem);
 }
 
-#grid-toggle-button, #theme-select, #trail-toggle-button {
+#grid-toggle-button, #theme-select, #login-button, #trail-toggle-button {
     float: right;
     min-height: 32px;
     min-width: calc(10% - 1rem);
     margin: 0 0.5rem;
     border-radius: 5px;
+}
+
+#logout-button {
+    margin-bottom: 0;
 }
 
 #task-selector-box button {
@@ -263,6 +280,7 @@ button:hover {
     box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     padding: 0.5rem;
+    cursor: pointer;
 }
 
 .multiple-choice-question:hover {

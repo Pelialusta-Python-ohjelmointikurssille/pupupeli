@@ -27,10 +27,6 @@ self.onmessage = async function (event) {
         setResetFlag(false);
         runPythonCode(pyodide, message.details);
     }
-    if (message.type === 'reset') {
-        console.log("This should never print");
-        // setResetFlag(true);
-    }
 }
 
 /**
@@ -207,7 +203,7 @@ function addLineNumberOutputs(codeString) {
         // Check if the line is empty, contains only whitespace, or is a comment
         else if (trimmedLine === '' || trimmedLine.startsWith('#')) {
             // Use the last non-empty line's indentation for empty lines and comment lines
-            return `${lastIndentation}pupu.rivi(${index + 1})\n${line}`;
+            return line;
         } else {
             // Update the last non-empty line's indentation
             lastIndentation = indentation;

@@ -1,16 +1,16 @@
 import * as globals from "../util/globals.js";
 import * as fileReader from "../file_reader.js";
+import * as api from "../api/api.js";
+
 import { getEditor } from "../input/editor.js"
 import { initWorker } from "../event_handler.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, setTheme } from "../game/game_controller.js";
 
-let eventHandler;
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
-// const completedTasks = fileReader.tryGetFileAsJson("/completed_tasks/completed.json");
 
 /**
  * Runs ui initialisation functions + atm the event_handlers worker
@@ -20,8 +20,6 @@ async function main() {
     initPage();
     initializeEditorButtons();
     await initGameAndCanvas();
-
-    // Create chapter buttons
 }
 
 /**
@@ -92,63 +90,41 @@ async function initPage() {
             // if option is correct, add eventlistener which calls onTaskComplete
             if (option.isCorrectAnswer === true) {
                 let questionButton = document.getElementById(optionId);
-                questionButton.addEventListener("click", onTaskComplete, false);
+                questionButton.dataset.correct = true;
             }
+        });
+        let questions = document.getElementsByClassName("multiple-choice-question");
+
+        Array.from(questions).forEach(question => {
+            question.addEventListener("click", colorSelectedChoice);
         });
     }
     // set editor code
     window.addEventListener('load', function () {
         getEditor().setValue(globals.task.getEditorCode());
+        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
     });
 
-    createTaskButtons();
     createChapterButtons();
     isUserLoggedIn();
 }
 
 function isUserLoggedIn() {
-    let userNameContainer = document.getElementById('user-name');
-    let userLogContainer = document.getElementById('log-button');
-    userNameContainer.innerHTML = ''; // Clear the userContainer
-    userLogContainer.innerHTML = ''; // Clear the userContainer
-    if (localStorage.getItem("username") !== null) {
-        let usernameElement = document.createElement('p');
-        userNameContainer.style.width = "300px";
-        usernameElement.textContent = "Käyttäjä: " + localStorage.getItem("username");
-        let logoutButton = document.createElement('button');
-        logoutButton.textContent = "Kirjaudu ulos";
-        logoutButton.style.marginBottom = "0px";
-        logoutButton.style.height = "30px";
-        logoutButton.addEventListener('click', () => {
-            localStorage.removeItem("username");
-            usernameElement.textContent = "";
-            isUserLoggedIn()
-        });
-        userNameContainer.appendChild(usernameElement) // Append the usernameElement
-        userLogContainer.appendChild(logoutButton);
-    } else {
-        // Create the input elements
-        let userInput = document.createElement('input');
-        let submitButton = document.createElement('button');
-        userNameContainer.style.width = "150px";
-        // Set the attributes for the user input
-        userInput.setAttribute('type', 'text');
-        userInput.setAttribute('id', 'user-input');
-        userInput.setAttribute('placeholder', 'Enter user name');
-
-        // Set the attributes for the submit button
-        submitButton.style.marginBottom = "0px";
-        submitButton.textContent = "Kirjaudu sisään";
-        submitButton.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent the form from being submitted
-            localStorage.setItem("username", userInput.value);
-            isUserLoggedIn()
-        });
-
-        // Append the elements to the user container
-        userNameContainer.appendChild(userInput);
-        userLogContainer.appendChild(submitButton);
+    if (localStorage.getItem("token") !== null) {
+        document.getElementById("user-container").classList.add("is-hidden");
+        document.getElementById("logout-button").classList.remove("is-hidden");
     }
+}
+
+function colorSelectedChoice(selectedChoice) {
+    let questions = document.getElementsByClassName("multiple-choice-question");
+    globals.setMultipleChoiceCorrect(selectedChoice);
+
+    Array.from(questions).forEach(question => {
+        question.classList.remove("selected-choice");
+    });
+
+    selectedChoice.target.classList.add("selected-choice");
 }
 
 /**
@@ -156,44 +132,33 @@ function isUserLoggedIn() {
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
 function createTaskButtons() {
-    const numberOfButtons = totalTasks
     const buttonContainer = document.getElementById('buttonTable');
-    if (localStorage.getItem("completedTasks") === null) {
-        createEmptyTasksCompletedJson()
-    }
-    let completedTasksStrRaw = localStorage.getItem("completedTasks");
-    let completedTasksDict = JSON.parse(completedTasksStrRaw);
 
-    // Create and append buttons
-    for (let i = 0; i < numberOfButtons; i++) {
-        const button = document.createElement('button');
-        button.id = `button-${i + 1}`;
-        if (completedTasksDict[currentChapter].includes(i + 1)) {
-            button.classList.add("button-completed");
-        } else {
-            button.classList.add("button-incompleted");
+    api.getCompletedTasks().then(taskList => {
+        let completedTasksList = taskList.tasks;
+        // Create and append buttons
+        for (let i = 0; i < totalTasks; i++) {
+            const button = document.createElement('button');
+            let buttonIdText = `chapter${currentChapter}task${i + 1}`;
+            button.id = buttonIdText
+            if (completedTasksList.includes(buttonIdText)) {
+                button.classList.add("button-completed");
+            } else {
+                button.classList.add("button-incompleted");
+            }
+            button.innerText = `${i + 1}`;
+            button.addEventListener('click', () => {
+                window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
+            });
+            buttonContainer.appendChild(button);
         }
-        button.innerText = `${i + 1}`;
-        button.addEventListener('click', () => {
-            window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
-        });
-        buttonContainer.appendChild(button);
-    }
-}
-
-function createEmptyTasksCompletedJson() {
-    let tasksCompleted = {};
-    for (let i = 1; i <= totalChapters; i++) {
-        tasksCompleted[i] = [];
-    }
-    localStorage.setItem("completedTasks", JSON.stringify(tasksCompleted));
+    });
 }
 
 function createChapterButtons() {
-    const numberOfButtons = totalChapters;
     const selectContainer = document.getElementById('chapterbuttontable');
 
-    for (let i = 0; i < numberOfButtons; i++) {
+    for (let i = 0; i < totalChapters; i++) {
         const option = document.createElement('option');
         option.id = `chapter-option-${i + 1}`;
         option.value = i + 1;
@@ -210,42 +175,40 @@ function createChapterButtons() {
 }
 
 /**
- * Turns task button green and saves completion status. The html button's class is changed and the task number is added to localStorage. 
+ * a function that turns the current button green and sends a PUSH request to the api indicating the user has completed a task
+ * @param {boolean} won a boolean indicating whether the task was completed successfully or not
  */
-export function onTaskComplete() {
-    const taskIdentifier = globals.taskIdentifier;
-    const buttonid = `button-${taskIdentifier}`;
-    let button = document.getElementById(buttonid);
-    let celebrationBox = document.getElementById("celebration")
-    const container = document.getElementById('celebration-confetti-container');
-    for (let i = 0; i < 30; i++) {
-        const celebrationConfetti = createCelebrationConfetti();
-        container.appendChild(celebrationConfetti);
+export function onTaskComplete(won) {
+    const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
 
-        // Remove the confetti after animation completes to prevent memory leaks
-        celebrationConfetti.addEventListener('animationend', () => {
-            container.removeChild(celebrationConfetti);
-        });
-    }
-    celebrationBox.classList.remove("is-invisible");
+    if (won) {
+        const buttonid = `${apiTaskIdentifier}`;
+        let button = document.getElementById(buttonid);
+        let celebrationBox = document.getElementById("celebration")
+        const container = document.getElementById('celebration-confetti-container');
+        for (let i = 0; i < 30; i++) {
+            const celebrationConfetti = createCelebrationConfetti();
+            container.appendChild(celebrationConfetti);
 
-    setTimeout(() => {
-        celebrationBox.classList.add('is-invisible');
-    }, 3000);
-
-    if (button.getAttribute("class") == "button-incompleted") {
-        if (localStorage.getItem("completedTasks") === null) {
-            createEmptyTasksCompletedJson()
+            // Remove the confetti after animation completes to prevent memory leaks
+            celebrationConfetti.addEventListener('animationend', () => {
+                container.removeChild(celebrationConfetti);
+            });
         }
-        addCompletedTaskToLocalStorage()
-        button.classList.replace("button-incompleted", "button-completed");
-    }
-}
+        celebrationBox.classList.remove("is-hidden");
 
-function addCompletedTaskToLocalStorage() {
-    let completedTasksDict = JSON.parse(localStorage.getItem("completedTasks"));
-    completedTasksDict[currentChapter].push(globals.taskIdentifier);
-    localStorage.setItem("completedTasks", JSON.stringify(completedTasksDict));
+        setTimeout(() => {
+            celebrationBox.classList.add('is-hidden');
+        }, 3000);
+
+        if (button.getAttribute("class") == "button-incompleted") {
+            button.classList.replace("button-incompleted", "button-completed");
+        }
+        globals.setGameAsWon();
+        api.sendTask(apiTaskIdentifier);
+    } else {
+        api.sendTask(apiTaskIdentifier);
+    }
 }
 
 function createCelebrationConfetti() {
@@ -267,25 +230,13 @@ function createCelebrationConfetti() {
 }
 
 /**
- * Used to get the event handler we are currently using.
- * @returns The event handler we're currently using.
- */
-export function getEventHandler() {
-    return eventHandler;
-}
-
-/**
  * Used to display an error message on the page.
  * @param {*} error The error to display on the page.
  */
 export function displayErrorMessage(error) {
     if (typeof error === "string") { console.log(error) } else { console.log(error.message) }
     let errorDetails = extractErrorDetails(error.message);
-    if (errorDetails.text === "KeyboardInterrupt") {
-        //KeyboardInterrupt error happens when pyodide is interrupted while doing "input()"
-        //Do not show this error to user, as it's working as intended.
-        return;
-    }
+    if (errorDetails.text === "KeyboardInterrupt") return; // intended error; do not display to user
     let errorContainer = document.getElementById("error-box");
     errorContainer.classList.toggle("show-error");
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';

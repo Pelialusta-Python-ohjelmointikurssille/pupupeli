@@ -29,8 +29,28 @@ export const conditions = task.getConditions();
 export const conditionsCleared = [];
 
 export let currentSAB;
+export let currentGameMode;
+
+export let isGameWon = 0;
+export let multipleChoiceCorrect = false;
 
 export const theme = localStorage.getItem("theme");
+
+export function setGameAsWon() {
+    isGameWon = 1;
+}
+
+export function setMultipleChoiceCorrect(isCorrect=true) {
+    if (isCorrect.target.dataset.correct) {
+        multipleChoiceCorrect = isCorrect;
+    } else {
+        multipleChoiceCorrect = false;
+    }
+}
+
+export function getMultipleChoiceCorrect() {
+    return multipleChoiceCorrect
+}
 
 export function setCurrentSAB(sab) {
     currentSAB = sab;
@@ -38,6 +58,14 @@ export function setCurrentSAB(sab) {
 
 export function getCurrentSAB() {
     return currentSAB;
+}
+
+export function setCurrentGameMode(gameMode) {
+    currentGameMode = gameMode;
+}
+
+export function getCurrentGameMode() {
+    return currentGameMode;
 }
 
 export function incrementCollectibles() {
@@ -52,7 +80,7 @@ export function addClearedConditions(conditionsFromEventHandler) {
 }
 
 export function allConditionsCleared() {
-    return conditionChecker(conditions, conditionsCleared);
+    return conditionChecker(conditions, conditionsCleared) && collectibles.current === collectibles.total;
 }
 
 /**

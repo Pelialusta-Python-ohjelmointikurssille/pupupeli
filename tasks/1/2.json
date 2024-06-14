@@ -67,7 +67,7 @@
     },
     {
       "condition": "conditionMaxLines",
-      "parameter": 6
+      "parameter": false
     }
   ]
 }
