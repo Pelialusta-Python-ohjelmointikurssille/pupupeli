@@ -23,7 +23,7 @@ export class GameModeGetCollectibles {
     removedFromGrid(event) {
         let gridobject = event.detail;
         if (gridobject.type === Constants.COLLECTIBLE) {
-            globals.collectibles++;
+            globals.incrementCollectibles();
             console.log("Score is: " + globals.collectibles.current);
             this.#checkIfGameWon();
         }
