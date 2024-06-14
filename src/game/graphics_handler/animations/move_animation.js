@@ -18,7 +18,8 @@ export class MoveAnimation {
         this.pawnEntity.updatePosition();
         this.progress.start();
         this.inProgress = true;
-        this.pawnEntity.swapTextureToMoveDir(this.data.direction);
+        this.pawnEntity.direction = this.data.direction
+        this.pawnEntity.updateTextures();
     }
 
     increment(deltaTime) {

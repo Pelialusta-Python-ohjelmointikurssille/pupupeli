@@ -25,11 +25,11 @@ export class GraphicsEntity {
         this.skins = skins;
         this.currentSkin = null;
         this.currentSkin = this.skins.keys().next().value;
-        this.swapTextureToMoveDir(this.direction);
         this.type = "generic";
         this.direction = Direction.Down;
         this.currentAnimation = null;
         this.isReady = true;
+        this.updateTextures();
     }
 
     /**
@@ -134,33 +134,29 @@ export class GraphicsEntity {
         this.isReady = true;
         this.currentAnimation = null;
         this.direction = Direction.Down;
+        this.updateTextures();
     }
 
-    swapTextureToMoveDir(dir) {
-        if (this.skins != null && this.skins.size > 0) {
-            this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
-        }
-        else {
-            return;
-        }
-        
+    updateTextures() {
+        if (this.skins == null || this.skins.size <= 0) return;
+
         let tex;
-        if (dir === Direction.Up && this.skins.get(this.currentSkin).upTexture != null) {
+        this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
+        if (this.direction === Direction.Up && this.skins.get(this.currentSkin).upTexture != null) {
             tex = this.skins.get(this.currentSkin).upTexture;
         }
-        if (dir === Direction.Down && this.skins.get(this.currentSkin).downTexture != null) {
+        if (this.direction === Direction.Down && this.skins.get(this.currentSkin).downTexture != null) {
             tex = this.skins.get(this.currentSkin).downTexture;
         }
-        if (dir === Direction.Left && this.skins.get(this.currentSkin).leftTexture != null) {
+        if (this.direction === Direction.Left && this.skins.get(this.currentSkin).leftTexture != null) {
             tex = this.skins.get(this.currentSkin).leftTexture;
         }
-        if (dir === Direction.Right && this.skins.get(this.currentSkin).rightTexture != null) {
+        if (this.direction === Direction.Right && this.skins.get(this.currentSkin).rightTexture != null) {
             tex = this.skins.get(this.currentSkin).rightTexture;
         }
         if (tex !== undefined) {
             this.sprite.texture = tex;
         }
-        this.direction = dir;
     }
 
     /**
@@ -189,6 +185,6 @@ export class GraphicsEntity {
                 this.currentSkin = key;
             }
         });
-        this.swapTextureToMoveDir(this.direction);
+        this.updateTextures();
     }
 }
