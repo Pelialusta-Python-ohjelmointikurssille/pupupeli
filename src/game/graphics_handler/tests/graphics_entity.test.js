@@ -7,6 +7,8 @@ describe("Testing GraphicsEntity", () => {
     let mockTexture1;
     let mockTexture2;
     let mockTexture3;
+    let mockTexture4;
+    let mockTexture5;
     let mockSprite;
     let mockSkin1;
     let mockSkin2;
@@ -18,13 +20,35 @@ describe("Testing GraphicsEntity", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        mockTexture1 = { height: 64, widht: 64 }
-        mockTexture2 = { height: 64, widht: 64 }
-        mockTexture3 = { height: 64, widht: 64 }
+        mockTexture1 = { uid: "01", height: 64, widht: 64 }
+        mockTexture2 = { uid: "02", height: 64, widht: 64 }
+        mockTexture3 = { uid: "03", height: 64, widht: 64 }
+        mockTexture4 = { uid: "04", height: 64, widht: 64 }
+        mockTexture5 = { uid: "05", height: 64, widht: 64 }
         mockSprite = { texture: null, width: 64, height: 64 };
-        mockSkin1 = new EntitySkin("skin1_name", "theme1", { defaultTexture: mockTexture1 });
+        mockSkin1 = new EntitySkin(
+            "skin1_name",
+            "theme1",
+            { 
+                defaultTexture: mockTexture1,
+                upTexture: mockTexture2,
+                downTexture: mockTexture2,
+                leftTexture: mockTexture2,
+                rightTexture: mockTexture2 
+            }
+        );
         mockSkin2 = new EntitySkin("skin2_name", "theme2", { defaultTexture: mockTexture2 });
-        mockSkin3 = new EntitySkin("skin3_name", "theme3", { defaultTexture: mockTexture3 });
+        mockSkin3 = new EntitySkin(
+            "skin3_name",
+            "theme3",
+            { 
+                defaultTexture: mockTexture1,
+                upTexture: mockTexture2,
+                downTexture: mockTexture3,
+                leftTexture: mockTexture4,
+                rightTexture: mockTexture5 
+            }
+        );
         mockDummyContainer = { addChild: jest.fn(), position: { x: 0, y: 0 }, rotation: 0, scale: 1 , alpha: 1 };
         mockSkinBundle = new Map([["skin1_name", mockSkin1], ["skin2_name", mockSkin2], ["skin3_name", mockSkin3]]);
         mockAnimation = { start: jest.fn(), stop: jest.fn(), increment: jest.fn(), skipToEnd: jest.fn(), inProgress: true };
@@ -61,6 +85,30 @@ describe("Testing GraphicsEntity", () => {
     test("If setting theme that doesn't exist then skin is not changed", () => {
         gfxEntity.setTheme("theme4");
         expect(gfxEntity.skins.get(gfxEntity.currentSkin).theme).not.toBe("theme4");
+    });
+
+    test("If skin is set correctly for Direction.Right", () => {
+        gfxEntity.direction = Direction.Right;
+        gfxEntity.setTheme("theme3");
+        expect(gfxEntity.sprite.texture).toBe(mockTexture5);
+    });
+
+    test("If skin is set correctly for Direction.Left", () => {
+        gfxEntity.direction = Direction.Left;
+        gfxEntity.setTheme("theme3");
+        expect(gfxEntity.sprite.texture).toBe(mockTexture4);
+    });
+
+    test("If skin is set correctly for Direction.Up", () => {
+        gfxEntity.direction = Direction.Up;
+        gfxEntity.setTheme("theme3");
+        expect(gfxEntity.sprite.texture).toBe(mockTexture2);
+    });
+
+    test("If skin is set correctly for Direction.Down", () => {
+        gfxEntity.direction = Direction.Down;
+        gfxEntity.setTheme("theme3");
+        expect(gfxEntity.sprite.texture).toBe(mockTexture3);
     });
 
     test("If resetting entity resets all container variables correctly", () => {
