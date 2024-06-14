@@ -1,4 +1,5 @@
 import { Direction } from "../../direction.js";
+import { Vector2 } from "../../vector.js";
 
 /**
  * The base graphics object. Used to display in-game graphics. All graphics classes must inheret from this base class.
@@ -17,6 +18,10 @@ export class GraphicsEntity {
         this.entityUUID = entityUUID;
         this.entityHandler = entityHandler;
         this.container = pixiContainer;
+        this.containerStartPosition = new Vector2(this.container.position.x, this.container.position.y);
+        this.containerStartScale = this.container.scale;
+        this.containerStartAlpha = this.container.alpha;
+        this.containerStartRotation = this.container.rotation;
         this.sprite = sprite;
         if (this.sprite != null) {
             this.container.addChild(this.sprite);
@@ -129,8 +134,12 @@ export class GraphicsEntity {
         if (this.currentAnimation != null) {
             this.currentAnimation.stop();
         }
-        this.container.rotation = 0;
-        this.container.alpha = 1;
+        this.container.rotation = this.containerStartRotation;
+        this.container.alpha = this.containerStartAlpha;
+        this.container.scale = this.containerStartScale;
+        this.container.position.x = this.containerStartPosition.x;
+        this.container.position.y = this.containerStartPosition.y;
+
         this.isReady = true;
         this.currentAnimation = null;
         this.direction = Direction.Down;
