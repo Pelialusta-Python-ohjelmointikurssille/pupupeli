@@ -105,6 +105,7 @@ body {
 }
 
 #app {
+    position: relative; /* This makes the #app div a positioning context for absolutely positioned children */
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -274,19 +275,51 @@ button:hover {
     z-index: 1000; /* in front of all other markers */ 
 }
 
-#celebration {
-    position: fixed;
-    top: 15%;
-    left: 40%;
-    transform: translate(-50%, -50%);
+#celebration{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* This ensures the center of #celebration-content, not its top-left corner, is at the center of #app */
     padding: 1rem;
-    background-color: #4CAF50;
+    background-color: #248944;
     color: white;
     border-radius: 8px;
     font-size: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     z-index: 1000;
+}
+
+#streamer-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Ensures the streamers do not block user interactions */
+    overflow: hidden;
+    z-index: 1000; /* Ensures the streamers appear on top of other content */
+}
+
+.streamer {
+    position: absolute;
+    top: -10px;
+    width: 10px;
+    height: 30px;
+    background-color: var(--color, red); /* Default color */
+    opacity: 0;
+    animation: fall 3s ease-out forwards;
+}
+
+@keyframes fall {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(360deg);
+    }
 }
 
 #input-container {

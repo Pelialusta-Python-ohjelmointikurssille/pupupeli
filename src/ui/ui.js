@@ -217,7 +217,16 @@ export function onTaskComplete() {
     const buttonid = `button-${taskIdentifier}`;
     let button = document.getElementById(buttonid);
     let celebrationBox = document.getElementById("celebration")
+    const container = document.getElementById('streamer-container');
+    for (let i = 0; i < 30; i++) {
+        const streamer = createStreamer();
+        container.appendChild(streamer);
 
+        // Remove the streamer after animation completes to prevent memory leaks
+        streamer.addEventListener('animationend', () => {
+            container.removeChild(streamer);
+        });
+    }
     celebrationBox.classList.remove("is-invisible");
 
     setTimeout(() => {
@@ -239,6 +248,23 @@ function addCompletedTaskToLocalStorage() {
     localStorage.setItem("completedTasks", JSON.stringify(completedTasksDict));
 }
 
+function createStreamer() {
+    const streamer = document.createElement('div');
+    streamer.classList.add('streamer');
+
+    // Randomize the streamer color
+    const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    streamer.style.setProperty('--color', randomColor);
+
+    // Randomize the initial position and animation duration
+    const randomLeft = Math.random() * 100;
+    const randomDuration = Math.random() * 2 + 2; // Between 2 and 4 seconds
+    streamer.style.left = `${randomLeft}vw`;
+    streamer.style.animationDuration = `${randomDuration}s`;
+
+    return streamer;
+}
 
 /**
  * Used to get the event handler we are currently using.
