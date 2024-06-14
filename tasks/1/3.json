@@ -5,7 +5,8 @@
     "pupu.liiku(\"oikea\")",
     "pupu.liiku(\"alas\")",
     "pupu.liiku(\"vasen\")",
-    "pupu.liiku(\"ylös\")"
+    "pupu.liiku(\"ylös\")",
+    "Käytä for-silmukkaa"
   ],
   "editorCode": [
     "pupu.liiku(\"oikea\")"
