@@ -217,7 +217,16 @@ export function onTaskComplete() {
     const buttonid = `button-${taskIdentifier}`;
     let button = document.getElementById(buttonid);
     let celebrationBox = document.getElementById("celebration")
+    const container = document.getElementById('celebration-confetti-container');
+    for (let i = 0; i < 30; i++) {
+        const celebrationConfetti = createCelebrationConfetti();
+        container.appendChild(celebrationConfetti);
 
+        // Remove the confetti after animation completes to prevent memory leaks
+        celebrationConfetti.addEventListener('animationend', () => {
+            container.removeChild(celebrationConfetti);
+        });
+    }
     celebrationBox.classList.remove("is-invisible");
 
     setTimeout(() => {
@@ -239,6 +248,23 @@ function addCompletedTaskToLocalStorage() {
     localStorage.setItem("completedTasks", JSON.stringify(completedTasksDict));
 }
 
+function createCelebrationConfetti() {
+    const celebrationConfetti = document.createElement('div');
+    celebrationConfetti.classList.add('celebration-confetti');
+
+    // Randomize the confetti color
+    const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    celebrationConfetti.style.setProperty('--color', randomColor);
+
+    // Randomize the initial position and animation duration
+    const randomLeft = Math.random() * 100;
+    const randomDuration = Math.random() * 2 + 2; // Between 2 and 4 seconds
+    celebrationConfetti.style.left = `${randomLeft}vw`;
+    celebrationConfetti.style.animationDuration = `${randomDuration}s`;
+
+    return celebrationConfetti;
+}
 
 /**
  * Used to get the event handler we are currently using.
