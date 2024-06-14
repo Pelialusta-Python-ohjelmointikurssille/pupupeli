@@ -1,21 +1,11 @@
 import { Constants } from "./commonstrings.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { Vector2 } from "./vector.js";
-//implements the interface Command. That just means that all these classes have the function "execute()" (and can easily implement "undo()").
-//Stuff to read if interested: 
+import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.js";
+//Trying to implement the Command pattern in javascript. Interfaces in JS are so janky that I just made classes.
+//Maybe do a base Command class and extend that, if you want. 
 //    https://refactoring.guru/design-patterns/command
 //    https://gameprogrammingpatterns.com/command.html
-
-
-/**
- * The interface for commands
- * disabling lint here
- */
-// eslint-disable-next-line no-unused-vars
-const Command = {
-    execute: function () { },
-    //undo: function () { }, maybe someday
-};
 
 /**
  * MoveCommand is created to execute the MoveCommand action in game logic and rendering.
@@ -44,9 +34,9 @@ export class MoveCommand {
         if (isSuccess) this.#checkForObjects();
         let dirObj = { direction: this.dir, time: this.moveSpeed };
         if (isSuccess) {
-            this.graphicsHandler.doAction(this.gridObject.id, "pawn_move", dirObj);
+            this.graphicsHandler.doAction(this.gridObject.id, AnimationNames.PAWN_MOVE, dirObj);
         } else {
-            this.graphicsHandler.doAction(this.gridObject.id, "pawn_failmove", dirObj);
+            this.graphicsHandler.doAction(this.gridObject.id, AnimationNames.PAWN_FAIL_MOVE, dirObj);
         }
 
     }
@@ -60,7 +50,7 @@ export class MoveCommand {
         for (let i = 0; i < gridobjects.length; i++) {
             if (gridobjects[i].type === Constants.COLLECTIBLE) {
                 let go = gridobjects[i];
-                this.graphicsHandler.doAction(go.id, "hide", { time: this.objectHideSpeed });
+                this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
                 this.grid.removeFromGrid(go);
             }
         }
@@ -91,7 +81,7 @@ export class SayCommand {
             },
             SKIN_BUNDLES["speech_bubble"]
         );
-        this.graphicsHandler.doAction(textboxId, "appear_hide", { time: 2 });
+        this.graphicsHandler.doAction(textboxId, AnimationNames.APPEAR_HIDE, { time: 2 });
     }
 }
 
