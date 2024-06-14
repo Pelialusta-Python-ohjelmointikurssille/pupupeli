@@ -41,28 +41,28 @@ export class GraphicsEntity {
      * Called when onCreate is called. Handles setting override variables if given using entityData.
      */
     applyEntityData() {
-        if (this.entityData != null) {
-            if (this.entityData.position != null) {
-                this.container.position.x = this.entityData.position.x;
-                this.container.position.y = this.entityData.position.y;
-            }
-            
-            if (this.entityData.rotation != null) {
-                this.container.rotation = this.entityData.rotation;
-            }
-            
-            if (this.entityData.scale != null) {
-                this.container.scale = this.entityData.scale;
-            }
-            
-            if (this.entityData.direction != null) {
-                this.direction = this.entityData.direction;
-            }
-            
-            if (this.entityData.size != null && this.sprite != null) {
-                this.sprite.width = this.entityData.size.x;
-                this.sprite.height = this.entityData.size.y;
-            }
+        if (this.entityData == null) return;
+        
+        if (this.entityData.position != null) {
+            this.container.position.x = this.entityData.position.x;
+            this.container.position.y = this.entityData.position.y;
+        }
+        
+        if (this.entityData.rotation != null) {
+            this.container.rotation = this.entityData.rotation;
+        }
+        
+        if (this.entityData.scale != null) {
+            this.container.scale = this.entityData.scale;
+        }
+        
+        if (this.entityData.direction != null) {
+            this.direction = this.entityData.direction;
+        }
+        
+        if (this.entityData.size != null && this.sprite != null) {
+            this.sprite.width = this.entityData.size.x;
+            this.sprite.height = this.entityData.size.y;
         }
     }
 
