@@ -4,26 +4,39 @@ import { GraphicsEntity } from "../entities/graphics_entity.js";
 import { EntitySkin } from "../entity_skins/entity_skin.js";
 
 describe("Testing GraphicsEntity", () => {
-    let dummyTexture1;
-    let dummyTexture2;
-    let dummyTexture3;
-    let skin1;
-    let skin2;
-    let skin3;
-    let dummyContainer;
-    let skinBundle; 
+    let mockTexture1;
+    let mockTexture2;
+    let mockTexture3;
+    let mockSprite;
+    let mockSkin1;
+    let mockSkin2;
+    let mockSkin3;
+    let mockDummyContainer;
+    let mockSkinBundle; 
     let gfxEntity;
 
     beforeEach(() => {
-        dummyTexture1 = { height: 64, widht: 64 }
-        dummyTexture2 = { height: 64, widht: 64 }
-        dummyTexture3 = { height: 64, widht: 64 }
-        skin1 = new EntitySkin("skin1_name", "theme1", { defaultTexture: dummyTexture1 });
-        skin2 = new EntitySkin("skin2_name", "theme2", { defaultTexture: dummyTexture2 });
-        skin3 = new EntitySkin("skin3_name", "theme3", { defaultTexture: dummyTexture3 });
-        dummyContainer = { addChild: ()=>{}, position: { x: 0, y: 0 }, rotation: 0, scale: 1 , alpha: 1 };
-        skinBundle = new Map([["skin1_name", skin1], ["skin2_name", skin2], ["skin3_name", skin3]]);
-        gfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null, width: 64, height: 64 }, null, skinBundle);
+        jest.clearAllMocks();
+        mockTexture1 = { height: 64, widht: 64 }
+        mockTexture2 = { height: 64, widht: 64 }
+        mockTexture3 = { height: 64, widht: 64 }
+        mockSprite = { texture: null, width: 64, height: 64 };
+        mockSkin1 = new EntitySkin("skin1_name", "theme1", { defaultTexture: mockTexture1 });
+        mockSkin2 = new EntitySkin("skin2_name", "theme2", { defaultTexture: mockTexture2 });
+        mockSkin3 = new EntitySkin("skin3_name", "theme3", { defaultTexture: mockTexture3 });
+        mockDummyContainer = { addChild: jest.fn(), position: { x: 0, y: 0 }, rotation: 0, scale: 1 , alpha: 1 };
+        mockSkinBundle = new Map([["skin1_name", mockSkin1], ["skin2_name", mockSkin2], ["skin3_name", mockSkin3]]);
+        gfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, mockSprite, null, mockSkinBundle);
+    });
+
+    test("If when initialized and if sprite is not null, sprite added as child of container", () => {
+        expect(mockDummyContainer.addChild).toHaveBeenCalledWith(mockSprite);
+    });
+
+    test("If when initialized and if sprite is not null, sprite is not added as child of container", () => {
+        let newMockDummyContainer = { addChild: jest.fn(), position: { x: 0, y: 0 }, rotation: 0, scale: 1 , alpha: 1 };
+        let newGfxEntity = new GraphicsEntity("UUID", null, newMockDummyContainer, null, null, mockSkinBundle);
+        expect(newMockDummyContainer.addChild).not.toHaveBeenCalled();
     });
 
     test("If when initialized, first theme is current skin", () => {
@@ -83,7 +96,7 @@ describe("Testing GraphicsEntity", () => {
     test("If given no entitydata, then values remain default", () => {
         let defaultStartDirection = Direction.Down;
         let dummyEntityData = null;
-        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        let newGfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, { texture: null }, dummyEntityData, mockSkinBundle);
         newGfxEntity.onCreate();
         expect(newGfxEntity.container.position.x).toBe(0);
         expect(newGfxEntity.container.position.y).toBe(0);
@@ -95,7 +108,7 @@ describe("Testing GraphicsEntity", () => {
     test("If given an entitydata position, then sets position correctly", () => {
         let defaultStartDirection = Direction.Down;
         let dummyEntityData = { position: new Vector2(32, 32) };
-        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        let newGfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, { texture: null }, dummyEntityData, mockSkinBundle);
         newGfxEntity.onCreate();
         expect(newGfxEntity.container.position.x).toBe(32);
         expect(newGfxEntity.container.position.y).toBe(32);
@@ -107,7 +120,7 @@ describe("Testing GraphicsEntity", () => {
     test("If given an entitydata rotation, then sets rotation correctly", () => {
         let defaultStartDirection = Direction.Down;
         let dummyEntityData = { rotation: 90 };
-        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        let newGfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, { texture: null }, dummyEntityData, mockSkinBundle);
         newGfxEntity.onCreate();
         expect(newGfxEntity.container.position.x).toBe(0);
         expect(newGfxEntity.container.position.y).toBe(0);
@@ -119,7 +132,7 @@ describe("Testing GraphicsEntity", () => {
     test("If given an entitydata scale, then sets scale correctly", () => {
         let defaultStartDirection = Direction.Down;
         let dummyEntityData = { scale: 2.3 };
-        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        let newGfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, { texture: null }, dummyEntityData, mockSkinBundle);
         newGfxEntity.onCreate();
         expect(newGfxEntity.container.position.x).toBe(0);
         expect(newGfxEntity.container.position.y).toBe(0);
@@ -130,7 +143,7 @@ describe("Testing GraphicsEntity", () => {
 
     test("If given an entitydata direction, then sets direction correctly", () => {
         let dummyEntityData = { direction: Direction.Left };
-        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null }, dummyEntityData, skinBundle);
+        let newGfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, { texture: null }, dummyEntityData, mockSkinBundle);
         newGfxEntity.onCreate();
         expect(newGfxEntity.container.position.x).toBe(0);
         expect(newGfxEntity.container.position.y).toBe(0);
@@ -142,7 +155,7 @@ describe("Testing GraphicsEntity", () => {
     test("If given a size for sprite, then sets sprite size correctly", () => {
         let defaultStartDirection = Direction.Down;
         let dummyEntityData = { size: new Vector2(32, 32) };
-        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, { texture: null, width: 64, height: 64 }, dummyEntityData, skinBundle);
+        let newGfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, { texture: null, width: 64, height: 64 }, dummyEntityData, mockSkinBundle);
         newGfxEntity.onCreate();
         expect(newGfxEntity.container.position.x).toBe(0);
         expect(newGfxEntity.container.position.y).toBe(0);
@@ -156,7 +169,7 @@ describe("Testing GraphicsEntity", () => {
     test("If given a size for sprite and sprite is null, do nothing", () => {
         let defaultStartDirection = Direction.Down;
         let dummyEntityData = { size: new Vector2(32, 32) };
-        let newGfxEntity = new GraphicsEntity("UUID", null, dummyContainer, null, dummyEntityData, skinBundle);
+        let newGfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, null, dummyEntityData, mockSkinBundle);
         newGfxEntity.onCreate();
         expect(newGfxEntity.container.position.x).toBe(0);
         expect(newGfxEntity.container.position.y).toBe(0);
