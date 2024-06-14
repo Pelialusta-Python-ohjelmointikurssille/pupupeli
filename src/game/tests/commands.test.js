@@ -1,5 +1,7 @@
 import { MoveCommand } from '../commands';
-import { Constants, GetDirectionAsString } from '../commonstrings';
+import { Constants } from '../commonstrings';
+import { AnimationNames } from '../graphics_handler/manifests/animation_manifest';
+import { Direction } from '../direction';
 
 // Mock dependencies
 const mockGrid = {
@@ -27,7 +29,7 @@ describe('MoveCommand', () => {
     });
 
     test('should create a new MoveCommand with the correct properties', () => {
-        const moveCommand = new MoveCommand(mockGrid, mockGridObject, 'UP', mockGraphicsHandler);
+        const moveCommand = new MoveCommand(mockGrid, mockGridObject, Direction.Up, mockGraphicsHandler);
         expect(moveCommand.moveSpeed).toBeGreaterThan(0);
         expect(moveCommand.objectHideSpeed).toBeGreaterThan(0);
     });
@@ -35,49 +37,50 @@ describe('MoveCommand', () => {
     test('should execute move successfully and call graphicsHandler with move action', () => {
         mockGrid.moveGridObjectToDir.mockReturnValue(true);
 
-        const moveCommand = new MoveCommand(mockGrid, mockGridObject, 'UP', mockGraphicsHandler);
+        const moveCommand = new MoveCommand(mockGrid, mockGridObject, Direction.Up, mockGraphicsHandler);
         moveCommand.execute();
 
-        expect(mockGrid.moveGridObjectToDir).toHaveBeenCalledWith(mockGridObject, 'UP');
+        expect(mockGrid.moveGridObjectToDir).toHaveBeenCalledWith(mockGridObject, Direction.Up);
         expect(mockGraphicsHandler.doAction).toHaveBeenCalledWith(
-            'test-id',
-            Constants.MOVE_STR,
-            { direction: GetDirectionAsString('UP'), time: 0.4 }
+            mockGridObject.id,
+            AnimationNames.PAWN_MOVE,
+            { direction: Direction.Up, time: moveCommand.moveSpeed }
         );
     });
 
     test('should fail move and call graphicsHandler with failmove action', () => {
         mockGrid.moveGridObjectToDir.mockReturnValue(false);
 
-        const moveCommand = new MoveCommand(mockGrid, mockGridObject, 'UP', mockGraphicsHandler);
+        const moveCommand = new MoveCommand(mockGrid, mockGridObject, Direction.Up, mockGraphicsHandler);
         moveCommand.execute();
 
-        expect(mockGrid.moveGridObjectToDir).toHaveBeenCalledWith(mockGridObject, 'UP');
+        expect(mockGrid.moveGridObjectToDir).toHaveBeenCalledWith(mockGridObject, Direction.Up);
         expect(mockGraphicsHandler.doAction).toHaveBeenCalledWith(
-            'test-id',
-            'failmove',
-            { direction: GetDirectionAsString('UP'), time: 0.4 }
+            mockGridObject.id,
+            AnimationNames.PAWN_FAIL_MOVE,
+            { direction: Direction.Up, time: moveCommand.moveSpeed }
         );
     });
 
     test('should hide and remove collectible when entering a cell with collectible', () => {
+        let collectibleID = 'collectible-id';
         mockGrid.moveGridObjectToDir.mockReturnValue(true);
-        const mockCollectible = { type: Constants.COLLECTIBLE, id: 'collectible-id' };
+        const mockCollectible = { type: Constants.COLLECTIBLE, id: collectibleID };
         mockGrid.getAdjacentObjectsAtDir.mockReturnValue([mockCollectible]);
 
-        const moveCommand = new MoveCommand(mockGrid, mockGridObject, 'UP', mockGraphicsHandler);
+        const moveCommand = new MoveCommand(mockGrid, mockGridObject, Direction.Up, mockGraphicsHandler);
         moveCommand.execute();
 
-        expect(mockGrid.moveGridObjectToDir).toHaveBeenCalledWith(mockGridObject, 'UP');
+        expect(mockGrid.moveGridObjectToDir).toHaveBeenCalledWith(mockGridObject, Direction.Up);
         expect(mockGraphicsHandler.doAction).toHaveBeenCalledWith(
             'test-id',
-            Constants.MOVE_STR,
-            { direction: GetDirectionAsString('UP'), time: 0.4 }
+            AnimationNames.PAWN_MOVE,
+            { direction: Direction.Up, time: moveCommand.moveSpeed }
         );
         expect(mockGraphicsHandler.doAction).toHaveBeenCalledWith(
-            'collectible-id',
-            'hide',
-            { time: 0.6 }
+            collectibleID,
+            AnimationNames.PAWN_HIDE,
+            { time: moveCommand.objectHideSpeed }
         );
         expect(mockGrid.removeFromGrid).toHaveBeenCalledWith(mockCollectible);
     });
