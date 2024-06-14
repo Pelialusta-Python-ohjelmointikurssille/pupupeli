@@ -5,6 +5,7 @@ import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
 import { commandsDone, notifyGameWon } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
+import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 
 export class Game {
     constructor() {
@@ -28,8 +29,9 @@ export class Game {
     }
 
     createGridEntityForRendering(gridObject) {
-        let data = { position: gridObject.getVector2Position() };
-        this.gh.createEntity(gridObject.id, gridObject.type, data);
+        let data = { gridPosition: gridObject.getVector2Position() };
+        let skins = SKIN_BUNDLES[gridObject.type];
+        this.gh.createEntity(gridObject.id, gridObject.type, data, skins);
     }
 
     getCanvas() {
@@ -87,6 +89,7 @@ export class Game {
         this.gh.resetGridObjects();
         this.gh.destroyTextBoxes();
         this.gameMode.reset();
+        this.gh.destroyTextBoxes();
     }
 
     /**
@@ -98,13 +101,23 @@ export class Game {
         this.gameWon = true;
     }
 
-    toggleGrid() {
-        if (this.isGridEnabled === true) {
-            this.isGridEnabled = false;
-            this.gh.setGridState(false);
-        } else {
-            this.isGridEnabled = true;
-            this.gh.setGridState(true);
+    setTheme(theme) {
+        if (theme === "Pupu") {
+            this.gh.setEntityThemes("bunny");
         }
+        if (theme === "Robo") {
+            this.gh.setEntityThemes("robot");
+        }
+    }
+
+    toggleGrid() {
+        this.isGridEnabled = !this.isGridEnabled;
+        this.gh.setGridState(this.isGridEnabled);
+    }
+
+    toggleTrail() {
+        let id = this.grid.player.id;
+        let playerGraphicsPawn = this.gh.getEntity(id);
+        playerGraphicsPawn.lineDrawer?.toggle();
     }
 }

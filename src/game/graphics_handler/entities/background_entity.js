@@ -1,19 +1,11 @@
 import { GraphicsEntity } from "./graphics_entity.js";
 
+/**
+ * May be obsolete.Mainly used to create backgrounds.
+ * However does not contain unique functionality compared to GraphicsEntity.
+ */
 export class BackgroundEntity extends GraphicsEntity {
-    constructor(entityId, entityHandler, container, sprite, data) {
-        super(entityId, entityHandler, container, sprite, data);
-        this.entityId = entityId;
-        this.entityHandler = entityHandler;
-        this.container = container;
-        this.sprite = sprite;
-        this.isReady = true;
-        this.type = "background";
-        if (this.sprite !== null) {
-            this.container.addChild(this.sprite);
-            this.sprite.width = data.bgWidth;
-            this.sprite.height = data.bgHeight;
-            this.container.zIndex = -1;
-        }
+    constructor(entityUUID, entityHandler, container, sprite, entityData, skins) {
+        super(entityUUID, entityHandler, container, sprite, entityData, skins);
     }
 }
