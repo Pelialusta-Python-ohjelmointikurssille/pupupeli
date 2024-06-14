@@ -183,6 +183,7 @@ function removeInputs(codeString) {
 }
 
 function indentString(str, indent = '    ') {  // Default indentation is 4 spaces
+    if (str === "") return "";
     codeString = str.split('\n').map(line => indent + line).join('\n');
     codeString = "def test_string():\n" + codeString;
     return codeString;
@@ -202,7 +203,6 @@ function addLineNumberOutputs(codeString) {
         }
         // Check if the line is empty, contains only whitespace, or is a comment
         else if (trimmedLine === '' || trimmedLine.startsWith('#')) {
-            // Use the last non-empty line's indentation for empty lines and comment lines
             return line;
         } else {
             // Update the last non-empty line's indentation
