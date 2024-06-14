@@ -14,6 +14,7 @@ describe("Testing GraphicsEntity", () => {
     let mockDummyContainer;
     let mockSkinBundle; 
     let gfxEntity;
+    let mockAnimation;
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -26,6 +27,7 @@ describe("Testing GraphicsEntity", () => {
         mockSkin3 = new EntitySkin("skin3_name", "theme3", { defaultTexture: mockTexture3 });
         mockDummyContainer = { addChild: jest.fn(), position: { x: 0, y: 0 }, rotation: 0, scale: 1 , alpha: 1 };
         mockSkinBundle = new Map([["skin1_name", mockSkin1], ["skin2_name", mockSkin2], ["skin3_name", mockSkin3]]);
+        mockAnimation = { start: jest.fn(), stop: jest.fn(), increment: jest.fn(), skipToEnd: jest.fn() };
         gfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, mockSprite, null, mockSkinBundle);
     });
 
@@ -33,7 +35,7 @@ describe("Testing GraphicsEntity", () => {
         expect(mockDummyContainer.addChild).toHaveBeenCalledWith(mockSprite);
     });
 
-    test("If when initialized and if sprite is not null, sprite is not added as child of container", () => {
+    test("If when initialized and if sprite is null, sprite is not added as child of container", () => {
         let newMockDummyContainer = { addChild: jest.fn(), position: { x: 0, y: 0 }, rotation: 0, scale: 1 , alpha: 1 };
         let newGfxEntity = new GraphicsEntity("UUID", null, newMockDummyContainer, null, null, mockSkinBundle);
         expect(newMockDummyContainer.addChild).not.toHaveBeenCalled();
