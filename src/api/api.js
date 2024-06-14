@@ -85,8 +85,8 @@ async function sendPostRequest(url, params) {
         const json = await response.json();
         return json;
     } catch (error) {
+        console.error(error);
         // if parsing fails, return the raw response
-        console.log(error);
         return response;
     }
 }
