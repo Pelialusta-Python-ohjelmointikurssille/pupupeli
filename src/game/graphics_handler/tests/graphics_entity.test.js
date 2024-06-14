@@ -27,7 +27,7 @@ describe("Testing GraphicsEntity", () => {
         mockSkin3 = new EntitySkin("skin3_name", "theme3", { defaultTexture: mockTexture3 });
         mockDummyContainer = { addChild: jest.fn(), position: { x: 0, y: 0 }, rotation: 0, scale: 1 , alpha: 1 };
         mockSkinBundle = new Map([["skin1_name", mockSkin1], ["skin2_name", mockSkin2], ["skin3_name", mockSkin3]]);
-        mockAnimation = { start: jest.fn(), stop: jest.fn(), increment: jest.fn(), skipToEnd: jest.fn() };
+        mockAnimation = { start: jest.fn(), stop: jest.fn(), increment: jest.fn(), skipToEnd: jest.fn(), inProgress: true };
         gfxEntity = new GraphicsEntity("UUID", null, mockDummyContainer, mockSprite, null, mockSkinBundle);
     });
 
@@ -179,5 +179,40 @@ describe("Testing GraphicsEntity", () => {
         expect(newGfxEntity.container.rotation).toBe(0);
         expect(newGfxEntity.direction).toBe(defaultStartDirection);
         expect(newGfxEntity.sprite).toBe(null);
+    });
+
+    test("If resetting entity stops current animation", () => {
+        gfxEntity.currentAnimation = mockAnimation;
+        gfxEntity.reset();
+
+        expect(mockAnimation.stop).toHaveBeenCalled();
+    });
+
+    test("If doAnimation calls animation correctly", () => {
+        gfxEntity.doAnimation(mockAnimation);
+
+        expect(mockAnimation.start).toHaveBeenCalled();
+        expect(gfxEntity.currentAnimation).toBe(mockAnimation);
+    });
+
+    test("If starting animation sets onReady to false", () => {
+        gfxEntity.doAnimation(mockAnimation);
+        gfxEntity.onStartAnimation();
+
+        expect(gfxEntity.isReady).toBe(false);
+    });
+
+    test("If finishing animation instantly properly finishes animation", () => {
+        gfxEntity.doAnimation(mockAnimation);
+        gfxEntity.finishAnimationsInstantly();
+
+        expect(mockAnimation.skipToEnd).toHaveBeenCalled();
+    });
+
+    test("If update calls animation increment when animation is in progress", () => {
+        gfxEntity.doAnimation(mockAnimation);
+        gfxEntity.onUpdate(0.16);
+
+        expect(mockAnimation.increment).toHaveBeenCalledWith(0.16);
     });
 });
