@@ -154,7 +154,7 @@ export class GraphicsEntity {
         if (this.direction === Direction.Right && this.skins.get(this.currentSkin).rightTexture != null) {
             tex = this.skins.get(this.currentSkin).rightTexture;
         }
-        if (tex !== undefined) {
+        if (tex != null) {
             this.sprite.texture = tex;
         }
     }
