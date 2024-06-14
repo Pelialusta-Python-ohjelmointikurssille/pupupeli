@@ -1,3 +1,14 @@
+/* remove below before release */
+#devtaskbuttoncontainer {
+    max-height: 30px;
+    margin-right: 1rem;
+}
+
+#devtaskbuttoncontainer > input {
+    min-height: 26px;
+}
+/* remove above before elease */
+
 :root {
     --canvas-width: 640px;
     --canvas-height: var(--canvas-width);
