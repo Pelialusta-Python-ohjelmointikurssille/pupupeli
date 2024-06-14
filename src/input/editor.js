@@ -1,10 +1,8 @@
 import { ace_version } from "../util/version_strings.js";
+import { setCurrentLine } from "./py_error_handling.js";
 
 let editor;
 let currentLineMarker; //the line that is currently executing
-//line resets from reset button:
-document.getElementById("editor-stop-button").addEventListener("click", resetLineHighlight, false);
-//Currently works inconsistently, as sometimes after resetting, a line highlight is still called.
 
 const aceEditorScript = document.createElement('script');
 aceEditorScript.src = `https://cdnjs.cloudflare.com/ajax/libs/ace/${ace_version}/ace.js`;
@@ -58,15 +56,15 @@ export function getEditor() {
 }
 
 export function highlightCurrentLine(lineNumber) {
-    console.log("highlight: " + lineNumber)
+    setCurrentLine(lineNumber);
     if (currentLineMarker !== undefined) {
         editor.session.removeMarker(currentLineMarker);
     }
     // eslint-disable-next-line no-undef
-    currentLineMarker = editor.session.addMarker(new ace.Range(lineNumber - 1, 4, lineNumber - 1, 5), "executing-line", "fullLine");
+    currentLineMarker = editor.session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "executing-line", "fullLine");
 }
 
 export function resetLineHighlight() {
-    console.log("reset");
+    setCurrentLine(null);
     editor.session.removeMarker(currentLineMarker);
 }

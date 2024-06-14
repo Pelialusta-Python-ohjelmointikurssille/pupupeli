@@ -1,10 +1,10 @@
-import { extractErrorDetails, translateErrorType } from '../py_error_handling';
+import { extractErrorDetails, translateErrorType, setCurrentLine, getCurrentLine } from '../py_error_handling';
 
 describe('extractErrorDetails', () => {
     test('should extract line number and translate error type', () => {
         const errorMessage = `
             Traceback (most recent call last):
-              File "script.py", line 2, in <module>
+              File "script.py", line 3, in <module>
                 main()
               File "script.py", line 5, in main
                 raise ValueError('Virheellinen suunta')
@@ -13,7 +13,7 @@ describe('extractErrorDetails', () => {
         const result = extractErrorDetails(errorMessage);
         expect(result).toEqual({
             text: 'Antamasi suunta ei ole kirjoitettu oikein',
-            line: '5'
+            line: '2'
         });
     });
 
@@ -22,7 +22,7 @@ describe('extractErrorDetails', () => {
             Traceback (most recent call last):
               File "script.py", line 2, in <module>
                 main()
-              File "script.py", line 5, in main
+              File "script.py", line 6, in main
                 raise UnknownError('Tuntematon virhe')
             UnknownError: Tuntematon virhe
         `;
@@ -38,7 +38,7 @@ describe('extractErrorDetails', () => {
             Traceback (most recent call last):
               File "script.py", line 2, in <module>
                 main()
-              File "script.py", line 5, in main
+              File "script.py", line 6, in main
                 raise UnknownError('Tuntematon virhe')
             UnknownError: Tuntematon virhe
         `;
@@ -107,6 +107,16 @@ describe('translateErrorType', () => {
         const errorType = 'TypeError: unsupported operand type(s)';
         const result = translateErrorType(errorType);
         expect(result).toBe('Tarkista, että käyttämäsi arvot ovat oikeaa tyyppiä');
+    });
+});
+
+describe('Line handling', () => {
+    it('should set and get the current line correctly', () => {
+        setCurrentLine(5);
+        expect(getCurrentLine()).toBe(5);
+
+        setCurrentLine(10);
+        expect(getCurrentLine()).toBe(10);
     });
 });
 
