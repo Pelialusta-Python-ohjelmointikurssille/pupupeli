@@ -105,9 +105,9 @@ async function initPage() {
     // set editor code
     window.addEventListener('load', function () {
         getEditor().setValue(globals.task.getEditorCode());
+        createTaskButtons(); // must be called here to avoid race condition
     });
 
-    createTaskButtons();
     createChapterButtons();
     isUserLoggedIn();
 

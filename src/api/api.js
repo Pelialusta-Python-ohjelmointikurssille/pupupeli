@@ -90,14 +90,14 @@ export async function login() {
         username: user,
         password: pass
     };
-    return sendPostRequest(url, data);
+    return sendPostRequest(url+"login", data);
 }
 
 export async function logout() {
     const data = {
         token: localStorage.getItem("token")
     };
-    return sendPostRequest(url, data);
+    return sendPostRequest(url+"logout", data);
 }
 
 export async function sendTask(taskIdentifier) {
