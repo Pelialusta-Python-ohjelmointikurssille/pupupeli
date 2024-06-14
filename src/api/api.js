@@ -5,10 +5,10 @@ let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
 let getTaskButton = document.getElementById("getTaskButton");
 let getCompletedTasksButton = document.getElementById("getCompletedTasksButton");
-export const apiUrl = 'http://localhost:3000/api/';
+const url = 'http://localhost:3000/api/';
 
 loginButton.addEventListener("click", () => {
-    login(apiUrl + "login")
+    login(url)
         .then(data => {
             localStorage.setItem("token", data.token);
             window.location.reload();
@@ -19,7 +19,7 @@ loginButton.addEventListener("click", () => {
 });
 
 logoutButton.addEventListener("click", () => {
-    logout(apiUrl + "logout")
+    logout(url)
         .then(data => {
             localStorage.removeItem("token");
             window.location.reload();
@@ -30,7 +30,7 @@ logoutButton.addEventListener("click", () => {
 });
 
 getTaskButton.addEventListener("click", () => {
-    getTask(apiUrl)
+    getTask(url)
         .then(data => {
             console.log("get", data);
         })
@@ -40,7 +40,7 @@ getTaskButton.addEventListener("click", () => {
 });
 
 getCompletedTasksButton.addEventListener("click", () => {
-    getCompletedTasks(apiUrl)
+    getCompletedTasks(url)
         .then(data => {
             console.log("list", data);
         })
@@ -49,12 +49,12 @@ getCompletedTasksButton.addEventListener("click", () => {
         });
 });
 
-function buildUrl(url, params) {
+function buildUrl(params) {
     const queryString = new URLSearchParams(params).toString();
     return `${url}?${queryString}`;
 }
 
-export async function sendPostRequest(url, data) {
+async function sendPostRequest(url, data) {
     const formData = new URLSearchParams();
     Object.keys(data).forEach(key => formData.append(key, data[key]));
 
@@ -77,13 +77,13 @@ export async function sendPostRequest(url, data) {
     }
 }
 
-export async function sendGetRequest(url, data) {
+async function sendGetRequest(url) {
     return fetch(url)
     .then(response => response.json())
     .catch(error => console.error('Error:', error));
 }
 
-export async function login(url) {
+export async function login() {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
     const data = {
@@ -93,29 +93,28 @@ export async function login(url) {
     return sendPostRequest(url, data);
 }
 
-export async function logout(url) {
+export async function logout() {
     const data = {
         token: localStorage.getItem("token")
     };
     return sendPostRequest(url, data);
 }
 
-export async function sendTask(url, taskIdentifier) {
-    console.log(url, taskIdentifier);
+export async function sendTask(taskIdentifier) {
     const token = localStorage.getItem("token");
     const task =  taskIdentifier;
-    const data = getEditor().getValue();
+    const editorData = getEditor().getValue();
     const result = globals.isGameWon;
-    const dataobj = {
+    const data = {
         token: token,
         task: task,
-        data: data,
+        data: editorData,
         result: result
     }
-    return sendPostRequest(url+"put", dataobj);
+    return sendPostRequest(url+"put", data);
 }
 
-export async function getTask(url) {
+export async function getTask() {
     const token = localStorage.getItem("token");
     const task = document.getElementById("task-get-input").value;
     const params = {
@@ -126,7 +125,7 @@ export async function getTask(url) {
     return sendGetRequest(getUrl);
 }
 
-export async function getCompletedTasks(url) {
+export async function getCompletedTasks() {
     const token = localStorage.getItem("token");
     const params = {
         token: token

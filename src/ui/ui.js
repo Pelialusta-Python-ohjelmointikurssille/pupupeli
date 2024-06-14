@@ -233,9 +233,9 @@ export function onTaskComplete(won) {
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
-        api.sendTask(api.apiUrl, apiTaskIdentifier);
+        api.sendTask(apiTaskIdentifier);
     } else {
-        api.sendTask(api.apiUrl, apiTaskIdentifier);
+        api.sendTask(apiTaskIdentifier);
     }
 }
 
