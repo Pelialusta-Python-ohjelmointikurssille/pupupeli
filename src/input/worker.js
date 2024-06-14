@@ -131,7 +131,9 @@ function runCommand(command, parameters) {
 
 // eslint-disable-next-line no-unused-vars
 function sendLine(line) {
-    self.postMessage({ type: 'line', details: line });
+    if (!resetFlag) {
+        self.postMessage({ type: 'line', details: line });
+    }
 }
 
 /**
@@ -143,6 +145,7 @@ async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
     let codeStringTest;
     codeStringTest = removeInputs(codeString);
+    codeStringTest = indentString(codeStringTest);
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
     console.log("Started running code...");
@@ -182,14 +185,30 @@ function removeInputs(codeString) {
     return codeString.replace(/input\(/g, 'mock_input(');
 }
 
+function removeWhileTrue(codeString) {
+    return codeString.replace(/while True:/g, 'for _ in range(100):');
+}
+
+function indentString(str, indent = '    ') {  // Default indentation is 4 spaces
+    codeString = str.split('\n').map(line => indent + line).join('\n');
+    codeString = "def test_string():\n" + codeString;
+    return codeString;
+}
+
 function addLineNumberOutputs(codeString) {
     if (codeString === undefined) return;
     let lines = codeString.split('\n');
     let lastIndentation = '';
     lines = lines.map((line, index) => {
         const indentation = line.match(/^\s*/)[0];
+        const trimmedLine = line.trim();
+
+        // Check if the line starts with 'else:' or 'elif:'
+        if (trimmedLine.startsWith('else:') || trimmedLine.startsWith('elif:') || trimmedLine.startsWith('except') || trimmedLine.startsWith('finally')){
+            return line;
+        }
         // Check if the line is empty, contains only whitespace, or is a comment
-        if (line.trim() === '' || line.trim().startsWith('#')) {
+        else if (trimmedLine === '' || trimmedLine.startsWith('#')) {
             // Use the last non-empty line's indentation for empty lines and comment lines
             return `${lastIndentation}pupu.rivi(${index + 1})\n${line}`;
         } else {

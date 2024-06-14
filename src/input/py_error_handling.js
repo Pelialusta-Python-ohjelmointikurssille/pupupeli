@@ -17,15 +17,14 @@ export function extractErrorDetails(errorMessage) {
         lastToLastLineReference = lastLineReference;
         lastLineReference = match[1];
     }
-
     const translatedErrorType = translateErrorType(errorTypeMatch);
     if ( currentLine !== null) {
         lineNumberMatch = getCurrentLine() || "Tuntematon rivi";
     } else {
         if (translatedErrorType === "Antamasi suunta ei ole kirjoitettu oikein") {
-            lineNumberMatch = lastToLastLineReference || "Tuntematon rivi";
+            lineNumberMatch = decrementStringNumber(lastToLastLineReference) || "Tuntematon rivi";
         } else {
-            lineNumberMatch = lastLineReference || "Tuntematon rivi";
+            lineNumberMatch = decrementStringNumber(lastLineReference) || "Tuntematon rivi";
         }
     }
 
@@ -34,6 +33,16 @@ export function extractErrorDetails(errorMessage) {
     } else {
         return { text: errorMessage, line: "Tuntematon rivi" };
     }
+}
+
+function decrementStringNumber(lastLineReference) {
+    if (lastLineReference) {
+        const numberValue = Number(lastLineReference);
+        if (!isNaN(numberValue)) {
+            return String(numberValue - 1);
+        }
+    }
+    return lastLineReference;
 }
 
 /**

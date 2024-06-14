@@ -55,10 +55,13 @@ class Pelaaja:
 class ErrorCheck:
     def __init__(self, name="pupu"):
         self.__name = name
-        self.__directions =  ["oikea", "vasen", "ylös", "alas"]
+        self.__directions =  ["oikea", "vasen", "ylös", "alas", 0]
 
     def liiku(self, direction: str):
-        return
+        if direction in self.__directions:
+            return
+        else:
+            raise ValueError("Virheellinen suunta")
         
     def sano(self, sentence: str):
         return
