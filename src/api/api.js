@@ -12,8 +12,12 @@ const url = 'http://localhost:3000/api/';
 loginButton.addEventListener("click", () => {
     login(url)
         .then(data => {
-            localStorage.setItem("token", data.token);
-            window.location.reload();
+            if (data.token !== undefined) {
+                localStorage.setItem("token", data.token);
+                window.location.reload();
+            } else {
+                window.alert("väärä käyttäjänimi tai salasana");
+            }
         })
         .catch(error => {
             console.error('Error:', error);
