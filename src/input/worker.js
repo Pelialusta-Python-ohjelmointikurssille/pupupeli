@@ -192,7 +192,6 @@ function indentString(str, indent = '    ') {  // Default indentation is 4 space
 function addLineNumberOutputs(codeString) {
     if (codeString === undefined) return;
     let lines = codeString.split('\n');
-    let lastIndentation = '';
     lines = lines.map((line, index) => {
         const indentation = line.match(/^\s*/)[0];
         const trimmedLine = line.trim();
@@ -206,7 +205,6 @@ function addLineNumberOutputs(codeString) {
             return line;
         } else {
             // Update the last non-empty line's indentation
-            lastIndentation = indentation;
             return `${indentation}pupu.rivi(${index + 1})\n${line}`;
         }
     });
