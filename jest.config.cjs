@@ -44,5 +44,6 @@ module.exports = {
         "!src/**/ui/**",
         "!src/util/globals.js",
         "!src/**/commonstrings.js", //no need to test, no need to check if a constant string is what it is declared to be when it doesn't even matter
+        "!src/api/api.js", 
     ]
 };
