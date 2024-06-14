@@ -260,7 +260,7 @@ export function displayErrorMessage(error) {
     }
     let errorContainer = document.getElementById("error-box");
     errorContainer.classList.toggle("show-error");
-    errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivillä: ' + errorDetails.line;
+    errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
     disablePlayButton("error");
 }
 
