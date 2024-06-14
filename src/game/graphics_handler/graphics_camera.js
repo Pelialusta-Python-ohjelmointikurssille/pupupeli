@@ -4,7 +4,7 @@ import { Vector2 } from "../vector.js";
  * Entity used for changing viewport position and resolution scaling.
  * Acts as a virtual camera in the game world.
  */
-export class GraphicsCameraEntity {
+export class GraphicsCamera {
     /**
      * 
      * @param {PIXI.Container} container Reference to PixiRenderer's cameraWorldContainer

@@ -1,4 +1,4 @@
-import { AnimationProgress } from "../animation_progress.js";
+import { AnimationProgress } from "./tweener/animation_progress.js";
 
 export class UnhideAnimation {
     constructor(gridObject, name, data) {
@@ -12,7 +12,7 @@ export class UnhideAnimation {
     start() {
         this.progress.start();
         this.inProgress = true;
-        this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridCellPosition);
+        this.gridObject.screenPosition = this.gridObject.gridReference.gridToScreenCoordinates(this.gridObject.gridPosition);
         this.gridObject.container.x = this.gridObject.screenPosition.x + this.gridObject.fakeZPosition;
         this.gridObject.container.y = this.gridObject.screenPosition.y + this.gridObject.fakeZPosition;
     }

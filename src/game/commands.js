@@ -1,4 +1,5 @@
-import { Constants, GetDirectionAsString } from "./commonstrings.js";
+import { Constants } from "./commonstrings.js";
+import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { Vector2 } from "./vector.js";
 //implements the interface Command. That just means that all these classes have the function "execute()" (and can easily implement "undo()").
 //Stuff to read if interested: 
@@ -41,11 +42,11 @@ export class MoveCommand {
     execute() {
         let isSuccess = this.grid.moveGridObjectToDir(this.gridObject, this.dir);
         if (isSuccess) this.#checkForObjects();
-        let dirObj = { direction: GetDirectionAsString(this.dir), time: this.moveSpeed };
+        let dirObj = { direction: this.dir, time: this.moveSpeed };
         if (isSuccess) {
-            this.graphicsHandler.doAction(this.gridObject.id, Constants.MOVE_STR, dirObj);
+            this.graphicsHandler.doAction(this.gridObject.id, "pawn_move", dirObj);
         } else {
-            this.graphicsHandler.doAction(this.gridObject.id, "failmove", dirObj);
+            this.graphicsHandler.doAction(this.gridObject.id, "pawn_failmove", dirObj);
         }
 
     }
@@ -81,12 +82,16 @@ export class SayCommand {
 
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = crypto.randomUUID().toString();
-        this.graphicsHandler.createEntity(textboxId, "textbox", {
-            //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
-            targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
-            text: this.sayString
-        });
-        this.graphicsHandler.doAction(textboxId, "say", { time: 2 });
+        this.graphicsHandler.createEntity(
+            textboxId,
+            "textbox",
+            {
+                targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
+                text: this.sayString
+            },
+            SKIN_BUNDLES["speech_bubble"]
+        );
+        this.graphicsHandler.doAction(textboxId, "appear_hide", { time: 2 });
     }
 }
 
@@ -103,13 +108,17 @@ export class AskCommand {
         //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = crypto.randomUUID().toString();
-        this.graphicsHandler.createEntity(textboxId, "textbox", {
-            //texture: this.renderer.builtinAssets.ui.speechbubble_9slice,
-            position: new Vector2(512, 980),
-            size: new Vector2(1000, 200),
-            targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
-            text: this.askString
-        });
+        this.graphicsHandler.createEntity(
+            textboxId,
+            "textbox",
+            {
+                position: new Vector2(512, 980),
+                size: new Vector2(1000, 200),
+                targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
+                text: this.askString
+            },
+            SKIN_BUNDLES["speech_bubble"]
+        );
         //this.graphicsHandler.doAction(textboxId, "ask", { time: 2 });
     }
 }

@@ -6,7 +6,7 @@ import { getEditor } from "../input/editor.js"
 import { initWorker } from "../event_handler.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
-import { initGame } from "../game/game_controller.js";
+import { initGame, setTheme } from "../game/game_controller.js";
 
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
@@ -30,6 +30,7 @@ async function initGameAndCanvas() {
     document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
+    setTheme(localStorage.getItem("theme"));
 }
 
 /**
@@ -106,16 +107,6 @@ async function initPage() {
 
     createChapterButtons();
     isUserLoggedIn();
-
-    // set theme eventlistener, but first set theme if not set
-    if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
-    let themeSelectDropdown = document.getElementById("theme-select");
-    themeSelectDropdown.value = localStorage.getItem("theme");
-    themeSelectDropdown.addEventListener('change', function (event) {
-        let selectedValue = event.target.value;
-        localStorage.setItem("theme", selectedValue);
-        window.location.reload();
-    });
 }
 
 function isUserLoggedIn() {
@@ -188,13 +179,22 @@ function createChapterButtons() {
  * @param {boolean} won a boolean indicating whether the task was completed successfully or not
  */
 export function onTaskComplete(won) {
-    const apiTaskIdentifier = "chapter"+globals.chapterIdentifier+"task"+globals.taskIdentifier;
+    const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
 
     if (won) {
         const buttonid = `${apiTaskIdentifier}`;
         let button = document.getElementById(buttonid);
         let celebrationBox = document.getElementById("celebration")
+        const container = document.getElementById('celebration-confetti-container');
+        for (let i = 0; i < 30; i++) {
+            const celebrationConfetti = createCelebrationConfetti();
+            container.appendChild(celebrationConfetti);
 
+            // Remove the confetti after animation completes to prevent memory leaks
+            celebrationConfetti.addEventListener('animationend', () => {
+                container.removeChild(celebrationConfetti);
+            });
+        }
         celebrationBox.classList.remove("is-hidden");
 
         setTimeout(() => {
@@ -209,6 +209,24 @@ export function onTaskComplete(won) {
     } else {
         api.sendTask(apiTaskIdentifier);
     }
+}
+
+function createCelebrationConfetti() {
+    const celebrationConfetti = document.createElement('div');
+    celebrationConfetti.classList.add('celebration-confetti');
+
+    // Randomize the confetti color
+    const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    celebrationConfetti.style.setProperty('--color', randomColor);
+
+    // Randomize the initial position and animation duration
+    const randomLeft = Math.random() * 100;
+    const randomDuration = Math.random() * 2 + 2; // Between 2 and 4 seconds
+    celebrationConfetti.style.left = `${randomLeft}vw`;
+    celebrationConfetti.style.animationDuration = `${randomDuration}s`;
+
+    return celebrationConfetti;
 }
 
 /**

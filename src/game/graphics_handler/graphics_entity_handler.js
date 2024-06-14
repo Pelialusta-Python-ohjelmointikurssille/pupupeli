@@ -1,7 +1,5 @@
 import { Vector2 } from "../vector.js";
-import { GraphicsCameraEntity } from "./graphics_camera_entity.js";
-import { GraphicsEntityFactory } from "./graphics_entity_factory.js";
-import { AnimationFactory } from "./animations/animation_factory.js";
+import { GraphicsCamera } from "./graphics_camera.js";
 
 /**
  * Manages all instantiated gfx entities.
@@ -11,17 +9,17 @@ export class GraphicsEntitySystem {
      * 
      * @param {PixiRenderer} renderer PixiRenderer object reference
      * @param {GraphicsHandler} graphicsHandler GraphicsHandler object reference
+     * @param {GraphicsRegistry} graphicsRegistry Registry that holds information about animations, entities and skins. Contains the factories needed to create them.
      */
-    constructor(renderer, graphicsHandler) {
+    constructor(renderer, graphicsHandler, graphicsRegistry) {
         this.builtinAssets = renderer.builtinAssets;
         this.entityDict = new Map();
         this.spriteDict = new Map();
         this.renderer = renderer;
         this.camera = null;
-        this.entityFactory = new GraphicsEntityFactory(this, this.builtinAssets);
         this.isReady = true;
         this.graphicsHandler = graphicsHandler;
-        this.animationFactory = new AnimationFactory();
+        this.graphicsRegistry = graphicsRegistry;
         this.mainGridEntityUUID = "";
     }
 
@@ -39,9 +37,8 @@ export class GraphicsEntitySystem {
             }
         });
         // Checks if transitioned from or to the ready state.
-        if (this.isReady === true && maybeReady === false) {
-            this.onEntitiesNotReady();
-        }
+        //if (this.isReady === true && maybeReady === false) {
+        //}
         if (this.isReady === false && maybeReady === true) {
             this.onEntitiesReady();
         }
@@ -52,7 +49,7 @@ export class GraphicsEntitySystem {
      * Creates the camera object.
      */
     createCamera() {
-        this.camera = new GraphicsCameraEntity(this.renderer.cameraWorldContainer, this.renderer.pixiApp.screen, new Vector2(0, 0));
+        this.camera = new GraphicsCamera(this.renderer.cameraWorldContainer, this.renderer.pixiApp.screen, new Vector2(0, 0));
     }
 
     /**
@@ -60,9 +57,10 @@ export class GraphicsEntitySystem {
       * @param {string} entityId The entity will be created using the given uuid. 
       * @param {string} type Type of entity
       * @param {object} data Data related to the entity in object form.
+      * @param {Array} skins A list of strings. All the skins of the entity. For ease of use when creating, use skin bundles in manifests/skin_manifest.js 
       */
-    createGraphicsEntity(entityId, type, data) {
-        let entity = this.entityFactory.createEntity(entityId, type, data);
+    createGraphicsEntity(entityId, type, data, skins) {
+        let entity = this.graphicsRegistry.createEntity(entityId, type, data, skins);
         if (type === "grid") {
             this.mainGridEntityUUID = entityId;
         }
@@ -83,12 +81,12 @@ export class GraphicsEntitySystem {
     /**
      * Used to play an animation on a gfx entity.
      * @param {string} entityId The uuid of the gfx entity that should play the given animation. 
-     * @param {string} actionId The id of the animation to be played.
-     * @param {object} actionData Data related to the animation in object form.
+     * @param {string} animationId The id of the animation to be played.
+     * @param {object} animationData Data related to the animation in object form.
      */
     doAction(entityId, animationId, animationData) {
         let entity = this.getGraphicsEntity(entityId);
-        let animation = this.animationFactory.getAnimation(animationId, entity, animationData);
+        let animation = this.graphicsRegistry.createAnimation(animationId, animationData, entity);
         entity.doAnimation(animation);
     }
 
@@ -102,17 +100,10 @@ export class GraphicsEntitySystem {
     }
 
     /**
-     * @returns Main grid object
+     * @returns Main grid object of type GridEntity.
      */
     getMainGridObject() {
         return this.getGraphicsEntity(this.mainGridEntityUUID);
-    }
-
-    /**
-     * Called when entity handler enters the "not ready" state.
-     */
-    onEntitiesNotReady() {
-        this.graphicsHandler.onEntitiesNotReady();
     }
 
     /**
@@ -127,23 +118,38 @@ export class GraphicsEntitySystem {
      */
     resetGridObjects() {
         this.entityDict.forEach((value) => {
-            if (value.type === "grid_object") {
-                value.reset();
-            }
+            value.reset();
         });
     }
 
+    /**
+     * Skips and finishes all currently running animations. Used to skip animations to be able to run next command.
+     */
     skipAnimationsAndFinish() {
         this.entityDict.forEach((value) => {
             value.finishAnimationsInstantly();
         });
     }
 
+    /**
+     * Destroys all entities of type "textbox". Used to remove unwanted speech bubbles and the like.
+     */
     destroyTextBoxes() {
         this.entityDict.forEach((value, key) => {
             if (value.type === "textbox"){
                 this.destroyGraphicsEntity(key);
             }
+        });
+    }
+    
+    /**
+     * Sets the skin of all entities to follow given theme. If the entity 
+     * doesn't have a skin of the corresponding theme, this instruction is ignored.
+     * @param {string} theme The theme to be selected. Themes of skins are defined in the skin manifest, under the theme variable.
+     */
+    setEntityThemes(theme) {
+        this.entityDict.forEach((value) => {
+            value.setTheme(theme);
         });
     }
 }

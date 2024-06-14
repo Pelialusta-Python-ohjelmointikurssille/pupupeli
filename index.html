@@ -12,7 +12,11 @@
 </head>
 
 <body>
-
+    <div id="celebration-confetti-container">
+        <div id="celebration" class="is-invisible">
+            Läpäisit tehtävän, onneksi olkoon!
+        </div>
+    </div>
     <div id="header" class="is-flex">
         <div id="header-container" class="is-flex">
             <h1>Pupupeli</h1>
@@ -38,28 +42,30 @@
         </div>
 
     </div>
-    <div id="celebration" class="is-hidden">
-        Läpäisit tehtävän, onneksi olkoon!
-    </div>
     <div id="app" class="is-flex">
         <div id="app-container" class="is-flex">
             <div id="left-container" class="is-flex">
                 <div id="task-container">
-                    <div>
-                        <h1>
-                            <a id="prev-task-link" href="/?task=1" style="text-decoration:none;">
-                                < </a>Tehtävä <span id="task-id"></span><a id="next-task-link" href="/?task=2"
-                                        style="text-decoration:none;"> ></a>
-                        </h1>
-                        <button id="grid-toggle-button" type="button">Ruudukko</button>
-                        <select id="theme-select" type="button">
-                            <option>Pupu</option>
-                            <option>Robo</option>
-                        </select>
-                        <div id="task-description">
+                    <div id="task-name-div">
+                        <div id="task-header">
+                            <h1>
+                                <a id="prev-task-link" href="/?task=1" style="text-decoration:none;">
+                                    < </a>Tehtävä <span id="task-id"></span><a id="next-task-link" href="/?task=2"
+                                            style="text-decoration:none;"> ></a>
+                            </h1>
                         </div>
-                        <div id="multiple-choice-questions" class="is-hidden">
+                        <div id="toggle-buttons-div">
+                            <select id="theme-select" type="button">
+                                <option>Pupu</option>
+                                <option>Robo</option>
+                            </select>
+                            <button id="trail-toggle-button" type="button">Jälkiviiva</button>
+                            <button id="grid-toggle-button" type="button">Ruudukko</button>
                         </div>
+                    </div>
+                    <div id="task-description">
+                    </div>
+                    <div id="multiple-choice-questions" class="is-hidden">
                     </div>
                 </div>
                 <div id="editor-container" class="is-flex">

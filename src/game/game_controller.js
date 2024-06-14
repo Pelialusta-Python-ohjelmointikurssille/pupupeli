@@ -47,6 +47,14 @@ export function notifyGameWon(won) {
     onTaskComplete(won);
 }
 
+export function setTheme(theme) {
+    game.setTheme(theme);
+}
+
 export function toggleGrid() {
     game.toggleGrid();
+}
+
+export function toggleTrail() {
+    game.toggleTrail();
 }
