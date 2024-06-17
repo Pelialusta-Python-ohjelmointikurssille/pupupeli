@@ -5,6 +5,7 @@ import { displayErrorMessage } from './ui/ui.js';
 import * as globals from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
+import { Constants, getVariableTrueName } from './game/commonstrings.js';
 
 let worker;
 let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
@@ -43,6 +44,14 @@ export function initWorker() {
                 break;
             case "error":
                 displayErrorMessage(message.error);
+                break;
+            case "getInt":
+                sharedArray = new Uint16Array(message.sab, 4);
+                syncArray = new Int32Array(message.sab, 0, 1);
+                let variableName = getVariableTrueName(message.details);
+                if (!variableName) inputToWorker("-1");
+                else inputToWorker(globals.collectibles.current.toString());
+                console.log("variable true name: " + variableName);
                 break;
         }
     }

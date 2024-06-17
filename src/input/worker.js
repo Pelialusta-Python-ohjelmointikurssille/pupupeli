@@ -68,7 +68,7 @@ function handleInput() {
     //We interrupt pyodide and and send message that we are finished.
     //This sends out an error but it's a friend, not an enemy.
     //https://pyodide.org/en/stable/usage/streams.html#handling-keyboard-interrupts
-    //KeyboardInterrupt should probably be handled somehow. 
+    //KeyboardInterrupt should probably be handled somehow(?). 
     if (word === PYODIDE_INTERRUPT_INPUT) {
         interruptBuffer[0] = 2;
         console.log("v Intended error: pyodide interrupted while in stdin v");
@@ -131,6 +131,25 @@ function sendLine(line) {
     if (!resetFlag) {
         self.postMessage({ type: 'line', details: line });
     }
+}
+
+/**
+ * 
+ * @param {*} variableName Name of the variable we want the value of.
+ * @returns 
+ */
+function getInt(variableName) {
+    console.log(variableName);
+    const sab = new SharedArrayBuffer(512 * 2 + 4);
+    const sharedArray = new Uint16Array(sab, 4);
+    const syncArray = new Int32Array(sab, 0, 1);
+
+    postMessage({ type: 'getInt', details: variableName, sab: sab });
+    Atomics.wait(syncArray, 0, 0);
+    let word = getStringFromSharedArray(sharedArray);
+    console.log("worker received word: " + word);
+    //word converted to int in python
+    return word;
 }
 
 /**
@@ -197,7 +216,7 @@ function addLineNumberOutputs(codeString) {
         const trimmedLine = line.trim();
 
         // Check if the line starts with 'else:' or 'elif:' or 'except' or 'finally'
-        if (trimmedLine.startsWith('else:') || trimmedLine.startsWith('elif:') || trimmedLine.startsWith('except') || trimmedLine.startsWith('finally')){
+        if (trimmedLine.startsWith('else:') || trimmedLine.startsWith('elif:') || trimmedLine.startsWith('except') || trimmedLine.startsWith('finally')) {
             return line;
         }
         // Check if the line is empty, contains only whitespace, or is a comment
