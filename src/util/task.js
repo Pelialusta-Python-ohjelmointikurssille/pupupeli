@@ -15,8 +15,9 @@
  * @returns {Task} - An object representing a task
  */
 export class Task {
-    constructor(tasktype, description, editorCode, multipleChoiceQuestions, grid, conditions) {
+    constructor(tasktype, title, description, editorCode, multipleChoiceQuestions, grid, conditions) {
         this.tasktype = tasktype;
+        this.title = title;
         this.description = description;
         this.editorCode = editorCode;
         this.multipleChoiceQuestions = multipleChoiceQuestions;
@@ -133,5 +134,21 @@ export class Task {
      */
     getConditions() {
         return this.conditions.filter((condition) => condition.parameter !== false);
+    }
+
+    /**
+     *  Retruns string of task's task type.
+     * @returns {string} tasktype
+     */
+    getTaskType() {
+        return this.tasktype;
+    }
+
+    /**
+     *  Returns string of task title.
+     * @returns {string} title
+     */
+    getTitle() {
+        return this.title;
     }
 }
