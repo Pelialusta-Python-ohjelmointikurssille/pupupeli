@@ -3,6 +3,7 @@ import { getInputBoxValue, showInputBox } from './ui/inputBox.js';
 import { disablePlayButton } from './ui/ui_editor_buttons.js'
 import { displayErrorMessage } from './ui/ui.js';
 import * as globals from './util/globals.js';
+import { getCurrentGameObjectCount } from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
 import { Constants, getVariableTrueName } from './game/commonstrings.js';
@@ -50,7 +51,7 @@ export function initWorker() {
                 syncArray = new Int32Array(message.sab, 0, 1);
                 let variableName = getVariableTrueName(message.details);
                 if (!variableName) inputToWorker("-1");
-                else inputToWorker(globals.collectibles.current.toString());
+                else inputToWorker(getCurrentGameObjectCount().toString()); //input to worker currently just strings
                 console.log("variable true name: " + variableName);
                 break;
         }

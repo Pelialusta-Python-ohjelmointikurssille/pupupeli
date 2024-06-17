@@ -56,11 +56,14 @@ class Pelaaja:
     def kysyMaara(self, variableName: str):
         #        if reset_flag:
         #            raise Exception("Interpreter was reset")
-        count = int(js.getInt(variableName)) #returns -1 if not found
+        if variableName == self.__name:
+            self.sano("Minua voi olla vain yksi!")
+            return 1
+        count = int(js.getInt(variableName))  # returns -1 if not found
         if count < 0:
             self.sano("En tiedä minkä asian lukumäärää kysyit!")
-            count = 0
-        self.sano("Ai " + variableName + "? Näen niitä " + count + "!")
+            return 0
+        self.sano("Ai " + variableName + "? Näen niitä " + str(count) + "!")
         return count
 
     def rivi(self, line: int):

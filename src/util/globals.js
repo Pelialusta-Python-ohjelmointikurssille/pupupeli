@@ -1,4 +1,5 @@
 import { tryGetFileAsJson } from "../file_reader.js";
+import { Constants } from "../game/commonstrings.js";
 import { Task } from "../util/task.js";
 
 export const taskIdentifier = (function () {
@@ -6,7 +7,7 @@ export const taskIdentifier = (function () {
     if (searchParams.size === 0) return 1;
 
     const taskIdentifier = parseInt(searchParams.get("task"));
-    if(isNaN(taskIdentifier)) return 1;
+    if (isNaN(taskIdentifier)) return 1;
     return taskIdentifier;
 })();
 
@@ -15,7 +16,7 @@ export const chapterIdentifier = (function () {
     if (searchParams.size === 0) return 1;
 
     const chapterIdentifier = parseInt(searchParams.get("chapter"));
-    if(isNaN(chapterIdentifier)) return 1;
+    if (isNaN(chapterIdentifier)) return 1;
     return chapterIdentifier
 })();
 
@@ -25,6 +26,14 @@ export const task = (function () {
 })();
 
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
+export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
+
+export function getCurrentGameObjectCount(name) {
+    if (name === Constants.COLLECTIBLE) return collectibles.current;
+    if (name === Constants.OBSTACLE) return obstacles.current;
+    return 0;
+}
+
 export const conditions = task.getConditions();
 export const conditionsCleared = [];
 
@@ -40,7 +49,7 @@ export function setGameAsWon() {
     isGameWon = 1;
 }
 
-export function setMultipleChoiceCorrect(isCorrect=true) {
+export function setMultipleChoiceCorrect(isCorrect = true) {
     if (isCorrect.target.dataset.correct) {
         multipleChoiceCorrect = isCorrect;
     } else {
@@ -104,7 +113,7 @@ function conditionChecker(conditionsToClear, conditionsCleared) {
         // is there a condition to clear that isn't cleared?
         if (param1 === undefined) {
             return false;
-        } 
+        }
         // are the truth values the same (= true)
         if (typeof param1 === 'boolean' && typeof param2 === 'boolean') {
             if (param1 !== param2) {
