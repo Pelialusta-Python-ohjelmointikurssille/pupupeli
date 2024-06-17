@@ -53,19 +53,17 @@ async function initPage() {
 
     setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
 
-    // set description
-    globals.task.getDescription().forEach((line, i) => {
-        line = line === "" ? "<br>" : line;
-        if (line === "<br>" && i < 2) return;
-        if (i === 0) {
-            document.getElementById("task-description").insertAdjacentHTML("beforeend", "<p>" + line + "</p>");
-        } else {
-            document.getElementById("task-description").insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
-        }
-    });
+    let descriptionTargetDiv;
+    if (globals.task.tasktype != "instructions") {
+        descriptionTargetDiv = document.getElementById("task-description");
+    } else {
+        // CHANGE THIS NOW! TO THE ACTUAL INSTRUCTIONS DESCRIPTION DIV!
+        descriptionTargetDiv = document.getElementById("task-description");
+    }
+    setDescription(descriptionTargetDiv);
+
     console.log(globals.task.tasktype);
     if (globals.task.tasktype != "instructions") {
-        console.log("moro")
 
     // set multiple choice questions
     let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
@@ -93,16 +91,23 @@ async function initPage() {
         getEditor().setValue(globals.task.getEditorCode());
         createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
     });
-    } else {
-        const appDiv = document.getElementById("app");
-        appDiv.innerHTML = "";
-        window.addEventListener('load', function () {
-            createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
-        });
     }
 
     createChapterButtons();
     isUserLoggedIn();
+}
+
+function setDescription(targetDiv){
+    // set description
+    globals.task.getDescription().forEach((line, i) => {
+        line = line === "" ? "<br>" : line;
+        if (line === "<br>" && i < 2) return;
+        if (i === 0) {
+            targetDiv.insertAdjacentHTML("beforeend", "<p>" + line + "</p>");
+        } else {
+            targetDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
+        }
+    });
 }
 
 /**
