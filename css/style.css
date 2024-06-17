@@ -127,6 +127,16 @@ body {
     border: 1px solid black;
 }
 
+#instruction-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: calc(var(--canvas-width) * 2.5);
+    padding: 2rem;
+    height: 100%;
+}
+
 #task-selector-container {
     flex-direction: row;
     justify-content: center;

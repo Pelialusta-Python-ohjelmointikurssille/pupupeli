@@ -91,6 +91,27 @@ async function initPage() {
         getEditor().setValue(globals.task.getEditorCode());
         createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
     });
+    } else {
+        const appDiv = document.getElementById("app-container");
+        appDiv.innerHTML = "";
+        appDiv.style.flexDirection = "row";
+        appDiv.style.display = "flex";
+        window.addEventListener('load', function () {
+            createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
+        });
+        const insDiv = document.createElement('div');
+        insDiv.id = 'instruction-div';
+        let insHead = document.createElement('h1');
+        insHead.id = 'instruction-head';
+        let insDesc = document.createElement('p');
+        insDesc.id = 'instruction-desc';
+        //insHead.innerHTML = globals.task.title;
+        insHead.innerHTML = "Ohjeet";
+        insDesc.innerHTML = globals.task.description;
+        appDiv.appendChild(insDiv);
+        insDiv.appendChild(insHead);
+        insDiv.appendChild(insDesc);
+        insDiv.innerHTML = globals.task.description;
     }
 
     createChapterButtons();
