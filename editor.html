@@ -563,6 +563,8 @@
                     tx.forEach(inputBox => {
                         inputBox.dispatchEvent(new Event("input"));
                     });
+
+                    generateTaskOutput();
                 }
 
                 reader.readAsText(file);
@@ -593,7 +595,7 @@
                 taskInput.value = "";
 
                 for (let i = 0; i < description.length; i++) {
-                    taskInput.value += description[i]+"\n";
+                    taskInput.value += (i === description.length -1) ? description[i] : description[i]+"\n";
                 }
             }
 
@@ -602,7 +604,7 @@
                 editorCodeInput.value = "";
 
                 for (let i = 0; i < editorCode.length; i++) {
-                    editorCodeInput.value += editorCode[i]+"\n";
+                    editorCodeInput.value += (i === editorCode.length-1 ) ? editorCode[i] : editorCode[i]+"\n";
                 }
             }
 
