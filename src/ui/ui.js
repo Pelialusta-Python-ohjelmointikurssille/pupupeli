@@ -101,17 +101,18 @@ async function initPage() {
         });
         const insDiv = document.createElement('div');
         insDiv.id = 'instruction-div';
-        let insHead = document.createElement('h1');
+        let insHead = document.createElement('div');
+        let insHeadline = document.createElement('h1');
         insHead.id = 'instruction-head';
-        let insDesc = document.createElement('p');
-        insDesc.id = 'instruction-desc';
+        let insDesc = document.createElement('div');
         //insHead.innerHTML = globals.task.title;
-        insHead.innerHTML = "Ohjeet";
-        insDesc.innerHTML = globals.task.description;
+        insHeadline.innerHTML = "Ohjeet";
+        insHead.appendChild(insHeadline);
+        setDescription(insDesc);
+        insDesc.id = 'instruction-desc';
         appDiv.appendChild(insDiv);
         insDiv.appendChild(insHead);
         insDiv.appendChild(insDesc);
-        insDiv.innerHTML = globals.task.description;
     }
 
     createChapterButtons();

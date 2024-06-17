@@ -137,6 +137,10 @@ body {
     height: 100%;
 }
 
+#instruction-desc {
+    white-space: pre-wrap;
+}
+
 #task-selector-container {
     flex-direction: row;
     justify-content: center;
