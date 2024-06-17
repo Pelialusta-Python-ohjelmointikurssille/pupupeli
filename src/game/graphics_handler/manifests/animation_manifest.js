@@ -22,7 +22,7 @@ export const ANIMATIONS = [
         factoryFunction: createPawnMoveAnimation
     },
     {
-        typeName: "pawn_failmove",
+        typeName: "pawn_fail_move",
         compatibleEntities: ["pawn"],
         factoryFunction: createPawnFailMoveAnimation
     },
