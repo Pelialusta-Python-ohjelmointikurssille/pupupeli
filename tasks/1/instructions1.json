@@ -1,0 +1,9 @@
+{
+    "tasktype": "instructions",
+    "description": [
+      "Voit ajaa saman koodipätkän monta kertaa käyttäen for-silmukkaa.",
+      "for i in range(5):",
+      " pupu.liiku(\"oikea\")",
+      " pupu.liiku(\"alas\")"
+    ]
+  }
