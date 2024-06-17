@@ -25,12 +25,13 @@ export const task = (function () {
     return Task.fromJSON(tryGetFileAsJson(path));
 })();
 
+//not sexy to count every object in the grid every time you want the total amount... (task.getTotalCollectibles())
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
 
-export function getCurrentGameObjectCount(name) {
-    if (name === Constants.COLLECTIBLE) return collectibles.current;
-    if (name === Constants.OBSTACLE) return obstacles.current;
+export function getGridObjectsLeft(name) {
+    if (name === Constants.COLLECTIBLE) return (collectibles.total - collectibles.current);
+    if (name === Constants.OBSTACLE) return (obstacles.total - obstacles.current);
     return 0;
 }
 
