@@ -12,14 +12,17 @@ const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.c
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
 
+
 /**
  * Runs ui initialisation functions + atm the event_handlers worker
  */
 async function main() {
-    initWorker();
-    initPage();
-    initializeEditorButtons();
-    await initGameAndCanvas();
+    initPage(); // creates task json global variable
+    if (globals.task.tasktype != "instructions") {
+        initWorker();
+        initializeEditorButtons();
+        await initGameAndCanvas();
+    }
 }
 
 /**
@@ -60,6 +63,9 @@ async function initPage() {
             document.getElementById("task-description").insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
         }
     });
+    console.log(globals.task.tasktype);
+    if (globals.task.tasktype != "instructions") {
+        console.log("moro")
 
     // set multiple choice questions
     let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
@@ -87,6 +93,10 @@ async function initPage() {
         getEditor().setValue(globals.task.getEditorCode());
         createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
     });
+    } else {
+        const appDiv = document.getElementById("app");
+        appDiv.innerHTML = "";
+    }
 
     createChapterButtons();
     isUserLoggedIn();
