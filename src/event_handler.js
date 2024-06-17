@@ -51,7 +51,7 @@ export function initWorker() {
                 syncArray = new Int32Array(message.sab, 0, 1);
                 let variableName = getVariableTrueName(message.details);
                 if (!variableName) inputToWorker("-1");
-                else inputToWorker(getCurrentGameObjectCount().toString()); //input to worker currently just strings
+                else inputToWorker(getCurrentGameObjectCount().toString()); //input to worker currently just strings§
                 console.log("variable true name: " + variableName);
                 break;
         }
