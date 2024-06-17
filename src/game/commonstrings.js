@@ -1,3 +1,5 @@
+import { Direction } from "./direction.js";
+
 export class Constants {
     static COLLECTIBLE = "collectible";
     static OBSTACLE = "obstacle";
