@@ -540,7 +540,6 @@
 
                 reader.onload = function (e) {
                     let task = JSON.parse(e.target.result);
-                    console.log(task);
 
                     createTable(false, true, task.grid.length, task.grid[0].length);
 
