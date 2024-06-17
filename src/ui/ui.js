@@ -96,6 +96,9 @@ async function initPage() {
     } else {
         const appDiv = document.getElementById("app");
         appDiv.innerHTML = "";
+        window.addEventListener('load', function () {
+            createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
+        });
     }
 
     createChapterButtons();
