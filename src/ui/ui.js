@@ -48,24 +48,7 @@ async function initPage() {
     const prevTaskLink = document.querySelector('a[href^="/?task="]:first-child');
     const nextTaskLink = document.querySelector('a[href^="/?task="]:last-child');
 
-    // Changes href of prevtasklink and hides it if no prev task exists
-    if (taskIdentifier > 1) {
-        prevTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier - 1}`;
-
-        prevTaskLink.style.display = 'inline'; // Ensure it's visible
-    } else {
-        prevTaskLink.style.display = 'none'; // Hide if on the first task
-    }
-    // Changes href of nexttasklink and hides it if no prev task exists
-    if (taskIdentifier < totalTasks) {
-        nextTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier + 1}`;
-
-        nextTaskLink.style.display = 'inline'; // Ensure it's visible
-    } else {
-        nextTaskLink.style.display = 'none'; // Hide if on the last task
-    }
-
-
+    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
 
     // set description
     globals.task.getDescription().forEach((line, i) => {
@@ -107,6 +90,33 @@ async function initPage() {
 
     createChapterButtons();
     isUserLoggedIn();
+}
+
+/**
+ * Sets previous and next task buttons if there are any. This was refactored to make initPage cleaner.
+ * @param {number} taskIdentifier 
+ * @param {number} chapterIdentifier 
+ * @param {number} totalTasks 
+ * @param {string} prevTaskLink 
+ * @param {string} nextTaskLink 
+ */
+function setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink) {
+    // Changes href of prevtasklink and hides it if no prev task exists
+    if (taskIdentifier > 1) {
+        prevTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier - 1}`;
+
+        prevTaskLink.style.display = 'inline'; // Ensure it's visible
+    } else {
+        prevTaskLink.style.display = 'none'; // Hide if on the first task
+    }
+    // Changes href of nexttasklink and hides it if no prev task exists
+    if (taskIdentifier < totalTasks) {
+        nextTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier + 1}`;
+
+        nextTaskLink.style.display = 'inline'; // Ensure it's visible
+    } else {
+        nextTaskLink.style.display = 'none'; // Hide if on the last task
+    }
 }
 
 function isUserLoggedIn() {
