@@ -167,7 +167,7 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
 
-        #add-multiple-choice-button {
+        #add-multiple-choice-button, #del-multiple-choice-button {
             margin: 0;
         }
 
@@ -255,6 +255,7 @@
                         <button class="options-input-buttons" value="inputEditorCode" onclick="inputButtonsToggler(event)">Editorin koodi</button>
                         <button class="options-input-buttons" value="inputMultipleChoice" onclick="inputButtonsToggler(event)">Monivalintatehtävät</button>
                         <button id="add-multiple-choice-button" class="is-hidden" onclick="addMultipleChoiceQuestion()">+</button>
+                        <button id="del-multiple-choice-button" class="is-hidden" onclick="delMultipleChoiceQuestion()">x</button>
                     </div>
                     <textarea rows="3" name="task-input" id="task-input" value="" placeholder="Lisää tehtävän kuvaus"></textarea>
                     <textarea rows="3" name="editor-input" id="editor-input" class="is-hidden" value="" placeholder="Lisää tehtävän tekstieditoriin etukäteen asetettu koodi"></textarea>
@@ -456,6 +457,7 @@
             let editorInput = document.getElementById("editor-input");
             let multipleChoiceContainer = document.getElementById("multiple-choice-container");
             let multipleChoiceAddButton = document.getElementById("add-multiple-choice-button");
+            let multipleChoiceDelButton = document.getElementById("del-multiple-choice-button");
 
             switch (event.target.value) {
                 case "inputDescription":
@@ -464,6 +466,7 @@
                     if (!multipleChoiceContainer.classList.contains("is-hidden")) {
                         multipleChoiceContainer.classList.toggle("is-hidden");
                         multipleChoiceAddButton.classList.toggle("is-hidden");
+                        multipleChoiceDelButton.classList.toggle("is-hidden");
                         multipleChoiceContainer.classList.toggle("is-flex");
                     }
                     break;
@@ -473,6 +476,7 @@
                     if (!multipleChoiceContainer.classList.contains("is-hidden")) {
                         multipleChoiceContainer.classList.toggle("is-hidden");
                         multipleChoiceAddButton.classList.toggle("is-hidden");
+                        multipleChoiceDelButton.classList.toggle("is-hidden");
                         multipleChoiceContainer.classList.toggle("is-flex");
                     }
                     break;
@@ -482,6 +486,7 @@
                     if (multipleChoiceContainer.classList.contains("is-hidden")) {
                         multipleChoiceContainer.classList.toggle("is-hidden");
                         multipleChoiceAddButton.classList.toggle("is-hidden");
+                        multipleChoiceDelButton.classList.toggle("is-hidden");
                         multipleChoiceContainer.classList.toggle("is-flex");
                     }
                     break;
@@ -502,6 +507,11 @@
                 }
             }
             multipleChoiceContainer.insertAdjacentElement("beforeend", multipleChoiceElement);
+        }
+
+        function delMultipleChoiceQuestion() {
+            let multipleChoiceContainer = document.getElementById("multiple-choice-container");
+            multipleChoiceContainer.childNodes[multipleChoiceContainer.childNodes.length-1].remove();
         }
 
         // creates a downloadable file from the text in the output field
