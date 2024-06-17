@@ -97,6 +97,10 @@ async function initPage() {
     isUserLoggedIn();
 }
 
+/**
+ * Sets the text from task.description to given div. Useful since game and instructions tasks use different description div.
+ * @param {object} targetDiv | the description div where we want description text as a html element
+ */
 function setDescription(targetDiv){
     // set description
     globals.task.getDescription().forEach((line, i) => {
