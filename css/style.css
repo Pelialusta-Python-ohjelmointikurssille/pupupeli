@@ -293,6 +293,18 @@ button:hover {
     z-index: 1000; /* in front of all other markers */ 
 }
 
+#login-failed {
+    position: absolute;
+    top: 5rem;
+    max-width: 23rem;
+    margin-left: -27rem;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    z-index: 99;
+    padding: 1rem;
+}
+
 #celebration{
     position: absolute;
     top: 50%;

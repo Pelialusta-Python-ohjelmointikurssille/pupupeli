@@ -16,7 +16,11 @@ loginButton.addEventListener("click", () => {
                 localStorage.setItem("token", data.token);
                 window.location.reload();
             } else {
-                window.alert("väärä käyttäjänimi tai salasana");
+                let loginFailed = document.getElementById("login-failed");
+                setTimeout(() => {
+                    loginFailed.classList.toggle("is-hidden");
+                }, 3000);
+                loginFailed.classList.toggle("is-hidden");
             }
         })
         .catch(error => {
