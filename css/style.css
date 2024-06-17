@@ -10,7 +10,7 @@
 /* remove above before elease */
 
 :root {
-    --canvas-width: 640px;
+    --canvas-width: 1024px;
     --canvas-height: var(--canvas-width);
 }
 
