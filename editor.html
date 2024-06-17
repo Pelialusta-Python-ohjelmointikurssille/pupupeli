@@ -293,21 +293,21 @@
                 for (y = 0; y < gridDimensions.width; y++) {
                     let cell = table.children[x].appendChild(document.createElement("td"));
                     cell.dataset.value = "1";
-                    cell.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+                    cell.innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>'
 
 
                     cell.addEventListener('click', function () {
                         switch (this.dataset.value) {
                             case '1':
                                 this.dataset.value = '2';
-                                this.innerHTML = '<img src="/src/static/game_assets/carrot.png"></img>'
+                                this.innerHTML = '<img src="/src/static/game_assets/collectibles/carrot.png"></img>'
                                 break;
                             case '2':
                                 this.dataset.value = '3';
-                                this.innerHTML = '<img src="/src/static/game_assets/Kivi3.png"></img>'
+                                this.innerHTML = '<img src="/src/static/game_assets/obstacles/rock.png"></img>'
                                 break;
                             case '3':
-                                this.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+                                this.innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>'
                                 this.dataset.value = '1';
                                 break;
                         }
@@ -327,12 +327,12 @@
                     Array.from(cells).forEach(c => {
                         if (c.dataset.value === "0") {
                             c.dataset.value = "1";
-                            c.innerHTML = '<img src="/src/static/game_assets/background_grass.png"></img>'
+                            c.innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>'
                         }
                     });
 
                     this.dataset.value = "0";
-                    this.innerHTML = '<img src="/src/static/game_assets/bunny_right.png"></img>';
+                    this.innerHTML = '<img src="/src/static/game_assets/characters/bunny_right.png"></img>';
                 });
             });
         }

@@ -1,3 +1,4 @@
+import * as gameController from '../game/game_controller.js';
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 
@@ -23,15 +24,18 @@ export class GameModeGetCollectibles {
     removedFromGrid(event) {
         let gridobject = event.detail;
         if (gridobject.type === Constants.COLLECTIBLE) {
-            globals.collectibles++;
+            globals.incrementCollectibles();
             console.log("Score is: " + globals.collectibles.current);
-            this.#checkIfGameWon();
         }
     }
 
-    #checkIfGameWon() {
-        if (globals.collectibles.current >= globals.collectibles.total) {
+    // called by eventhandler after checking conditions
+    checkIfGameWon() {
+        if (globals.allConditionsCleared()) {
             this.eventTarget.dispatchEvent(new Event("victory"));
+            gameController.notifyGameWon(true);
+        } else {
+            gameController.notifyGameWon(false);
         }
     }
 
@@ -48,6 +52,7 @@ export class GameModeMultipleChoice {
     constructor(grid) {
         grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
         this.startScore = globals.collectibles.current;
+        this.eventTarget = new EventTarget();
     }
 
     removedFromGrid(event) {
@@ -55,6 +60,16 @@ export class GameModeMultipleChoice {
         if (gridobject.type === Constants.COLLECTIBLE) {
             globals.incrementCollectibles();
             console.log("Score is: " + globals.collectibles.current);
+        }
+    }
+
+    // called by eventhandler after checking conditions
+    checkIfGameWon() {
+        if (globals.allConditionsCleared() && globals.getMultipleChoiceCorrect()) {
+            this.eventTarget.dispatchEvent(new Event("victory"));
+            gameController.notifyGameWon(true);
+        } else {
+            gameController.notifyGameWon(false);
         }
     }
 

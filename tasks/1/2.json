@@ -1,6 +1,6 @@
 {
   "description": [
-    "Kuinka monta kertaa pupun pitää hypätä päästäkseen oikeaan alakulmaan mahdollisimman pienellä määrällä hyppyjä?"
+    "Kuinka monta kertaa pupun pitää hypätä päästäkseen oikeaan alakulmaan mahdollisimman pienellä määrällä hyppyjä?(Käytä for-silmukkaa)"
   ],
   "editorCode": [
     "pupu.liiku(\"alas\")",
@@ -67,7 +67,7 @@
     },
     {
       "condition": "conditionMaxLines",
-      "parameter": 6
+      "parameter": false
     }
   ]
 }

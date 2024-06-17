@@ -33,6 +33,8 @@ export function initWorker() {
                 globals.addClearedConditions(message.details);
                 break;
             case "finish":
+                // final check to see if all win conditions are achieved
+                globals.getCurrentGameMode().checkIfGameWon();
                 disablePlayButton();
                 console.log("Last command finished");
                 break;

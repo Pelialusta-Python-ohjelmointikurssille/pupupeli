@@ -1,3 +1,14 @@
+/* remove below before release */
+#devtaskbuttoncontainer {
+    max-height: 30px;
+    margin-right: 1rem;
+}
+
+#devtaskbuttoncontainer > input {
+    min-height: 26px;
+}
+/* remove above before elease */
+
 :root {
     --canvas-width: 640px;
     --canvas-height: var(--canvas-width);
@@ -21,6 +32,18 @@ body {
     max-width: var(--canvas-height);
     border: 1px solid black;
     border-radius: 5px;
+}
+
+/* This one includes both task header and toggle buttons div, we want them on the same level */
+#task-name-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem; /* Optional: add some space below the task name div */
+}
+
+#toggle-buttons-div {
+    display: flex;
 }
 
 #left-container, #editor-container {
@@ -72,14 +95,12 @@ body {
 }
 
 #user-container {
-    height: 30px;
+    min-height: 32px;
 }
 
-#user-name {
-    display: flex;
-    font-size: 20px;
-    margin-right: 1rem;
-    height: 30px;
+#username, #password {
+    min-height: 100%;
+    margin: 0 0.5rem;
 }
 
 #header-buttons {
@@ -93,6 +114,7 @@ body {
 }
 
 #app {
+    position: relative; /* This makes the #app div a positioning context for absolutely positioned children */
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -145,6 +167,10 @@ body {
     text-align: center;
 }
 
+.selected-choice {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
 .show-error {
     transition: 0.5s all ease-in-out;
     padding: 1rem !important;
@@ -156,12 +182,16 @@ body {
     width: calc(100% - 2rem);
 }
 
-#grid-toggle-button, #theme-select, #trail-toggle-button {
+#grid-toggle-button, #theme-select, #login-button, #trail-toggle-button {
     float: right;
     min-height: 32px;
     min-width: calc(10% - 1rem);
     margin: 0 0.5rem;
     border-radius: 5px;
+}
+
+#logout-button {
+    margin-bottom: 0;
 }
 
 #task-selector-box button {
@@ -250,6 +280,7 @@ button:hover {
     box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     padding: 0.5rem;
+    cursor: pointer;
 }
 
 .multiple-choice-question:hover {
@@ -262,19 +293,51 @@ button:hover {
     z-index: 1000; /* in front of all other markers */ 
 }
 
-#celebration {
-    position: fixed;
-    top: 15%;
-    left: 40%;
-    transform: translate(-50%, -50%);
+#celebration{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* This ensures the center of #celebration-content, not its top-left corner, is at the center of #app */
     padding: 1rem;
-    background-color: #4CAF50;
+    background-color: #248944;
     color: white;
     border-radius: 8px;
     font-size: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     z-index: 1000;
+}
+
+#celebration-confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Ensures the confettis do not block user interactions */
+    overflow: hidden;
+    z-index: 1000; /* Ensures the confettis appear on top of other content */
+}
+
+.celebration-confetti {
+    position: absolute;
+    top: -10px;
+    width: 10px;
+    height: 30px;
+    background-color: var(--color, red); /* Default color */
+    opacity: 0;
+    animation: fall 3s ease-out forwards;
+}
+
+@keyframes fall {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(360deg);
+    }
 }
 
 #input-container {

@@ -27,10 +27,6 @@ self.onmessage = async function (event) {
         setResetFlag(false);
         runPythonCode(pyodide, message.details);
     }
-    if (message.type === 'reset') {
-        console.log("This should never print");
-        // setResetFlag(true);
-    }
 }
 
 /**
@@ -187,6 +183,7 @@ function removeInputs(codeString) {
 }
 
 function indentString(str, indent = '    ') {  // Default indentation is 4 spaces
+    if (str === "") return "";
     codeString = str.split('\n').map(line => indent + line).join('\n');
     codeString = "def test_string():\n" + codeString;
     return codeString;
@@ -195,22 +192,18 @@ function indentString(str, indent = '    ') {  // Default indentation is 4 space
 function addLineNumberOutputs(codeString) {
     if (codeString === undefined) return;
     let lines = codeString.split('\n');
-    let lastIndentation = '';
     lines = lines.map((line, index) => {
         const indentation = line.match(/^\s*/)[0];
         const trimmedLine = line.trim();
 
-        // Check if the line starts with 'else:' or 'elif:'
+        // Check if the line starts with 'else:' or 'elif:' or 'except' or 'finally'
         if (trimmedLine.startsWith('else:') || trimmedLine.startsWith('elif:') || trimmedLine.startsWith('except') || trimmedLine.startsWith('finally')){
             return line;
         }
         // Check if the line is empty, contains only whitespace, or is a comment
         else if (trimmedLine === '' || trimmedLine.startsWith('#')) {
-            // Use the last non-empty line's indentation for empty lines and comment lines
-            return `${lastIndentation}pupu.rivi(${index + 1})\n${line}`;
+            return line;
         } else {
-            // Update the last non-empty line's indentation
-            lastIndentation = indentation;
             return `${indentation}pupu.rivi(${index + 1})\n${line}`;
         }
     });

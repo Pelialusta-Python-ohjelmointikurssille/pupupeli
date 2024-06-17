@@ -74,9 +74,9 @@ function runButtonSetVisualsToInitial() {
 }
 
 function resetCelebrationBox() {
-    let containsInvisible = celebrationBox.classList.contains("is-invisible");
+    let containsInvisible = celebrationBox.classList.contains("is-hidden");
     if (!containsInvisible) {
-        celebrationBox.classList.add("is-invisible") // hide celebration box
+        celebrationBox.classList.add("is-hidden") // hide celebration box
     }
 }
 

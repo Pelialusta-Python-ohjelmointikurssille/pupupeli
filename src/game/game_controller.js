@@ -43,8 +43,8 @@ export function resetGame() {
     game.resetGame();
 }
 
-export function notifyGameWon() {
-    onTaskComplete();
+export function notifyGameWon(won) {
+    onTaskComplete(won);
 }
 
 export function setTheme(theme) {

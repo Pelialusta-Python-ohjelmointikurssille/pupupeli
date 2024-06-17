@@ -29,6 +29,7 @@ export function getGameTask() {
     } else {
         currentGameMode = new GameModeGetCollectibles(newGrid);
     }
+    globals.setCurrentGameMode(currentGameMode);
     //Send the grid and the gamemode
     return { grid: newGrid, gameMode: currentGameMode };
 };
