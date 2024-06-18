@@ -16,9 +16,9 @@ loginButton.addEventListener("click", () => {
             } else {
                 let loginFailed = document.getElementById("login-failed");
                 setTimeout(() => {
-                    loginFailed.classList.toggle("is-hidden");
-                }, 3000);
-                loginFailed.classList.toggle("is-hidden");
+                    loginFailed.classList.remove("login-failed-show");
+                }, 6000);
+                loginFailed.classList.add("login-failed-show");
             }
         })
         .catch(error => {
