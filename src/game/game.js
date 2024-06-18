@@ -84,9 +84,15 @@ export class Game {
 
     askQuestionMessage(question) {
         this.isAskingQuestionFromGame = true;
-        let askCommand = new AskCommand(this.grid.player, this.gh, "Onko totta että 2+2=4?");
+        let askCommand = new AskCommand(this.grid.player, this.gh, question);
         askCommand.execute();
         askQuestion(question);
+    }
+
+    respondToQuestion(answer) {
+        this.makeSayCommand(this.grid.player, this.gh, answer)
+        //console.log(answer);
+        this.onAnimsReady();
     }
 
     resetGame() {

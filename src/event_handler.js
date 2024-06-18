@@ -105,7 +105,7 @@ export function onUserSendInputToWorker() {
     let word = getInputBoxValue();
     inputToWorker(word);
     gameController.game.isAskingQuestionFromGame = false;
-    gameController.game.onAnimsReady();
+    gameController.game.respondToQuestion(word);
 }
 
 export function inputToWorker(word) {

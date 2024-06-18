@@ -58,8 +58,8 @@ export class MoveCommand {
             if (gridobjects[i].type === Constants.QUESTION_COLLECTIBLE) {
                 let go = gridobjects[i];
                 this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
-                
-                this.game.askQuestionMessage("HELLO?");
+
+                this.game.askQuestionMessage("1+1=?");
             }
         }
     }
