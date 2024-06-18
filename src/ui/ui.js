@@ -45,14 +45,15 @@ async function initGameAndCanvas() {
 
 /**
  * Inserts information to page elements according to current task. Also adds task select buttons.
+ * Game and instructions task types require different elements.
  */
 async function initPage() {
     const taskIdentifier = globals.taskIdentifier;
     const chapterIdentifier = globals.chapterIdentifier;
 
+    // checking if task type is instructions
     if (globals.task.getTaskType() != instructionsStr) {
         createGamePage();
-    
     } else {
         createInstructionPage();
     }
@@ -67,6 +68,9 @@ async function initPage() {
     isUserLoggedIn();
 }
 
+/**
+ * Edits elements of app-conatiner for instruction page
+ */
 function createGamePage() {
     let descriptionTargetDiv = document.getElementById("task-description");
         setDescription(descriptionTargetDiv);
@@ -99,6 +103,9 @@ function createGamePage() {
         });
 }
 
+/**
+ * Clears app-container, creates a new one and adds elements for instruction page
+ */
 function createInstructionPage() {
 
     const appDiv = document.getElementById("app-container");
@@ -144,7 +151,10 @@ function createInstructionPage() {
     insDiv.appendChild(insHead);
     insDiv.appendChild(insDesc);
 }
-
+/**
+ * Sets the text from task.title to given div. Useful since game and instructions tasks use different title div.
+ * @param {object} titleDiv | the title div where we want title text as a html element
+ */
 function setTitle(titleDiv) {
     let chapterAndTaskNumberPeriod = `${globals.chapterIdentifier}.${globals.taskIdentifier}. `
     let titleStr = chapterAndTaskNumberPeriod + globals.task.getTitle();
@@ -218,17 +228,14 @@ function createTaskButtons() {
     api.getCompletedTasks().then(taskList => {
         let completedTasksList = taskList.tasks;
         // Create and append buttons
-        let taskNumber = 0;
-        let instructionNumber = 0;
         for (let i = 0; i < totalTasks; i++) {
             const button = document.createElement('button');
+            let taskNumber = i+1;
             // if task is task, increase tasknumber.
             // if task is instruction, increase instructionnumber and dont increase tasknumber.
-            if (instructionTasks.includes(i+1)) {
-                instructionNumber++
-                button.innerText = `i${instructionNumber}`;
+            if (instructionTasks.includes(taskNumber)) {
+                button.innerText = `${taskNumber}i`;
             } else {
-                taskNumber++
                 button.innerText = `${taskNumber}`;
             }
 
