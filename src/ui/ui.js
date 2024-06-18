@@ -134,25 +134,39 @@ function colorSelectedChoice(selectedChoice) {
 function createTaskButtons() {
     const buttonContainer = document.getElementById('buttonTable');
 
-    api.getCompletedTasks().then(taskList => {
-        let completedTasksList = taskList.tasks;
-        // Create and append buttons
+    if (localStorage.getItem("token") !== null) { // user is logged in
+        api.getCompletedTasks().then(taskList => {
+            let completedTasksList = taskList.tasks;
+            // Create and append buttons
+            for (let i = 0; i < totalTasks; i++) {
+                const button = document.createElement('button');
+                let buttonIdText = `chapter${currentChapter}task${i + 1}`;
+                button.id = buttonIdText
+                if (completedTasksList.includes(buttonIdText)) {
+                    button.classList.add("button-completed");
+                } else {
+                    button.classList.add("button-incompleted");
+                }
+                button.innerText = `${i + 1}`;
+                button.addEventListener('click', () => {
+                    window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
+                });
+                buttonContainer.appendChild(button);
+            }
+        });
+    } else { // user is not logged in
         for (let i = 0; i < totalTasks; i++) {
             const button = document.createElement('button');
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
             button.id = buttonIdText
-            if (completedTasksList.includes(buttonIdText)) {
-                button.classList.add("button-completed");
-            } else {
-                button.classList.add("button-incompleted");
-            }
+            button.classList.add("button-incompleted");
             button.innerText = `${i + 1}`;
             button.addEventListener('click', () => {
                 window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
             });
             buttonContainer.appendChild(button);
         }
-    });
+    }
 }
 
 function createChapterButtons() {
