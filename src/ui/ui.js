@@ -11,6 +11,7 @@ import { initGame, setTheme } from "../game/game_controller.js";
 const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
 const totalChapters = fileReader.countForChaptersInDirectory();
 let currentChapter = globals.chapterIdentifier;
+const instructionsStr = "instructions";
 
 
 /**
@@ -18,7 +19,7 @@ let currentChapter = globals.chapterIdentifier;
  */
 async function main() {
     initPage(); // creates task json global variable
-    if (globals.task.tasktype != "instructions") {
+    if (globals.task.getTaskType() != "instructions") {
         initWorker();
         initializeEditorButtons();
         await initGameAndCanvas();
@@ -54,16 +55,19 @@ async function initPage() {
     setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
 
     let descriptionTargetDiv;
-    if (globals.task.tasktype != "instructions") {
+    if (globals.task.getTaskType() != instructionsStr) {
         descriptionTargetDiv = document.getElementById("task-description");
-    } else {
+        setDescription(descriptionTargetDiv);
+    } //else {
         // CHANGE THIS NOW! TO THE ACTUAL INSTRUCTIONS DESCRIPTION DIV!
-        descriptionTargetDiv = document.getElementById("task-description");
-    }
-    setDescription(descriptionTargetDiv);
+    //     descriptionTargetDiv = document.getElementById("task-description");
+    // }
 
-    console.log(globals.task.tasktype);
-    if (globals.task.tasktype != "instructions") {
+    console.log(globals.task.getTaskType());
+    if (globals.task.getTaskType() != instructionsStr) {
+
+    descriptionTargetDiv = document.getElementById("task-description");
+    setDescription(descriptionTargetDiv);
 
     // set multiple choice questions
     let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
@@ -125,10 +129,15 @@ async function initPage() {
 function setDescription(targetDiv){
     // set description
     globals.task.getDescription().forEach((line, i) => {
+        console.log(i)
+        console.log(line)
         line = line === "" ? "<br>" : line;
-        if (line === "<br>" && i < 2) return;
+        if (line === "<br>" && i < 2) {
+            console.log(line);
+            return;
+        }
         if (i === 0) {
-            targetDiv.insertAdjacentHTML("beforeend", "<p>" + line + "</p>");
+            targetDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
         } else {
             targetDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
         }
