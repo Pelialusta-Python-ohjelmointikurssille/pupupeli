@@ -18,8 +18,8 @@ export class Game {
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
-
         this.isGridEnabled = true;
+        this.tempObjectIds = [];
     }
 
     async init() {
@@ -92,6 +92,14 @@ export class Game {
         this.gh.destroyTextBoxes();
         this.gameMode.reset();
         this.gh.destroyTextBoxes();
+        this.destroyTempObjects();
+    }
+
+    destroyTempObjects() {
+        for (let i = 0; i < this.tempObjectIds.length; i++) {
+            this.gh.destroyEntity(this.tempObjectIds[i]);
+        }
+        this.tempObjectIds = [];
     }
 
     /**
@@ -134,5 +142,6 @@ export class Game {
         let newGO = new GridObject(type);
         this.grid.addToGrid(newGO, x, y);
         this.createGridEntityForRendering(newGO);
+        this.tempObjectIds.push(newGO.id);
     }
 }
