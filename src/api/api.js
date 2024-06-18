@@ -1,6 +1,7 @@
 import * as globals from "../util/globals.js";
 import { getEditor } from "../input/editor.js";
 
+let stored_username;
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
 const url = 'http://localhost:3000/api/';
@@ -12,6 +13,7 @@ loginButton.addEventListener("click", () => {
         .then(data => {
             if (data.token !== undefined) {
                 localStorage.setItem("token", data.token);
+                localStorage.setItem("username", stored_username);
                 window.location.reload();
             } else {
                 let loginFailed = document.getElementById("login-failed");
@@ -28,9 +30,9 @@ loginButton.addEventListener("click", () => {
 
 logoutButton.addEventListener("click", () => {
     logout(url)
-        .then(data => {
-            console.log(data);
+        .then(function() {
             localStorage.removeItem("token");
+            localStorage.removeItem("username");
             window.location.reload();
         })
         .catch(error => {
@@ -95,6 +97,8 @@ async function sendGetRequest(url) {
 export async function login() {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
+    stored_username = user;
+
     const params = {
         username: user,
         password: pass
