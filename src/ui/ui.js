@@ -27,7 +27,7 @@ async function main() {
  */
 async function initGameAndCanvas() {
     let canvas = await initGame();
-    document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
+    document.getElementById("right-container").insertAdjacentElement("afterbegin", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
     setTheme(localStorage.getItem("theme"));

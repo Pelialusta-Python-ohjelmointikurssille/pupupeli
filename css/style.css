@@ -50,8 +50,9 @@ body {
     flex-direction: column;
 }
 
-#left-container {
+#left-container, #right-container {
     min-width: var(--canvas-width);
+    min-height: var(--canvas-height);
     justify-content: space-between;
 }
 
