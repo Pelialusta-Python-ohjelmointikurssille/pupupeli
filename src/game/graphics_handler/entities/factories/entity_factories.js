@@ -145,7 +145,7 @@ export function createGrid(entityUUID, entityData, graphicsEntityHandler, skins)
  * @returns {BackgroundEntity} Background to the grid, rendered behind everything
  */
 export function createBackground(entityUUID, entityData, graphicsEntityHandler, skins) {
-    let sprite = new PIXI.Sprite();
+    let sprite = new PIXI.TilingSprite();
     let entity = new BackgroundEntity(
         entityUUID,
         graphicsEntityHandler,
