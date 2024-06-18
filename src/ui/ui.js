@@ -105,8 +105,7 @@ async function initPage() {
         let insHeadline = document.createElement('h1');
         insHead.id = 'instruction-head';
         let insDesc = document.createElement('div');
-        //insHead.innerHTML = globals.task.title;
-        insHeadline.innerHTML = "Ohjeet";
+        insHeadline.innerHTML = globals.task.title;
         insHead.appendChild(insHeadline);
         setDescription(insDesc);
         insDesc.id = 'instruction-desc';
