@@ -50,9 +50,13 @@ body {
     flex-direction: column;
 }
 
-#left-container {
+#left-container, #right-container {
     min-width: var(--canvas-width);
     justify-content: space-between;
+}
+
+#right-container {
+    min-height: var(--canvas-height);
 }
 
 .is-margin-half-rem-x {
