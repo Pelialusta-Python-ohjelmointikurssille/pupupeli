@@ -23,6 +23,7 @@ export class GraphicsCamera {
         this.rotation = 0;
         this.minZoom = 0.5;
         this.maxZoom = 1.5;
+        this.focusPaddingPercent = 0.05;
         this.container.position.x = this.screenCenter.x;
         this.container.position.y = this.screenCenter.y;
         this.totalRenderScale = this.getTotalRenderScale();
@@ -63,6 +64,24 @@ export class GraphicsCamera {
     moveToPoint(point) {
         this.position.x = point.x;
         this.position.y = point.y;
+    }
+
+    focusOnAreaMiddle(middle, size) {
+        let topLeft = new Vector2(middle.x - (size.x / 2), middle.y - (size.y / 2));
+        let bottomRight = new Vector2(middle.x + (size.x / 2), middle.y + (size.y / 2));
+        this.focusOnArea(topLeft, bottomRight);
+    }
+
+    focusOnArea(topLeft, bottomRight) {
+        let zoom = 1;
+        let width = (bottomRight.x - topLeft.x);
+        let height = (bottomRight.y - topLeft.y);
+        let middle = new Vector2(topLeft.x + width / 2, topLeft.y + height / 2);
+        this.moveToPoint(middle);
+
+        if (width > height) zoom = 1024 / width;
+        else zoom = 1024 / height;
+        this.setZoom(zoom * (1 - this.focusPaddingPercent));
     }
 
     setZoom(value) {
