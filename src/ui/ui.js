@@ -119,8 +119,8 @@ async function initPage() {
 }
 
 function setTitle(titleDiv) {
-
-    let titleStr = globals.task.getTitle();
+    let chapterAndTaskNumberPeriod = `${globals.chapterIdentifier}.${globals.taskIdentifier}. `
+    let titleStr = chapterAndTaskNumberPeriod + globals.task.getTitle();
     titleDiv.innerHTML = titleStr;
 }
 
