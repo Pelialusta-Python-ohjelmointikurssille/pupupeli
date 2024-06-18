@@ -129,7 +129,7 @@ export class GraphicsHandler {
      */
     createGrid() {
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
-        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 128, this.gridHeight * 128) } , SKIN_BUNDLES["background"]);
+        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 300, this.gridHeight * 300) } , SKIN_BUNDLES["background"]);
         let gridObject = this.graphicsEntityHandler.getMainGridObject();
         this.graphicsEntityHandler.camera.focusOnAreaMiddle(gridObject.getMiddlePixelPosition(), gridObject.pixelSize);
     }
