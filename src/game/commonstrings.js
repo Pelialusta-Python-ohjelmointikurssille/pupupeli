@@ -1,3 +1,5 @@
+import { Direction } from "./direction.js";
+
 export class Constants {
     static COLLECTIBLE = "collectible";
     static OBSTACLE = "obstacle";
@@ -11,10 +13,22 @@ export class Constants {
     static TYPE_STR = "type";
     static GRID_STR = "grid";
     static TEST_STR = "test";
+    //Directions
+    static UP_STR = "up";
+    static DOWN_STR = "down";
+    static LEFT_STR = "left";
+    static RIGHT_STR = "right";
 }
 
-
-
-
-
-
+export function GetDirectionAsString(direction) {
+    switch (direction) {
+        case Direction.Down:
+            return Constants.DOWN_STR;
+        case Direction.Up:
+            return Constants.UP_STR;
+        case Direction.Left:
+            return Constants.LEFT_STR;
+        case Direction.Right:
+            return Constants.RIGHT_STR;
+    }
+}

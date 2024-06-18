@@ -1,4 +1,5 @@
 import { Direction } from "../../direction.js";
+import { Vector2 } from "../../vector.js";
 
 /**
  * The base graphics object. Used to display in-game graphics. All graphics classes must inheret from this base class.
@@ -17,6 +18,10 @@ export class GraphicsEntity {
         this.entityUUID = entityUUID;
         this.entityHandler = entityHandler;
         this.container = pixiContainer;
+        this.containerStartPosition = new Vector2(this.container.position.x, this.container.position.y);
+        this.containerStartScale = this.container.scale;
+        this.containerStartAlpha = this.container.alpha;
+        this.containerStartRotation = this.container.rotation;
         this.sprite = sprite;
         if (this.sprite != null) {
             this.container.addChild(this.sprite);
@@ -24,40 +29,42 @@ export class GraphicsEntity {
         this.entityData = entityData;
         this.skins = skins;
         this.currentSkin = null;
-        this.currentSkin = this.skins.keys().next().value;
-        this.swapTextureToMoveDir(this.direction);
+        if (this.skins != null && this.skins.size >= 1) {
+            this.currentSkin = this.skins.keys().next().value;
+        }
         this.type = "generic";
         this.direction = Direction.Down;
         this.currentAnimation = null;
         this.isReady = true;
+        this.updateTextures();
     }
 
     /**
      * Called when onCreate is called. Handles setting override variables if given using entityData.
      */
     applyEntityData() {
-        if (this.entityData != null) {
-            if (this.entityData.position != null) {
-                this.container.position.x = this.entityData.position.x;
-                this.container.position.y = this.entityData.position.y;
-            }
-            
-            if (this.entityData.rotation != null) {
-                this.container.rotation = this.entityData.rotation;
-            }
-            
-            if (this.entityData.scale != null) {
-                this.container.scale = this.entityData.scale;
-            }
-            
-            if (this.entityData.direction != null) {
-                this.direction = this.entityData.direction;
-            }
-            
-            if (this.entityData.size != null && this.sprite != null) {
-                this.sprite.width = this.entityData.size.x;
-                this.sprite.height = this.entityData.size.y;
-            }
+        if (this.entityData == null) return;
+        
+        if (this.entityData.position != null) {
+            this.container.position.x = this.entityData.position.x;
+            this.container.position.y = this.entityData.position.y;
+        }
+        
+        if (this.entityData.rotation != null) {
+            this.container.rotation = this.entityData.rotation;
+        }
+        
+        if (this.entityData.scale != null) {
+            this.container.scale = this.entityData.scale;
+        }
+        
+        if (this.entityData.direction != null) {
+            this.direction = this.entityData.direction;
+        }
+        
+        if (this.entityData.size != null && this.sprite != null) {
+            this.sprite.width = this.entityData.size.x;
+            this.sprite.height = this.entityData.size.y;
         }
     }
 
@@ -75,10 +82,9 @@ export class GraphicsEntity {
      * @param {*} deltaTime Time between frames in seconds. 
      */
     onUpdate(deltaTime) {
-        if (this.currentAnimation != null) {
-            if (this.currentAnimation.inProgress === false) return;
-            this.currentAnimation.increment(deltaTime);
-        }
+        if (this.currentAnimation == null) return;
+        if (this.currentAnimation.inProgress === false) return;
+        this.currentAnimation.increment(deltaTime);
     }
     
     /**
@@ -129,38 +135,38 @@ export class GraphicsEntity {
         if (this.currentAnimation != null) {
             this.currentAnimation.stop();
         }
-        this.container.rotation = 0;
-        this.container.alpha = 1;
+        this.container.rotation = this.containerStartRotation;
+        this.container.alpha = this.containerStartAlpha;
+        this.container.scale = this.containerStartScale;
+        this.container.position.x = this.containerStartPosition.x;
+        this.container.position.y = this.containerStartPosition.y;
+
         this.isReady = true;
         this.currentAnimation = null;
         this.direction = Direction.Down;
+        this.updateTextures();
     }
 
-    swapTextureToMoveDir(dir) {
-        if (this.skins != null && this.skins.size > 0) {
-            this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
-        }
-        else {
-            return;
-        }
-        
+    updateTextures() {
+        if (this.skins == null || this.skins.size <= 0 || this.sprite == null) return;
+
         let tex;
-        if (dir === Direction.Up && this.skins.get(this.currentSkin).upTexture != null) {
+        this.sprite.texture = this.skins.get(this.currentSkin).defaultTexture;
+        if (this.direction === Direction.Up && this.skins.get(this.currentSkin).upTexture != null) {
             tex = this.skins.get(this.currentSkin).upTexture;
         }
-        if (dir === Direction.Down && this.skins.get(this.currentSkin).downTexture != null) {
+        if (this.direction === Direction.Down && this.skins.get(this.currentSkin).downTexture != null) {
             tex = this.skins.get(this.currentSkin).downTexture;
         }
-        if (dir === Direction.Left && this.skins.get(this.currentSkin).leftTexture != null) {
+        if (this.direction === Direction.Left && this.skins.get(this.currentSkin).leftTexture != null) {
             tex = this.skins.get(this.currentSkin).leftTexture;
         }
-        if (dir === Direction.Right && this.skins.get(this.currentSkin).rightTexture != null) {
+        if (this.direction === Direction.Right && this.skins.get(this.currentSkin).rightTexture != null) {
             tex = this.skins.get(this.currentSkin).rightTexture;
         }
-        if (tex !== undefined) {
+        if (tex != null) {
             this.sprite.texture = tex;
         }
-        this.direction = dir;
     }
 
     /**
@@ -189,6 +195,6 @@ export class GraphicsEntity {
                 this.currentSkin = key;
             }
         });
-        this.swapTextureToMoveDir(this.direction);
+        this.updateTextures();
     }
 }

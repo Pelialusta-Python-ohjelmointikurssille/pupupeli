@@ -19,7 +19,7 @@ export class GridEntity extends GraphicsEntity {
      */
     constructor(entityUUID, entityHandler, container, sprite, entityData, skins) {
         super(entityUUID, entityHandler, container, sprite, entityData, skins);
-        this.lineGraphics = new PIXI.Graphics()
+        this.lineGraphics = null;
         this.lineGraphicsList =  [];
         this.lineColor = 0x000000;
         this.lineWidth = 2;
