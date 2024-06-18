@@ -56,4 +56,8 @@ export class GraphicsCamera {
     onUpdate(deltaTime) {
         this.updatePosition();
     }
+
+    moveToPoint(point) {
+
+    }
 }
