@@ -122,4 +122,8 @@ export class GridEntity extends GraphicsEntity {
         let screenPos = GridVectorToScreenVector(gridCellPosition, this.pixelSize, this.gridSize, new Vector2(this.container.x, this.container.y));
         return screenPos;
     }
+
+    getMiddlePixelPosition() {
+        return new Vector2(this.pixelSize.x / 2 + this.container.position.x, this.pixelSize.y / 2 + this.container.position.y);
+    }
 }
