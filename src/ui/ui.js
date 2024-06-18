@@ -52,11 +52,11 @@ async function initPage() {
     //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
     const taskIdentifier = globals.taskIdentifier;
     const chapterIdentifier = globals.chapterIdentifier;
-    document.getElementById("task-id").innerHTML = globals.taskIdentifier;
+    setTitle(document.getElementById("taskTitle"));
 
     // Update the href for previous and next task links
-    const prevTaskLink = document.querySelector('a[href^="/?task="]:first-child');
-    const nextTaskLink = document.querySelector('a[href^="/?task="]:last-child');
+    const prevTaskLink = document.getElementById('prev-task-link');
+    const nextTaskLink = document.getElementById('next-task-link');
 
     setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
 
@@ -105,7 +105,7 @@ async function initPage() {
         let insHeadline = document.createElement('h1');
         insHead.id = 'instruction-head';
         let insDesc = document.createElement('div');
-        insHeadline.innerHTML = globals.task.title;
+        setTitle(insHeadline);
         insHead.appendChild(insHeadline);
         setDescription(insDesc);
         insDesc.id = 'instruction-desc';
@@ -118,11 +118,17 @@ async function initPage() {
     isUserLoggedIn();
 }
 
+function setTitle(titleDiv) {
+
+    let titleStr = globals.task.getTitle();
+    titleDiv.innerHTML = titleStr;
+}
+
 /**
  * Sets the text from task.description to given div. Useful since game and instructions tasks use different description div.
- * @param {object} targetDiv | the description div where we want description text as a html element
+ * @param {object} descriptionDiv | the description div where we want description text as a html element
  */
-function setDescription(targetDiv){
+function setDescription(descriptionDiv){
     // set description
     globals.task.getDescription().forEach((line, i) => {
         line = line === "" ? "<br>" : line;
@@ -130,9 +136,9 @@ function setDescription(targetDiv){
             return;
         }
         if (i === 0) {
-            targetDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
+            descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
         } else {
-            targetDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
+            descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
         }
     });
 }
