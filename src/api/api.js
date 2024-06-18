@@ -3,8 +3,6 @@ import { getEditor } from "../input/editor.js";
 
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
-let getTaskButton = document.getElementById("getTaskButton");
-let getCompletedTasksButton = document.getElementById("getCompletedTasksButton");
 const url = 'http://localhost:3000/api/';
 
 // eventlisteners should probably eventually be moved elsewhere
@@ -34,26 +32,6 @@ logoutButton.addEventListener("click", () => {
             console.log(data);
             localStorage.removeItem("token");
             window.location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
-
-getTaskButton.addEventListener("click", () => {
-    getTask(url)
-        .then(data => {
-            console.log("get", data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
-
-getCompletedTasksButton.addEventListener("click", () => {
-    getCompletedTasks(url)
-        .then(data => {
-            console.log("list", data);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -92,8 +70,7 @@ async function sendPostRequest(url, params) {
         // try to parse response body as JSON
         const json = await response.json();
         return json;
-    } catch (error) {
-        console.error(error);
+    } catch {
         // if parsing fails, return the raw response
         return response;
     }
