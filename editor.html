@@ -64,6 +64,11 @@
             padding: 0;
         }
 
+        #instructions-input {
+            width: 100%;
+            min-height: 50rem;
+        }
+
         @media (max-width:1280px) {
             #app {
                 grid-template-columns: 1fr;
@@ -265,7 +270,7 @@
                     <textarea id="instructions-input" class="is-hidden" rows="10" cols="50" placeholder="Kirjoita ohje tänne"></textarea>
                 </div>
                 <div id="other-conditions-head">
-                    <h3>Valitse muut ehdot:</h3>
+                    <h3 class="headline">Valitse muut ehdot:</h3>
                 </div>
                 <div id="options-conditions" class="is-flex is-flex-1 is-flex-center">
                     <div class="checkbox-container is-flex is-flex-center">
@@ -302,7 +307,7 @@
                 </div>
             </div>
             <div id="app-container-indicator">
-                <h3>Tehtävän ruudukko:</h3>
+                <h3 class="headline">Tehtävän ruudukko:</h3>
             </div>
             <div id="app-container" class="is-flex">
                 <div id="editor-container">
@@ -324,7 +329,7 @@
         let optionsInputDiv = document.getElementById('options-input');
         let optionsAppContainer = document.getElementById('app-container');
         let instructionsInput = document.getElementById('instructions-input');
-
+        let headlines = document.querySelectorAll('.headline');
         // Add the event listener to each radio button
         taskTypeRadios.forEach(radio => {
             radio.addEventListener('change', function() {
@@ -335,6 +340,9 @@
                     optionsAppContainer.style.display = 'none';
                     instructionsInput.style.display = 'block';
                     instructionsInput.classList.remove('is-hidden');
+                    headlines.forEach(headline => {
+                    headline.style.display = 'none';
+                    });
                 } else {
                     // Otherwise, hide the text box and show the divs
                     instructionsInput.style.display = 'none';
@@ -342,6 +350,9 @@
                     optionsInputDiv.style.display = 'flex';
                     optionsAppContainer.style.display = 'flex';
                     instructionsInput.classList.add('is-hidden');
+                    headlines.forEach(headline => {
+                    headline.style.display = 'block';
+                    });
                 }
             });
         });
