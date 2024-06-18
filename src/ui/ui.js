@@ -27,7 +27,7 @@ async function main() {
  */
 async function initGameAndCanvas() {
     let canvas = await initGame();
-    document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
+    document.getElementById("right-container").insertAdjacentElement("afterbegin", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
     setTheme(localStorage.getItem("theme"));
@@ -114,9 +114,10 @@ function isUserLoggedIn() {
         document.getElementById("logged-in-as-user").innerText = localStorage.getItem("username");
     }
     if (localStorage.getItem("token") !== null) {
-        document.getElementById("user-container").classList.add("is-hidden");
         document.getElementById("logout-button").classList.remove("is-hidden");
         document.getElementById("logged-in-as-container").classList.remove("is-hidden");
+    } else {
+        document.getElementById("user-container").classList.remove("is-hidden");
     }
 }
 
