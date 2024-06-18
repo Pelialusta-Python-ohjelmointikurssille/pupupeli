@@ -113,12 +113,12 @@ function createInstructionPage() {
     
     let insHead = document.createElement('div');
     insHead.id = 'instruction-head';
-    
+    insHead.style.marginBottom = '1rem';
+
     let insHeadline = document.createElement('h1');
     
     let prevTaskLink = document.createElement('a');
     prevTaskLink.id = 'prev-task-link';
-    prevTaskLink.href = '/?task=1';
     prevTaskLink.style.textDecoration = 'none';
     prevTaskLink.textContent = '< ';
     
@@ -127,7 +127,6 @@ function createInstructionPage() {
     
     let nextTaskLink = document.createElement('a');
     nextTaskLink.id = 'next-task-link';
-    nextTaskLink.href = '/?task=2';
     nextTaskLink.style.textDecoration = 'none';
     nextTaskLink.textContent = ' >';
     
