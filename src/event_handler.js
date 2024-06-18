@@ -104,6 +104,8 @@ export function runSingleCommand() {
 export function onUserSendInputToWorker() {
     let word = getInputBoxValue();
     inputToWorker(word);
+    gameController.game.isAskingQuestionFromGame = false;
+    gameController.game.onAnimsReady();
 }
 
 export function inputToWorker(word) {

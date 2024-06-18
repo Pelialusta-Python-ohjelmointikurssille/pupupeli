@@ -16,11 +16,12 @@ import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.
  * @graphicsHandler The current GraphicsHandler used.
  */
 export class MoveCommand {
-    constructor(grid, gridObject, dir, graphicsHandler) {
+    constructor(grid, gridObject, dir, graphicsHandler, game) {
         this.grid = grid;
         this.gridObject = gridObject;
         this.dir = dir;
         this.graphicsHandler = graphicsHandler;
+        this.game = game;
         this.moveStartPos = this.gridObject.getVector2Position();
         this.moveSpeed = 0.4;
         this.objectHideSpeed = 0.6;
@@ -53,8 +54,12 @@ export class MoveCommand {
                 this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
                 
                 this.grid.removeFromGrid(go);
-                let sayCommand = new SayCommand(this.grid.player, this.graphicsHandler, "NAM!");
-                sayCommand.execute();
+            }
+            if (gridobjects[i].type === Constants.QUESTION_COLLECTIBLE) {
+                let go = gridobjects[i];
+                this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
+                
+                this.game.askQuestionMessage("HELLO?");
             }
         }
     }

@@ -1,12 +1,13 @@
 import { onTaskComplete } from "../ui/ui.js";
 import { Game } from "./game.js";
 import { postMessage } from "../event_handler.js";
+import { showInputBox } from "../ui/inputBox.js";
 
 //This file controls game. 
 // - Creates new game instances (Game contains both logic and rendering)
 // - handles game command input and output
 
-var game;
+export var game;
 var currentCommand;
 
 
@@ -33,6 +34,10 @@ export function commandsDone() {
         return;
     }
     postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
+}
+
+export function askQuestion(question) {
+    showInputBox();
 }
 
 export function getCanvas() {

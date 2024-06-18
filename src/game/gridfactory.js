@@ -9,7 +9,7 @@ const gridObjectManifest = {
     1: "",
     2: Constants.COLLECTIBLE,
     3: Constants.OBSTACLE,
-    4: Constants.ASK_OBJECT
+    4: Constants.QUESTION_COLLECTIBLE
 }
 
 /**

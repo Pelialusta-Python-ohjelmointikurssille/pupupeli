@@ -41,5 +41,9 @@ export const ENTITIES = [
     {
         typeName: "collectible",
         factoryFunction: createCollectible
+    },
+    {
+        typeName: "question_collectible",
+        factoryFunction: createCollectible
     }
 ]

@@ -2,7 +2,7 @@ import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
-import { commandsDone } from "./game_controller.js";
+import { commandsDone, askQuestion } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
@@ -19,6 +19,7 @@ export class Game {
         this.gameWon = false;
 
         this.isGridEnabled = true;
+        this.isAskingQuestionFromGame = false;
     }
 
     async init() {
@@ -58,13 +59,14 @@ export class Game {
      * This is necessary to not call gamewon and display celebration box after inputting wrong code after a succesful pass.
      */
     onAnimsReady() {
+        if (this.isAskingQuestionFromGame) return;
         commandsDone();
         this.gameWon = false;
     }
 
     makeMoveCommand(commandParameter) {
         let dir = translatePythonMoveStringToDirection(commandParameter);
-        let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
+        let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh, this);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
     }
@@ -75,9 +77,16 @@ export class Game {
     }
 
     makeAskCommand(commandParameter) {
-        let moveCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
-        moveCommand.execute();
+        let askCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
+        askCommand.execute();
         this.onAnimsReady();
+    }
+
+    askQuestionMessage(question) {
+        this.isAskingQuestionFromGame = true;
+        let askCommand = new AskCommand(this.grid.player, this.gh, "Onko totta että 2+2=4?");
+        askCommand.execute();
+        askQuestion(question);
     }
 
     resetGame() {
