@@ -192,6 +192,7 @@ body {
 
 #logout-button {
     margin-bottom: 0;
+    margin-left: 1rem;
 }
 
 #task-selector-box button {
@@ -395,7 +396,7 @@ button:hover {
     }
 
     #game {
-        margin: 1rem auto 1rem auto;
+        margin: 1rem;
     }
 
     #task-container, #editor {

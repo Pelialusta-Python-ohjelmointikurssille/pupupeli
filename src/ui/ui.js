@@ -110,9 +110,13 @@ async function initPage() {
 }
 
 function isUserLoggedIn() {
+    if (localStorage.getItem("username") !== null) {
+        document.getElementById("logged-in-as-user").innerText = localStorage.getItem("username");
+    }
     if (localStorage.getItem("token") !== null) {
         document.getElementById("user-container").classList.add("is-hidden");
         document.getElementById("logout-button").classList.remove("is-hidden");
+        document.getElementById("logged-in-as-container").classList.remove("is-hidden");
     }
 }
 
