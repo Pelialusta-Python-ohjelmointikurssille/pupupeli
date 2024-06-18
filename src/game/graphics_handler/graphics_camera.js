@@ -21,6 +21,8 @@ export class GraphicsCamera {
         this.screenCenter = new Vector2(pixiScreen.width / 2, pixiScreen.height / 2)
         this.zoomScale = 1;
         this.rotation = 0;
+        this.minZoom = 0.5;
+        this.maxZoom = 1.5;
         this.container.position.x = this.screenCenter.x;
         this.container.position.y = this.screenCenter.y;
         this.totalRenderScale = this.getTotalRenderScale();
@@ -61,5 +63,11 @@ export class GraphicsCamera {
     moveToPoint(point) {
         this.position.x = point.x;
         this.position.y = point.y;
+    }
+
+    setZoom(value) {
+        if (value > this.maxZoom) this.zoomScale = this.maxZoom;
+        else if (value < this.minZoom) this.zoomScale = this.minZoom;
+        else this.zoomScale = value;
     }
 }

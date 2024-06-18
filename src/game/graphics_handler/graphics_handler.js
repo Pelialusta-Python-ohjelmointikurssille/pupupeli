@@ -57,6 +57,7 @@ export class GraphicsHandler {
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
 
         this.createGrid();
+        this.zoomCameraCorrectly();
 
         let t2 = new Date().getTime();
         console.log(`Loading graphics engine took ${t2-t1}ms`);
@@ -130,9 +131,18 @@ export class GraphicsHandler {
     createGrid() {
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
         this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 128, this.gridHeight * 128) } , SKIN_BUNDLES["background"]);
+    }
 
+    zoomCameraCorrectly() {
+        let zoom = 1;
+        if (this.gridWidth > this.gridHeight) {
+            zoom = 1024 / this.graphicsEntityHandler.getMainGridObject().pixelSize.x;
+        } else {
+            zoom = 1024 / this.graphicsEntityHandler.getMainGridObject().pixelSize.y;
+        }
         let middle = this.graphicsEntityHandler.getMainGridObject().getMiddlePixelPosition();
         this.graphicsEntityHandler.camera.moveToPoint(middle);
+        this.graphicsEntityHandler.camera.setZoom(zoom * 0.95);
     }
 
     /**
