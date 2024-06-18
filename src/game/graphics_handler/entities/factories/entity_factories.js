@@ -94,6 +94,25 @@ export function createCollectible(entityUUID, entityData, graphicsEntityHandler,
     return entity;
 }
 
+export function createObstacle(entityUUID, entityData, graphicsEntityHandler, skins) {
+    let sprite = new PIXI.Sprite();
+    let entity = new PawnEntity(
+        entityUUID,
+        graphicsEntityHandler,
+        new PIXI.Container(),
+        sprite,
+        entityData,
+        skins
+    );
+    if (entityData.zIndex != null) {
+        entity.container.zIndex = entityData.zIndex;
+    } else {
+        entity.container.zIndex = -2;
+    }
+    entity.type = "pawn";
+    return entity;
+}
+
 /**
  * @private
  * @param {string} entityUUID 
@@ -113,7 +132,7 @@ export function createGrid(entityUUID, entityData, graphicsEntityHandler, skins)
     if (entityData.zIndex != null) {
         entity.container.zIndex = entityData.zIndex;
     } else {
-        entity.container.zIndex = -10;
+        entity.container.zIndex = 0;
     }
     entity.type = "grid";
     return entity;
