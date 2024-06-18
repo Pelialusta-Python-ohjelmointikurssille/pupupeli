@@ -11,8 +11,10 @@ export class GridData {
         globalGridData.data = this;
     }
 
-    remove() {
-
+    remove(gridObject) {
+        if (this.goDict[gridObject.type] === undefined) return;
+        let index = this.goDict[gridObject.type].indexOf(gridObject);
+        this.goDict[gridObject.type].splice(index, 1);
     }
 
     reset() {

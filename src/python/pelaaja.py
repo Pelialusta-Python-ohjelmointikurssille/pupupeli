@@ -53,7 +53,7 @@ class Pelaaja:
         js.runCommand("ask", question)
         return input()
 
-    def kysyMaara(self, variableName: str):
+    def laske(self, variableName: str):
         #        if reset_flag:
         #            raise Exception("Interpreter was reset")
         if variableName == self.__name:

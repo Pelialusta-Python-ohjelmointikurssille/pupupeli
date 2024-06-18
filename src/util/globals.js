@@ -1,7 +1,5 @@
 import { tryGetFileAsJson } from "../file_reader.js";
-import { Constants } from "../game/commonstrings.js";
 import { Task } from "../util/task.js";
-import { GridData } from "../game/grid_data.js";
 
 export const taskIdentifier = (function () {
     const searchParams = new URLSearchParams(window.location.search);
