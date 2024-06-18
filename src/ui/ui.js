@@ -159,19 +159,25 @@ function createChapterButtons() {
     const selectContainer = document.getElementById('chapterbuttontable');
 
     for (let i = 0; i < totalChapters; i++) {
-        const option = document.createElement('option');
-        option.id = `chapter-option-${i + 1}`;
-        option.value = i + 1;
-        option.innerText = `Tehtäväsarja ${i + 1}`;
-        selectContainer.appendChild(option);
+        const button = document.createElement('button');
+        button.id = `chapter-button-${i + 1}`;
+        button.value = i + 1;
+        button.innerText = `Tehtäväsarja ${i + 1}`;
+        button.addEventListener('click', () => {
+            currentChapter = i + 1; 
+            window.location.href = `/?chapter=${currentChapter}&task=1`; 
+        });
+        selectContainer.appendChild(button);
+        
     }
 
-    selectContainer.value = currentChapter;
+    // selectContainer.value = currentChapter;
 
-    selectContainer.addEventListener('change', (event) => {
-        const selectedChapter = event.target.value;
-        window.location.href = `/?chapter=${selectedChapter}&task=1`;
-    });
+    // selectContainer.addEventListener('change', (event) => {
+    //     const selectedChapter = event.target.value;
+    //     window.location.href = `/?chapter=${selectedChapter}&task=1`;
+    // });
+    
 }
 
 /**
