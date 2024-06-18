@@ -52,13 +52,12 @@ async function initPage() {
     //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
     const taskIdentifier = globals.taskIdentifier;
     const chapterIdentifier = globals.chapterIdentifier;
-    setTitle(document.getElementById("taskTitle"));
 
     // Update the href for previous and next task links
-    const prevTaskLink = document.getElementById('prev-task-link');
-    const nextTaskLink = document.getElementById('next-task-link');
+    // const prevTaskLink = document.getElementById('prev-task-link');
+    // const nextTaskLink = document.getElementById('next-task-link');
 
-    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
+    // setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
 
     if (globals.task.getTaskType() != instructionsStr) {
 
@@ -101,18 +100,47 @@ async function initPage() {
         });
         const insDiv = document.createElement('div');
         insDiv.id = 'instruction-div';
+        
         let insHead = document.createElement('div');
-        let insHeadline = document.createElement('h1');
         insHead.id = 'instruction-head';
-        let insDesc = document.createElement('div');
-        setTitle(insHeadline);
+        
+        let insHeadline = document.createElement('h1');
+        
+        let prevTaskLink = document.createElement('a');
+        prevTaskLink.id = 'prev-task-link';
+        prevTaskLink.href = '/?task=1';
+        prevTaskLink.style.textDecoration = 'none';
+        prevTaskLink.textContent = '< ';
+        
+        let taskTitle = document.createElement('a');
+        taskTitle.id = 'taskTitle';
+        
+        let nextTaskLink = document.createElement('a');
+        nextTaskLink.id = 'next-task-link';
+        nextTaskLink.href = '/?task=2';
+        nextTaskLink.style.textDecoration = 'none';
+        nextTaskLink.textContent = ' >';
+        
+        insHeadline.appendChild(prevTaskLink);
+        insHeadline.appendChild(taskTitle);
+        insHeadline.appendChild(nextTaskLink);
+        
         insHead.appendChild(insHeadline);
+        
+        let insDesc = document.createElement('div');
         setDescription(insDesc);
         insDesc.id = 'instruction-desc';
+        
         appDiv.appendChild(insDiv);
         insDiv.appendChild(insHead);
         insDiv.appendChild(insDesc);
     }
+
+    setTitle(document.getElementById("taskTitle"));
+    const prevTaskLink = document.getElementById('prev-task-link');
+    const nextTaskLink = document.getElementById('next-task-link');
+
+    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
 
     createChapterButtons();
     isUserLoggedIn();
