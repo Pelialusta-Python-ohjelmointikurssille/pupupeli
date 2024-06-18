@@ -43,6 +43,10 @@
             display: none !important;
         }
 
+        .is-flex {
+            display: flex;
+        }
+
         .is-flex-center {
             justify-content: center;
             align-items: center;
@@ -66,6 +70,15 @@
             }
         }
 
+        #other-conditions-head {
+            display: flex;
+            justify-content: center;
+        }
+
+        #box-type {
+            display: flex;
+            justify-content: center;
+        }
 
         #app-container {
             margin: 1rem;
@@ -156,6 +169,13 @@
             min-height: 3rem;
         }
 
+        #instructions-input {
+            width: 100%;
+            max-width: calc(var(--canvas-width)* 1.8);
+            min-height: 50rem;
+            padding: 0.5rem;
+        }
+
         .options-input-buttons {
             margin-bottom: 0.25rem;
         }
@@ -224,6 +244,27 @@
                 </div>
             </div>
             <div id="options-container" class="is-flex is-flex-column">
+                <div id="task-title" class="is-flex is-flex-center">
+                    <h3>Tehtävän nimi:</h3>
+                    <input type="text" placeholder="Tehtävän nimi" style="text-align:center; width: 200px; height: 25px;">
+                </div>
+                <div id="task-type" class="is-flex is-flex-center">
+                    <h3>Tehtävän tyyppi:</h3>
+                    <input type="radio" id="taskType1" name="taskType" value="collectibles" style="margin-right: 10px;">
+                    <label for="taskType1" style="margin-right: 20px;">Kerää esineet</label>
+                
+                    <input type="radio" id="taskType2" name="taskType" value="multiple-choice" style="margin-right: 10px;">
+                    <label for="taskType2" style="margin-right: 20px;">Monivalinta</label>
+                
+                    <input type="radio" id="taskType3" name="taskType" value="instructions" style="margin-right: 10px;">
+                    <label for="taskType3">Ohjeistus</label>
+                </div>
+                <div>
+                    <textarea id="instructions-input" class="is-hidden" rows="10" cols="50" placeholder="Kirjoita ohje tänne"></textarea>
+                </div>
+                <div id="other-conditions-head">
+                    <h3>Valitse muut ehdot:</h3>
+                </div>
                 <div id="options-conditions" class="is-flex is-flex-1 is-flex-center">
                     <div class="checkbox-container is-flex is-flex-center">
                         <input type="checkbox" id="condition1" class="checkbox" name="condition1" value="conditionUsedWhile" onclick="clickConditionBox(this)">
@@ -243,6 +284,9 @@
                     </div>
                 </div>
                 <div id="options-input" class="is-flex is-flex-1 is-flex-column">
+                    <div id="box-type">
+                        <h3 id="box-type-indicator">Tehtävän kuvaus:</h3>
+                    </div>
                     <div id="options-input-buttons-container">
                         <button class="options-input-buttons" value="inputDescription" onclick="inputButtonsToggler(event)">Tehtävän kuvaus</button>
                         <button class="options-input-buttons" value="inputEditorCode" onclick="inputButtonsToggler(event)">Editorin koodi</button>
@@ -254,6 +298,9 @@
                     <div id="multiple-choice-container" class="is-hidden">
                     </div>
                 </div>
+            </div>
+            <div id="app-container-indicator">
+                <h3>Tehtävän ruudukko:</h3>
             </div>
             <div id="app-container" class="is-flex">
                 <div id="editor-container">
@@ -267,8 +314,40 @@
     </div>
 
     <script>
+        // Get all the radio buttons
+        let taskTypeRadios = document.querySelectorAll('input[name="taskType"]');
+
+        // Get the divs
+        let optionsConditionsDiv = document.getElementById('options-conditions');
+        let optionsInputDiv = document.getElementById('options-input');
+        let optionsAppContainer = document.getElementById('app-container');
+        let instructionsInput = document.getElementById('instructions-input');
+
+        // Add the event listener to each radio button
+        taskTypeRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // If the selected task type is 'instructions', show the text box and hide the divs
+                if (this.value === 'instructions') {
+                    optionsConditionsDiv.style.display = 'none';
+                    optionsInputDiv.style.display = 'none';
+                    optionsAppContainer.style.display = 'none';
+                    instructionsInput.style.display = 'block';
+                    instructionsInput.classList.remove('is-hidden');
+                } else {
+                    // Otherwise, hide the text box and show the divs
+                    instructionsInput.style.display = 'none';
+                    optionsConditionsDiv.style.display = 'flex';
+                    optionsInputDiv.style.display = 'flex';
+                    optionsAppContainer.style.display = 'flex';
+                    instructionsInput.classList.add('is-hidden');
+                }
+            });
+        });
+
         class Level {
-            constructor(description, editorCode, multipleChoiceQuestions, grid, conditions) {
+            constructor(description, taskTitle, taskType, editorCode, multipleChoiceQuestions, grid, conditions) {
+                this.title = taskTitle;
+                this.taskType = taskType;
                 this.description = description;
                 this.editorCode = editorCode;
                 this.multipleChoiceQuestions = multipleChoiceQuestions;
@@ -389,15 +468,35 @@
             return editorCodeLines;
         }
 
-        function generateTaskOutput() {
+        function getTitle() {
+            titleLine = []
+            titleLine.push(document.querySelector("#task-title input").value);
+            return titleLine;
+        }
 
+        function getTaskType() {
+            typeLine = []
+            typeLine.push(document.querySelector('input[name="taskType"]:checked').value);
+            return typeLine;
+        }
+
+        function generateTaskOutput() {
+            let taskTitle = document.querySelector('#task-title input').value;
+            let selectedTaskType = document.querySelector('input[name="taskType"]:checked').value;
             const taskDescriptionLines = [];
-            document.getElementById("task-input").value.split("\n").forEach((line) => {
-                taskDescriptionLines.push(line);
-            });
+            if (selectedTaskType === 'instructions') {
+                document.getElementById('instructions-input').value.split("\n").forEach((line) => {
+                    taskDescriptionLines.push(line);
+                });
+            } else {
+                document.getElementById("task-input").value.split("\n").forEach((line) => {
+                    taskDescriptionLines.push(line);
+                });
+            }
+
 
             // use Level class to get json output
-            let output = new Level(taskDescriptionLines, getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
+            let output = new Level(taskDescriptionLines, getTitle(), getTaskType(), getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
             let outputField = document.getElementById("output-field");
             outputField.value = customJSONStringify(output);
             // need to fire input event to resize output field
@@ -442,9 +541,11 @@
             let editorInput = document.getElementById("editor-input");
             let multipleChoiceContainer = document.getElementById("multiple-choice-container");
             let multipleChoiceAddButton = document.getElementById("add-multiple-choice-button");
+            let typeIndicator = document.getElementById("box-type-indicator");
 
             switch (event.target.value) {
                 case "inputDescription":
+                    typeIndicator.innerHTML = "Tehtävän kuvaus:";
                     if (taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
                     if (!editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
                     if (!multipleChoiceContainer.classList.contains("is-hidden")) {
@@ -454,6 +555,7 @@
                     }
                     break;
                 case "inputEditorCode":
+                    typeIndicator.innerHTML = "Editorin koodi:";
                     if (!taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
                     if (editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
                     if (!multipleChoiceContainer.classList.contains("is-hidden")) {
@@ -463,6 +565,7 @@
                     }
                     break;
                 case "inputMultipleChoice":
+                    typeIndicator.innerHTML = "Monivalinta vaihtoehdot:";
                     if (!taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
                     if (!editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
                     if (multipleChoiceContainer.classList.contains("is-hidden")) {
@@ -478,7 +581,7 @@
             let multipleChoiceContainer = document.getElementById("multiple-choice-container");
             let multipleChoiceElement = document.createElement("div");
             multipleChoiceElement.classList.add("multiple-choice", "is-flex", "is-flex-column");
-            multipleChoiceElement.innerHTML = `<input type='text' placeholder='Lisää kysymys'><div class='multiple-choice-input'><input name='multipleChoice${multipleChoiceContainer.childNodes.length - 1}' type='checkbox'><label for='multipleChoice${multipleChoiceContainer.childNodes.length - 1} style="line-height: 20px;'>Oikea vastaus?</label></div>`;
+            multipleChoiceElement.innerHTML = `<input type='text' placeholder='Lisää vastaus'><div class='multiple-choice-input'><input name='multipleChoice${multipleChoiceContainer.childNodes.length - 1}' type='checkbox'><label for='multipleChoice${multipleChoiceContainer.childNodes.length - 1} style="line-height: 20px;'>Oikea vastaus?</label></div>`;
 
             multipleChoiceContainer.insertAdjacentElement("beforeend", multipleChoiceElement);
         }
