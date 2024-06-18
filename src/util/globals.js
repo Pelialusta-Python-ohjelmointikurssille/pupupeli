@@ -1,6 +1,7 @@
 import { tryGetFileAsJson } from "../file_reader.js";
 import { Constants } from "../game/commonstrings.js";
 import { Task } from "../util/task.js";
+import { GridData } from "../game/grid_data.js";
 
 export const taskIdentifier = (function () {
     const searchParams = new URLSearchParams(window.location.search);
@@ -25,14 +26,27 @@ export const task = (function () {
     return Task.fromJSON(tryGetFileAsJson(path));
 })();
 
+//This works on the assumption that there is only one grid.
+//globalGridData is a GridData
+/**
+ * This works on the assumption that there is only one grid.
+ * globalGridData.data is a GridData object (grid_data.js), and is a singleton, meaning that making a new 
+ * game grid will replace it, as the newest GridData makes globalGridData refrence itself.
+ * Only use functions starting with "get", as other functions are used by the current grids logic.
+ */
+export let globalGridData = { data: undefined };
 //not sexy to count every object in the grid every time you want the total amount... (task.getTotalCollectibles())
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
 
-export function getGridObjectsLeft(name) {
-    if (name === Constants.COLLECTIBLE) return (collectibles.total - collectibles.current);
-    if (name === Constants.OBSTACLE) return (obstacles.total - obstacles.current);
-    return 0;
+export function getGridObjectsLeft(type) {
+    //if (name === Constants.COLLECTIBLE) return (collectibles.total - collectibles.current);
+    //if (name === Constants.OBSTACLE) return (obstacles.total - obstacles.current);
+    if (!globalGridData.data) {
+        console.error("No global grid data.");
+        return 0;
+    }
+    return globalGridData.data.getGridObjectsOfTypeCount(type);
 }
 
 export const conditions = task.getConditions();

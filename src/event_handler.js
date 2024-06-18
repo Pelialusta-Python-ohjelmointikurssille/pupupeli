@@ -47,7 +47,7 @@ export function initWorker() {
                 displayErrorMessage(message.error);
                 break;
             case "getInt":
-                senAmountOfVariableToWorkerAsInput(message);
+                sendAmountOfVariableToWorkerAsInput(message);
                 break;
         }
     }
@@ -59,7 +59,7 @@ export function initWorker() {
     }
 }
 
-function senAmountOfVariableToWorkerAsInput(message) {
+function sendAmountOfVariableToWorkerAsInput(message) {
     sharedArray = new Uint16Array(message.sab, 4);
     syncArray = new Int32Array(message.sab, 0, 1);
     let trueName = getVariableTrueName(message.details);
