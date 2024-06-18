@@ -111,8 +111,9 @@ async function initPage() {
 
 function isUserLoggedIn() {
     if (localStorage.getItem("token") !== null) {
-        document.getElementById("user-container").classList.add("is-hidden");
         document.getElementById("logout-button").classList.remove("is-hidden");
+    } else {
+        document.getElementById("user-container").classList.remove("is-hidden");
     }
 }
 
