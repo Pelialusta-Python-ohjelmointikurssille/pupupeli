@@ -61,17 +61,32 @@ export class GraphicsCamera {
         this.updatePosition();
     }
 
+
+    /**
+     * Move camera to a Vector2 point.
+     * @param {Vector2} point 
+     */
     moveToPoint(point) {
         this.position.x = point.x;
         this.position.y = point.y;
     }
 
+    /**
+     * Set camera to focus on an area, so that it fits inside camera view.
+     * @param {Vector2} middle Middle position of the area.
+     * @param {Vector2} size Width and height of the area.
+     */
     focusOnAreaMiddle(middle, size) {
         let topLeft = new Vector2(middle.x - (size.x / 2), middle.y - (size.y / 2));
         let bottomRight = new Vector2(middle.x + (size.x / 2), middle.y + (size.y / 2));
         this.focusOnArea(topLeft, bottomRight);
     }
 
+    /**
+     * Set camera to focus on an area, so that it fits inside camera view.
+     * @param {Vector2} topLeft Top left point of the area bounds.
+     * @param {Vector2} bottomRight Bottom right point of the area bounds.
+     */
     focusOnArea(topLeft, bottomRight) {
         let zoom = 1;
         let width = (bottomRight.x - topLeft.x);
@@ -84,6 +99,10 @@ export class GraphicsCamera {
         this.setZoom(zoom * (1 - this.focusPaddingPercent));
     }
 
+    /**
+     * Set camera zoom. Will be clamped if too big or small. Smaller value means more zoomed out. Bigger means more zoomed in.
+     * @param {number} value 
+     */
     setZoom(value) {
         if (value > this.maxZoom) this.zoomScale = this.maxZoom;
         else if (value < this.minZoom) this.zoomScale = this.minZoom;
