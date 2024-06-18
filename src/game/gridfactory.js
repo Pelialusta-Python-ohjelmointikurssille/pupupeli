@@ -4,6 +4,14 @@ import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 import { GameModeGetCollectibles, GameModeMultipleChoice } from "./gameModes.js";
 
+const gridObjectManifest = {
+    0: Constants.PLAYER_STR,
+    1: "",
+    2: Constants.COLLECTIBLE,
+    3: Constants.OBSTACLE,
+    4: Constants.ASK_OBJECT
+}
+
 /**
  * 
  * @returns Object containing the task: { grid: grid, gameMode: gameMode }
@@ -44,13 +52,13 @@ export function getGameTask() {
 function buildGrid(gridIntTable, newGrid, width, height) {
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            if (gridIntTable[y][x] === 2) {
-                let collectible = getNewGridObject(Constants.COLLECTIBLE);
-                newGrid.addToGrid(collectible, x, y);
-            } else if (gridIntTable[y][x] === 3) {
-                let obstacle = getNewGridObject(Constants.OBSTACLE);
-                newGrid.addToGrid(obstacle, x, y);
-            }
+            addToGridById(gridIntTable[y][x], newGrid, x, y);
         }
     }
+}
+
+function addToGridById(objectId, newGrid, x, y) {
+    if (objectId === 0 || objectId === 1) return;
+    let collectible = getNewGridObject(gridObjectManifest[objectId]);
+    newGrid.addToGrid(collectible, x, y);
 }

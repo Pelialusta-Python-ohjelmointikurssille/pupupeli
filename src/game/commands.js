@@ -51,7 +51,10 @@ export class MoveCommand {
             if (gridobjects[i].type === Constants.COLLECTIBLE) {
                 let go = gridobjects[i];
                 this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
+                
                 this.grid.removeFromGrid(go);
+                let sayCommand = new SayCommand(this.grid.player, this.graphicsHandler, "NAM!");
+                sayCommand.execute();
             }
         }
     }

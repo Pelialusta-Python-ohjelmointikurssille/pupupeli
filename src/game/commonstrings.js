@@ -1,6 +1,8 @@
 export class Constants {
     static COLLECTIBLE = "collectible";
     static OBSTACLE = "obstacle";
+    static EMPTY_TILE = "";
+    static ASK_OBJECT = "ask_collectible";
     //Following are the valid command strings:
     static MOVE_STR = "move";
     static SAY_STR = "say";
