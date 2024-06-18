@@ -47,21 +47,28 @@ async function initGameAndCanvas() {
  * Inserts information to page elements according to current task. Also adds task select buttons.
  */
 async function initPage() {
-    // Set task identifier
-    //copypasted from createTaskButtons function, this could be globals
-    //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
     const taskIdentifier = globals.taskIdentifier;
     const chapterIdentifier = globals.chapterIdentifier;
 
-    // Update the href for previous and next task links
-    // const prevTaskLink = document.getElementById('prev-task-link');
-    // const nextTaskLink = document.getElementById('next-task-link');
-
-    // setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
-
     if (globals.task.getTaskType() != instructionsStr) {
+        createGamePage();
+    
+    } else {
+        createInstructionPage();
+    }
 
-        let descriptionTargetDiv = document.getElementById("task-description");
+    setTitle(document.getElementById("taskTitle"));
+    const prevTaskLink = document.getElementById('prev-task-link');
+    const nextTaskLink = document.getElementById('next-task-link');
+
+    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
+
+    createChapterButtons();
+    isUserLoggedIn();
+}
+
+function createGamePage() {
+    let descriptionTargetDiv = document.getElementById("task-description");
         setDescription(descriptionTargetDiv);
 
         // set multiple choice questions
@@ -90,60 +97,53 @@ async function initPage() {
             getEditor().setValue(globals.task.getEditorCode());
             createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
         });
-    } else {
-        const appDiv = document.getElementById("app-container");
-        appDiv.innerHTML = "";
-        appDiv.style.flexDirection = "row";
-        appDiv.style.display = "flex";
-        window.addEventListener('load', function () {
-            createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
-        });
-        const insDiv = document.createElement('div');
-        insDiv.id = 'instruction-div';
-        
-        let insHead = document.createElement('div');
-        insHead.id = 'instruction-head';
-        
-        let insHeadline = document.createElement('h1');
-        
-        let prevTaskLink = document.createElement('a');
-        prevTaskLink.id = 'prev-task-link';
-        prevTaskLink.href = '/?task=1';
-        prevTaskLink.style.textDecoration = 'none';
-        prevTaskLink.textContent = '< ';
-        
-        let taskTitle = document.createElement('a');
-        taskTitle.id = 'taskTitle';
-        
-        let nextTaskLink = document.createElement('a');
-        nextTaskLink.id = 'next-task-link';
-        nextTaskLink.href = '/?task=2';
-        nextTaskLink.style.textDecoration = 'none';
-        nextTaskLink.textContent = ' >';
-        
-        insHeadline.appendChild(prevTaskLink);
-        insHeadline.appendChild(taskTitle);
-        insHeadline.appendChild(nextTaskLink);
-        
-        insHead.appendChild(insHeadline);
-        
-        let insDesc = document.createElement('div');
-        setDescription(insDesc);
-        insDesc.id = 'instruction-desc';
-        
-        appDiv.appendChild(insDiv);
-        insDiv.appendChild(insHead);
-        insDiv.appendChild(insDesc);
-    }
+}
 
-    setTitle(document.getElementById("taskTitle"));
-    const prevTaskLink = document.getElementById('prev-task-link');
-    const nextTaskLink = document.getElementById('next-task-link');
+function createInstructionPage() {
 
-    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
-
-    createChapterButtons();
-    isUserLoggedIn();
+    const appDiv = document.getElementById("app-container");
+    appDiv.innerHTML = "";
+    appDiv.style.flexDirection = "row";
+    appDiv.style.display = "flex";
+    window.addEventListener('load', function () {
+        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
+    });
+    const insDiv = document.createElement('div');
+    insDiv.id = 'instruction-div';
+    
+    let insHead = document.createElement('div');
+    insHead.id = 'instruction-head';
+    
+    let insHeadline = document.createElement('h1');
+    
+    let prevTaskLink = document.createElement('a');
+    prevTaskLink.id = 'prev-task-link';
+    prevTaskLink.href = '/?task=1';
+    prevTaskLink.style.textDecoration = 'none';
+    prevTaskLink.textContent = '< ';
+    
+    let taskTitle = document.createElement('a');
+    taskTitle.id = 'taskTitle';
+    
+    let nextTaskLink = document.createElement('a');
+    nextTaskLink.id = 'next-task-link';
+    nextTaskLink.href = '/?task=2';
+    nextTaskLink.style.textDecoration = 'none';
+    nextTaskLink.textContent = ' >';
+    
+    insHeadline.appendChild(prevTaskLink);
+    insHeadline.appendChild(taskTitle);
+    insHeadline.appendChild(nextTaskLink);
+    
+    insHead.appendChild(insHeadline);
+    
+    let insDesc = document.createElement('div');
+    setDescription(insDesc);
+    insDesc.id = 'instruction-desc';
+    
+    appDiv.appendChild(insDiv);
+    insDiv.appendChild(insHead);
+    insDiv.appendChild(insDesc);
 }
 
 function setTitle(titleDiv) {
