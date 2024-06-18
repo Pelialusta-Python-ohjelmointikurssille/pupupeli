@@ -58,7 +58,6 @@ export class Grid {
         if (this.gridObjects.includes(gridObject) === false) {
             this.gridObjects.push(gridObject);
         }
-
         this.doubleArray[x][y].entities.push(gridObject);
         gridObject.cell = this.doubleArray[x][y];
         this.data.add(gridObject);

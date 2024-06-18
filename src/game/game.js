@@ -134,11 +134,20 @@ export class Game {
     createNewPlayerCreatedGridObject(commandParameters) {
         let type = getVariableTrueName(commandParameters[0]);
         if (!type) {
-            makeSayCommand("Ups, luonti ei onnistunut koska en tiedä mitä objektia tarkoitat.");
+            this.makeSayCommand("Ups, luonti ei onnistunut koska en tiedä mitä objektia tarkoitat.");
             return;
         }
-        let x = commandParameters[1];
-        let y = commandParameters[2];
+        //x and y are actually flipped in game logic visually
+        let y = commandParameters[1];
+        let x = commandParameters[2];
+        if (!this.grid.boundaryCheck(x, y)) {
+            this.makeSayCommand("Ei onnistu, se ei mahdu ruudukkoon! (" + x + ", " + y + ")");
+            return;
+        }
+        if (this.grid.getObjectsAtGridPosition(x, y).length > 0) {
+            this.makeSayCommand("En voi luoda sinne koska siellä on jo jotain! (" + x + ", " + y + ")");
+            return;
+        }
         let newGO = new GridObject(type);
         this.grid.addToGrid(newGO, x, y);
         this.createGridEntityForRendering(newGO);

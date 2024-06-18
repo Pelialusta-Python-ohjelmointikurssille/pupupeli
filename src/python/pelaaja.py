@@ -67,9 +67,15 @@ class Pelaaja:
         return count
     
     def luo(self, gridObjectType : str, x = -1, y = -1):
+        if gridObjectType == self.__name:
+            pupu.sano("Ei, voi olla vain yksi " + self.__name + "!")
+            return
         js.createObject(gridObjectType, x, y)
         
-
+    def poista(self):
+        #js.removeObject();
+        return
+    
     def rivi(self, line: int):
         js.sendLine(line)
 
