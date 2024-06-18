@@ -155,42 +155,136 @@ function createTaskButtons() {
     });
 }
 
+// function createChapterButtons() {
+//     const selectContainer = document.getElementById('chapterbuttontable');
+
+//     for (let i = 0; i < totalChapters; i++) {
+//         const button = document.createElement('button');
+//         button.id = `chapter-button-${i + 1}`;
+//         button.value = i + 1;
+//         button.innerText = `Tehtäväsarja ${i + 1}`;
+//         button.addEventListener('click', () => {
+//             currentChapter = i + 1; 
+//             window.location.href = `/?chapter=${currentChapter}&task=1`; 
+//         });
+//         selectContainer.appendChild(button);
+        
+//     }    
+// }
+// function createChapterButtons() {
+//     const selectContainer = document.getElementById('chapterbuttontable');
+
+//     api.getCompletedTasks().then(taskList => {
+//         let completedTasksList = taskList.tasks;
+//         for (let i = 0; i < totalChapters; i++) {
+//             const button = document.createElement('button');
+//             button.id = `chapter-button-${i + 1}`;
+//             button.value = i + 1;
+//             button.innerText = `Tehtäväsarja ${i + 1}`;
+
+//             let allTasksCompleted = true;
+//             for (let j = 0; j < totalTasks; j++) {
+//                 let taskId = `chapter${i + 1}task${j + 1}`;
+//                 if (!completedTasksList.includes(taskId)) {
+//                     allTasksCompleted = false;
+//                     break;
+//                 }
+//             }
+
+//             if (allTasksCompleted) {
+//                 button.classList.add("button-completed");
+//             } else {
+//                 button.classList.add("button-incompleted");
+//             }
+
+//             button.addEventListener('click', () => {
+//                 currentChapter = i + 1;
+//                 window.location.href = `/?chapter=${currentChapter}&task=1`;
+//             });
+
+//             selectContainer.appendChild(button);
+//     )}
+
 function createChapterButtons() {
     const selectContainer = document.getElementById('chapterbuttontable');
 
-    for (let i = 0; i < totalChapters; i++) {
-        const button = document.createElement('button');
-        button.id = `chapter-button-${i + 1}`;
-        button.value = i + 1;
-        button.innerText = `Tehtäväsarja ${i + 1}`;
-        button.addEventListener('click', () => {
-            currentChapter = i + 1; 
-            window.location.href = `/?chapter=${currentChapter}&task=1`; 
-        });
-        selectContainer.appendChild(button);
-        
-    }
+    api.getCompletedTasks().then(taskList => {
+        let completedTasksList = taskList.tasks;
+        for (let i = 0; i < totalChapters; i++) {
+            const button = document.createElement('button');
+            button.id = `chapter-button-${i + 1}`;
+            button.value = i + 1;
+            button.innerText = `Tehtäväsarja ${i + 1}`;
 
-    // selectContainer.value = currentChapter;
+            let allTasksCompleted = true;
+            for (let j = 0; j < totalTasks; j++) {
+                let taskId = `chapter${i + 1}task${j + 1}`;
+                if (!completedTasksList.includes(taskId)) {
+                    allTasksCompleted = false;
+                    break;
+                }
+            }
 
-    // selectContainer.addEventListener('change', (event) => {
-    //     const selectedChapter = event.target.value;
-    //     window.location.href = `/?chapter=${selectedChapter}&task=1`;
-    // });
-    
+            if (allTasksCompleted) {
+                button.classList.add("button-completed");
+            } else {
+                button.classList.add("button-incompleted");
+            }
+
+            button.addEventListener('click', () => {
+                currentChapter = i + 1;
+                window.location.href = `/?chapter=${currentChapter}&task=1`;
+            });
+
+            selectContainer.appendChild(button);
+        }
+    })
 }
+
 
 /**
  * a function that turns the current button green and sends a PUSH request to the api indicating the user has completed a task
  * @param {boolean} won a boolean indicating whether the task was completed successfully or not
  */
+// export function onTaskComplete(won) {
+//     const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
+
+//     if (won) {
+//         const buttonid = `${apiTaskIdentifier}`;
+//         let button = document.getElementById(buttonid);
+//         let celebrationBox = document.getElementById("celebration")
+//         const container = document.getElementById('celebration-confetti-container');
+//         for (let i = 0; i < 30; i++) {
+//             const celebrationConfetti = createCelebrationConfetti();
+//             container.appendChild(celebrationConfetti);
+
+//             // Remove the confetti after animation completes to prevent memory leaks
+//             celebrationConfetti.addEventListener('animationend', () => {
+//                 container.removeChild(celebrationConfetti);
+//             });
+//         }
+//         celebrationBox.classList.remove("is-hidden");
+
+//         setTimeout(() => {
+//             celebrationBox.classList.add('is-hidden');
+//         }, 3000);
+
+//         if (button.getAttribute("class") == "button-incompleted") {
+//             button.classList.replace("button-incompleted", "button-completed");
+//         }
+//         globals.setGameAsWon();
+//         }
+//         } else {
+//             api.sendTask(apiTaskIdentifier);
+//     }
+
 export function onTaskComplete(won) {
     const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
 
     if (won) {
         const buttonid = `${apiTaskIdentifier}`;
         let button = document.getElementById(buttonid);
-        let celebrationBox = document.getElementById("celebration")
+        let celebrationBox = document.getElementById("celebration");
         const container = document.getElementById('celebration-confetti-container');
         for (let i = 0; i < 30; i++) {
             const celebrationConfetti = createCelebrationConfetti();
@@ -207,11 +301,10 @@ export function onTaskComplete(won) {
             celebrationBox.classList.add('is-hidden');
         }, 3000);
 
-        if (button.getAttribute("class") == "button-incompleted") {
+        if (button.getAttribute("class") === "button-incompleted") {
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
-        api.sendTask(apiTaskIdentifier);
     } else {
         api.sendTask(apiTaskIdentifier);
     }
