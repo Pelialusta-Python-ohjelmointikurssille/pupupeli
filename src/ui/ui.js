@@ -159,14 +159,7 @@ function setDescription(descriptionDiv){
     // set description
     globals.task.getDescription().forEach((line, i) => {
         line = line === "" ? "<br>" : line;
-        if (line === "<br>" && i < 2) {
-            return;
-        }
-        if (i === 0) {
-            descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
-        } else {
-            descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
-        }
+        descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
     });
 }
 
