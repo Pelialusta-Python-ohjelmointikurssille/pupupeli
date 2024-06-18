@@ -27,7 +27,7 @@ export function initWorker() {
                 syncArray = new Int32Array(message.sab, 0, 1);
                 showInputBox();
                 break;
-            case "command":
+            case "command": //commands are game commands without return values
                 globals.setCurrentSAB(message.sab);
                 gameController.giveCommand({ data: message.details, sab: message.sab });
                 break;
@@ -49,6 +49,8 @@ export function initWorker() {
             case "getInt":
                 sendAmountOfVariableToWorkerAsInput(message);
                 break;
+            case "createObject":
+                gameController.createObject(message.details);
         }
     }
     try {

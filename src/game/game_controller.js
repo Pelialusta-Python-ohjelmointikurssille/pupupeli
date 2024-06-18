@@ -58,3 +58,7 @@ export function toggleGrid() {
 export function toggleTrail() {
     game.toggleTrail();
 }
+
+export function createObject(parameters) {
+    game.createNewPlayerCreatedGridObject(parameters);
+}

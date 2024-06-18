@@ -152,6 +152,10 @@ function getInt(variableName) {
     return word;
 }
 
+function createObject(gridObjectType, x, y) {
+    postMessage({ type: 'createObject', details: [gridObjectType, x, y] });
+}
+
 /**
  * Runs python code on pyodide.
  * @param {object} pyodide The pyodide object initialized in initializePyodide().

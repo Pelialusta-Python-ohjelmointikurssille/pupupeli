@@ -3,9 +3,10 @@ import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
 import { commandsDone } from "./game_controller.js";
-import { Constants } from "./commonstrings.js";
+import { Constants, getVariableTrueName } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
+import { GridObject } from "./gridobject.js";
 
 export class Game {
     constructor() {
@@ -42,13 +43,17 @@ export class Game {
         if (!this.gh.isReady) {
             this.gh.finishAnimationsImmediately();
         }
-        this.gh.destroyTextBoxes();
-        if (commandName === Constants.MOVE_STR) {
-            this.makeMoveCommand(commandParameter);
-        } else if (commandName === Constants.SAY_STR) {
-            this.makeSayCommand(commandParameter);
-        } else if (commandName === Constants.ASK_STR) {
-            this.makeAskCommand(commandParameter);
+        this.gh.destroyTextBoxes(); //just a extra check?
+        switch (commandName) {
+            case Constants.MOVE_STR:
+                this.makeMoveCommand(commandParameter);
+                break;
+            case Constants.SAY_STR:
+                this.makeSayCommand(commandParameter);
+                break;
+            case Constants.ASK_STR:
+                this.makeAskCommand(commandParameter);
+                break;
         }
     }
 
@@ -116,5 +121,18 @@ export class Game {
         let id = this.grid.player.id;
         let playerGraphicsPawn = this.gh.getEntity(id);
         playerGraphicsPawn.lineDrawer?.toggle();
+    }
+
+    createNewPlayerCreatedGridObject(commandParameters) {
+        let type = getVariableTrueName(commandParameters[0]);
+        if (!type) {
+            makeSayCommand("Ups, luonti ei onnistunut koska en tiedä mitä objektia tarkoitat.");
+            return;
+        }
+        let x = commandParameters[1];
+        let y = commandParameters[2];
+        let newGO = new GridObject(type);
+        this.grid.addToGrid(newGO, x, y);
+        this.createGridEntityForRendering(newGO);
     }
 }

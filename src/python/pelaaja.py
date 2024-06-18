@@ -65,6 +65,10 @@ class Pelaaja:
             return 0
         self.sano("Ai " + variableName + "? Näen niitä " + str(count) + "!")
         return count
+    
+    def luo(self, gridObjectType : str, x = -1, y = -1):
+        js.createObject(gridObjectType, x, y)
+        
 
     def rivi(self, line: int):
         js.sendLine(line)
