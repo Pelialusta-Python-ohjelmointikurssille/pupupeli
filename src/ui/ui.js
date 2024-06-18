@@ -8,8 +8,14 @@ import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, setTheme } from "../game/game_controller.js";
 
-const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
+
+const chapterDir = "/tasks/" + globals.chapterIdentifier;
+const countTaskResponse = fileReader.countForTaskFilesInDirectory(chapterDir);
+const totalTasks = countTaskResponse.count;
+const instructionTasks = countTaskResponse.instructionNumbers;
+
 const totalChapters = fileReader.countForChaptersInDirectory();
+
 let currentChapter = globals.chapterIdentifier;
 const instructionsStr = "instructions";
 
@@ -19,7 +25,7 @@ const instructionsStr = "instructions";
  */
 async function main() {
     initPage(); // creates task json global variable
-    if (globals.task.getTaskType() != "instructions") {
+    if (globals.task.getTaskType() != instructionsStr) {
         initWorker();
         initializeEditorButtons();
         await initGameAndCanvas();
@@ -199,8 +205,20 @@ function createTaskButtons() {
     api.getCompletedTasks().then(taskList => {
         let completedTasksList = taskList.tasks;
         // Create and append buttons
+        let taskNumber = 0;
+        let instructionNumber = 0;
         for (let i = 0; i < totalTasks; i++) {
             const button = document.createElement('button');
+            // if task is task, increase tasknumber.
+            // if task is instruction, increase instructionnumber and dont increase tasknumber.
+            if (instructionTasks.includes(i+1)) {
+                instructionNumber++
+                button.innerText = `i${instructionNumber}`;
+            } else {
+                taskNumber++
+                button.innerText = `${taskNumber}`;
+            }
+
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
             button.id = buttonIdText
             if (completedTasksList.includes(buttonIdText)) {
@@ -208,7 +226,6 @@ function createTaskButtons() {
             } else {
                 button.classList.add("button-incompleted");
             }
-            button.innerText = `${i + 1}`;
             button.addEventListener('click', () => {
                 window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
             });

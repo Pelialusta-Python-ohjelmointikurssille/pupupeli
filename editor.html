@@ -168,12 +168,10 @@
             max-width: calc(var(--canvas-width)* 1.5);
             min-height: 3rem;
         }
-
-        #instructions-input {
-            width: 100%;
-            max-width: calc(var(--canvas-width)* 1.8);
-            min-height: 50rem;
-            padding: 0.5rem;
+    
+        #task-input,
+        #editor-input {
+            padding: 0.2rem 0.5rem;
         }
 
         .options-input-buttons {
@@ -208,6 +206,10 @@
 
         .multiple-choice-input {
             margin-top: 0.5rem;
+        }
+
+        #multiple-choice-input-box {
+            padding: 0.1rem 0.2rem;
         }
 
         #left-side {
@@ -581,7 +583,7 @@
             let multipleChoiceContainer = document.getElementById("multiple-choice-container");
             let multipleChoiceElement = document.createElement("div");
             multipleChoiceElement.classList.add("multiple-choice", "is-flex", "is-flex-column");
-            multipleChoiceElement.innerHTML = `<input type='text' placeholder='Lisää vastaus'><div class='multiple-choice-input'><input name='multipleChoice${multipleChoiceContainer.childNodes.length - 1}' type='checkbox'><label for='multipleChoice${multipleChoiceContainer.childNodes.length - 1} style="line-height: 20px;'>Oikea vastaus?</label></div>`;
+            multipleChoiceElement.innerHTML = `<input type='text' id='multiple-choice-input-box' placeholder='Lisää vastaus'><div class='multiple-choice-input'><input name='multipleChoice${multipleChoiceContainer.childNodes.length - 1}' type='checkbox'><label for='multipleChoice${multipleChoiceContainer.childNodes.length - 1} style="line-height: 20px;'>Oikea vastaus?</label></div>`;
 
             multipleChoiceContainer.insertAdjacentElement("beforeend", multipleChoiceElement);
         }
