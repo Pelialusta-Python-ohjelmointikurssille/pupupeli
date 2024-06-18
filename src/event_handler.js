@@ -6,7 +6,7 @@ import * as globals from './util/globals.js';
 import { getGridObjectsLeft } from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
-import { Constants, getVariableTrueName } from './game/commonstrings.js';
+import { getVariableTrueName } from './game/commonstrings.js';
 
 let worker;
 let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot

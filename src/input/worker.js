@@ -138,6 +138,7 @@ function sendLine(line) {
  * @param {*} variableName Name of the variable we want the value of.
  * @returns 
  */
+// eslint-disable-next-line no-unused-vars
 function getInt(variableName) {
     console.log(variableName);
     const sab = new SharedArrayBuffer(512 * 2 + 4);
