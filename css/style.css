@@ -10,7 +10,7 @@
 /* remove above before elease */
 
 :root {
-    --canvas-width: 640px;
+    --canvas-width: 1024px;
     --canvas-height: var(--canvas-width);
 }
 
@@ -371,7 +371,7 @@ button:hover {
     border-bottom: none;
 }
 
-@media (max-width: calc((640px * 2) + 3rem)) {
+@media (max-width: calc((1024px * 2) + 3rem)) {
     #app-container {
         flex-direction: column;
     }

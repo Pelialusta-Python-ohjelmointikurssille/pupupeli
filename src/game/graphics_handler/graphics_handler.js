@@ -58,9 +58,6 @@ export class GraphicsHandler {
 
         this.createGrid();
 
-        // TODO: create proper grid scaling?
-        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 128, this.gridHeight * 128) } , SKIN_BUNDLES["background"]);
-
         let t2 = new Date().getTime();
         console.log(`Loading graphics engine took ${t2-t1}ms`);
     }
@@ -132,12 +129,9 @@ export class GraphicsHandler {
      */
     createGrid() {
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
-        if (this.gridWidth > this.gridHeight) {
-            this.graphicsEntityHandler.camera.zoomScale = this.gridWidth**0.001 - 0.1;
-        }
-        else {
-            this.graphicsEntityHandler.camera.zoomScale = this.gridHeight**0.001 - 0.1;
-        }
+        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 300, this.gridHeight * 300) } , SKIN_BUNDLES["background"]);
+        let gridObject = this.graphicsEntityHandler.getMainGridObject();
+        this.graphicsEntityHandler.camera.focusOnAreaMiddle(gridObject.getMiddlePixelPosition(), gridObject.pixelSize);
     }
 
     /**
