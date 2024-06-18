@@ -21,7 +21,7 @@ export class GraphicsCamera {
         this.screenCenter = new Vector2(pixiScreen.width / 2, pixiScreen.height / 2)
         this.zoomScale = 1;
         this.rotation = 0;
-        this.minZoom = 0.2;
+        this.minZoom = 0.08;
         this.maxZoom = 1;
         this.focusPaddingPercent = 0.025;
         this.container.position.x = this.screenCenter.x;
