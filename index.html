@@ -29,7 +29,7 @@
             <div id="header-buttons" class="is-flex">
                 <div id="user-container" class="is-flex">
                     <input id="username" placeholder="username">
-                    <input type="password" id="password" placeholder="********">
+                    <input type="password" id="password" placeholder="********" onkeydown="if(event.key === 'Enter'){event.preventDefault();this.nextElementSibling.click();}">
                     <button id="login-button" value="login">Kirjaudu sisään</button>
                 </div>
                 <button id="logout-button" class="is-hidden" value="logout">Kirjaudu ulos</button>
