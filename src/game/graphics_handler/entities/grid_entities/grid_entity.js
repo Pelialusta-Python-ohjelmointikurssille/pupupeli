@@ -27,8 +27,8 @@ export class GridEntity extends GraphicsEntity {
         this.font = "Roboto Light";
         this.gridSize = new Vector2(4, 4);
         this.areLinesEnabled = true;
-        this.sizeOnScreen = new Vector2(512, 512);
-        this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
+        this.pixelSize = new Vector2(this.gridSize.x * 128, this.gridSize.y * 128);
+        this.gridScale = this.pixelSize.x / this.gridSize.x;
     }
 
     /**
@@ -63,8 +63,8 @@ export class GridEntity extends GraphicsEntity {
      */
     onCreate() {
         super.onCreate();
-        this.sizeOnScreen = new Vector2(this.gridSize.x * 128, this.gridSize.y * 128)
-        this.gridScale = this.sizeOnScreen.x / this.gridSize.x;
+        this.pixelSize = new Vector2(this.gridSize.x * 128, this.gridSize.y * 128);
+        this.gridScale = this.pixelSize.x / this.gridSize.x;
         this.createLines();
     }
 
@@ -77,11 +77,11 @@ export class GridEntity extends GraphicsEntity {
         this.areLinesEnabled = true;
         let linexcount = this.gridSize.x + 1;
         let lineycount = this.gridSize.y + 1;
-        let linexgap = this.sizeOnScreen.x / this.gridSize.x;
-        let lineygap = this.sizeOnScreen.y / this.gridSize.y;
+        let linexgap = this.pixelSize.x / this.gridSize.x;
+        let lineygap = this.pixelSize.y / this.gridSize.y;
         for (let i=0; i<linexcount; i++) {
             this.lineGraphics
-            .rect(i*linexgap-(this.lineWidth/2), 0, this.lineWidth, this.sizeOnScreen.y)
+            .rect(i*linexgap-(this.lineWidth/2), 0, this.lineWidth, this.pixelSize.y)
             .fill({color: this.lineColor});
             if (i == linexcount-1) continue;
             let textObject = new PIXI.Text({ text: `${i+1}`, style: { fontFamily: this.font, fontSize: this.fontSize, fill : this.lineColor } });
@@ -92,7 +92,7 @@ export class GridEntity extends GraphicsEntity {
         }
         for (let i=0; i<lineycount; i++) {
             this.lineGraphics
-            .rect(0, i*lineygap-(this.lineWidth/2), this.sizeOnScreen.x, this.lineWidth)
+            .rect(0, i*lineygap-(this.lineWidth/2), this.pixelSize.x, this.lineWidth)
             .fill({color: this.lineColor});
             if (i == lineycount-1) continue;
             let textObject = new PIXI.Text({ text: `${i+1}`, style: { fontFamily: this.font, fontSize: 32, fill : this.lineColor } });
@@ -119,7 +119,7 @@ export class GridEntity extends GraphicsEntity {
      * @returns A Vector2 of the screen position of the given cell position.
      */
     gridToScreenCoordinates(gridCellPosition) {
-        let screenPos = GridVectorToScreenVector(gridCellPosition, this.sizeOnScreen, this.gridSize, new Vector2(this.container.x, this.container.y));
+        let screenPos = GridVectorToScreenVector(gridCellPosition, this.pixelSize, this.gridSize, new Vector2(this.container.x, this.container.y));
         return screenPos;
     }
 }
