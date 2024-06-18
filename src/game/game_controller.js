@@ -29,8 +29,7 @@ export function giveCommand(dirtyCommand) {
  */
 export function commandsDone() {
     if (currentCommand === undefined) {
-        console.error("current command undefined");
-        return;
+        return; //if not waiting current command, no problem, just dont postMessage
     }
     postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
 }
@@ -59,6 +58,17 @@ export function toggleTrail() {
     game.toggleTrail();
 }
 
-export function createObject(parameters) {
-    game.createNewPlayerCreatedGridObject(parameters);
+export function createObject(commandParameters) {
+    name = commandParameters[0]
+    //x and y are actually flipped in game logic visually
+    let y = commandParameters[1];
+    let x = commandParameters[2];
+    game.createNewPlayerCreatedGridObject(name, x, y);
+}
+
+export function destroyObject(commandParameters) {
+    //x and y are actually flipped in game logic visually
+    let y = commandParameters[0];
+    let x = commandParameters[1];
+    game.destroyObject(x, y);
 }

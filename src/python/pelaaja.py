@@ -72,8 +72,8 @@ class Pelaaja:
             return
         js.createObject(gridObjectType, x, y)
         
-    def poista(self):
-        #js.removeObject();
+    def poista(self, x, y):
+        js.removeObject(x, y)
         return
     
     def rivi(self, line: int):

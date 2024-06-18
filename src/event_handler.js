@@ -51,6 +51,8 @@ export function initWorker() {
                 break;
             case "createObject":
                 gameController.createObject(message.details);
+            case "destroyObject":
+                gameController.destroyObject(message.details);
         }
     }
     try {

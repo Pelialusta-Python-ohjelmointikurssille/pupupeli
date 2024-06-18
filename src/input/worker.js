@@ -156,6 +156,10 @@ function createObject(gridObjectType, x, y) {
     postMessage({ type: 'createObject', details: [gridObjectType, x, y] });
 }
 
+function removeObject(x, y) {
+    postMessage({ type: 'destroyObject', details: [x, y] });
+}
+
 /**
  * Runs python code on pyodide.
  * @param {object} pyodide The pyodide object initialized in initializePyodide().

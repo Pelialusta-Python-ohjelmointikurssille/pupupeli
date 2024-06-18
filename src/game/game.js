@@ -7,6 +7,7 @@ import { Constants, getVariableTrueName } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { GridObject } from "./gridobject.js";
+import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.js";
 
 export class Game {
     constructor() {
@@ -131,15 +132,12 @@ export class Game {
         playerGraphicsPawn.lineDrawer?.toggle();
     }
 
-    createNewPlayerCreatedGridObject(commandParameters) {
-        let type = getVariableTrueName(commandParameters[0]);
+    createNewPlayerCreatedGridObject(type, x, y) {
+        type = getVariableTrueName(type);
         if (!type) {
             this.makeSayCommand("Ups, luonti ei onnistunut koska en tiedä mitä objektia tarkoitat.");
             return;
         }
-        //x and y are actually flipped in game logic visually
-        let y = commandParameters[1];
-        let x = commandParameters[2];
         if (!this.grid.boundaryCheck(x, y)) {
             this.makeSayCommand("Ei onnistu, se ei mahdu ruudukkoon! (" + x + ", " + y + ")");
             return;
@@ -152,5 +150,20 @@ export class Game {
         this.grid.addToGrid(newGO, x, y);
         this.createGridEntityForRendering(newGO);
         this.tempObjectIds.push(newGO.id);
+    }
+
+    destroyObject(x, y) {
+        let list = this.grid.getObjectsAtGridPosition(x, y);
+        if (list.length <= 0) {
+            this.makeSayCommand("Ei ole poistettavaa! (" + x + ", " + y + ")");
+            return;
+        }
+        let gridObject = list[0];
+        if (gridObject === this.grid.player) {
+            this.makeSayCommand("Et voi poistaa minua! (" + x + ", " + y + ")");
+            return;
+        }
+        this.gh.doAction(gridObject.id, AnimationNames.APPEAR_HIDE, { time: 0.5 });
+        this.grid.removeFromGrid(gridObject);
     }
 }
