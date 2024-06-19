@@ -19,7 +19,6 @@ export class Game {
         this.gameWon = false;
 
         this.isGridEnabled = true;
-        this.isAskingQuestionFromGame = false;
     }
 
     async init() {
@@ -59,7 +58,6 @@ export class Game {
      * This is necessary to not call gamewon and display celebration box after inputting wrong code after a succesful pass.
      */
     onAnimsReady() {
-        if (this.isAskingQuestionFromGame) return;
         commandsDone();
         this.gameWon = false;
     }

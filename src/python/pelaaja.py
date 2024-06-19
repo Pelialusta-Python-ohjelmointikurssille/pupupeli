@@ -32,8 +32,8 @@ class Pelaaja:
         self.__directions = ["oikea", "vasen", "ylös", "alas"]
 
     def liiku(self, direction: str):
-        # if reset_flag:
-        #    raise Exception("Interpreter was reset")
+        if reset_flag:
+            raise Exception("Interpreter was reset")
         if direction in self.__directions:
             js.runCommand("move", direction)
         else:

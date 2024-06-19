@@ -7,7 +7,7 @@ import { showInputBox } from "../ui/inputBox.js";
 // - Creates new game instances (Game contains both logic and rendering)
 // - handles game command input and output
 
-export var game;
+var game;
 var currentCommand;
 
 
