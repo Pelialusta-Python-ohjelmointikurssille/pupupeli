@@ -1,5 +1,6 @@
 import * as globals from "../util/globals.js";
 import { getEditor } from "../input/editor.js";
+import { showLoginFailed } from "../ui/ui.js";
 
 let stored_username;
 let loginButton = document.getElementById("login-button");
@@ -35,17 +36,6 @@ logoutButton.addEventListener("click", () => {
             console.error('Error:', error);
         });
 });
-
-/**
- * briefly displays a popup informing the user they have failed to log in
- */
-function showLoginFailed() {
-    let loginFailed = document.getElementById("login-failed");
-    setTimeout(() => {
-        loginFailed.classList.remove("login-failed-show");
-    }, 6000);
-    loginFailed.classList.add("login-failed-show");
-}
 
 /**
  * a function used to create api URLs from a base URL and an object
@@ -104,7 +94,7 @@ async function sendGetRequest(url) {
 export async function login() {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
-    
+
     if (user === "") {
         showLoginFailed();
         return

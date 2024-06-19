@@ -24,8 +24,20 @@
   ],
   "conditions": [
     {
+      "condition": "conditionUsedWhile",
+      "parameter": false
+    },
+    {
       "condition": "conditionUsedFor",
       "parameter": true
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": false
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": 5
     }
   ]
 }

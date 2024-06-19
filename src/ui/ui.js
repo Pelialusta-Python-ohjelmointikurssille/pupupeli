@@ -226,6 +226,30 @@ export function onTaskComplete(won) {
         globals.setGameAsWon();
         api.sendTask(apiTaskIdentifier);
     } else {
+        let errorMessage = "<h2><ol>Voi juku, et vielä läpäissyt tasoa koska:";
+        if (!globals.multipleChoiceCorrect) errorMessage += "\n<li>monivalintatehtävän vastaus oli väärä</li>"
+        globals.conditionsNotCleared.forEach(failedCondition => {
+            switch (failedCondition) {
+                case "conditionUsedFor":
+                    errorMessage += "\n<li>et käyttänyt for-silmukkaa</li>"
+                    break;
+                case "conditionUsedWhile":
+                    errorMessage += "\n<li>et käyttänyt while-silmukkaa</li>"
+                    break;
+                case "conditionUsedInput":
+                    errorMessage += "\n<li>et käyttänyt input-toiminnallisuutta</li>"
+                    break;
+                case "conditionMaxLines":
+                    errorMessage += "\n<li>vastauksessasi oli liian monta riviä</li>"
+                    break;
+            }
+        })
+        errorMessage += "</ol></h2>";
+
+        // temporary something to show error message on until I figure out something better
+        document.getElementById("login-failed").innerHTML = errorMessage;
+        showLoginFailed();
+        
         api.sendTask(apiTaskIdentifier);
     }
 }
@@ -246,6 +270,17 @@ function createCelebrationConfetti() {
     celebrationConfetti.style.animationDuration = `${randomDuration}s`;
 
     return celebrationConfetti;
+}
+
+/**
+ * briefly displays a popup informing the user they have failed to log in
+ */
+export function showLoginFailed() {
+    let loginFailed = document.getElementById("login-failed");
+    setTimeout(() => {
+        loginFailed.classList.remove("login-failed-show");
+    }, 6000);
+    loginFailed.classList.add("login-failed-show");
 }
 
 /**
