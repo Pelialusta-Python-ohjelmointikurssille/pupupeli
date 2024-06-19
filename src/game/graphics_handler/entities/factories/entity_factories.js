@@ -94,6 +94,25 @@ export function createCollectible(entityUUID, entityData, graphicsEntityHandler,
     return entity;
 }
 
+export function createObstacle(entityUUID, entityData, graphicsEntityHandler, skins) {
+    let sprite = new PIXI.Sprite();
+    let entity = new PawnEntity(
+        entityUUID,
+        graphicsEntityHandler,
+        new PIXI.Container(),
+        sprite,
+        entityData,
+        skins
+    );
+    if (entityData.zIndex != null) {
+        entity.container.zIndex = entityData.zIndex;
+    } else {
+        entity.container.zIndex = -2;
+    }
+    entity.type = "pawn";
+    return entity;
+}
+
 /**
  * @private
  * @param {string} entityUUID 
@@ -113,8 +132,9 @@ export function createGrid(entityUUID, entityData, graphicsEntityHandler, skins)
     if (entityData.zIndex != null) {
         entity.container.zIndex = entityData.zIndex;
     } else {
-        entity.container.zIndex = -10;
+        entity.container.zIndex = 0;
     }
+    entity.lineGraphics = new PIXI.Graphics();
     entity.type = "grid";
     return entity;
 }
@@ -126,7 +146,7 @@ export function createGrid(entityUUID, entityData, graphicsEntityHandler, skins)
  * @returns {BackgroundEntity} Background to the grid, rendered behind everything
  */
 export function createBackground(entityUUID, entityData, graphicsEntityHandler, skins) {
-    let sprite = new PIXI.Sprite();
+    let sprite = new PIXI.TilingSprite();
     let entity = new BackgroundEntity(
         entityUUID,
         graphicsEntityHandler,
