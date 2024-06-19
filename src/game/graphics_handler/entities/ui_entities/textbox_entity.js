@@ -53,7 +53,7 @@ export class TextBoxEntity extends GraphicsEntity {
     initTextObject() {
         this.textObject.anchor.set(0.5);
         if (this.alignTextTop) {
-            this.textObject.position.y = -(this.sprite.height / 2) + this.textObject.height + 16;
+            this.textObject.position.y = -(this.sprite.height / 2) + this.textObject.height + 20;
         }
     }
 
