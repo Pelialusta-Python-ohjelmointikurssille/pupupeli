@@ -227,7 +227,7 @@ export function onTaskComplete(won) {
         api.sendTask(apiTaskIdentifier);
     } else {
         let errorMessage = "<h2><ol>Voi juku, et vielä läpäissyt tasoa koska:";
-        if (!globals.multipleChoiceCorrect) errorMessage += "\n<li>monivalintatehtävän vastaus oli väärä</li>"
+        if (!globals.getMultipleChoiceCorrect()) errorMessage += "\n<li>monivalintatehtävän vastaus oli väärä</li>"
         globals.conditionsNotCleared.forEach(failedCondition => {
             switch (failedCondition) {
                 case "conditionUsedFor":

@@ -72,7 +72,11 @@ export function setMultipleChoiceCorrect(isCorrect = true) {
 }
 
 export function getMultipleChoiceCorrect() {
-    return multipleChoiceCorrect
+    if (currentGameMode.name === "GameModeMultipleChoice") {
+        return multipleChoiceCorrect
+    } else {
+        return true; // ignore check if gamemode isn't multiple choice
+    }
 }
 
 export function setCurrentSAB(sab) {
