@@ -1,7 +1,6 @@
 import { onTaskComplete } from "../ui/ui.js";
 import { Game } from "./game.js";
 import { postMessage } from "../event_handler.js";
-import { showInputBox } from "../ui/inputBox.js";
 
 //This file controls game. 
 // - Creates new game instances (Game contains both logic and rendering)

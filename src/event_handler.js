@@ -1,5 +1,4 @@
 import * as gameController from './game/game_controller.js';
-import { getInputBoxValue, showInputBox } from './ui/inputBox.js';
 import { disablePlayButton } from './ui/ui_editor_buttons.js'
 import { displayErrorMessage } from './ui/ui.js';
 import * as globals from './util/globals.js';

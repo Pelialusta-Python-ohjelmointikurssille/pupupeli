@@ -2,7 +2,7 @@ import { Constants } from "./commonstrings.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { Vector2 } from "./vector.js";
 import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.js";
-import { requestInputFromGame, requestInputFromPython } from "./game_input_controller.js";
+import { requestInputFromGame } from "./game_input_controller.js";
 //Trying to implement the Command pattern in javascript. Interfaces in JS are so janky that I just made classes.
 //Maybe do a base Command class and extend that, if you want. 
 //    https://refactoring.guru/design-patterns/command
@@ -17,12 +17,11 @@ import { requestInputFromGame, requestInputFromPython } from "./game_input_contr
  * @graphicsHandler The current GraphicsHandler used.
  */
 export class MoveCommand {
-    constructor(grid, gridObject, dir, graphicsHandler, game) {
+    constructor(grid, gridObject, dir, graphicsHandler) {
         this.grid = grid;
         this.gridObject = gridObject;
         this.dir = dir;
         this.graphicsHandler = graphicsHandler;
-        this.game = game;
         this.moveStartPos = this.gridObject.getVector2Position();
         this.moveSpeed = 0.4;
         this.objectHideSpeed = 0.6;
