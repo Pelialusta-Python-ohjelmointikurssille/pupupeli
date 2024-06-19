@@ -344,24 +344,10 @@
             radio.addEventListener('change', function() {
                 // If the selected task type is 'instructions', show the text box and hide the divs
                 if (this.value === 'instructions') {
-                    optionsConditionsDiv.style.display = 'none';
-                    optionsInputDiv.style.display = 'none';
-                    optionsAppContainer.style.display = 'none';
-                    instructionsInput.style.display = 'block';
-                    instructionsInput.classList.remove('is-hidden');
-                    headlines.forEach(headline => {
-                    headline.style.display = 'none';
-                    });
+                    showInstructions()
                 } else {
                     // Otherwise, hide the text box and show the divs
-                    instructionsInput.style.display = 'none';
-                    optionsConditionsDiv.style.display = 'flex';
-                    optionsInputDiv.style.display = 'flex';
-                    optionsAppContainer.style.display = 'flex';
-                    instructionsInput.classList.add('is-hidden');
-                    headlines.forEach(headline => {
-                    headline.style.display = 'block';
-                    });
+                    hideInstructions()
                 }
             });
         });
