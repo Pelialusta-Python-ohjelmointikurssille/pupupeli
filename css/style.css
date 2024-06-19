@@ -34,12 +34,26 @@ body {
     border-radius: 5px;
 }
 
+#input-box-send-button {
+    margin: 4px;
+    align-self: center;
+    grid-column-start: 2;
+    grid-row-start: 1;
+}
+
+#input-box-container {
+    margin-bottom: 48px;
+    display: grid;
+}
+
 #input-box {
     height: 40px;
-    min-width: 640px;
+    min-width: 512px;
     border: 1px solid black;
     font-size: 18px;
-    margin-bottom: 48px;
+    grid-column-start: 1;
+    grid-row-start: 1;
+    margin: 4px;
 }
 
 /* This one includes both task header and toggle buttons div, we want them on the same level */
