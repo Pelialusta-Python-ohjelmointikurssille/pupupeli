@@ -366,6 +366,26 @@
             });
         });
 
+        function showInstructions() {                    
+                    optionsConditionsDiv.style.display = 'none';
+                    optionsInputDiv.style.display = 'none';
+                    optionsAppContainer.style.display = 'none';
+                    instructionsInput.style.display = 'block';
+                    instructionsInput.classList.remove('is-hidden');
+                    headlines.forEach(headline => {
+                    headline.style.display = 'none';});
+                }
+                
+        function hideInstructions() {
+                    instructionsInput.style.display = 'none';
+                    optionsConditionsDiv.style.display = 'flex';
+                    optionsInputDiv.style.display = 'flex';
+                    optionsAppContainer.style.display = 'flex';
+                    instructionsInput.classList.add('is-hidden');
+                    headlines.forEach(headline => {
+                    headline.style.display = 'block';});
+                }
+
         class Level {
             constructor(description, taskTitle, taskType, editorCode, multipleChoiceQuestions, grid, conditions) {
                 this.title = taskTitle;
@@ -699,6 +719,11 @@
                 for (let i=0; i < taskTypeRadios.length; i++) {
                     if (taskTypeRadios[i].value === taskType) {
                         taskTypeRadios[i].checked = true;
+                        if (taskType === "instructions") {
+                            showInstructions();
+                        } else {
+                            hideInstructions();
+                        }
                     }
                 }
             }
