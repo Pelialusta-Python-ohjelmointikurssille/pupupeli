@@ -16,11 +16,7 @@ loginButton.addEventListener("click", () => {
                 localStorage.setItem("username", stored_username);
                 window.location.reload();
             } else {
-                let loginFailed = document.getElementById("login-failed");
-                setTimeout(() => {
-                    loginFailed.classList.remove("login-failed-show");
-                }, 6000);
-                loginFailed.classList.add("login-failed-show");
+                showLoginFailed();
             }
         })
         .catch(error => {
@@ -39,6 +35,17 @@ logoutButton.addEventListener("click", () => {
             console.error('Error:', error);
         });
 });
+
+/**
+ * briefly displays a popup informing the user they have failed to log in
+ */
+function showLoginFailed() {
+    let loginFailed = document.getElementById("login-failed");
+    setTimeout(() => {
+        loginFailed.classList.remove("login-failed-show");
+    }, 6000);
+    loginFailed.classList.add("login-failed-show");
+}
 
 /**
  * a function used to create api URLs from a base URL and an object
@@ -98,6 +105,10 @@ export async function login() {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
     stored_username = user;
+    if (stored_username = "") {
+        showLoginFailed();
+        return
+    }
 
     const params = {
         username: user,
