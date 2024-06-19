@@ -672,7 +672,7 @@
                     importTitle(task.title);
                     importTaskType(task.taskType);
                     importConditions(task.conditions);
-                    importDescription(task.description);
+                    importDescription(task.description, task.taskType);
                     importEditorCode(task.editorCode);
                     importGrid(task.grid);
                     importMultipleChoice(task.multipleChoiceQuestions);
@@ -724,8 +724,13 @@
                 }
             }
 
-            function importDescription(description) {
-                let taskInput = document.getElementById("task-input");
+            function importDescription(description, taskType) {
+                let taskInput;
+                if (taskType != "instructions") {
+                    taskInput = document.getElementById("task-input");
+                } else {
+                    taskInput = document.getElementById("instructions-input");
+                }
                 taskInput.value = "";
 
                 for (let i = 0; i < description.length; i++) {
