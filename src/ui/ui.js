@@ -1,25 +1,35 @@
 import * as globals from "../util/globals.js";
 import * as fileReader from "../file_reader.js";
 import * as api from "../api/api.js";
-
+import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
 import { getEditor } from "../input/editor.js"
 import { initWorker } from "../event_handler.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, setTheme } from "../game/game_controller.js";
 
-const totalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
+
+const chapterDir = "/tasks/" + globals.chapterIdentifier;
+const countTaskResponse = fileReader.countForTaskFilesInDirectory(chapterDir);
+const totalTasks = countTaskResponse.count;
+const instructionTasks = countTaskResponse.instructionNumbers;
+
 const totalChapters = fileReader.countForChaptersInDirectory();
+
 let currentChapter = globals.chapterIdentifier;
+const instructionsStr = "instructions";
+
 
 /**
  * Runs ui initialisation functions + atm the event_handlers worker
  */
 async function main() {
-    initWorker();
-    initPage();
-    initializeEditorButtons();
-    await initGameAndCanvas();
+    initPage(); // creates task json global variable
+    if (globals.task.getTaskType() != instructionsStr) {
+        initWorker();
+        initializeEditorButtons();
+        await initGameAndCanvas();
+    }
 }
 
 /**
@@ -35,19 +45,150 @@ async function initGameAndCanvas() {
 
 /**
  * Inserts information to page elements according to current task. Also adds task select buttons.
+ * Game and instructions task types require different elements.
  */
 async function initPage() {
-    // Set task identifier
-    //copypasted from createTaskButtons function, this could be globals
-    //const totalTasks = fileReader.countForFilesInDirectory("/tasks");
     const taskIdentifier = globals.taskIdentifier;
     const chapterIdentifier = globals.chapterIdentifier;
-    document.getElementById("task-id").innerHTML = globals.taskIdentifier;
 
-    // Update the href for previous and next task links
-    const prevTaskLink = document.querySelector('a[href^="/?task="]:first-child');
-    const nextTaskLink = document.querySelector('a[href^="/?task="]:last-child');
+    createChapterButtons();
+    isUserLoggedIn();
+    // checking if task type is instructions
+    if (globals.task.getTaskType() != instructionsStr) {
+        createGamePage();
+    } else {
+        createInstructionPage();
+    }
+    const prevTaskLink = document.getElementById('prev-task-link');
+    const nextTaskLink = document.getElementById('next-task-link');
 
+    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
+
+
+}
+
+/**
+ * Edits elements of app-conatiner for instruction page
+ */
+function createGamePage() {
+    let descriptionTargetDiv = document.getElementById("task-description");
+        setDescription(descriptionTargetDiv);
+
+        // set multiple choice questions
+        let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
+        if (globals.task.getMultipleChoiceQuestions().length > 0) {
+            multipleChoiceContainer.classList.remove("is-hidden");
+            let optionIdCounter = 0;
+            globals.task.getMultipleChoiceQuestions().forEach((option) => {
+                const optionId = `option-${optionIdCounter++}`;
+                multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
+
+                // if option is correct, add eventlistener which calls onTaskComplete
+                if (option.isCorrectAnswer === true) {
+                    let questionButton = document.getElementById(optionId);
+                    questionButton.dataset.correct = true;
+                }
+            });
+            let questions = document.getElementsByClassName("multiple-choice-question");
+
+            Array.from(questions).forEach(question => {
+                question.addEventListener("click", colorSelectedChoice);
+            });
+        }
+        // set editor code
+        window.addEventListener('load', function () {
+            getEditor().setValue(globals.task.getEditorCode());
+            createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
+        });
+        let titleTargetDiv = document.getElementById("taskTitle");
+        setTitle(titleTargetDiv);
+}
+
+/**
+ * Clears app-container, creates a new one and adds elements for instruction page
+ */
+function createInstructionPage() {
+    const taskIdentifier = globals.taskIdentifier;
+    const chapterIdentifier = globals.chapterIdentifier;
+    const appDiv = document.getElementById("app-container");
+    appDiv.classList.add("is-hidden");
+
+    let insAppDiv = document.createElement('div');
+    insAppDiv.id = 'instructions-container';
+    insAppDiv.style.flexDirection = "row";
+    insAppDiv.style.display = "flex";
+    window.addEventListener('load', function () {
+        createTaskButtons("instructions"); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
+    });
+    const insDiv = document.createElement('div');
+    insDiv.id = 'instruction-div';
+    
+    let insHead = document.createElement('div');
+    insHead.id = 'instruction-head';
+
+    let insHeadline = document.createElement('h1');
+    
+    let prevTaskLink = document.createElement('a');
+    prevTaskLink.id = 'prev-task-link';
+    prevTaskLink.textContent = '< ';
+    
+    let instructionTitle = document.createElement('a');
+    instructionTitle.id = 'instructionTitle';
+    setTitle(instructionTitle);
+    
+    let nextTaskLink = document.createElement('a');
+    nextTaskLink.id = 'next-task-link';
+    nextTaskLink.textContent = ' >';
+    
+    insHeadline.appendChild(prevTaskLink);
+    insHeadline.appendChild(instructionTitle);
+    insHeadline.appendChild(nextTaskLink);
+
+    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
+
+    insHead.appendChild(insHeadline);
+    
+    let insDesc = document.createElement('div');
+    setDescription(insDesc);
+    insDesc.id = 'instruction-desc';
+    
+    
+    appDiv.insertAdjacentElement("afterend", insAppDiv);
+    insAppDiv.appendChild(insDiv);
+    insDiv.appendChild(insHead);
+    insDiv.appendChild(insDesc);
+}
+/**
+ * Sets the text from task.title to given div. Useful since game and instructions tasks use different title div.
+ * @param {object} titleDiv | the title div where we want title text as a html element
+ */
+function setTitle(titleDiv) {
+    let chapterAndTaskNumberPeriod = `${globals.chapterIdentifier}.${globals.taskIdentifier}. `
+    let titleStr = chapterAndTaskNumberPeriod + globals.task.getTitle();
+    titleDiv.innerHTML = titleStr;
+}
+
+/**
+ * Sets the text from task.description to given div. Useful since game and instructions tasks use different description div.
+ * @param {object} descriptionDiv | the description div where we want description text as a html element
+ */
+function setDescription(descriptionDiv){
+    // set description
+    globals.task.getDescription().forEach((line) => {
+        line = line === "" ? "<br>" : line;
+        descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + marked.parse(line) + "</div>");
+    });
+}
+
+/**
+ * Sets previous and next task buttons if there are any. This was refactored to make initPage cleaner.
+ * @param {number} taskIdentifier 
+ * @param {number} chapterIdentifier 
+ * @param {number} totalTasks 
+ * @param {string} prevTaskLink 
+ * @param {string} nextTaskLink 
+ */
+function setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink) {
     // Changes href of prevtasklink and hides it if no prev task exists
     if (taskIdentifier > 1) {
         prevTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier - 1}`;
@@ -64,49 +205,6 @@ async function initPage() {
     } else {
         nextTaskLink.style.display = 'none'; // Hide if on the last task
     }
-
-
-
-    // set description
-    globals.task.getDescription().forEach((line, i) => {
-        line = line === "" ? "<br>" : line;
-        if (line === "<br>" && i < 2) return;
-        if (i === 0) {
-            document.getElementById("task-description").insertAdjacentHTML("beforeend", "<p>" + line + "</p>");
-        } else {
-            document.getElementById("task-description").insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
-        }
-    });
-
-    // set multiple choice questions
-    let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
-    if (globals.task.getMultipleChoiceQuestions().length > 0) {
-        multipleChoiceContainer.classList.remove("is-hidden");
-        let optionIdCounter = 0;
-        globals.task.getMultipleChoiceQuestions().forEach((option) => {
-            const optionId = `option-${optionIdCounter++}`;
-            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
-
-            // if option is correct, add eventlistener which calls onTaskComplete
-            if (option.isCorrectAnswer === true) {
-                let questionButton = document.getElementById(optionId);
-                questionButton.dataset.correct = true;
-            }
-        });
-        let questions = document.getElementsByClassName("multiple-choice-question");
-
-        Array.from(questions).forEach(question => {
-            question.addEventListener("click", colorSelectedChoice);
-        });
-    }
-    // set editor code
-    window.addEventListener('load', function () {
-        getEditor().setValue(globals.task.getEditorCode());
-        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
-    });
-
-    createChapterButtons();
-    isUserLoggedIn();
 }
 
 function isUserLoggedIn() {
@@ -136,7 +234,7 @@ function colorSelectedChoice(selectedChoice) {
  * Create buttons for selecting tasks based on how many json files exist in tasks directory.
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
-function createTaskButtons() {
+function createTaskButtons(str="") {
     const buttonContainer = document.getElementById('buttonTable');
 
     if (localStorage.getItem("token") !== null) { // user is logged in
@@ -145,27 +243,43 @@ function createTaskButtons() {
             // Create and append buttons
             for (let i = 0; i < totalTasks; i++) {
                 const button = document.createElement('button');
-                let buttonIdText = `chapter${currentChapter}task${i + 1}`;
+                let taskNumber = i+1;
+            // if task is task, increase tasknumber.
+            // if task is instruction, increase instructionnumber and dont increase tasknumber.
+            if (instructionTasks.includes(taskNumber)) {
+                button.innerText = `${taskNumber}i`;
+            } else {
+                button.innerText = `${taskNumber}`;
+            }
+
+            let buttonIdText = `chapter${currentChapter}task${i + 1}`;
                 button.id = buttonIdText
                 if (completedTasksList.includes(buttonIdText)) {
                     button.classList.add("button-completed");
                 } else {
                     button.classList.add("button-incompleted");
                 }
-                button.innerText = `${i + 1}`;
-                button.addEventListener('click', () => {
+                    button.addEventListener('click', () => {
                     window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
                 });
                 buttonContainer.appendChild(button);
             }
-        });
+            if (str === "instructions") {
+            onTaskComplete(true);
+        }
+    });
     } else { // user is not logged in
         for (let i = 0; i < totalTasks; i++) {
             const button = document.createElement('button');
+            let taskNumber = i+1;
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
             button.id = buttonIdText
             button.classList.add("button-incompleted");
-            button.innerText = `${i + 1}`;
+            if (instructionTasks.includes(taskNumber)) {
+                button.innerText = `${taskNumber}i`;
+            } else {
+                button.innerText = `${taskNumber}`;
+            }
             button.addEventListener('click', () => {
                 window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
             });
@@ -201,25 +315,11 @@ export function onTaskComplete(won) {
     const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
 
     if (won) {
-        const buttonid = `${apiTaskIdentifier}`;
+        const buttonid = apiTaskIdentifier;
         let button = document.getElementById(buttonid);
-        let celebrationBox = document.getElementById("celebration")
-        const container = document.getElementById('celebration-confetti-container');
-        for (let i = 0; i < 30; i++) {
-            const celebrationConfetti = createCelebrationConfetti();
-            container.appendChild(celebrationConfetti);
-
-            // Remove the confetti after animation completes to prevent memory leaks
-            celebrationConfetti.addEventListener('animationend', () => {
-                container.removeChild(celebrationConfetti);
-            });
+        if (globals.task.getTaskType() != instructionsStr) {
+        celebration();
         }
-        celebrationBox.classList.remove("is-hidden");
-
-        setTimeout(() => {
-            celebrationBox.classList.add('is-hidden');
-        }, 3000);
-
         if (button.getAttribute("class") == "button-incompleted") {
             button.classList.replace("button-incompleted", "button-completed");
         }
@@ -252,6 +352,26 @@ export function onTaskComplete(won) {
         api.sendTask(apiTaskIdentifier);
     }
 }
+
+function celebration() {
+    let celebrationBox = document.getElementById("celebration")
+    const container = document.getElementById('celebration-confetti-container');
+    for (let i = 0; i < 30; i++) {
+        const celebrationConfetti = createCelebrationConfetti();
+        container.appendChild(celebrationConfetti);
+
+        // Remove the confetti after animation completes to prevent memory leaks
+        celebrationConfetti.addEventListener('animationend', () => {
+            container.removeChild(celebrationConfetti);
+        });
+    }
+    celebrationBox.classList.remove("is-hidden");
+
+    setTimeout(() => {
+        celebrationBox.classList.add('is-hidden');
+    }, 3000);
+}
+    
 
 function createCelebrationConfetti() {
     const celebrationConfetti = document.createElement('div');
