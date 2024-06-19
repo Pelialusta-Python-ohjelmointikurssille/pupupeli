@@ -51,11 +51,13 @@ async function initPage() {
     const taskIdentifier = globals.taskIdentifier;
     const chapterIdentifier = globals.chapterIdentifier;
 
+    createChapterButtons();
+    isUserLoggedIn();
     // checking if task type is instructions
     if (globals.task.getTaskType() != instructionsStr) {
         createGamePage();
     } else {
-        createInstructionPage();
+        createInstructionPage()
     }
 
     setTitle(document.getElementById("taskTitle"));
@@ -64,8 +66,7 @@ async function initPage() {
 
     setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
 
-    createChapterButtons();
-    isUserLoggedIn();
+
 }
 
 /**
@@ -113,7 +114,7 @@ function createInstructionPage() {
     appDiv.style.flexDirection = "row";
     appDiv.style.display = "flex";
     window.addEventListener('load', function () {
-        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
+        createTaskButtons("instructions"); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
     });
     const insDiv = document.createElement('div');
     insDiv.id = 'instruction-div';
@@ -219,13 +220,14 @@ function colorSelectedChoice(selectedChoice) {
  * Create buttons for selecting tasks based on how many json files exist in tasks directory.
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
-function createTaskButtons() {
+function createTaskButtons(str="") {
     const buttonContainer = document.getElementById('buttonTable');
 
     api.getCompletedTasks().then(taskList => {
         let completedTasksList = taskList.tasks;
         // Create and append buttons
         for (let i = 0; i < totalTasks; i++) {
+            console.log(i);
             const button = document.createElement('button');
             let taskNumber = i+1;
             // if task is task, increase tasknumber.
@@ -247,6 +249,9 @@ function createTaskButtons() {
                 window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
             });
             buttonContainer.appendChild(button);
+        }
+        if (str === "instructions") {
+            onTaskComplete(true);
         }
     });
 }
@@ -278,34 +283,43 @@ export function onTaskComplete(won) {
     const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
 
     if (won) {
-        const buttonid = `${apiTaskIdentifier}`;
+        const buttonid = apiTaskIdentifier;
+        console.log(buttonid);
         let button = document.getElementById(buttonid);
-        let celebrationBox = document.getElementById("celebration")
-        const container = document.getElementById('celebration-confetti-container');
-        for (let i = 0; i < 30; i++) {
-            const celebrationConfetti = createCelebrationConfetti();
-            container.appendChild(celebrationConfetti);
-
-            // Remove the confetti after animation completes to prevent memory leaks
-            celebrationConfetti.addEventListener('animationend', () => {
-                container.removeChild(celebrationConfetti);
-            });
+        if (globals.task.getTaskType() != instructionsStr) {
+        celebration();
         }
-        celebrationBox.classList.remove("is-hidden");
-
-        setTimeout(() => {
-            celebrationBox.classList.add('is-hidden');
-        }, 3000);
-
+        console.log(button);
         if (button.getAttribute("class") == "button-incompleted") {
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
         api.sendTask(apiTaskIdentifier);
+        console.log("Task completed successfully");
     } else {
         api.sendTask(apiTaskIdentifier);
     }
 }
+
+function celebration() {
+    let celebrationBox = document.getElementById("celebration")
+    const container = document.getElementById('celebration-confetti-container');
+    for (let i = 0; i < 30; i++) {
+        const celebrationConfetti = createCelebrationConfetti();
+        container.appendChild(celebrationConfetti);
+
+        // Remove the confetti after animation completes to prevent memory leaks
+        celebrationConfetti.addEventListener('animationend', () => {
+            container.removeChild(celebrationConfetti);
+        });
+    }
+    celebrationBox.classList.remove("is-hidden");
+
+    setTimeout(() => {
+        celebrationBox.classList.add('is-hidden');
+    }, 3000);
+}
+    
 
 function createCelebrationConfetti() {
     const celebrationConfetti = document.createElement('div');

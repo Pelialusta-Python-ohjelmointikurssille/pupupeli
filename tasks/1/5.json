@@ -1,10 +1,6 @@
 {
-  "title": [
-    "The Lorem"
-  ],
-  "taskType": [
-    "instructions"
-  ],
+  "title": "The Lorem",
+  "taskType": "instructions",
   "description": [
     "# Lorem Ipsum",
     "",
