@@ -3,10 +3,8 @@ import { getInputBoxValue, showInputBox } from './ui/inputBox.js';
 import { disablePlayButton } from './ui/ui_editor_buttons.js'
 import { displayErrorMessage } from './ui/ui.js';
 import * as globals from './util/globals.js';
-import { getGridObjectsLeft } from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
-import { Constants, getVariableTrueName } from './game/commonstrings.js';
 
 let worker;
 let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
@@ -62,13 +60,8 @@ export function initWorker() {
 function sendAmountOfVariableToWorkerAsInput(message) {
     sharedArray = new Uint16Array(message.sab, 4);
     syncArray = new Int32Array(message.sab, 0, 1);
-    let trueName = getVariableTrueName(message.details);
-    if (!trueName) { //not found
-        inputToWorker("-1");
-        return;
-    }
-    let amountOfObjects = getGridObjectsLeft(trueName);
-    inputToWorker(amountOfObjects.toString()); //input to worker currently just strings§
+    let amountOfObjects = gameController.getGridObjectsOfTypeLeft(message.details);
+    inputToWorker(amountOfObjects.toString()); //input to worker currently just strings
 }
 
 /**
