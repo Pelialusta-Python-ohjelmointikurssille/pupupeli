@@ -118,3 +118,34 @@ Retrospektiivi
 
 
 ### LESS OF vähemmän
+
+
+## Retro 5, 17.6.2024
+
+### START aloitetaan
+- pidetään mainista huolta
+- katotaan grafiikkatestit
+- backlogi sheetsiin ja voidaan käyttää issues edelleen
+- testaaminen
+- definition of donen noudattaminen <- testaus ja toisten tsekkaama
+
+### STOP lopetetaan
+- ei magic stringejä
+- kommunikaation katko
+- eteenpäin siirtyminen ilman testejä jne
+
+
+### CONTINUE jatketaan
+- JSDOCIT grafiikkafunktioihin
+- feature branch / pull request
+- pullarikatselmointi
+- taskit: harjoittelija kirjoittaa ja ohjaaja auttaa
+- kommunikointia
+
+### MORE OF lisää
+- Kysy voiko auttaa jos loppuu tekeminen
+- enemmän läpinäkyvyyttä taskeissa
+- tehtävien jakaminen
+
+
+### LESS OF vähemmän
