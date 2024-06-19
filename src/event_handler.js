@@ -7,6 +7,7 @@ import { getGridObjectsLeft } from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
 import { getVariableTrueName } from './game/commonstrings.js';
+import { requestInputFromPython } from './game/game_input_controller.js';
 
 let worker;
 let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
@@ -25,7 +26,8 @@ export function initWorker() {
             case "input":
                 sharedArray = new Uint16Array(message.sab, 4);
                 syncArray = new Int32Array(message.sab, 0, 1);
-                showInputBox();
+                console.log("INPUT RECEIVED TO EVENT HANDLER")
+                requestInputFromPython();
                 break;
             case "command":
                 globals.setCurrentSAB(message.sab);
@@ -95,6 +97,7 @@ export function postMessage(message) {
  */
 export function setMessagePassingState(state) {
     isMessagePassingPaused = state.paused;
+    console.log(`SET MESSAGE PASSING STATE TO ${state.paused}`)
     if (!isMessagePassingPaused) {
         postMessage({ type: lastMessage.type, details: lastMessage.message, sab: lastMessage.sab });
     }
@@ -118,8 +121,7 @@ export function runSingleCommand() {
  * @param {*} event The event when the user inputs something in the input box,
  * in this case, the relevant part is the key the user inputs.
  */
-export function onUserSendInputToWorker() {
-    let word = getInputBoxValue();
+export function onUserSendInputToWorker(word) {
     inputToWorker(word);
 }
 
@@ -166,4 +168,8 @@ function postMessageToWorker(message) {
  */
 function saveLastMessage(message) {
     lastMessage = message;
+}
+
+export function getWorkerMessageState() {
+    return isMessagePassingPaused;
 }

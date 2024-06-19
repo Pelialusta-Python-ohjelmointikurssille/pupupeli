@@ -2,6 +2,7 @@ import { Constants } from "./commonstrings.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { Vector2 } from "./vector.js";
 import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.js";
+import { requestInputFromGame, requestInputFromPython } from "./game_input_controller.js";
 //Trying to implement the Command pattern in javascript. Interfaces in JS are so janky that I just made classes.
 //Maybe do a base Command class and extend that, if you want. 
 //    https://refactoring.guru/design-patterns/command
@@ -60,6 +61,22 @@ export class MoveCommand {
                 this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
                 
                 this.grid.removeFromGrid(go);
+
+                requestInputFromGame();
+                this.graphicsHandler.destroyTextBoxes();
+                let textboxId = crypto.randomUUID().toString();
+                this.graphicsHandler.createEntity(
+                    textboxId,
+                    "textbox",
+                    {
+                        position: new Vector2(512, 940),
+                        size: new Vector2(1000, 200),
+                        targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
+                        text: "Testikysymys?",
+                        alignTextTop: true
+                    },
+                    SKIN_BUNDLES["speech_bubble"]
+                );
             }
         }
     }

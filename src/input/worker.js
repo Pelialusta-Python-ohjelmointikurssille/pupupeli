@@ -61,6 +61,7 @@ function handleInput() {
     const syncArray = new Int32Array(sab, 0, 1);
 
     postMessage({ type: 'input', details: "", sab: sab });
+    console.log("POST MESSAGE INPUT FROM WORKER");
     Atomics.wait(syncArray, 0, 0);
     let word = getStringFromSharedArray(sharedArray);
     console.log("worker received word: " + word);

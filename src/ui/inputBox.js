@@ -1,6 +1,6 @@
-import { onUserSendInputToWorker } from "../event_handler.js";
+import { answerInput, getUserInputs, resetInputs } from "../game/game_input_controller.js";
+
 let inputBox = document.getElementById("input-box");
-let userInputs = []
 let inputContainer = document.getElementById('input-container')
 
 /**
@@ -23,7 +23,7 @@ export function getInputBoxValue() {
 }
 
 export function resetInputHistory() {
-    userInputs = [];
+    resetInputs();
     displayPreviousInputs();
 }
 
@@ -50,20 +50,18 @@ function clearInputBoxValue() {
 
 function addInputToUserInputs(event) {
     if (event.key !== 'Enter') return;
-    userInputs.push(inputBox.value);
-    displayPreviousInputs();
-    onUserSendInputToWorker();
-    hideAndClearInputBox();
+    console.log("ANSWER INPUT WITH TEXTBOX");
+    answerInput(inputBox.value);
 }
 
-function displayPreviousInputs() {
+export function displayPreviousInputs() {
     inputContainer.innerHTML = '';
-    if (userInputs.length <= 0) {
+    if (getUserInputs().length <= 0) {
         inputContainer.classList.add("is-hidden");
         return;
     }
     inputContainer.classList.remove("is-hidden");
-    userInputs.forEach(input => {
+    getUserInputs().forEach(input => {
         const inputElement = document.createElement('div');
         inputElement.textContent = input;
         inputContainer.appendChild(inputElement);
