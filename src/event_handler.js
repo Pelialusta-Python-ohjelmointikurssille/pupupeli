@@ -94,7 +94,6 @@ export function postMessage(message) {
  */
 export function setMessagePassingState(state) {
     isMessagePassingPaused = state.paused;
-    console.log(`SET MESSAGE PASSING STATE TO ${state.paused}`)
     if (!isMessagePassingPaused) {
         postMessage({ type: lastMessage.type, details: lastMessage.message, sab: lastMessage.sab });
     }
