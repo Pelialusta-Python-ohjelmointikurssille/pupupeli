@@ -1,7 +1,7 @@
 import * as globals from "../util/globals.js";
 import * as fileReader from "../file_reader.js";
 import * as api from "../api/api.js";
-
+import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
 import { getEditor } from "../input/editor.js"
 import { initWorker } from "../event_handler.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
@@ -120,13 +120,11 @@ function createInstructionPage() {
     
     let insHead = document.createElement('div');
     insHead.id = 'instruction-head';
-    insHead.style.marginBottom = '1rem';
 
     let insHeadline = document.createElement('h1');
     
     let prevTaskLink = document.createElement('a');
     prevTaskLink.id = 'prev-task-link';
-    prevTaskLink.style.textDecoration = 'none';
     prevTaskLink.textContent = '< ';
     
     let taskTitle = document.createElement('a');
@@ -134,7 +132,6 @@ function createInstructionPage() {
     
     let nextTaskLink = document.createElement('a');
     nextTaskLink.id = 'next-task-link';
-    nextTaskLink.style.textDecoration = 'none';
     nextTaskLink.textContent = ' >';
     
     insHeadline.appendChild(prevTaskLink);
@@ -169,7 +166,7 @@ function setDescription(descriptionDiv){
     // set description
     globals.task.getDescription().forEach((line, i) => {
         line = line === "" ? "<br>" : line;
-        descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + line + "</div>");
+        descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + marked.parse(line) + "</div>");
     });
 }
 
