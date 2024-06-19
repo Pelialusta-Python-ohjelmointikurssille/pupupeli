@@ -110,10 +110,11 @@ export class AskCommand {
             textboxId,
             "textbox",
             {
-                position: new Vector2(512, 980),
+                position: new Vector2(512, 940),
                 size: new Vector2(1000, 200),
                 targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
-                text: this.askString
+                text: this.askString,
+                alignTextTop: true
             },
             SKIN_BUNDLES["speech_bubble"]
         );

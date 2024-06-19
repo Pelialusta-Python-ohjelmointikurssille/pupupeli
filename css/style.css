@@ -34,6 +34,25 @@ body {
     border-radius: 5px;
 }
 
+.game-layered {
+    display: grid;
+    justify-items: center;
+    align-items: end;
+}
+
+.game-layered > * {
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+
+#input-box {
+    height: 40px;
+    min-width: 640px;
+    border: 1px solid black;
+    font-size: 18px;
+    margin-bottom: 64px;
+}
+
 /* This one includes both task header and toggle buttons div, we want them on the same level */
 #task-name-div {
     display: flex;
@@ -223,15 +242,6 @@ body {
 
 #editor-stop-button {
     float: right;
-}
-
-#input-box {
-    display: inline-flex;
-    position: relative;
-    height: 32px;
-    border: 1px solid black;
-    padding: 5px;
-    font-size: 16px;
 }
 
 h1 {
