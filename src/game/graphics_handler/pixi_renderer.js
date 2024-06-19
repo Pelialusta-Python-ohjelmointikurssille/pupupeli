@@ -22,7 +22,7 @@ export class PixiRenderer {
         this.pixiApp.ticker.add((time) => {
             this.renderLoop(time);
         });
-        this.cameraWorldContainer = new PIXI.Container();
+        this.cameraWorldContainer = new PIXI.Container({ interractiveChildren: false });
         this.cameraWorldContainer.sortDirty = true;
         this.pixiApp.stage.addChild(this.cameraWorldContainer);
     }
