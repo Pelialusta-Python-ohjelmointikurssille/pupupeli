@@ -169,8 +169,8 @@ function createChapterButtons() {
             button.id = `chapter-button-${i + 1}`;
             button.value = i + 1;
             button.innerText = `Tehtäväsarja ${i + 1}`;
-
-            const currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + globals.chapterIdentifier);
+            //Check if 
+            let currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + (i + 1));
             let allTasksCompleted = true;
             for (let j = 0; j < currentTotalTasks; j++) {
                 let taskId = `chapter${i + 1}task${j + 1}`;
@@ -191,7 +191,6 @@ function createChapterButtons() {
                 console.log(currentChapter)
                 window.location.href = `/?chapter=${currentChapter}&task=1`;
             });
-
             selectContainer.appendChild(button);
         }
     })
@@ -232,7 +231,7 @@ export function onTaskComplete(won) {
         }
         globals.setGameAsWon();
         api.sendTask(apiTaskIdentifier).then(() => {
-            createChapterButtons(); 
+            createChapterButtons();
         });
     } else {
         api.sendTask(apiTaskIdentifier);
