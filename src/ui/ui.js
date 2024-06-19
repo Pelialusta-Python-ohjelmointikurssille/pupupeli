@@ -134,8 +134,7 @@ function createInstructionPage() {
     
     let instructionTitle = document.createElement('a');
     instructionTitle.id = 'instructionTitle';
-    let titleTargetDiv = document.getElementById("instructionTitle");
-    setTitle(titleTargetDiv);
+    setTitle(instructionTitle);
     
     let nextTaskLink = document.createElement('a');
     nextTaskLink.id = 'next-task-link';
