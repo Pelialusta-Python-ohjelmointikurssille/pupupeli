@@ -171,7 +171,7 @@ function setTitle(titleDiv) {
  */
 function setDescription(descriptionDiv){
     // set description
-    globals.task.getDescription().forEach((line, i) => {
+    globals.task.getDescription().forEach((line) => {
         line = line === "" ? "<br>" : line;
         descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + marked.parse(line) + "</div>");
     });
