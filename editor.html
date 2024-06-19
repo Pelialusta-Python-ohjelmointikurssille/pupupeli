@@ -259,20 +259,20 @@
                 </div>
             </div>
             <div id="options-container" class="is-flex is-flex-column">
-                <div id="task-title" class="is-flex is-flex-center">
+                <div id="task-title-container" class="is-flex is-flex-center">
                     <h3>Tehtävän nimi:</h3>
-                    <input type="text" placeholder="Tehtävän nimi" style="text-align:center; width: 200px; height: 25px;">
+                    <input type="text" id="task-title-input" placeholder="Tehtävän nimi" style="text-align:center; width: 200px; height: 25px;">
                 </div>
                 <div id="task-type" class="is-flex is-flex-center">
                     <h3>Tehtävän tyyppi:</h3>
-                    <input type="radio" id="taskType1" name="taskType" value="collectibles" style="margin-right: 10px;">
-                    <label for="taskType1" style="margin-right: 20px;">Kerää esineet</label>
+                    <input type="radio" id="taskTypeCollectibles" name="taskType" value="collectibles" style="margin-right: 10px;" checked>
+                    <label for="taskTypeCollectibles" style="margin-right: 20px;">Kerää esineet</label>
                 
-                    <input type="radio" id="taskType2" name="taskType" value="multiple-choice" style="margin-right: 10px;">
-                    <label for="taskType2" style="margin-right: 20px;">Monivalinta</label>
+                    <input type="radio" id="taskTypeMultipleChoice" name="taskType" value="multiple-choice" style="margin-right: 10px;">
+                    <label for="taskTypeMultipleChoice" style="margin-right: 20px;">Monivalinta</label>
                 
-                    <input type="radio" id="taskType3" name="taskType" value="instructions" style="margin-right: 10px;">
-                    <label for="taskType3">Ohjeistus</label>
+                    <input type="radio" id="taskTypeInstructions" name="taskType" value="instructions" style="margin-right: 10px;">
+                    <label for="taskTypeInstructions">Ohjeistus</label>
                 </div>
                 <div>
                     <textarea id="instructions-input" class="is-hidden" rows="10" cols="50" placeholder="Kirjoita ohje tänne"></textarea>
@@ -498,7 +498,7 @@
         }
 
         function getTitle() {
-            let titleLine = document.querySelector("#task-title input").value;
+            let titleLine = document.querySelector("#task-title-input").value;
             return titleLine;
         }
 
@@ -508,7 +508,8 @@
         }
 
         function generateTaskOutput() {
-            let taskTitle = document.querySelector('#task-title input').value;
+            console.log(document.querySelector('#task-title-input').value);
+            let taskTitle = document.querySelector('#task-title-input').value;
             let selectedTaskType = document.querySelector('input[name="taskType"]:checked').value;
             const taskDescriptionLines = [];
             if (selectedTaskType === 'instructions') {
@@ -668,6 +669,8 @@
 
                     createTable(false, true, task.grid.length, task.grid[0].length);
 
+                    importTitle(task.title);
+                    importTaskType(task.taskType);
                     importConditions(task.conditions);
                     importDescription(task.description);
                     importEditorCode(task.editorCode);
@@ -684,6 +687,22 @@
 
                 reader.readAsText(file);
             }
+
+            function importTitle(title) {
+                let taskTitle = document.getElementById("task-title-input");
+                taskTitle.value = title;
+            }
+
+            function importTaskType(taskType) {
+                let taskTypeRadios = document.getElementsByName("taskType");
+
+                for (let i=0; i < taskTypeRadios.length; i++) {
+                    if (taskTypeRadios[i].value === taskType) {
+                        taskTypeRadios[i].checked = true;
+                    }
+                }
+            }
+
 
             function importConditions(conditions) {
                 document.getElementById("options-conditions").querySelectorAll(".checkbox-container").forEach(element => {
