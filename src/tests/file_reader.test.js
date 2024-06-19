@@ -158,8 +158,21 @@ describe('countForTaskFilesInDirectory', () => {
   test('should return file count 2', () => {
     const dirPath = path.resolve(__dirname, './mocks/mock_tasks/countfortaskfiles');
     const expectedOutput = 2;
-    let fileNumber = countForTaskFilesInDirectory(dirPath);
+    let fileNumber = countForTaskFilesInDirectory(dirPath).count;
     expect(fileNumber).toEqual(expectedOutput);
+  });
+});
+
+describe('countForTaskFilesInDirectory', () => {
+  beforeEach(() => {
+      global.XMLHttpRequest = XMLHttpRequestMock;
+  });
+
+  test('should return instructionNumbers array with 1', () => {
+    const dirPath = path.resolve(__dirname, './mocks/mock_tasks/countfortaskfiles');
+    let fileInstructionNumbers = countForTaskFilesInDirectory(dirPath).instructionNumbers;
+    expect(fileInstructionNumbers.length).toEqual(1);
+    expect(fileInstructionNumbers[0]).toEqual(1);
   });
 });
 
@@ -177,11 +190,13 @@ describe('checkIfFileExists', () => {
 
   test('should return result if exists', () => {
     const filePath = path.resolve(__dirname, './mocks/mock_tasks/countfortaskfiles/2.json');
-    const expectedOutput = { "hi": "moi"};
+    const expectedOutput = { "taskType": "collectibles", "hi": "moi"};
     let result = checkIfFileExists(filePath);
     expect(result).not.toEqual(null);
     expect(result).toEqual(expectedOutput);
     expect(result.hi).toEqual("moi");
+    expect(result).toEqual(expectedOutput);
+    expect(result.taskType).toEqual("collectibles");
   });
 });
 

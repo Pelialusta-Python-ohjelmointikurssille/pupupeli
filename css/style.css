@@ -124,11 +124,35 @@ body {
     align-items: center;
 }
 
-#app-container {
+#app-container, #instructions-container {
     max-width: calc(var(--canvas-width) * 2.5);
     background-color: #ddd;
     border-radius: 8px;
     border: 1px solid black;
+}
+
+#instruction-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: calc(var(--canvas-width) * 2.5);
+    padding: 2rem;
+    height: 100%;
+}
+
+#instruction-head {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#instruction-desc {
+    white-space: pre-wrap;
+}
+
+#prev-task-link, #next-task-link {
+    text-decoration: none;
+    margin: 0 0.5rem;
 }
 
 #task-selector-container {
