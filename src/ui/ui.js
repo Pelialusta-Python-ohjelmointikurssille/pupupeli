@@ -108,7 +108,8 @@ function createGamePage() {
  * Clears app-container, creates a new one and adds elements for instruction page
  */
 function createInstructionPage() {
-
+    const taskIdentifier = globals.taskIdentifier;
+    const chapterIdentifier = globals.chapterIdentifier;
     const appDiv = document.getElementById("app-container");
     appDiv.classList.add("is-hidden");
 
@@ -142,7 +143,9 @@ function createInstructionPage() {
     insHeadline.appendChild(prevTaskLink);
     insHeadline.appendChild(instructionTitle);
     insHeadline.appendChild(nextTaskLink);
-    
+
+    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
+
     insHead.appendChild(insHeadline);
     
     let insDesc = document.createElement('div');
