@@ -104,10 +104,12 @@ async function sendGetRequest(url) {
 export async function login() {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
-    stored_username = user;
-    if (stored_username = "") {
+    
+    if (user === "") {
         showLoginFailed();
         return
+    } else {
+        stored_username = user;
     }
 
     const params = {
