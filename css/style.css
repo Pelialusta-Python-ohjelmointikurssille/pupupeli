@@ -10,7 +10,7 @@
 /* remove above before elease */
 
 :root {
-    --canvas-width: 640px;
+    --canvas-width: 1024px;
     --canvas-height: var(--canvas-width);
 }
 
@@ -50,9 +50,13 @@ body {
     flex-direction: column;
 }
 
-#left-container {
+#left-container, #right-container {
     min-width: var(--canvas-width);
     justify-content: space-between;
+}
+
+#right-container {
+    min-height: var(--canvas-height);
 }
 
 .is-margin-half-rem-x {
@@ -359,7 +363,7 @@ button:hover {
     border-bottom: none;
 }
 
-@media (max-width: calc((640px * 2) + 3rem)) {
+@media (max-width: calc((1024px * 2) + 3rem)) {
     #app-container {
         flex-direction: column;
     }

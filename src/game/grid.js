@@ -1,7 +1,7 @@
 import { Vector2 } from "./vector.js";
 import { Cell } from "./cell.js";
 import { Constants } from "./commonstrings.js";
-
+import { GridData } from "./grid_data.js";
 
 /**
  * Represents the game grid
@@ -24,6 +24,7 @@ export class Grid {
         this.player = player;
         this.resetPosMap = new Map();
         this.eventTarget = new EventTarget();
+        this.data = new GridData();
     };
 
     /**
@@ -41,6 +42,7 @@ export class Grid {
      */
     resetGrid() {
         this.doubleArray = this.CreateDoubleArray(this.width, this.height);
+        this.data.reset();
         for (let [gridobject, vector2] of this.resetPosMap.entries()) {
             this.addToGrid(gridobject, vector2.x, vector2.y);
         }
@@ -59,6 +61,7 @@ export class Grid {
 
         this.doubleArray[x][y].entities.push(gridObject);
         gridObject.cell = this.doubleArray[x][y];
+        this.data.add(gridObject);
     }
 
     /**
@@ -141,7 +144,7 @@ export class Grid {
         let index = cell.entities.indexOf(gridObject);
         cell.entities.splice(index, 1);
         gridObject.cell = null;
-        //? means that doesn't call if function undefined or null
+        this.data.remove(gridObject);
         this.eventTarget.dispatchEvent(new CustomEvent("remove", { detail: gridObject }));
     }
 
