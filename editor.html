@@ -483,14 +483,12 @@
         }
 
         function getTitle() {
-            titleLine = []
-            titleLine.push(document.querySelector("#task-title input").value);
+            let titleLine = document.querySelector("#task-title input").value;
             return titleLine;
         }
 
         function getTaskType() {
-            typeLine = []
-            typeLine.push(document.querySelector('input[name="taskType"]:checked').value);
+            let typeLine = document.querySelector('input[name="taskType"]:checked').value;
             return typeLine;
         }
 
