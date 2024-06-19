@@ -23,7 +23,7 @@ export class GraphicsCamera {
         this.rotation = 0;
         this.minZoom = 0.08;
         this.maxZoom = 1;
-        this.focusPaddingPercent = 0.025;
+        this.focusPaddingPercent = 0.1;
         this.container.position.x = this.screenCenter.x;
         this.container.position.y = this.screenCenter.y;
         this.totalRenderScale = this.getTotalRenderScale();
@@ -96,7 +96,7 @@ export class GraphicsCamera {
 
         if (width > height) zoom = 1024 / width;
         else zoom = 1024 / height;
-        this.setZoom(zoom * (1 - this.focusPaddingPercent));
+        this.setZoom(zoom * (1 - (this.focusPaddingPercent * zoom)));
     }
 
     /**
