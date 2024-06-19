@@ -1,0 +1,73 @@
+{
+  "title": "The Lorem",
+  "taskType": "instructions",
+  "description": [
+    "# Lorem Ipsum",
+    "",
+    "Lorem ipsum dolor sit amet, **consectetur adipiscing elit**. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. *Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus*. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget odio.",
+    "",
+    "## Subheading 1",
+    "",
+    "Pellentesque maximus, ligula vel auctor dictum, diam nunc imperdiet lectus, ut venenatis leo nulla nec nisi. Quisque at nunc at libero venenatis lacinia. Aliquam erat volutpat. Nulla facilisi. Integer lacinia arcu sed nulla ultricies, sit amet varius lacus scelerisque. Integer sit amet urna non orci volutpat posuere. Ut elementum libero ut velit bibendum, id vehicula nunc convallis.",
+    "",
+    "- **Bullet point 1**",
+    "- *Bullet point 2*",
+    "- Bullet point 3",
+    "",
+    "## Subheading 2",
+    "",
+    "Morbi nec sapien id quam gravida bibendum. Mauris fringilla posuere metus, id tincidunt risus feugiat ut. Suspendisse eu augue non odio cursus ultrices ut ut justo. Proin et metus ut ante placerat pellentesque. Nulla in dolor quis urna fermentum imperdiet at ac metus. ",
+    "",
+    "1. Ordered item 1",
+    "2. Ordered item 2",
+    "3. Ordered item 3",
+    "",
+    "### Sub-subheading",
+    "",
+    "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam cursus euismod magna, a viverra magna. Fusce ac lectus et leo sollicitudin varius sit amet a purus. In facilisis massa eu purus euismod, non ultrices libero ullamcorper. Nam at felis mauris. Integer non quam at lacus commodo suscipit. Curabitur nec elit id eros fermentum faucibus.",
+    "",
+    "> This is a blockquote. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Morbi ultricies mi vel erat ultricies elementum. Nulla facilisi. Donec consequat laoreet nulla vel vestibulum. ",
+    "",
+    "## Subheading 3",
+    "",
+    "Proin euismod dui sed eros hendrerit, sed dapibus metus fermentum. Sed imperdiet lacus non auctor finibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nam nec lectus nec sapien euismod vehicula a ac nunc. Nullam eget consectetur est.",
+    "",
+    "### Sub-subheading 2",
+    "",
+    "Etiam ut metus suscipit, venenatis felis vel, iaculis orci. Quisque consequat neque vitae sem convallis dictum. Ut quis orci vel justo vulputate iaculis. Fusce sollicitudin nibh sed tellus ultricies, nec gravida elit tristique. Curabitur ac libero at mi gravida lacinia non at orci.",
+    "",
+    "Muista myös [*pupueditor*](http://localhost:8000/editor.html)"
+  ],
+  "editorCode": [
+    ""
+  ],
+  "multipleChoiceQuestions": [],
+  "grid": [
+    [1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1]
+  ],
+  "conditions": [
+    {
+      "condition": "conditionUsedWhile",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedFor",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": false
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": false
+    }
+  ]
+}

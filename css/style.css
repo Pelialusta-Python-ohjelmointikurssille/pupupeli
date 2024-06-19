@@ -120,7 +120,7 @@ body {
     align-items: center;
 }
 
-#app-container {
+#app-container, #instructions-container {
     max-width: calc(var(--canvas-width) * 2.5);
     background-color: #ddd;
     border-radius: 8px;

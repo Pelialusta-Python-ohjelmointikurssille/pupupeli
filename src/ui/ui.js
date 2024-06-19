@@ -57,10 +57,9 @@ async function initPage() {
     if (globals.task.getTaskType() != instructionsStr) {
         createGamePage();
     } else {
-        createInstructionPage()
+        createInstructionPage();
     }
-
-    setTitle(document.getElementById("taskTitle"));
+    console.log(document.getElementById("taskTitle"));
     const prevTaskLink = document.getElementById('prev-task-link');
     const nextTaskLink = document.getElementById('next-task-link');
 
@@ -102,6 +101,8 @@ function createGamePage() {
             getEditor().setValue(globals.task.getEditorCode());
             createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
         });
+        let titleTargetDiv = document.getElementById("taskTitle");
+        setTitle(titleTargetDiv);
 }
 
 /**
@@ -110,9 +111,12 @@ function createGamePage() {
 function createInstructionPage() {
 
     const appDiv = document.getElementById("app-container");
-    appDiv.innerHTML = "";
-    appDiv.style.flexDirection = "row";
-    appDiv.style.display = "flex";
+    appDiv.classList.add("is-hidden");
+
+    let insAppDiv = document.createElement('div');
+    insAppDiv.id = 'instructions-container';
+    insAppDiv.style.flexDirection = "row";
+    insAppDiv.style.display = "flex";
     window.addEventListener('load', function () {
         createTaskButtons("instructions"); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
     });
@@ -128,15 +132,17 @@ function createInstructionPage() {
     prevTaskLink.id = 'prev-task-link';
     prevTaskLink.textContent = '< ';
     
-    let taskTitle = document.createElement('a');
-    taskTitle.id = 'taskTitle';
+    let instructionTitle = document.createElement('a');
+    instructionTitle.id = 'instructionTitle';
+    let titleTargetDiv = document.getElementById("instructionTitle");
+    setTitle(titleTargetDiv);
     
     let nextTaskLink = document.createElement('a');
     nextTaskLink.id = 'next-task-link';
     nextTaskLink.textContent = ' >';
     
     insHeadline.appendChild(prevTaskLink);
-    insHeadline.appendChild(taskTitle);
+    insHeadline.appendChild(instructionTitle);
     insHeadline.appendChild(nextTaskLink);
     
     insHead.appendChild(insHeadline);
@@ -145,7 +151,9 @@ function createInstructionPage() {
     setDescription(insDesc);
     insDesc.id = 'instruction-desc';
     
-    appDiv.appendChild(insDiv);
+    
+    appDiv.insertAdjacentElement("afterend", insAppDiv);
+    insAppDiv.appendChild(insDiv);
     insDiv.appendChild(insHead);
     insDiv.appendChild(insDesc);
 }
