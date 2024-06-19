@@ -351,7 +351,7 @@
                 }
             });
         });
-
+        // hides regular view and shows instruction view
         function showInstructions() {                    
                     optionsConditionsDiv.style.display = 'none';
                     optionsInputDiv.style.display = 'none';
@@ -361,7 +361,8 @@
                     headlines.forEach(headline => {
                     headline.style.display = 'none';});
                 }
-                
+
+        // hides instruction view and shows regular view
         function hideInstructions() {
                     instructionsInput.style.display = 'none';
                     optionsConditionsDiv.style.display = 'flex';
