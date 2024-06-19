@@ -27,17 +27,14 @@
                 </div>
             </div>
             <div id="header-buttons" class="is-flex">
-                <div id="user-container" class="is-flex">
+                <div id="logged-in-as-container" class="is-hidden"><h4><span id="logged-in-as-user"></span></h4></div>
+                <div id="user-container" class="is-flex is-hidden">
                     <input id="username" placeholder="username">
-                    <input type="password" id="password" placeholder="********">
+                    <input type="password" id="password" placeholder="********" onkeydown="(event.key==='Enter')?this.nextElementSibling.click():{}">
                     <button id="login-button" value="login">Kirjaudu sisään</button>
                 </div>
-                <div id="devtaskbuttoncontainer">
-                    <input id="task-get-input" placeholder="task_name" style="max-width: 4rem;">
-                    <button id="getTaskButton" class="" value="getTaskButton">get task</button>
-                    <button id="getCompletedTasksButton" class="" value="getAllTasksButton">get all tasks</button>
-                </div>
                 <button id="logout-button" class="is-hidden" value="logout">Kirjaudu ulos</button>
+                <div id="login-failed" class=""><h1>Voi ei! Käyttäjää ei ole olemassa tai salasana on väärin!</h1></div>
             </div>
         </div>
 
@@ -92,6 +89,9 @@
                     </div>
                     <div id="input-container" class="is-margin-half-rem-x is-flex-1 is-hidden"></div>
                 </div>
+            </div>
+            <div id="right-container">
+
             </div>
         </div>
     </div>

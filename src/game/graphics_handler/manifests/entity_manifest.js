@@ -6,7 +6,8 @@ import
     createGrid,
     createTextBox,
     createPlayer,
-    createCollectible
+    createCollectible,
+    createObstacle
 } from "../entities/factories/entity_factories.js";
 
 export const ENTITIES = [
@@ -36,7 +37,7 @@ export const ENTITIES = [
     },
     {
         typeName: "obstacle",
-        factoryFunction: createGridObject
+        factoryFunction: createObstacle
     },
     {
         typeName: "collectible",

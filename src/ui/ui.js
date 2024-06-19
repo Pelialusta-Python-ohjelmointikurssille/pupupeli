@@ -37,7 +37,7 @@ async function main() {
  */
 async function initGameAndCanvas() {
     let canvas = await initGame();
-    document.getElementById("left-container").insertAdjacentElement("afterend", canvas);
+    document.getElementById("right-container").insertAdjacentElement("afterbegin", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
     setTheme(localStorage.getItem("theme"));
@@ -205,9 +205,14 @@ function setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevT
 }
 
 function isUserLoggedIn() {
+    if (localStorage.getItem("username") !== null) {
+        document.getElementById("logged-in-as-user").innerText = localStorage.getItem("username");
+    }
     if (localStorage.getItem("token") !== null) {
-        document.getElementById("user-container").classList.add("is-hidden");
         document.getElementById("logout-button").classList.remove("is-hidden");
+        document.getElementById("logged-in-as-container").classList.remove("is-hidden");
+    } else {
+        document.getElementById("user-container").classList.remove("is-hidden");
     }
 }
 
@@ -229,12 +234,13 @@ function colorSelectedChoice(selectedChoice) {
 function createTaskButtons(str="") {
     const buttonContainer = document.getElementById('buttonTable');
 
-    api.getCompletedTasks().then(taskList => {
-        let completedTasksList = taskList.tasks;
-        // Create and append buttons
-        for (let i = 0; i < totalTasks; i++) {
-            const button = document.createElement('button');
-            let taskNumber = i+1;
+    if (localStorage.getItem("token") !== null) { // user is logged in
+        api.getCompletedTasks().then(taskList => {
+            let completedTasksList = taskList.tasks;
+            // Create and append buttons
+            for (let i = 0; i < totalTasks; i++) {
+                const button = document.createElement('button');
+                let taskNumber = i+1;
             // if task is task, increase tasknumber.
             // if task is instruction, increase instructionnumber and dont increase tasknumber.
             if (instructionTasks.includes(taskNumber)) {
@@ -244,21 +250,39 @@ function createTaskButtons(str="") {
             }
 
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
+                button.id = buttonIdText
+                if (completedTasksList.includes(buttonIdText)) {
+                    button.classList.add("button-completed");
+                } else {
+                    button.classList.add("button-incompleted");
+                }
+                    button.addEventListener('click', () => {
+                    window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
+                });
+                buttonContainer.appendChild(button);
+            }
+            if (str === "instructions") {
+            onTaskComplete(true);
+        }
+    });
+    } else { // user is not logged in
+        for (let i = 0; i < totalTasks; i++) {
+            const button = document.createElement('button');
+            let taskNumber = i+1;
+            let buttonIdText = `chapter${currentChapter}task${i + 1}`;
             button.id = buttonIdText
-            if (completedTasksList.includes(buttonIdText)) {
-                button.classList.add("button-completed");
+            button.classList.add("button-incompleted");
+            if (instructionTasks.includes(taskNumber)) {
+                button.innerText = `${taskNumber}i`;
             } else {
-                button.classList.add("button-incompleted");
+                button.innerText = `${taskNumber}`;
             }
             button.addEventListener('click', () => {
                 window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
             });
             buttonContainer.appendChild(button);
         }
-        if (str === "instructions") {
-            onTaskComplete(true);
-        }
-    });
+    }
 }
 
 function createChapterButtons() {

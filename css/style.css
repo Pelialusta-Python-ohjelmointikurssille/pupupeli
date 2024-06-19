@@ -10,7 +10,7 @@
 /* remove above before elease */
 
 :root {
-    --canvas-width: 640px;
+    --canvas-width: 1024px;
     --canvas-height: var(--canvas-width);
 }
 
@@ -50,9 +50,13 @@ body {
     flex-direction: column;
 }
 
-#left-container {
+#left-container, #right-container {
     min-width: var(--canvas-width);
     justify-content: space-between;
+}
+
+#right-container {
+    min-height: var(--canvas-height);
 }
 
 .is-margin-half-rem-x {
@@ -216,6 +220,7 @@ body {
 
 #logout-button {
     margin-bottom: 0;
+    margin-left: 1rem;
 }
 
 #task-selector-box button {
@@ -317,6 +322,32 @@ button:hover {
     z-index: 1000; /* in front of all other markers */ 
 }
 
+#login-failed {
+    display: none;
+    position: absolute;
+    top: calc(6rem - 1px);
+    right: 1.5rem;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1rem;
+    z-index: 99;
+}
+.login-failed-show {
+    display: block !important;
+    transform: scaleX(0);
+    animation: login-failed-anim;
+    animation-duration: 6s;
+}
+
+@keyframes login-failed-anim {
+    0% {transform: scaleX(0);}
+    10% {transform: scaleX(1);}
+    90% {transform: scaleX(1);}
+    100% {transform: scaleX(0);}
+}
+
+
 #celebration{
     position: absolute;
     top: 50%;
@@ -383,7 +414,7 @@ button:hover {
     border-bottom: none;
 }
 
-@media (max-width: calc((640px * 2) + 3rem)) {
+@media (max-width: calc((1024px * 2) + 3rem)) {
     #app-container {
         flex-direction: column;
     }
@@ -393,7 +424,7 @@ button:hover {
     }
 
     #game {
-        margin: 1rem auto 1rem auto;
+        margin: 1rem;
     }
 
     #task-container, #editor {
