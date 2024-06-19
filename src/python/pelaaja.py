@@ -32,6 +32,8 @@ class Pelaaja:
         self.__directions = ["oikea", "vasen", "ylös", "alas"]
 
     def liiku(self, direction: str):
+        # DO NOT COMMENT OUT
+        # Prevents movement not stopping when resetting
         if reset_flag:
             raise Exception("Interpreter was reset")
         if direction in self.__directions:
