@@ -10,7 +10,7 @@
 /* remove above before elease */
 
 :root {
-    --canvas-width: 1024px;
+    --canvas-width: 768px;
     --canvas-height: var(--canvas-width);
 }
 
@@ -34,23 +34,12 @@ body {
     border-radius: 5px;
 }
 
-.game-layered {
-    display: grid;
-    justify-items: center;
-    align-items: end;
-}
-
-.game-layered > * {
-    grid-column-start: 1;
-    grid-row-start: 1;
-}
-
 #input-box {
     height: 40px;
     min-width: 640px;
     border: 1px solid black;
     font-size: 18px;
-    margin-bottom: 64px;
+    margin-bottom: 48px;
 }
 
 /* This one includes both task header and toggle buttons div, we want them on the same level */
@@ -373,7 +362,7 @@ button:hover {
     border-bottom: none;
 }
 
-@media (max-width: calc((1024px * 2) + 3rem)) {
+@media (max-width: calc((768px * 2) + 3rem)) {
     #app-container {
         flex-direction: column;
     }
@@ -390,3 +379,14 @@ button:hover {
         margin: 1rem;
     }
   }
+
+.game-layered {
+    display: grid;
+    justify-items: center;
+    align-items: end;
+}
+
+.game-layered > * {
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
