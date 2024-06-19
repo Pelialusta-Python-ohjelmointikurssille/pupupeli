@@ -59,7 +59,6 @@ async function initPage() {
     } else {
         createInstructionPage();
     }
-    console.log(document.getElementById("taskTitle"));
     const prevTaskLink = document.getElementById('prev-task-link');
     const nextTaskLink = document.getElementById('next-task-link');
 
@@ -234,7 +233,6 @@ function createTaskButtons(str="") {
         let completedTasksList = taskList.tasks;
         // Create and append buttons
         for (let i = 0; i < totalTasks; i++) {
-            console.log(i);
             const button = document.createElement('button');
             let taskNumber = i+1;
             // if task is task, increase tasknumber.
@@ -291,18 +289,15 @@ export function onTaskComplete(won) {
 
     if (won) {
         const buttonid = apiTaskIdentifier;
-        console.log(buttonid);
         let button = document.getElementById(buttonid);
         if (globals.task.getTaskType() != instructionsStr) {
         celebration();
         }
-        console.log(button);
         if (button.getAttribute("class") == "button-incompleted") {
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
         api.sendTask(apiTaskIdentifier);
-        console.log("Task completed successfully");
     } else {
         api.sendTask(apiTaskIdentifier);
     }
