@@ -87,8 +87,8 @@ export function countForChaptersInDirectory(env = "") {
 }
 
 /**
- * 
- * @param {*} path checks if file at path exists. 
+ * Checks if file at path exists. 
+ * @param {*} path path as string
  * @returns true if found, false if not found.
  */
 export function checkIfFileExists(path) {
