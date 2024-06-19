@@ -2,7 +2,7 @@ import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
-import { commandsDone, askQuestion } from "./game_controller.js";
+import { commandsDone } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
@@ -79,19 +79,6 @@ export class Game {
     makeAskCommand(commandParameter) {
         let askCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
         askCommand.execute();
-        this.onAnimsReady();
-    }
-
-    askQuestionMessage(question) {
-        this.isAskingQuestionFromGame = true;
-        let askCommand = new AskCommand(this.grid.player, this.gh, question);
-        askCommand.execute();
-        askQuestion(question);
-    }
-
-    respondToQuestion(answer) {
-        this.makeSayCommand(this.grid.player, this.gh, answer)
-        //console.log(answer);
         this.onAnimsReady();
     }
 

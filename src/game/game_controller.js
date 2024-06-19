@@ -36,10 +36,6 @@ export function commandsDone() {
     postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
 }
 
-export function askQuestion(question) {
-    showInputBox();
-}
-
 export function getCanvas() {
     game.getCanvas();
 }
