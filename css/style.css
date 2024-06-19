@@ -196,6 +196,7 @@ body {
 
 #logout-button {
     margin-bottom: 0;
+    margin-left: 1rem;
 }
 
 #task-selector-box button {
@@ -297,6 +298,32 @@ button:hover {
     z-index: 1000; /* in front of all other markers */ 
 }
 
+#login-failed {
+    display: none;
+    position: absolute;
+    top: calc(6rem - 1px);
+    right: 1.5rem;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1rem;
+    z-index: 99;
+}
+.login-failed-show {
+    display: block !important;
+    transform: scaleX(0);
+    animation: login-failed-anim;
+    animation-duration: 6s;
+}
+
+@keyframes login-failed-anim {
+    0% {transform: scaleX(0);}
+    10% {transform: scaleX(1);}
+    90% {transform: scaleX(1);}
+    100% {transform: scaleX(0);}
+}
+
+
 #celebration{
     position: absolute;
     top: 50%;
@@ -373,7 +400,7 @@ button:hover {
     }
 
     #game {
-        margin: 1rem auto 1rem auto;
+        margin: 1rem;
     }
 
     #task-container, #editor {
