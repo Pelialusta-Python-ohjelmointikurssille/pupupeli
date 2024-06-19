@@ -6,8 +6,6 @@ let isWaitingForPython = false;
 export let isWaitingForInput = false;
 
 export function requestInputFromPython() {
-    console.log("REQUESTING INPUT IN GAME INPUT CONTROLLER");
-    console.log(getWorkerMessageState());
     isWaitingForPython = true;
     isWaitingForInput = true;
     showInputBox();

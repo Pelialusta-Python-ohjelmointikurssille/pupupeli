@@ -55,7 +55,6 @@ function clearInputBoxValue() {
 
 function addInputToUserInputs(event) {
     if (event.key !== 'Enter') return;
-    console.log("ANSWER INPUT WITH TEXTBOX");
     answerInput(inputBox.value);
 }
 

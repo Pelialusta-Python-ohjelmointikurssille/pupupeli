@@ -17,7 +17,6 @@ let syncArray;
  * Creates a new worker
  */
 export function initWorker() {
-    console.log("Initializing pyodide worker...")
     worker = new Worker('/src/input/worker.js');
     worker.onmessage = (message) => {
         message = message.data;
@@ -25,7 +24,6 @@ export function initWorker() {
             case "input":
                 sharedArray = new Uint16Array(message.sab, 4);
                 syncArray = new Int32Array(message.sab, 0, 1);
-                console.log("INPUT RECEIVED TO EVENT HANDLER")
                 requestInputFromPython();
                 break;
             case "command":
