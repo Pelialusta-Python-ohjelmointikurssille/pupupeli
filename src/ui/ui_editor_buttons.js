@@ -55,6 +55,7 @@ function onResetButtonClick() {
     if (_buttonsState === States.INITIAL) return; //No need to reset
     nextStepButton.disabled = false;
     startAndPauseButton.disabled = false;
+    resetNotificationPopUps();
     runButtonSetVisualsToInitial();
     resetErrorText();
     hideAndClearInputBox();
@@ -65,6 +66,13 @@ function onResetButtonClick() {
     _buttonsState = States.INITIAL;
     setMessagePassingState({ paused: false });
     resetLineHighlight();
+}
+
+function resetNotificationPopUps() {
+    let elements = document.getElementsByClassName("pop-up-notification-show");
+    Array.from(elements).forEach(element => {
+        element.classList.remove("pop-up-notification-show");
+    });
 }
 
 function runButtonSetVisualsToInitial() {
