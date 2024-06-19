@@ -1,6 +1,6 @@
 import * as globals from "../util/globals.js";
 import { getEditor } from "../input/editor.js";
-import { showLoginFailed } from "../ui/ui.js";
+import { showPopUpNotification } from "../ui/ui.js";
 
 let stored_username;
 let loginButton = document.getElementById("login-button");
@@ -17,7 +17,7 @@ loginButton.addEventListener("click", () => {
                 localStorage.setItem("username", stored_username);
                 window.location.reload();
             } else {
-                showLoginFailed();
+                showPopUpNotification("login-failed");
             }
         })
         .catch(error => {
@@ -96,7 +96,7 @@ export async function login() {
     const pass = document.getElementById("password").value;
 
     if (user === "") {
-        showLoginFailed();
+        showPopUpNotification("login-failed");
         return
     } else {
         stored_username = user;

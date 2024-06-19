@@ -246,9 +246,8 @@ export function onTaskComplete(won) {
         })
         errorMessage += "</ol></h2>";
 
-        // temporary something to show error message on until I figure out something better
-        document.getElementById("login-failed").innerHTML = errorMessage;
-        showLoginFailed();
+        document.getElementById("condition-failed").innerHTML = errorMessage;
+        showPopUpNotification("condition-failed");
         
         api.sendTask(apiTaskIdentifier);
     }
@@ -275,12 +274,16 @@ function createCelebrationConfetti() {
 /**
  * briefly displays a popup informing the user they have failed to log in
  */
-export function showLoginFailed() {
-    let loginFailed = document.getElementById("login-failed");
-    setTimeout(() => {
-        loginFailed.classList.remove("login-failed-show");
-    }, 6000);
-    loginFailed.classList.add("login-failed-show");
+export function showPopUpNotification(elementId) {
+    let element = document.getElementById(elementId);
+    if (elementId === "login-failed") {
+        setTimeout(() => {
+            element.classList.remove("pop-up-notification-show-login");
+        }, 6000);
+    element.classList.add("pop-up-notification-show-login");
+    } else {
+        element.classList.add("pop-up-notification-show");
+    }
 }
 
 /**
