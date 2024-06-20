@@ -322,7 +322,7 @@ button:hover {
     z-index: 1000; /* in front of all other markers */ 
 }
 
-#login-failed {
+#login-failed, #condition-failed {
     display: none;
     position: absolute;
     top: calc(6rem - 1px);
@@ -333,20 +333,32 @@ button:hover {
     padding: 1rem;
     z-index: 99;
 }
-.login-failed-show {
+.pop-up-notification-show, .pop-up-notification-show-login {
     display: block !important;
-    transform: scaleX(0);
-    animation: login-failed-anim;
+}
+
+.pop-up-notification-show {
+    animation: popup-show-anim;
+    animation-duration: 3s;
+}
+
+.pop-up-notification-show-login {
+    animation: popup-show-anim-login;
     animation-duration: 6s;
 }
 
-@keyframes login-failed-anim {
+@keyframes popup-show-anim {
+    0% {transform: scaleX(0);}
+    10% {transform: scaleX(1);}
+    100% {transform: scaleX(1);}
+}
+
+@keyframes popup-show-anim-login {
     0% {transform: scaleX(0);}
     10% {transform: scaleX(1);}
     90% {transform: scaleX(1);}
     100% {transform: scaleX(0);}
 }
-
 
 #celebration{
     position: absolute;

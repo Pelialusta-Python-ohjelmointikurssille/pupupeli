@@ -352,6 +352,29 @@ export function onTaskComplete(won) {
             createChapterButtons();
         });
     } else {
+        let errorMessage = "<h2><ol>Voi juku, et vielä läpäissyt tasoa koska:";
+        if (!globals.getMultipleChoiceCorrect()) errorMessage += "\n<li>monivalintatehtävän vastaus oli väärä</li>"
+        globals.conditionsNotCleared.forEach(failedCondition => {
+            switch (failedCondition) {
+                case "conditionUsedFor":
+                    errorMessage += "\n<li>et käyttänyt for-silmukkaa</li>"
+                    break;
+                case "conditionUsedWhile":
+                    errorMessage += "\n<li>et käyttänyt while-silmukkaa</li>"
+                    break;
+                case "conditionUsedInput":
+                    errorMessage += "\n<li>et käyttänyt input-toiminnallisuutta</li>"
+                    break;
+                case "conditionMaxLines":
+                    errorMessage += "\n<li>vastauksessasi oli liian monta riviä</li>"
+                    break;
+            }
+        })
+        errorMessage += "</ol></h2>";
+
+        document.getElementById("condition-failed").innerHTML = errorMessage;
+        showPopUpNotification("condition-failed");
+        
         api.sendTask(apiTaskIdentifier);
     }
 }
@@ -391,6 +414,21 @@ function createCelebrationConfetti() {
     celebrationConfetti.style.animationDuration = `${randomDuration}s`;
 
     return celebrationConfetti;
+}
+
+/**
+ * briefly displays a popup informing the user they have failed to log in
+ */
+export function showPopUpNotification(elementId) {
+    let element = document.getElementById(elementId);
+    if (elementId === "login-failed") {
+        setTimeout(() => {
+            element.classList.remove("pop-up-notification-show-login");
+        }, 6000);
+    element.classList.add("pop-up-notification-show-login");
+    } else {
+        element.classList.add("pop-up-notification-show");
+    }
 }
 
 /**
