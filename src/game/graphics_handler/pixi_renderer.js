@@ -7,6 +7,7 @@ export class PixiRenderer {
         this.renderLoopFunctions = [];
         this.builtinAssets = null;
         this.cameraWorldContainer = null;
+        this.uiContainer = null;
     }
 
     async initialize(renderOptions) {
@@ -23,8 +24,11 @@ export class PixiRenderer {
             this.renderLoop(time);
         });
         this.cameraWorldContainer = new PIXI.Container({ interractiveChildren: false });
+        this.uiContainer = new PIXI.Container();
         this.cameraWorldContainer.sortDirty = true;
         this.pixiApp.stage.addChild(this.cameraWorldContainer);
+        this.uiContainer.sortDirty = true;
+        this.pixiApp.stage.addChild(this.uiContainer);
     }
 
     async loadAssetBuiltinBundles() {
@@ -48,12 +52,20 @@ export class PixiRenderer {
         this.renderLoopFunctions.push({ f: func, o: object });
     }
 
-    addToStage(sprite) {
-        this.cameraWorldContainer.addChild(sprite);
+    addToStage(container) {
+        this.cameraWorldContainer.addChild(container);
     }
 
-    removeFromStage(sprite) {
-        this.cameraWorldContainer.removeChild(sprite);
+    removeFromStage(container) {
+        this.cameraWorldContainer.removeChild(container);
+    }
+
+    addToUI(container) {
+        this.uiContainer.addChild(container);
+    }
+
+    removeFromUI(container) {
+        this.uiContainer.removeChild(container);
     }
 }
 
