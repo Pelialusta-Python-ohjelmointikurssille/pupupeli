@@ -167,7 +167,6 @@ function onRunButtonClick() {
 }
 
 function initThemeSelect() {
-    if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
     let descriptionTargetDiv = document.getElementById("task-description");
     themeSelectDropdown = document.getElementById("theme-select");
     themeSelectDropdown.value = localStorage.getItem("theme");
