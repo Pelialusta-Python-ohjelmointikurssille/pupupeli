@@ -137,6 +137,10 @@ export class GraphicsHandler {
         let gridObject = this.graphicsEntityHandler.getMainGridObject();
         this.graphicsEntityHandler.camera.focusOnAreaMiddle(gridObject.getMiddlePixelPosition(), gridObject.pixelSize);
         this.graphicsEntityHandler.camera.setMinZoom(this.graphicsEntityHandler.camera.zoomScale);
+        this.graphicsEntityHandler.camera.minX = (this.gridWidth * 0.25) * 128;
+        this.graphicsEntityHandler.camera.minY = (this.gridWidth * 0.25) * 128;
+        this.graphicsEntityHandler.camera.maxX = (this.gridWidth * 0.75) * 128;
+        this.graphicsEntityHandler.camera.maxY = (this.gridHeight * 0.75) * 128;
     }
 
     /**

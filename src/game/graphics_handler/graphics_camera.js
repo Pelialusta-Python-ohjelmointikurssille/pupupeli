@@ -29,12 +29,21 @@ export class GraphicsCamera {
         this.totalRenderScale = this.getTotalRenderScale();
         this.linearZoomValue = 100;
         this.updatePosition();
+        this.minX = 0;
+        this.minY = 0;
+        this.maxX = 1024;
+        this.maxY = 1024;
     }
 
     /**
      * Update the camera's position and associated variables
      */
     updatePosition() {
+        if (this.position.x < this.minX) this.position.x = this.minX;
+        if (this.position.x > this.maxX) this.position.x = this.maxX;
+        if (this.position.y < this.minY) this.position.y = this.minY;
+        if (this.position.y > this.maxY) this.position.y = this.maxY;
+
         this.totalRenderScale = this.getTotalRenderScale();
         //this.container.position.x = -this.position.x;
         //this.container.position.y = -this.position.y;
