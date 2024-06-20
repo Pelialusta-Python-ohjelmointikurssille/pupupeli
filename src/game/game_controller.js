@@ -61,7 +61,7 @@ export function toggleTrail() {
 }
 
 export function createObject(commandParameters) {
-    name = commandParameters[0]
+    let name = commandParameters[0]
     //x and y are actually flipped in game logic visually
     let y = commandParameters[1];
     let x = commandParameters[2];
