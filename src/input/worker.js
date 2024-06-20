@@ -22,7 +22,7 @@ importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
 self.onmessage = async function (event) {
     let message = event.data
     if (message.type === 'init') {
-        initializePyodide(message.details.details);
+        initializePyodide(message.details);
     }
     if (message.type === 'start') {
         setResetFlag(false);
@@ -209,7 +209,7 @@ function removeInputs(codeString) {
 function indentString(str, indent = '    ') {  // Default indentation is 4 spaces
     if (str === "") return "";
     codeString = str.split('\n').map(line => indent + line).join('\n');
-    codeString = "def test_string():\n" + codeString;
+    codeString = `${theme} = ErrorCheck()\ndef test_string():\n` + codeString;
     return codeString;
 }
 
@@ -228,12 +228,12 @@ function addLineNumberOutputs(codeString) {
         else if (trimmedLine === '' || trimmedLine.startsWith('#')) {
             return line;
         } else {
-            return `${indentation}pupu.rivi(${index + 1})\n${line}`;
+            return `${indentation}${theme}.rivi(${index + 1})\n${line}`;
         }
     });
     codeString = lines.join('\n');
     // Prepend the new line of text to codeString
-    codeString = "pupu = Pelaaja()\n" + codeString;
+    codeString = `${theme} = Pelaaja()\n` + codeString;
     return codeString;
 }
 

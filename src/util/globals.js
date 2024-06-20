@@ -82,6 +82,14 @@ export function getCurrentSAB() {
     return currentSAB;
 }
 
+export function getCurrentTheme() {
+    return localStorage.getItem("theme");
+}
+
+export function setCurrentTheme(theme) {
+    localStorage.setItem("theme", theme);
+}
+
 export function setCurrentGameMode(gameMode) {
     currentGameMode = gameMode;
 }

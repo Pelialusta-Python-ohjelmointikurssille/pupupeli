@@ -60,6 +60,15 @@ export function initWorker() {
     }
 }
 
+export function themeChangeToWorker() {
+    try {
+        postMessage({ type: 'theme', details: globals.getCurrentTheme().toLowerCase() });
+        console.log("Theme changed to " + globals.getCurrentTheme().toLowerCase());
+    } catch (error) {
+        displayErrorMessage(error);
+    }
+}
+
 function sendAmountOfVariableToWorkerAsInput(message) {
     sharedArray = new Uint16Array(message.sab, 4);
     syncArray = new Int32Array(message.sab, 0, 1);
