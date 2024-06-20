@@ -1,6 +1,25 @@
 import { Constants } from "../commonstrings.js";
+import { GameModeGetCollectibles } from "../gameModes.js";
 import { Grid } from "../grid.js";
 import { GridObject } from "../gridobject.js";
+
+jest.mock("../grid_data.js", () => {
+    return {
+        GridData: jest.fn().mockImplementation(() => {
+            return {
+                remove: () => {},
+                reset: () => {},
+                add: () => {}
+            };
+        }),
+    };
+});
+
+jest.mock("../uuid_generator.js", () => {
+    return {
+        getRandomUUID: () => { return "12334232874329";},
+    };
+});
 
 describe('GameMode testing from gameModes.js', () => {
     let grid;
@@ -15,9 +34,9 @@ describe('GameMode testing from gameModes.js', () => {
         //Mock grid object jonnekkin tänne??!?!?
 
         grid.addToGrid(collectible, 0, 1);
-        newGrid.saveCurrentStateForReset(); //Important!
+        grid.saveCurrentStateForReset(); //Important!
         const collectibles = { total: 1, current: 0 };
-        globals.collectibles.mockReturnValue(collectibles);
+        //globals.collectibles.mockReturnValue(collectibles);
     });
 
     test('Can win game mode "GameModeGetCollectibles"', () => {

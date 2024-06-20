@@ -3,6 +3,18 @@ import { Vector2 } from "../vector.js";
 import { Cell } from "../../game/cell.js";
 import { Grid } from "../grid.js";
 
+jest.mock("../grid_data.js", () => {
+    return {
+        GridData: jest.fn().mockImplementation(() => {
+            return {
+                remove: () => {},
+                reset: () => {},
+                add: () => {}
+            };
+        }),
+    };
+});
+
 Vector2.FromDirection = jest.fn();
 
 describe('Grid class', () => {

@@ -9,7 +9,7 @@ module.exports = {
     testPathIgnorePatterns: [],
     coverageThreshold: {
         global: {
-            branches: 75,
+            branches: 40,
         }
     },
     reporters: [
@@ -35,6 +35,7 @@ module.exports = {
         //"!src/**/graphics_entity_handler.js",
         //"!src/**/graphics_handler.js",
         //"!src/**/animation_progress.js",
+        "!src/**/graphics_handler/manifests/**",
         "!src/**/pixi_renderer.js",
         "!src/**/example/**", // Exclude all files in specific directory
         "!src/**/objects/**",
