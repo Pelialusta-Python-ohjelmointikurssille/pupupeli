@@ -1,4 +1,4 @@
-const PYODIDE_INTERRUPT_INPUT = "pyodide_interrupt_input_666"
+const PYODIDE_INTERRUPT_INPUT = "pyodide_interrupt_input_1337"
 let pyodide;
 let pythonFileStr;
 let continuePythonExecution;
@@ -155,6 +155,16 @@ function getInt(variableName) {
     console.log("worker received word: " + word);
     //word converted to int in python
     return word;
+}
+
+// eslint-disable-next-line no-unused-vars
+function createObject(gridObjectType, x, y) {
+    postMessage({ type: 'createObject', details: [gridObjectType, x, y] });
+}
+
+// eslint-disable-next-line no-unused-vars
+function removeObject(x, y) {
+    postMessage({ type: 'destroyObject', details: [x, y] });
 }
 
 /**

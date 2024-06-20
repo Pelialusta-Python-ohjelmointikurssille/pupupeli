@@ -9,6 +9,7 @@
  * @returns {GridObject} - A grid object
  */
 
+import { getRandomUUID } from "./uuid_generator.js";
 import { Vector2 } from "./vector.js";
 
 export class GridObject {
@@ -19,7 +20,7 @@ export class GridObject {
     }
 
     #generateUniqueID() {
-        return crypto.randomUUID().toString();
+        return getRandomUUID();
     }
 
     toString() {

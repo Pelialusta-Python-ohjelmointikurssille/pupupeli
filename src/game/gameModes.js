@@ -16,6 +16,7 @@ import * as globals from "../util/globals.js";
  */
 export class GameModeGetCollectibles {
     constructor(grid) {
+        this.name = "GameModeGetCollectibles";
         grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
         this.startScore = globals.collectibles.current;
         this.eventTarget = new EventTarget();
@@ -50,6 +51,7 @@ export class GameModeGetCollectibles {
  */
 export class GameModeMultipleChoice {
     constructor(grid) {
+        this.name = "GameModeMultipleChoice";
         grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
         this.startScore = globals.collectibles.current;
         this.eventTarget = new EventTarget();
