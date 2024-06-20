@@ -1,7 +1,7 @@
 {
-  "taskType": "collectibles",
   "title": "Pupun välipala",
-  "enableAddRemove": false,
+  "taskType": "collectibles",
+  "enableAddRemove": true,
   "description": [
     "Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:",
     "",
@@ -11,7 +11,19 @@
     "pupu.liiku(\"ylös\")"
   ],
   "editorCode": [
-    "pupu.liiku(\"oikea\")"
+    "x = pupu.laske(\"porkkana\")",
+    "pupu.sano(x)",
+    "x = pupu.laske(\"kivi\")",
+    "pupu.sano(x)",
+    "",
+    "pupu.luo(\"porkkana\", 0, 3)",
+    "pupu.poista(1, 1)",
+    "",
+    "x = pupu.laske(\"porkkana\")",
+    "pupu.sano(x)",
+    "x = pupu.laske(\"kivi\")",
+    "pupu.sano(x)",
+    ""
   ],
   "multipleChoiceQuestions": [],
   "grid": [
@@ -24,5 +36,22 @@
     [1,3,3,3,3,3,1,1],
     [1,1,1,1,1,1,1,1]
   ],
-  "conditions": []
+  "conditions": [
+    {
+      "condition": "conditionUsedWhile",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedFor",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": false
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": false
+    }
+  ]
 }
