@@ -69,7 +69,13 @@ export function getCurrentSAB() {
 }
 
 export function getCurrentTheme() {
+    if (localStorage.getItem("theme") === null) {
+        console.log("No theme set, setting to Pupu");
+        localStorage.setItem("theme", "Pupu");
+        return ("Pupu")
+    } else {
     return localStorage.getItem("theme");
+    }
 }
 
 export function setCurrentTheme(theme) {
