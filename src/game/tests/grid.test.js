@@ -2,18 +2,7 @@
 import { Vector2 } from "../vector.js";
 import { Cell } from "../../game/cell.js";
 import { Grid } from "../grid.js";
-
-jest.mock("../grid_data.js", () => {
-    return {
-        GridData: jest.fn().mockImplementation(() => {
-            return {
-                remove: () => {},
-                reset: () => {},
-                add: () => {}
-            };
-        }),
-    };
-});
+import { Constants } from "../commonstrings.js";
 
 Vector2.FromDirection = jest.fn();
 
@@ -22,7 +11,7 @@ describe('Grid class', () => {
     let gridObject;
 
     beforeEach(() => {
-        gridObject = { cell: null };
+        gridObject = { type: Constants.OBSTACLE, cell: null };
         grid = new Grid(gridObject, 5, 5);
     });
 
@@ -48,7 +37,7 @@ describe('Grid class', () => {
     test('moveGridObjectToDir moves the object within bounds', () => {
         grid.addToGrid(gridObject, 2, 2);
         Vector2.FromDirection.mockReturnValue({ x: 1, y: 0 });
-        const moved = grid.moveGridObjectToDir(gridObject, 'right'); 
+        const moved = grid.moveGridObjectToDir(gridObject, 'right');
         expect(moved).toBe(true);
         expect(grid.doubleArray[3][2].entities).toContain(gridObject);
         expect(grid.doubleArray[2][2].entities).not.toContain(gridObject);
@@ -57,10 +46,16 @@ describe('Grid class', () => {
     test('moveGridObjectToDir does not move the object out of bounds', () => {
         grid.addToGrid(gridObject, 4, 4);
         Vector2.FromDirection.mockReturnValue({ x: 1, y: 0 });
-        const moved = grid.moveGridObjectToDir(gridObject, 'right'); 
+        const moved = grid.moveGridObjectToDir(gridObject, 'right');
         expect(moved).toBe(false);
         expect(grid.doubleArray[4][4].entities).toContain(gridObject);
         expect(grid.doubleArray[5] && grid.doubleArray[5][4]).toBeUndefined();
+    });
+
+    test('obstacleCheck() works', () => {
+        grid.addToGrid(gridObject, 2, 2);
+        let obstacleCheck = grid.obstacleCheck(2, 2);
+        expect(obstacleCheck).toBe(false);
     });
 
     test('removeFromGrid removes the object from the grid', () => {
@@ -125,5 +120,31 @@ describe('Grid class', () => {
         grid.addToGrid(gridObject, 1, 1);
         grid.addToGrid(gridObject, 2, 1);
         expect(grid.getAdjacentObjectsAtDir(1, 1, 'right')).toContain(gridObject);
+    });
+
+    test('gridData gives the correct amount of objects', () => {
+        grid.addToGrid(gridObject, 1, 1);
+        grid.addToGrid(gridObject, 2, 1);
+        expect(grid.data.getGridObjectsOfTypeCount(Constants.OBSTACLE)).toBe(2);
+        grid.removeFromGrid(gridObject);
+        expect(grid.data.getGridObjectsOfTypeCount(Constants.OBSTACLE)).toBe(1);
+    });
+
+    test('gridData returns value 0 when object isnt found.', () => {
+        expect(grid.data.getGridObjectsOfTypeCount("fh7348fh4w8of7o874wiwhfsw5967igohelai5")).toBe(0);
+    });
+
+    test('Saving, reset and loading works (in this order) ', () => {
+        gridObject.getVector2Position = function () { return new Vector2(gridObject.cell.x, gridObject.cell.y) };
+        grid.addToGrid(gridObject, 1, 1);
+        grid.saveCurrentStateForReset();
+        grid.addToGrid(gridObject, 1, 1);
+        expect(grid.data.getGridObjectsOfTypeCount(Constants.OBSTACLE)).toBe(2);
+        grid.resetGrid();
+        expect(grid.data.getGridObjectsOfTypeCount(Constants.OBSTACLE)).toBe(1);
+    });
+
+    test('griddata remove returns false if not able to find gridobject', () => {
+        expect(grid.data.remove("asd")).toBe(false);
     });
 });
