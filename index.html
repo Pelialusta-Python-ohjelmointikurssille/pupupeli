@@ -23,21 +23,19 @@
             <div id="chapter-selector-container" class="is-flex">
                 <div id="chapter-selector-box" class="is-flex">
                     <p id="chapter-selector-text">Valitse tehtäväsarja:</p>
-                    <select id="chapterbuttontable" class="dropdown"></select>
+                    <div id="chapterbuttontable" class="is-flex"></div>
                 </div>
             </div>
             <div id="header-buttons" class="is-flex">
-                <div id="user-container" class="is-flex is-hidden">
-                    <input id="username" placeholder="username">
-                    <input type="password" id="password" placeholder="********">
+                <div id="logged-in-as-container" class="is-hidden"><h4><span id="logged-in-as-user"></span></h4></div>
+                <form id="user-container" class="is-flex is-hidden" onsubmit="event.preventDefault()">
+                    <input id="username" placeholder="username" autocomplete="username">
+                    <input type="password" id="password" placeholder="password" autocomplete="current-password" onkeydown="(event.key==='Enter')?this.nextElementSibling.click():{}">
                     <button id="login-button" value="login">Kirjaudu sisään</button>
-                </div>
-                <div id="devtaskbuttoncontainer">
-                    <input id="task-get-input" placeholder="task_name" style="max-width: 4rem;">
-                    <button id="getTaskButton" class="" value="getTaskButton">get task</button>
-                    <button id="getCompletedTasksButton" class="" value="getAllTasksButton">get all tasks</button>
-                </div>
+                </form>
                 <button id="logout-button" class="is-hidden" value="logout">Kirjaudu ulos</button>
+                <div id="login-failed" class=""><h1>Voi ei! Käyttäjää ei ole olemassa tai salasana on väärin!</h1></div>
+                <div id="condition-failed" class=""><h1></h1></div>
             </div>
         </div>
 
@@ -49,9 +47,9 @@
                     <div id="task-name-div">
                         <div id="task-header">
                             <h1>
-                                <a id="prev-task-link" href="/?task=1" style="text-decoration:none;">
-                                    </a>Tehtävä <span id="task-id"></span><a id="next-task-link" href="/?task=2"
-                                            style="text-decoration:none;"> ></a>
+                                <a id="prev-task-link" href="/?task=1" style="text-decoration:none;"></a>
+                                    <a id="taskTitle"></a>
+                                <a id="next-task-link" href="/?task=2" style="text-decoration:none;"> ></a>
                             </h1>
                         </div>
                         <div id="toggle-buttons-div">

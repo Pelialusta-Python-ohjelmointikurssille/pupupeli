@@ -25,11 +25,12 @@ export function giveCommand(dirtyCommand) {
 }
 
 /**
- * Called by the Game class when game commands are done. 
+ * Called by the Game class when game commands are done.
+ * Sends a message that commands are done to worker, so it can continue executing. 
+ * If currentCommand is undefined, does nothing, so you can make gameController do commands even without sending a message to worker.
  */
 export function commandsDone() {
     if (currentCommand === undefined) {
-        console.error("current command undefined");
         return;
     }
     postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
@@ -57,4 +58,17 @@ export function toggleGrid() {
 
 export function toggleTrail() {
     game.toggleTrail();
+}
+
+export function createObject(commandParameters) {
+    let name = commandParameters[0]
+    let x = commandParameters[1];
+    let y = commandParameters[2];
+    game.createNewPlayerCreatedGridObject(name, x, y);
+}
+
+export function destroyObject(commandParameters) {
+    let x = commandParameters[0];
+    let y = commandParameters[1];
+    game.destroyObject(x, y);
 }

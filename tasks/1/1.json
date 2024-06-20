@@ -1,4 +1,6 @@
 {
+  "taskType": "collectibles",
+  "title": "Eka pupu",
   "description": [
     "Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:",
     "",

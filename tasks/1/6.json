@@ -1,6 +1,11 @@
 {
+  "taskType": "multiple-choice",
+  "title": "En tykkää tästä UX:stä",
   "description": [
-    "Kuinka monta kertaa pupun pitää hypätä päästäkseen oikeaan alakulmaan mahdollisimman pienellä määrällä hyppyjä?(Käytä while-silmukkaa)"
+    "Kuinka monta kertaa pupun pitää hypätä päästäkseen oikeaan alakulmaan mahdollisimman pienellä määrällä hyppyjä?",
+    "",
+    "Täytyy painaa 'suorita'-nappia jotta vastaus submittaa.",
+    "Tämä on epäintuitiivinen ainakin tähän hätään, jos monivalintatehtäviä ilman kentän winconia tullaan tekemään. (Minkä näen järkevänä)"
   ],
   "editorCode": [],
   "multipleChoiceQuestions": [
@@ -22,19 +27,19 @@
     }
   ],
   "grid": [
-    [1,1,1,1,1,1,1,2],
-    [2,3,3,2,3,3,3,1],
+    [1,1,1,1,1,1,1,1],
+    [1,3,3,1,3,3,3,1],
     [1,1,1,1,1,1,3,1],
-    [1,1,1,1,1,1,2,1],
+    [1,1,1,1,1,1,1,1],
     [1,1,1,1,1,1,3,1],
     [1,1,1,1,1,1,3,1],
     [1,1,1,1,1,3,0,3],
-    [2,1,1,1,1,1,1,2]
+    [1,1,1,1,1,1,1,1]
   ],
   "conditions": [
     {
       "condition": "conditionUsedWhile",
-      "parameter": true
+      "parameter": false
     },
     {
       "condition": "conditionUsedFor",

@@ -1,4 +1,6 @@
 {
+  "taskType": "multiple-choice",
+  "title": "Valinta valinta",
   "description": [
     "Kuinka monta kertaa pupun pitää hypätä päästäkseen oikeaan alakulmaan mahdollisimman pienellä määrällä hyppyjä?(Käytä while-silmukkaa)"
   ],
