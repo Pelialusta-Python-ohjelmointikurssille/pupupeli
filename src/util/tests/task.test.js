@@ -1,4 +1,11 @@
 import { Task } from '../task.js';
+import { getCurrentTheme } from "../globals.js";
+
+jest.mock("../globals.js", () => ({
+    getCurrentTheme: jest.fn(),
+}));
+
+getCurrentTheme.mockImplementation(() => 'pupu');
 
 describe('Task', () => {
     let grid = [
@@ -44,7 +51,7 @@ describe('Task', () => {
     };
 
     describe('Task', () => {
-        it('should set properties from JSON', () => {
+        it('should set properties from JSON', () => {            
             const task = new Task();
     
             const jsonData = {

@@ -97,7 +97,7 @@ function createGamePage() {
         }
         // set editor code
         window.addEventListener('load', function () {
-            getEditor().setValue(globals.task.getEditorCode());
+            setEditorCode()
             getEditor().clearSelection();
             createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
         });
@@ -169,11 +169,15 @@ function setTitle(titleDiv) {
     titleDiv.innerHTML = titleStr;
 }
 
+export function setEditorCode() {
+    getEditor().setValue(globals.task.getEditorCode());
+}
+
 /**
  * Sets the text from task.description to given div. Useful since game and instructions tasks use different description div.
  * @param {object} descriptionDiv | the description div where we want description text as a html element
  */
-function setDescription(descriptionDiv){
+export function setDescription(descriptionDiv){
     // set description
     globals.task.getDescription().forEach((line) => {
         line = line === "" ? "<br>" : line;

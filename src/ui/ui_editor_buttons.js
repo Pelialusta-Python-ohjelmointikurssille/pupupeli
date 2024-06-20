@@ -1,9 +1,11 @@
 import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
-import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker } from "../event_handler.js";
+import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../event_handler.js";
 import { getEditor, resetLineHighlight } from "../input/editor.js";
 import { resetGame, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
+import { setCurrentTheme } from "../util/globals.js";
+import { setDescription, setEditorCode } from "./ui.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -166,12 +168,17 @@ function onRunButtonClick() {
 
 function initThemeSelect() {
     if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
+    let descriptionTargetDiv = document.getElementById("task-description");
     themeSelectDropdown = document.getElementById("theme-select");
     themeSelectDropdown.value = localStorage.getItem("theme");
     themeSelectDropdown.addEventListener('change', function (event) {
         let selectedValue = event.target.value;
-        localStorage.setItem("theme", selectedValue);
+        setCurrentTheme(selectedValue);
+        themeChangeToWorker()
         setTheme(selectedValue);
+        setEditorCode();
+        descriptionTargetDiv.innerHTML = ''; // clear content
+        setDescription(descriptionTargetDiv);
     });
 }
 

@@ -102,4 +102,3 @@ class ErrorCheck:
         return
 
 
-pupu = ErrorCheck()

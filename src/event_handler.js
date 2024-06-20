@@ -63,6 +63,16 @@ export function initWorker() {
     try {
         let pythonFileStr = tryGetFileAsText("./src/python/pelaaja.py");
         postMessage({ type: 'init', details: pythonFileStr });
+        postMessage({ type: 'theme', details: globals.getCurrentTheme().toLowerCase() });
+    } catch (error) {
+        displayErrorMessage(error);
+    }
+}
+
+export function themeChangeToWorker() {
+    try {
+        postMessage({ type: 'theme', details: globals.getCurrentTheme().toLowerCase() });
+        console.log("Theme changed to " + globals.getCurrentTheme().toLowerCase());
     } catch (error) {
         displayErrorMessage(error);
     }
