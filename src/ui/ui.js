@@ -302,7 +302,7 @@ function createChapterButtons() {
             button.value = i + 1;
             button.innerText = `Tehtäväsarja ${i + 1}`;
             //Check if 
-            let currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + (i + 1));
+            let currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + (i + 1)).count;
             let allTasksCompleted = true;
             for (let j = 0; j < currentTotalTasks; j++) {
                 let taskId = `chapter${i + 1}task${j + 1}`;
