@@ -65,7 +65,17 @@ class Pelaaja:
             return 0
         #self.sano("Ai " + variableName + "? Näen niitä " + str(count) + "!")
         return count
-
+    
+    def luo(self, gridObjectType : str, x = -1, y = -1):
+        if gridObjectType == self.__name:
+            pupu.sano("Ei, voi olla vain yksi " + self.__name + "!")
+            return
+        js.createObject(gridObjectType, x, y)
+        
+    def poista(self, x, y):
+        js.removeObject(x, y)
+        return
+    
     def rivi(self, line: int):
         js.sendLine(line)
 

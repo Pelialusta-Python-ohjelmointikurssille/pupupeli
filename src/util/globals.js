@@ -33,6 +33,8 @@ export const task = (function () {
  * Only use functions starting with "get", as other functions are used by the current grids logic.
  */
 export let globalGridData = { data: undefined };
+//^^^actually, why is this even global...?
+
 //not sexy to count every object in the grid every time you want the total amount... (task.getTotalCollectibles())
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
@@ -49,6 +51,7 @@ export function getGridObjectsLeft(type) {
 
 export const conditions = task.getConditions();
 export const conditionsCleared = [];
+export const conditionsNotCleared = [];
 
 export let currentSAB;
 export let currentGameMode;
@@ -71,7 +74,11 @@ export function setMultipleChoiceCorrect(isCorrect = true) {
 }
 
 export function getMultipleChoiceCorrect() {
-    return multipleChoiceCorrect
+    if (currentGameMode.name === "GameModeMultipleChoice") {
+        return multipleChoiceCorrect
+    } else {
+        return true; // ignore check if gamemode isn't multiple choice
+    }
 }
 
 export function setCurrentSAB(sab) {
@@ -103,6 +110,7 @@ export function incrementCollectibles() {
 }
 
 export function addClearedConditions(conditionsFromEventHandler) {
+    conditionsNotCleared.length = 0;
     conditionsCleared.length = 0; // reset cleared conditions
     conditionsFromEventHandler.forEach(condition => {
         conditionsCleared.push(condition);
@@ -133,21 +141,25 @@ function conditionChecker(conditionsToClear, conditionsCleared) {
 
         // is there a condition to clear that isn't cleared?
         if (param1 === undefined) {
-            return false;
+            conditionsNotCleared.push(obj.condition);
         }
         // are the truth values the same (= true)
         if (typeof param1 === 'boolean' && typeof param2 === 'boolean') {
             if (param1 !== param2) {
-                return false;
+                conditionsNotCleared.push(obj.condition);
             }
         }
         // if the parameter is a number (= conditionMaxLines), is it equal or less than the required amount?
         if (typeof param1 === 'number' && typeof param2 === 'number') {
             if (param1 > param2) {
-                return false;
+                conditionsNotCleared.push(obj.condition);
             }
         }
     }
 
-    return true;
+    if (conditionsNotCleared.length > 0) {
+        return false;
+    } else {
+        return true;
+    }
 }

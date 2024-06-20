@@ -98,6 +98,7 @@ function createGamePage() {
         // set editor code
         window.addEventListener('load', function () {
             setEditorCode()
+            getEditor().clearSelection();
             createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
         });
         let titleTargetDiv = document.getElementById("taskTitle");
@@ -240,6 +241,7 @@ function colorSelectedChoice(selectedChoice) {
  */
 function createTaskButtons(str="") {
     const buttonContainer = document.getElementById('buttonTable');
+    buttonContainer.innerHTML = ''
 
     if (localStorage.getItem("token") !== null) { // user is logged in
         api.getCompletedTasks().then(taskList => {
@@ -258,6 +260,9 @@ function createTaskButtons(str="") {
 
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
                 button.id = buttonIdText
+                if (currentChapter === globals.chapterIdentifier && i+1 === globals.taskIdentifier) {
+                    button.classList.add("button-current-task")
+                }
                 if (completedTasksList.includes(buttonIdText)) {
                     button.classList.add("button-completed");
                 } else {
@@ -295,26 +300,67 @@ function createTaskButtons(str="") {
 function createChapterButtons() {
     const selectContainer = document.getElementById('chapterbuttontable');
 
-    for (let i = 0; i < totalChapters; i++) {
-        const option = document.createElement('option');
-        option.id = `chapter-option-${i + 1}`;
-        option.value = i + 1;
-        option.innerText = `Tehtäväsarja ${i + 1}`;
-        selectContainer.appendChild(option);
-    }
+    selectContainer.innerHTML = '';
 
-    selectContainer.value = currentChapter;
+    if (localStorage.getItem("token") !== null) {
+        api.getCompletedTasks().then(taskList => {
+            let completedTasksList = taskList.tasks;
+            for (let i = 0; i < totalChapters; i++) {
+                const button = document.createElement('button');
+                button.id = `chapter-button-${i + 1}`;
+                button.value = i + 1;
+                button.innerText = `Tehtäväsarja ${i + 1}`;
+                if (currentChapter === i + 1) button.classList.add("button-current-chapter")
+                //Check if 
+                let currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + (i + 1)).count;
+                let allTasksCompleted = true;
+                for (let j = 0; j < currentTotalTasks; j++) {
+                    let taskId = `chapter${i + 1}task${j + 1}`;
+                    if (!completedTasksList.includes(taskId)) {
+                        allTasksCompleted = false;
+                        break;
+                    }
+                }
 
-    selectContainer.addEventListener('change', (event) => {
-        const selectedChapter = event.target.value;
-        window.location.href = `/?chapter=${selectedChapter}&task=1`;
-    });
+                if (allTasksCompleted) {
+                    button.classList.add("button-completed");
+                } else {
+                    button.classList.add("button-incompleted");
+                }
+
+                button.addEventListener('click', () => {
+                    currentChapter = i + 1;
+                    console.log(currentChapter)
+                    window.location.href = `/?chapter=${currentChapter}&task=1`;
+                });
+                selectContainer.appendChild(button);
+            }
+        })
+    } else {
+        for (let i = 0; i < totalChapters; i++) {
+            const button = document.createElement('button');
+            button.id = `chapter-button-${i + 1}`;
+            button.value = i + 1;
+            button.innerText = `Tehtäväsarja ${i + 1}`;
+            if (currentChapter === i + 1) button.classList.add("button-current-chapter")
+
+            button.addEventListener('click', () => {
+                currentChapter = i + 1;
+                console.log(currentChapter)
+                window.location.href = `/?chapter=${currentChapter}&task=1`;
+            });
+            selectContainer.appendChild(button);
+        }
+    } 
 }
+
 
 /**
  * a function that turns the current button green and sends a PUSH request to the api indicating the user has completed a task
  * @param {boolean} won a boolean indicating whether the task was completed successfully or not
  */
+
+
 export function onTaskComplete(won) {
     const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
 
@@ -324,12 +370,37 @@ export function onTaskComplete(won) {
         if (globals.task.getTaskType() != instructionsStr) {
         celebration();
         }
-        if (button.getAttribute("class") == "button-incompleted") {
+        if (button.classList.contains("button-incompleted")) {
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
-        api.sendTask(apiTaskIdentifier);
+        api.sendTask(apiTaskIdentifier).then(() => {
+            createChapterButtons();
+        });
     } else {
+        let errorMessage = "<h2><ol>Voi juku, et vielä läpäissyt tasoa koska:";
+        if (!globals.getMultipleChoiceCorrect()) errorMessage += "\n<li>monivalintatehtävän vastaus oli väärä</li>"
+        globals.conditionsNotCleared.forEach(failedCondition => {
+            switch (failedCondition) {
+                case "conditionUsedFor":
+                    errorMessage += "\n<li>et käyttänyt for-silmukkaa</li>"
+                    break;
+                case "conditionUsedWhile":
+                    errorMessage += "\n<li>et käyttänyt while-silmukkaa</li>"
+                    break;
+                case "conditionUsedInput":
+                    errorMessage += "\n<li>et käyttänyt input-toiminnallisuutta</li>"
+                    break;
+                case "conditionMaxLines":
+                    errorMessage += "\n<li>vastauksessasi oli liian monta riviä</li>"
+                    break;
+            }
+        })
+        errorMessage += "</ol></h2>";
+
+        document.getElementById("condition-failed").innerHTML = errorMessage;
+        showPopUpNotification("condition-failed");
+        
         api.sendTask(apiTaskIdentifier);
     }
 }
@@ -352,7 +423,6 @@ function celebration() {
         celebrationBox.classList.add('is-hidden');
     }, 3000);
 }
-    
 
 function createCelebrationConfetti() {
     const celebrationConfetti = document.createElement('div');
@@ -370,6 +440,21 @@ function createCelebrationConfetti() {
     celebrationConfetti.style.animationDuration = `${randomDuration}s`;
 
     return celebrationConfetti;
+}
+
+/**
+ * briefly displays a popup informing the user they have failed to log in
+ */
+export function showPopUpNotification(elementId) {
+    let element = document.getElementById(elementId);
+    if (elementId === "login-failed") {
+        setTimeout(() => {
+            element.classList.remove("pop-up-notification-show-login");
+        }, 6000);
+    element.classList.add("pop-up-notification-show-login");
+    } else {
+        element.classList.add("pop-up-notification-show");
+    }
 }
 
 /**
