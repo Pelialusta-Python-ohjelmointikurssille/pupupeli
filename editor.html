@@ -384,9 +384,10 @@
                 }
 
         class Level {
-            constructor(description, taskTitle, taskType, editorCode, multipleChoiceQuestions, grid, conditions) {
+            constructor(description, taskTitle, enableAddRemove, taskType, editorCode, multipleChoiceQuestions, grid, conditions) {
                 this.title = taskTitle;
                 this.taskType = taskType;
+                this.enableAddRemove = enableAddRemove;
                 this.description = description;
                 this.editorCode = editorCode;
                 this.multipleChoiceQuestions = multipleChoiceQuestions;
@@ -524,6 +525,11 @@
             return typeLine;
         }
 
+        function getEnableAddRemove() {
+            let enableAddRemove = document.getElementById("enable-add-remove-checkbox").checked;
+            return enableAddRemove;
+        }
+
         function generateTaskOutput() {
             console.log(document.querySelector('#task-title-input').value);
             let taskTitle = document.querySelector('#task-title-input').value;
@@ -539,9 +545,8 @@
                 });
             }
 
-
             // use Level class to get json output
-            let output = new Level(taskDescriptionLines, getTitle(), getTaskType(), getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
+            let output = new Level(taskDescriptionLines, getTitle(), getEnableAddRemove(),getTaskType(), getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
             let outputField = document.getElementById("output-field");
             outputField.value = customJSONStringify(output);
             // need to fire input event to resize output field
@@ -688,6 +693,7 @@
 
                     importTitle(task.title);
                     importTaskType(task.taskType);
+                    importEnableAddRemove(task.enableAddRemove);
                     importConditions(task.conditions);
                     importDescription(task.description, task.taskType);
                     importEditorCode(task.editorCode);
@@ -722,6 +728,15 @@
                             hideInstructions();
                         }
                     }
+                }
+            }
+
+            function importEnableAddRemove(enableAddRemove) {
+                let checkbox = document.getElementById("enable-add-remove-checkbox")
+                if (enableAddRemove) {
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = true;
                 }
             }
 
