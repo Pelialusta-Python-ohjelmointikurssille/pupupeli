@@ -1,6 +1,7 @@
 {
   "taskType": "collectibles",
   "title": "Jos runaa niin python toimii",
+  "enableAddRemove": false,
   "description": [
     "Ultimate python debug string",
     "",

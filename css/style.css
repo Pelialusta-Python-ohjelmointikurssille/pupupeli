@@ -10,7 +10,7 @@
 /* remove above before elease */
 
 :root {
-    --canvas-width: 1024px;
+    --canvas-width: 768px;
     --canvas-height: var(--canvas-width);
 }
 
@@ -32,6 +32,28 @@ body {
     max-width: var(--canvas-height);
     border: 1px solid black;
     border-radius: 5px;
+}
+
+#input-box-send-button {
+    margin: 4px;
+    align-self: center;
+    grid-column-start: 2;
+    grid-row-start: 1;
+}
+
+#input-box-container {
+    margin-bottom: 48px;
+    display: grid;
+}
+
+#input-box {
+    height: 40px;
+    min-width: 512px;
+    border: 1px solid black;
+    font-size: 18px;
+    grid-column-start: 1;
+    grid-row-start: 1;
+    margin: 4px;
 }
 
 /* This one includes both task header and toggle buttons div, we want them on the same level */
@@ -250,15 +272,6 @@ body {
     float: right;
 }
 
-#input-box {
-    display: inline-flex;
-    position: relative;
-    height: 32px;
-    border: 1px solid black;
-    padding: 5px;
-    font-size: 16px;
-}
-
 h1 {
     margin: unset;
 }
@@ -426,7 +439,7 @@ button:hover {
     border-bottom: none;
 }
 
-@media (max-width: calc((1024px * 2) + 3rem)) {
+@media (max-width: calc((768px * 2) + 3rem)) {
     #app-container {
         flex-direction: column;
     }
@@ -444,19 +457,30 @@ button:hover {
     }
   }
 
-  .button-current-task, .button-current-chapter {
-    filter: brightness(0.75);
-  }
+.game-layered {
+    display: grid;
+    justify-items: center;
+    align-items: end;
+}
 
-  #chapter-selector-container, #chapter-selector-box, #chapterbuttontable {
-    justify-content: center;
-    align-items: center;
-  }
+.game-layered > * {
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
 
-  #chapter-selector-text {
-    font-size: 14px;
-  }
+.button-current-task, .button-current-chapter {
+  filter: brightness(0.75);
+}
 
-  #chapterbuttontable button {
-    margin: 0 0 0 0.5rem;
-  }
+#chapter-selector-container, #chapter-selector-box, #chapterbuttontable {
+  justify-content: center;
+  align-items: center;
+}
+
+#chapter-selector-text {
+  font-size: 14px;
+}
+
+#chapterbuttontable button {
+  margin: 0 0 0 0.5rem;
+}

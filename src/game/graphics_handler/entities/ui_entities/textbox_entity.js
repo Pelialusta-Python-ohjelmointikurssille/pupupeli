@@ -7,6 +7,7 @@ export class TextBoxEntity extends GraphicsEntity {
         this.lineGraphic = new PIXI.Graphics();
         this.targetPosition = null;
         this.textContent = "";
+        this.alignTextTop = false;
         this.textObject = new PIXI.Text({ text: "", style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0x000000 } });       
         this.container.addChild(this.lineGraphic);
         this.container.addChild(this.textObject);
@@ -34,6 +35,9 @@ export class TextBoxEntity extends GraphicsEntity {
         if (this.entityData.font != null) {
             this.textObject.style.fontFamily = this.entityData.font;
         }
+        if (this.entityData.alignTextTop != null) {
+            this.alignTextTop = this.entityData.alignTextTop;
+        }
     }
 
     onCreate() {
@@ -48,6 +52,9 @@ export class TextBoxEntity extends GraphicsEntity {
 
     initTextObject() {
         this.textObject.anchor.set(0.5);
+        if (this.alignTextTop) {
+            this.textObject.position.y = -(this.sprite.height / 2) + this.textObject.height + 20;
+        }
     }
 
     initBoxSprite() {

@@ -37,7 +37,7 @@ async function main() {
  */
 async function initGameAndCanvas() {
     let canvas = await initGame();
-    document.getElementById("right-container").insertAdjacentElement("afterbegin", canvas);
+    document.getElementById("game-container").insertAdjacentElement("afterbegin", canvas);
     canvas.classList.add("is-flex");
     canvas.id = "game";
     setTheme(localStorage.getItem("theme"));
@@ -210,6 +210,13 @@ function setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevT
     } else {
         nextTaskLink.style.display = 'none'; // Hide if on the last task
     }
+}
+
+export function enableEditorButtons() {
+    let buttons = document.getElementsByClassName("editor-button");
+    Array.from(buttons).forEach(button => {
+        button.disabled = false;
+    });
 }
 
 function isUserLoggedIn() {

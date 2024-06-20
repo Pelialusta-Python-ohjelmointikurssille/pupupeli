@@ -1,6 +1,7 @@
-import { onUserSendInputToWorker } from "../event_handler.js";
+import { answerInput, getUserInputs, resetInputs } from "../game/game_input_controller.js";
+
 let inputBox = document.getElementById("input-box");
-let userInputs = []
+let inputBoxSendButton = document.getElementById("input-box-send-button");
 let inputContainer = document.getElementById('input-container')
 
 /**
@@ -23,7 +24,7 @@ export function getInputBoxValue() {
 }
 
 export function resetInputHistory() {
-    userInputs = [];
+    resetInputs();
     displayPreviousInputs();
 }
 
@@ -33,12 +34,16 @@ export function resetInputHistory() {
 function setUserInputBoxVisibility(isVisible) {
     if (isVisible) {
         inputBox.classList.remove("is-invisible");
+        inputBoxSendButton.classList.remove("is-invisible");
         inputBox.addEventListener("keydown", addInputToUserInputs);
+        inputBoxSendButton.addEventListener("click", onInputSendButtonClick, false);
         inputBox.focus();
         return;
     }
     inputBox.classList.add("is-invisible");
+    inputBoxSendButton.classList.add("is-invisible");
     inputBox.removeEventListener("keydown", addInputToUserInputs);
+    inputBoxSendButton.removeEventListener("click", onInputSendButtonClick, false);
 }
 
 /**
@@ -50,20 +55,21 @@ function clearInputBoxValue() {
 
 function addInputToUserInputs(event) {
     if (event.key !== 'Enter') return;
-    userInputs.push(inputBox.value);
-    displayPreviousInputs();
-    onUserSendInputToWorker();
-    hideAndClearInputBox();
+    answerInput(inputBox.value);
 }
 
-function displayPreviousInputs() {
+function onInputSendButtonClick() {
+    answerInput(inputBox.value);
+}
+
+export function displayPreviousInputs() {
     inputContainer.innerHTML = '';
-    if (userInputs.length <= 0) {
+    if (getUserInputs().length <= 0) {
         inputContainer.classList.add("is-hidden");
         return;
     }
     inputContainer.classList.remove("is-hidden");
-    userInputs.forEach(input => {
+    getUserInputs().forEach(input => {
         const inputElement = document.createElement('div');
         inputElement.textContent = input;
         inputContainer.appendChild(inputElement);
