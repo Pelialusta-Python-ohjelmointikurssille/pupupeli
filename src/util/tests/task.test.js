@@ -12,6 +12,9 @@ describe('Task', () => {
         [2,1,1,1,1,1,1,2]
     ];
     let jsonData = {
+        "taskType": "collectibles",
+        "title": "testipupu",
+        "enableAddRemove": false,
         "description": [
             "Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:",
             "",

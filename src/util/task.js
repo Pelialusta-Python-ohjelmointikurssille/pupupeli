@@ -15,9 +15,10 @@
  * @returns {Task} - An object representing a task
  */
 export class Task {
-    constructor(taskType, title, description, editorCode, multipleChoiceQuestions, grid, conditions) {
+    constructor(taskType, title, enableAddRemove, description, editorCode, multipleChoiceQuestions, grid, conditions) {
         this.taskType = taskType;
         this.title = title;
+        this.enableAddRemove = enableAddRemove;
         this.description = description;
         this.editorCode = editorCode;
         this.multipleChoiceQuestions = multipleChoiceQuestions;
@@ -150,5 +151,13 @@ export class Task {
      */
     getTitle() {
         return this.title;
+    }
+
+    /**
+     *  Returns true if addRemove is enabled, otherwise false.
+     * @returns {boolean} enableAddRemove
+     */
+    getEnableAddRemove() {
+        return this.enableAddRemove;
     }
 }
