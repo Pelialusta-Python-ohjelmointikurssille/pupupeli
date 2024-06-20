@@ -346,6 +346,7 @@
         // Get the divs
         let optionsConditionsDiv = document.getElementById('options-conditions');
         let optionsInputDiv = document.getElementById('options-input');
+        let optionsAddRemoveDiv = document.getElementById('task-enable-add-remove');
         let optionsAppContainer = document.getElementById('app-container');
         let instructionsInput = document.getElementById('instructions-input');
         let headlines = document.querySelectorAll('.headline');
@@ -366,6 +367,7 @@
                     optionsConditionsDiv.style.display = 'none';
                     optionsInputDiv.style.display = 'none';
                     optionsAppContainer.style.display = 'none';
+                    optionsAddRemoveDiv.style.display = 'none';
                     instructionsInput.style.display = 'block';
                     instructionsInput.classList.remove('is-hidden');
                     headlines.forEach(headline => {
@@ -378,6 +380,7 @@
                     optionsConditionsDiv.style.display = 'flex';
                     optionsInputDiv.style.display = 'flex';
                     optionsAppContainer.style.display = 'flex';
+                    optionsAddRemoveDiv.style.display = 'flex';
                     instructionsInput.classList.add('is-hidden');
                     headlines.forEach(headline => {
                     headline.style.display = 'block';});
