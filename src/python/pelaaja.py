@@ -59,7 +59,7 @@ class Pelaaja:
         if variableName == self.__name:
             return 1
         count = int(js.getInt(variableName))  # returns -1 if not found
-        if count < 0:
+        if count <= -1:
             self.sano("En tiedä minkä asian lukumäärää laskea!")
             return 0
         return count
