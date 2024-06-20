@@ -1,6 +1,7 @@
 {
   "title": "The Lorem",
   "taskType": "instructions",
+  "enableAddRemove": false,
   "description": [
     "# Lorem Ipsum",
     "",
