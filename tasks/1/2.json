@@ -1,6 +1,7 @@
 {
   "taskType": "multiple-choice",
   "title": "For-silmukka ja monivalinta",
+  "enableAddRemove": true,
   "description": [
     "Kuinka monta kertaa pupun pitää hypätä päästäkseen oikeaan alakulmaan mahdollisimman pienellä määrällä hyppyjä?(Käytä for-silmukkaa)"
   ],

@@ -158,6 +158,6 @@ export class Task {
      * @returns {boolean} enableAddRemove
      */
     getEnableAddRemove() {
-        return this.EnableAddRemove;
+        return this.enableAddRemove;
     }
 }
