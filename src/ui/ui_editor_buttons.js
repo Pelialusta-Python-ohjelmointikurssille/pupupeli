@@ -140,6 +140,18 @@ export function disablePlayButton(cause = null) {
 }
 
 /**
+ * enables editor buttons after pyodide has been initialized
+ */
+export function enableEditorButtons() {
+    let buttons = document.getElementsByClassName("editor-button");
+    Array.from(buttons).forEach(button => {
+        let runButtonText = button.querySelector("#runButtonText");
+        if (runButtonText !== null) runButtonText.innerHTML = "Suorita";
+        button.disabled = false;
+    });
+}
+
+/**
  * Runs the code or pauses execution and changes the image of run/pause button.
  */
 function onRunButtonClick() {

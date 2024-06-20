@@ -212,6 +212,13 @@ function setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevT
     }
 }
 
+export function enableEditorButtons() {
+    let buttons = document.getElementsByClassName("editor-button");
+    Array.from(buttons).forEach(button => {
+        button.disabled = false;
+    });
+}
+
 function isUserLoggedIn() {
     if (localStorage.getItem("username") !== null) {
         document.getElementById("logged-in-as-user").innerText = localStorage.getItem("username");

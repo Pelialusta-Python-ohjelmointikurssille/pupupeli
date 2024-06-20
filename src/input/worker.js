@@ -51,6 +51,7 @@ async function initializePyodide(pythonCode) {
         });
         pythonFileStr = pythonCode;
         pyodide.setInterruptBuffer(interruptBuffer);
+        postMessage( { type: "init-finish" })
         console.log("Initialized pyodide worker");
     }
 }
