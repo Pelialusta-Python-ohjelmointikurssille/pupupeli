@@ -2,6 +2,7 @@ import { Constants } from "./commonstrings.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { Vector2 } from "./vector.js";
 import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.js";
+import { getRandomUUID } from "./uuid_generator.js";
 //Trying to implement the Command pattern in javascript. Interfaces in JS are so janky that I just made classes.
 //Maybe do a base Command class and extend that, if you want. 
 //    https://refactoring.guru/design-patterns/command
@@ -71,7 +72,7 @@ export class SayCommand {
         //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
 
         this.graphicsHandler.destroyTextBoxes();
-        let textboxId = crypto.randomUUID().toString();
+        let textboxId = getRandomUUID();
         this.graphicsHandler.createEntity(
             textboxId,
             "textbox",
@@ -97,7 +98,7 @@ export class AskCommand {
         // TEMPORARY HACK!! REPLACE THIS!
         //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
         this.graphicsHandler.destroyTextBoxes();
-        let textboxId = crypto.randomUUID().toString();
+        let textboxId = getRandomUUID();
         this.graphicsHandler.createEntity(
             textboxId,
             "textbox",
