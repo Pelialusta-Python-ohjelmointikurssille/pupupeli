@@ -374,10 +374,13 @@ export function onTaskComplete(won) {
             createChapterButtons();
         });
     } else {
-        let errorMessage = "<h2><ol>Voi juku, et vielä läpäissyt tasoa koska:";
+        let errorMessage = "<h2>Voi juku, et vielä läpäissyt tasoa koska:<ol>";
         if (!globals.getMultipleChoiceCorrect()) errorMessage += "\n<li>monivalintatehtävän vastaus oli väärä</li>"
         globals.conditionsNotCleared.forEach(failedCondition => {
             switch (failedCondition) {
+                case "conditionCollectAllCollectibles":
+                    errorMessage += "\n<li>et kerännyt kaikkia tarvittavia asioita</li>"
+                    break;
                 case "conditionUsedFor":
                     errorMessage += "\n<li>et käyttänyt for-silmukkaa</li>"
                     break;
