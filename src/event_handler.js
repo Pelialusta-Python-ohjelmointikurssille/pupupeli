@@ -48,10 +48,15 @@ export function initWorker() {
                 sendAmountOfVariableToWorkerAsInput(message);
                 break;
             case "createObject":
-                gameController.createObject(message.details);
+                if (globals.task.getEnableAddRemove()) {
+                    gameController.createObject(message.details);
+                }
                 break;
+                
             case "destroyObject":
-                gameController.destroyObject(message.details);
+                if (globals.task.getEnableAddRemove()) {
+                    gameController.destroyObject(message.details);
+                }
                 break;
         }
     }
