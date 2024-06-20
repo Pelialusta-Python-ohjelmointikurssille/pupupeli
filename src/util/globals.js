@@ -24,30 +24,9 @@ export const task = (function () {
     return Task.fromJSON(tryGetFileAsJson(path));
 })();
 
-//This works on the assumption that there is only one grid.
-//globalGridData is a GridData
-/**
- * This works on the assumption that there is only one grid.
- * globalGridData.data is a GridData object (grid_data.js), and is a singleton, meaning that making a new 
- * game grid will replace it, as the newest GridData makes globalGridData refrence itself.
- * Only use functions starting with "get", as other functions are used by the current grids logic.
- */
-export let globalGridData = { data: undefined };
-//^^^actually, why is this even global...?
-
 //not sexy to count every object in the grid every time you want the total amount... (task.getTotalCollectibles())
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
-
-export function getGridObjectsLeft(type) {
-    //if (name === Constants.COLLECTIBLE) return (collectibles.total - collectibles.current);
-    //if (name === Constants.OBSTACLE) return (obstacles.total - obstacles.current);
-    if (!globalGridData.data) {
-        console.error("No global grid data.");
-        return 0;
-    }
-    return globalGridData.data.getGridObjectsOfTypeCount(type);
-}
 
 export const conditions = task.getConditions();
 export const conditionsCleared = [];
@@ -89,6 +68,20 @@ export function getCurrentSAB() {
     return currentSAB;
 }
 
+export function getCurrentTheme() {
+    if (localStorage.getItem("theme") === null) {
+        console.log("No theme set, setting to Pupu");
+        localStorage.setItem("theme", "Pupu");
+        return ("Pupu")
+    } else {
+    return localStorage.getItem("theme");
+    }
+}
+
+export function setCurrentTheme(theme) {
+    localStorage.setItem("theme", theme);
+}
+
 export function setCurrentGameMode(gameMode) {
     currentGameMode = gameMode;
 }
@@ -110,7 +103,10 @@ export function addClearedConditions(conditionsFromEventHandler) {
 }
 
 export function allConditionsCleared() {
-    return conditionChecker(conditions, conditionsCleared) && collectibles.current === collectibles.total;
+    let otherConditions = conditionChecker(conditions, conditionsCleared);
+    let collectiblesCondition = collectibles.current === collectibles.total;
+    if (!collectiblesCondition) conditionsNotCleared.push("conditionCollectAllCollectibles");
+    return otherConditions && collectiblesCondition;
 }
 
 /**

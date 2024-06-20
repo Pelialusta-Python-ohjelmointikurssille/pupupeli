@@ -39,7 +39,7 @@ function decrementStringNumber(lastLineReference) {
     if (lastLineReference) {
         const numberValue = Number(lastLineReference);
         if (!isNaN(numberValue)) {
-            return String(numberValue - 1);
+            return String(numberValue - 2);
         }
     }
     return lastLineReference;

@@ -69,6 +69,11 @@
             min-height: 50rem;
         }
 
+        #enable-add-remove-checkbox {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
         @media (max-width:1280px) {
             #app {
                 grid-template-columns: 1fr;
@@ -274,6 +279,11 @@
                     <input type="radio" id="taskTypeInstructions" name="taskType" value="instructions" style="margin-right: 10px;">
                     <label for="taskTypeInstructions">Ohjeistus</label>
                 </div>
+
+                <div id="task-enable-add-remove" class="is-flex is-flex-center">
+                    <h3>Esineiden lisääminen ja poistaminen:</h3>
+                    <input type="checkbox" id="enable-add-remove-checkbox">
+                </div>
                 <div>
                     <textarea id="instructions-input" class="is-hidden" rows="10" cols="50" placeholder="Kirjoita ohje tänne"></textarea>
                 </div>
@@ -336,6 +346,7 @@
         // Get the divs
         let optionsConditionsDiv = document.getElementById('options-conditions');
         let optionsInputDiv = document.getElementById('options-input');
+        let optionsAddRemoveDiv = document.getElementById('task-enable-add-remove');
         let optionsAppContainer = document.getElementById('app-container');
         let instructionsInput = document.getElementById('instructions-input');
         let headlines = document.querySelectorAll('.headline');
@@ -356,6 +367,7 @@
                     optionsConditionsDiv.style.display = 'none';
                     optionsInputDiv.style.display = 'none';
                     optionsAppContainer.style.display = 'none';
+                    optionsAddRemoveDiv.style.display = 'none';
                     instructionsInput.style.display = 'block';
                     instructionsInput.classList.remove('is-hidden');
                     headlines.forEach(headline => {
@@ -368,15 +380,17 @@
                     optionsConditionsDiv.style.display = 'flex';
                     optionsInputDiv.style.display = 'flex';
                     optionsAppContainer.style.display = 'flex';
+                    optionsAddRemoveDiv.style.display = 'flex';
                     instructionsInput.classList.add('is-hidden');
                     headlines.forEach(headline => {
                     headline.style.display = 'block';});
                 }
 
         class Level {
-            constructor(description, taskTitle, taskType, editorCode, multipleChoiceQuestions, grid, conditions) {
+            constructor(description, taskTitle, enableAddRemove, taskType, editorCode, multipleChoiceQuestions, grid, conditions) {
                 this.title = taskTitle;
                 this.taskType = taskType;
+                this.enableAddRemove = enableAddRemove;
                 this.description = description;
                 this.editorCode = editorCode;
                 this.multipleChoiceQuestions = multipleChoiceQuestions;
@@ -514,6 +528,11 @@
             return typeLine;
         }
 
+        function getEnableAddRemove() {
+            let enableAddRemove = document.getElementById("enable-add-remove-checkbox").checked;
+            return enableAddRemove;
+        }
+
         function generateTaskOutput() {
             console.log(document.querySelector('#task-title-input').value);
             let taskTitle = document.querySelector('#task-title-input').value;
@@ -529,9 +548,8 @@
                 });
             }
 
-
             // use Level class to get json output
-            let output = new Level(taskDescriptionLines, getTitle(), getTaskType(), getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
+            let output = new Level(taskDescriptionLines, getTitle(), getEnableAddRemove(),getTaskType(), getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
             let outputField = document.getElementById("output-field");
             outputField.value = customJSONStringify(output);
             // need to fire input event to resize output field
@@ -678,6 +696,7 @@
 
                     importTitle(task.title);
                     importTaskType(task.taskType);
+                    importEnableAddRemove(task.enableAddRemove);
                     importConditions(task.conditions);
                     importDescription(task.description, task.taskType);
                     importEditorCode(task.editorCode);
@@ -712,6 +731,15 @@
                             hideInstructions();
                         }
                     }
+                }
+            }
+
+            function importEnableAddRemove(enableAddRemove) {
+                let checkbox = document.getElementById("enable-add-remove-checkbox");
+                if (enableAddRemove) {
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false;
                 }
             }
 

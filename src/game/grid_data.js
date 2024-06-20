@@ -1,6 +1,3 @@
-import { globalGridData } from "../util/globals.js";
-
-
 /**
  * GridData is given data by grid when grid logic happens. 
  * GridDatas responsibility is to update globals values to represent the current state of the grid.
@@ -8,13 +5,17 @@ import { globalGridData } from "../util/globals.js";
 export class GridData {
     constructor() {
         this.goDict = {}; //GridObject dictionary, keys are GO types and values are a list of currently known GO's of that type.
-        globalGridData.data = this;
     }
 
+    /**
+     * @param {*} gridObject GridObject to remove from gridData
+     * @returns true if able to remove that object, false if didn't find
+     */
     remove(gridObject) {
-        if (this.goDict[gridObject.type] === undefined) return;
+        if (this.goDict[gridObject.type] === undefined) return false;
         let index = this.goDict[gridObject.type].indexOf(gridObject);
         this.goDict[gridObject.type].splice(index, 1);
+        return true;
     }
 
     reset() {

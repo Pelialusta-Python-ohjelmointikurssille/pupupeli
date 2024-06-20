@@ -421,7 +421,7 @@ button:hover {
 }
 
 #input-container {
-    margin-top: 1rem;
+    margin-bottom: 1rem;
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -466,4 +466,21 @@ button:hover {
 .game-layered > * {
     grid-column-start: 1;
     grid-row-start: 1;
+}
+
+.button-current-task, .button-current-chapter {
+  filter: brightness(0.75);
+}
+
+#chapter-selector-container, #chapter-selector-box, #chapterbuttontable {
+  justify-content: center;
+  align-items: center;
+}
+
+#chapter-selector-text {
+  font-size: 14px;
+}
+
+#chapterbuttontable button {
+  margin: 0 0 0 0.5rem;
 }

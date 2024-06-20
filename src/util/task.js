@@ -1,3 +1,5 @@
+import { getCurrentTheme } from "./globals.js";
+
 /**
  * Represents a task of the course. Can be created from a json file using the fromJSON method.
  * @param {string} description - The description of the task
@@ -15,9 +17,10 @@
  * @returns {Task} - An object representing a task
  */
 export class Task {
-    constructor(taskType, title, description, editorCode, multipleChoiceQuestions, grid, conditions) {
+    constructor(taskType, title, enableAddRemove, description, editorCode, multipleChoiceQuestions, grid, conditions) {
         this.taskType = taskType;
         this.title = title;
+        this.enableAddRemove = enableAddRemove;
         this.description = description;
         this.editorCode = editorCode;
         this.multipleChoiceQuestions = multipleChoiceQuestions;
@@ -95,7 +98,11 @@ export class Task {
      * @returns {string} description - The description of the task
      */
     getDescription() {
-        return this.description;
+        const wordToReplace = "hahmo";
+        const newWord = getCurrentTheme(); // replace with the word you want
+        const regex = new RegExp(wordToReplace, 'gi'); // 'g' for global, 'i' for case-insensitive
+    
+        return this.description.map(line => line.replace(regex, newWord.toLowerCase()));
     }
 
     /**
@@ -108,8 +115,10 @@ export class Task {
         this.editorCode.forEach((line) => {
             editorCodeString += line + "\n";
         })
-
-        return editorCodeString;
+        const wordToReplace = "hahmo";
+        const newWord = getCurrentTheme(); // replace with the word you want
+        const regex = new RegExp(wordToReplace, 'gi'); // 'g' for global, 'i' for case-insensitive
+        return editorCodeString.replace(regex, newWord.toLowerCase());
     }
 
     /**
@@ -150,5 +159,13 @@ export class Task {
      */
     getTitle() {
         return this.title;
+    }
+
+    /**
+     *  Returns true if addRemove is enabled, otherwise false.
+     * @returns {boolean} enableAddRemove
+     */
+    getEnableAddRemove() {
+        return this.enableAddRemove;
     }
 }

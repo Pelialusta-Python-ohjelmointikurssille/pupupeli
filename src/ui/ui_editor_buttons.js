@@ -1,10 +1,12 @@
 import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
-import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker } from "../event_handler.js";
+import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../event_handler.js";
 import { getEditor, resetLineHighlight } from "../input/editor.js";
 import { resetGame, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 import { isWaitingForInput, resetInputWaiting } from "../game/game_input_controller.js";
+import { setCurrentTheme } from "../util/globals.js";
+import { setDescription, setEditorCode } from "./ui.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -141,6 +143,18 @@ export function disablePlayButton(cause = null) {
 }
 
 /**
+ * enables editor buttons after pyodide has been initialized
+ */
+export function enableEditorButtons() {
+    let buttons = document.getElementsByClassName("editor-button");
+    Array.from(buttons).forEach(button => {
+        let runButtonText = button.querySelector("#runButtonText");
+        if (runButtonText !== null) runButtonText.innerHTML = "Suorita";
+        button.disabled = false;
+    });
+}
+
+/**
  * Runs the code or pauses execution and changes the image of run/pause button.
  */
 function onRunButtonClick() {
@@ -170,13 +184,17 @@ function onRunButtonClick() {
 }
 
 function initThemeSelect() {
-    if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
+    let descriptionTargetDiv = document.getElementById("task-description");
     themeSelectDropdown = document.getElementById("theme-select");
     themeSelectDropdown.value = localStorage.getItem("theme");
     themeSelectDropdown.addEventListener('change', function (event) {
         let selectedValue = event.target.value;
-        localStorage.setItem("theme", selectedValue);
+        setCurrentTheme(selectedValue);
+        themeChangeToWorker()
         setTheme(selectedValue);
+        setEditorCode();
+        descriptionTargetDiv.innerHTML = ''; // clear content
+        setDescription(descriptionTargetDiv);
     });
 }
 

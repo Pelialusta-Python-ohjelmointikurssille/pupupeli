@@ -1,6 +1,7 @@
 {
   "taskType": "collectibles",
   "title": "Porkkana porkkana",
+  "enableAddRemove": false,
   "description": [
     "Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:",
     "",

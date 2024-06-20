@@ -3,7 +3,7 @@ import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
 import { commandsDone } from "./game_controller.js";
-import { Constants, getVariableTrueName } from "./commonstrings.js";
+import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { GridObject } from "./gridobject.js";
@@ -133,7 +133,6 @@ export class Game {
     }
 
     createNewPlayerCreatedGridObject(type, x, y) {
-        type = getVariableTrueName(type);
         if (!type) {
             this.makeSayCommand("Ups, luonti ei onnistunut koska en tiedä mitä objektia tarkoitat.");
             return;

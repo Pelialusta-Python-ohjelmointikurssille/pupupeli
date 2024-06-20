@@ -1,8 +1,8 @@
 import * as gameController from './game/game_controller.js';
-import { disablePlayButton } from './ui/ui_editor_buttons.js'
+import { getInputBoxValue, showInputBox } from './ui/inputBox.js';
+import { disablePlayButton, enableEditorButtons } from './ui/ui_editor_buttons.js'
 import { displayErrorMessage } from './ui/ui.js';
 import * as globals from './util/globals.js';
-import { getGridObjectsLeft } from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
 import { getVariableTrueName } from './game/commonstrings.js';
@@ -21,6 +21,9 @@ export function initWorker() {
     worker.onmessage = (message) => {
         message = message.data;
         switch (message.type) {
+            case "init-finish":
+                enableEditorButtons();
+                break;
             case "input":
                 sharedArray = new Uint16Array(message.sab, 4);
                 syncArray = new Int32Array(message.sab, 0, 1);
@@ -49,16 +52,31 @@ export function initWorker() {
                 sendAmountOfVariableToWorkerAsInput(message);
                 break;
             case "createObject":
-                gameController.createObject(message.details);
+                if (globals.task.getEnableAddRemove()) {
+                    gameController.createObject(message.details);
+                }
                 break;
+                
             case "destroyObject":
-                gameController.destroyObject(message.details);
+                if (globals.task.getEnableAddRemove()) {
+                    gameController.destroyObject(message.details);
+                }
                 break;
         }
     }
     try {
         let pythonFileStr = tryGetFileAsText("./src/python/pelaaja.py");
         postMessage({ type: 'init', details: pythonFileStr });
+        postMessage({ type: 'theme', details: globals.getCurrentTheme().toLowerCase() });
+    } catch (error) {
+        displayErrorMessage(error);
+    }
+}
+
+export function themeChangeToWorker() {
+    try {
+        postMessage({ type: 'theme', details: globals.getCurrentTheme().toLowerCase() });
+        console.log("Theme changed to " + globals.getCurrentTheme().toLowerCase());
     } catch (error) {
         displayErrorMessage(error);
     }
@@ -67,13 +85,8 @@ export function initWorker() {
 function sendAmountOfVariableToWorkerAsInput(message) {
     sharedArray = new Uint16Array(message.sab, 4);
     syncArray = new Int32Array(message.sab, 0, 1);
-    let trueName = getVariableTrueName(message.details);
-    if (!trueName) { //not found
-        inputToWorker("-1");
-        return;
-    }
-    let amountOfObjects = getGridObjectsLeft(trueName);
-    inputToWorker(amountOfObjects.toString()); //input to worker currently just strings§
+    let amountOfObjects = gameController.getGridObjectsOfTypeLeft(message.details);
+    inputToWorker(amountOfObjects.toString()); //input to worker currently just strings
 }
 
 /**

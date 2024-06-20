@@ -1,6 +1,7 @@
 {
   "taskType": "collectibles",
   "title": "Porkkana porkkana",
+  "enableAddRemove": false,
   "description": [
       "Kerää porkkanat"
     ],

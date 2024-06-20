@@ -97,7 +97,7 @@ function createGamePage() {
         }
         // set editor code
         window.addEventListener('load', function () {
-            getEditor().setValue(globals.task.getEditorCode());
+            setEditorCode()
             getEditor().clearSelection();
             createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
         });
@@ -169,11 +169,15 @@ function setTitle(titleDiv) {
     titleDiv.innerHTML = titleStr;
 }
 
+export function setEditorCode() {
+    getEditor().setValue(globals.task.getEditorCode());
+}
+
 /**
  * Sets the text from task.description to given div. Useful since game and instructions tasks use different description div.
  * @param {object} descriptionDiv | the description div where we want description text as a html element
  */
-function setDescription(descriptionDiv){
+export function setDescription(descriptionDiv){
     // set description
     globals.task.getDescription().forEach((line) => {
         line = line === "" ? "<br>" : line;
@@ -206,6 +210,13 @@ function setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevT
     } else {
         nextTaskLink.style.display = 'none'; // Hide if on the last task
     }
+}
+
+export function enableEditorButtons() {
+    let buttons = document.getElementsByClassName("editor-button");
+    Array.from(buttons).forEach(button => {
+        button.disabled = false;
+    });
 }
 
 function isUserLoggedIn() {
@@ -256,6 +267,9 @@ function createTaskButtons(str="") {
 
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
                 button.id = buttonIdText
+                if (currentChapter === globals.chapterIdentifier && i+1 === globals.taskIdentifier) {
+                    button.classList.add("button-current-task")
+                }
                 if (completedTasksList.includes(buttonIdText)) {
                     button.classList.add("button-completed");
                 } else {
@@ -295,29 +309,47 @@ function createChapterButtons() {
 
     selectContainer.innerHTML = '';
 
-    api.getCompletedTasks().then(taskList => {
-        let completedTasksList = taskList.tasks;
+    if (localStorage.getItem("token") !== null) {
+        api.getCompletedTasks().then(taskList => {
+            let completedTasksList = taskList.tasks;
+            for (let i = 0; i < totalChapters; i++) {
+                const button = document.createElement('button');
+                button.id = `chapter-button-${i + 1}`;
+                button.value = i + 1;
+                button.innerText = `Tehtäväsarja ${i + 1}`;
+                if (currentChapter === i + 1) button.classList.add("button-current-chapter")
+                //Check if 
+                let currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + (i + 1)).count;
+                let allTasksCompleted = true;
+                for (let j = 0; j < currentTotalTasks; j++) {
+                    let taskId = `chapter${i + 1}task${j + 1}`;
+                    if (!completedTasksList.includes(taskId)) {
+                        allTasksCompleted = false;
+                        break;
+                    }
+                }
+
+                if (allTasksCompleted) {
+                    button.classList.add("button-completed");
+                } else {
+                    button.classList.add("button-incompleted");
+                }
+
+                button.addEventListener('click', () => {
+                    currentChapter = i + 1;
+                    console.log(currentChapter)
+                    window.location.href = `/?chapter=${currentChapter}&task=1`;
+                });
+                selectContainer.appendChild(button);
+            }
+        })
+    } else {
         for (let i = 0; i < totalChapters; i++) {
             const button = document.createElement('button');
             button.id = `chapter-button-${i + 1}`;
             button.value = i + 1;
             button.innerText = `Tehtäväsarja ${i + 1}`;
-            //Check if 
-            let currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + (i + 1)).count;
-            let allTasksCompleted = true;
-            for (let j = 0; j < currentTotalTasks; j++) {
-                let taskId = `chapter${i + 1}task${j + 1}`;
-                if (!completedTasksList.includes(taskId)) {
-                    allTasksCompleted = false;
-                    break;
-                }
-            }
-
-            if (allTasksCompleted) {
-                button.classList.add("button-completed");
-            } else {
-                button.classList.add("button-incompleted");
-            }
+            if (currentChapter === i + 1) button.classList.add("button-current-chapter")
 
             button.addEventListener('click', () => {
                 currentChapter = i + 1;
@@ -326,7 +358,7 @@ function createChapterButtons() {
             });
             selectContainer.appendChild(button);
         }
-    })
+    } 
 }
 
 
@@ -345,7 +377,7 @@ export function onTaskComplete(won) {
         if (globals.task.getTaskType() != instructionsStr) {
         celebration();
         }
-        if (button.getAttribute("class") === "button-incompleted") {
+        if (button.classList.contains("button-incompleted")) {
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
@@ -353,10 +385,13 @@ export function onTaskComplete(won) {
             createChapterButtons();
         });
     } else {
-        let errorMessage = "<h2><ol>Voi juku, et vielä läpäissyt tasoa koska:";
+        let errorMessage = "<h2>Voi juku, et vielä läpäissyt tasoa koska:<ol>";
         if (!globals.getMultipleChoiceCorrect()) errorMessage += "\n<li>monivalintatehtävän vastaus oli väärä</li>"
         globals.conditionsNotCleared.forEach(failedCondition => {
             switch (failedCondition) {
+                case "conditionCollectAllCollectibles":
+                    errorMessage += "\n<li>et kerännyt kaikkia tarvittavia asioita</li>"
+                    break;
                 case "conditionUsedFor":
                     errorMessage += "\n<li>et käyttänyt for-silmukkaa</li>"
                     break;
