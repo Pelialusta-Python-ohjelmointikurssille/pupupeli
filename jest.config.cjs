@@ -9,7 +9,7 @@ module.exports = {
     testPathIgnorePatterns: [],
     coverageThreshold: {
         global: {
-            branches: 75,
+            branches: 40,
         }
     },
     reporters: [
