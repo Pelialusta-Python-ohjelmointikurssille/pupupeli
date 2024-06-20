@@ -138,6 +138,7 @@ function sendLine(line) {
  * @param {*} variableName Name of the variable we want the value of.
  * @returns 
  */
+// eslint-disable-next-line no-unused-vars
 function getInt(variableName) {
     console.log(variableName);
     const sab = new SharedArrayBuffer(512 * 2 + 4);
@@ -150,6 +151,14 @@ function getInt(variableName) {
     console.log("worker received word: " + word);
     //word converted to int in python
     return word;
+}
+
+function createObject(gridObjectType, x, y) {
+    postMessage({ type: 'createObject', details: [gridObjectType, x, y] });
+}
+
+function removeObject(x, y) {
+    postMessage({ type: 'destroyObject', details: [x, y] });
 }
 
 /**

@@ -50,9 +50,13 @@ body {
     flex-direction: column;
 }
 
-#left-container {
+#left-container, #right-container {
     min-width: var(--canvas-width);
     justify-content: space-between;
+}
+
+#right-container {
+    min-height: var(--canvas-height);
 }
 
 .is-margin-half-rem-x {
@@ -120,11 +124,35 @@ body {
     align-items: center;
 }
 
-#app-container {
+#app-container, #instructions-container {
     max-width: calc(var(--canvas-width) * 2.5);
     background-color: #ddd;
     border-radius: 8px;
     border: 1px solid black;
+}
+
+#instruction-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: calc(var(--canvas-width) * 2.5);
+    padding: 2rem;
+    height: 100%;
+}
+
+#instruction-head {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#instruction-desc {
+    white-space: pre-wrap;
+}
+
+#prev-task-link, #next-task-link {
+    text-decoration: none;
+    margin: 0 0.5rem;
 }
 
 #task-selector-container {
@@ -192,6 +220,7 @@ body {
 
 #logout-button {
     margin-bottom: 0;
+    margin-left: 1rem;
 }
 
 #task-selector-box button {
@@ -293,6 +322,44 @@ button:hover {
     z-index: 1000; /* in front of all other markers */ 
 }
 
+#login-failed, #condition-failed {
+    display: none;
+    position: absolute;
+    top: calc(6rem - 1px);
+    right: 1.5rem;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1rem;
+    z-index: 99;
+}
+.pop-up-notification-show, .pop-up-notification-show-login {
+    display: block !important;
+}
+
+.pop-up-notification-show {
+    animation: popup-show-anim;
+    animation-duration: 3s;
+}
+
+.pop-up-notification-show-login {
+    animation: popup-show-anim-login;
+    animation-duration: 6s;
+}
+
+@keyframes popup-show-anim {
+    0% {transform: scaleX(0);}
+    10% {transform: scaleX(1);}
+    100% {transform: scaleX(1);}
+}
+
+@keyframes popup-show-anim-login {
+    0% {transform: scaleX(0);}
+    10% {transform: scaleX(1);}
+    90% {transform: scaleX(1);}
+    100% {transform: scaleX(0);}
+}
+
 #celebration{
     position: absolute;
     top: 50%;
@@ -369,7 +436,7 @@ button:hover {
     }
 
     #game {
-        margin: 1rem auto 1rem auto;
+        margin: 1rem;
     }
 
     #task-container, #editor {

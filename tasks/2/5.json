@@ -1,5 +1,7 @@
 {
-    "description": [
+  "taskType": "collectibles",
+  "title": "Porkkana porkkana",
+  "description": [
       "Kerää porkkanat"
     ],
     "editorCode": [
