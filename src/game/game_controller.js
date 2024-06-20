@@ -62,15 +62,13 @@ export function toggleTrail() {
 
 export function createObject(commandParameters) {
     let name = commandParameters[0]
-    //x and y are actually flipped in game logic visually
-    let y = commandParameters[1];
-    let x = commandParameters[2];
+    let x = commandParameters[1];
+    let y = commandParameters[2];
     game.createNewPlayerCreatedGridObject(name, x, y);
 }
 
 export function destroyObject(commandParameters) {
-    //x and y are actually flipped in game logic visually
-    let y = commandParameters[0];
-    let x = commandParameters[1];
+    let x = commandParameters[0];
+    let y = commandParameters[1];
     game.destroyObject(x, y);
 }
