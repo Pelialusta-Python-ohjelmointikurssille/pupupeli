@@ -1,7 +1,7 @@
 import * as gameController from './game/game_controller.js';
 import { getInputBoxValue, showInputBox } from './ui/inputBox.js';
 import { disablePlayButton } from './ui/ui_editor_buttons.js'
-import { displayErrorMessage } from './ui/ui.js';
+import { displayErrorMessage, enableEditorButtons } from './ui/ui.js';
 import * as globals from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
@@ -20,6 +20,9 @@ export function initWorker() {
     worker.onmessage = (message) => {
         message = message.data;
         switch (message.type) {
+            case "init-finish":
+                enableEditorButtons();
+                break;
             case "input":
                 sharedArray = new Uint16Array(message.sab, 4);
                 syncArray = new Int32Array(message.sab, 0, 1);
