@@ -443,3 +443,20 @@ button:hover {
         margin: 1rem;
     }
   }
+
+  .button-current-task, .button-current-chapter {
+    filter: brightness(0.75);
+  }
+
+  #chapter-selector-container, #chapter-selector-box, #chapterbuttontable {
+    justify-content: center;
+    align-items: center;
+  }
+
+  #chapter-selector-text {
+    font-size: 14px;
+  }
+
+  #chapterbuttontable button {
+    margin: 0 0 0 0.5rem;
+  }
