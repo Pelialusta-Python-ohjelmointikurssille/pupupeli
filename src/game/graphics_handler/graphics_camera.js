@@ -22,7 +22,7 @@ export class GraphicsCamera {
         this.zoomScale = 1;
         this.rotation = 0;
         this.minZoom = 0.08;
-        this.maxZoom = 1;
+        this.maxZoom = 0.95;
         this.focusPaddingPercent = 0.1;
         this.container.position.x = this.screenCenter.x;
         this.container.position.y = this.screenCenter.y;
@@ -122,10 +122,13 @@ export class GraphicsCamera {
     }
 
     changeZoomLinear(valueDelta) {
-        
-        this.linearZoomValue += valueDelta / (1 - (this.linearZoomValue / 100));
+        let delta = valueDelta / (1 - (this.linearZoomValue / 100))
+        if (delta > 10) delta = 2;
+        if (delta < -10) delta = -10;
+        this.linearZoomValue += delta;
+        console.log(delta);
         if (this.linearZoomValue < 1) this.linearZoomValue = 1;
-        if (this.linearZoomValue > 90) this.linearZoomValue = 90;
+        if (this.linearZoomValue > 99) this.linearZoomValue = 95;
         this.setZoom(this.linearZoomValue / 100);
     }
 

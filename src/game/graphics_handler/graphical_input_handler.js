@@ -27,6 +27,10 @@ export class GraphicalInputHandler {
     onWheel(event) {
         let deltaNormalized = event.deltaY / Math.abs(event.deltaY);
         this.renderingCamera.changeZoomLinear((-deltaNormalized * 2));
+        if (this.renderingCamera.zoomScale <= this.renderingCamera.minZoom || this.renderingCamera.zoomScale >= this.renderingCamera.maxZoom) return;
+        this.renderingCamera.position.x += (event.global.x - 512) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
+        this.renderingCamera.position.y += (event.global.y - 512) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
+        
     }
 
     onMouseMove(event) {
