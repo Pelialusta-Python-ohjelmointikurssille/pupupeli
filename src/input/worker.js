@@ -153,10 +153,12 @@ function getInt(variableName) {
     return word;
 }
 
+// eslint-disable-next-line no-unused-vars
 function createObject(gridObjectType, x, y) {
     postMessage({ type: 'createObject', details: [gridObjectType, x, y] });
 }
 
+// eslint-disable-next-line no-unused-vars
 function removeObject(x, y) {
     postMessage({ type: 'destroyObject', details: [x, y] });
 }
