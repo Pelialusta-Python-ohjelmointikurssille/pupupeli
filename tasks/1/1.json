@@ -2,18 +2,18 @@
   "taskType": "collectibles",
   "title": "Eka pupu",
   "description": [
-    "Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:",
+    "Aseta hahmo liikkumaan oikeaan alareunaan. Saat hahmon liikkumaan seuraavilla komennoilla:",
     "",
-    "pupu.liiku(\"oikea\")",
-    "pupu.liiku(\"alas\")",
-    "pupu.liiku(\"vasen\")",
-    "pupu.liiku(\"ylös\")"
+    "hahmo.liiku(\"oikea\")",
+    "hahmo.liiku(\"alas\")",
+    "hahmo.liiku(\"vasen\")",
+    "hahmo.liiku(\"ylös\")"
   ],
   "editorCode": [
     "for i in range(7):",
-    "\tpupu.liiku(\"oikea\")",
+    "\thahmo.liiku(\"oikea\")",
     "for i in range(7):",
-    "\tpupu.liiku(\"alas\")"
+    "\thahmo.liiku(\"alas\")"
   ],
   "multipleChoiceQuestions": [],
   "grid": [

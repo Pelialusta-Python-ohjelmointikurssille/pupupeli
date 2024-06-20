@@ -1,3 +1,5 @@
+import { getCurrentTheme } from "./globals.js";
+
 /**
  * Represents a task of the course. Can be created from a json file using the fromJSON method.
  * @param {string} description - The description of the task
@@ -95,7 +97,11 @@ export class Task {
      * @returns {string} description - The description of the task
      */
     getDescription() {
-        return this.description;
+        const wordToReplace = "hahmo";
+        const newWord = getCurrentTheme(); // replace with the word you want
+        const regex = new RegExp(wordToReplace, 'gi'); // 'g' for global, 'i' for case-insensitive
+    
+        return this.description.map(line => line.replace(regex, newWord.toLowerCase()));
     }
 
     /**
@@ -108,8 +114,10 @@ export class Task {
         this.editorCode.forEach((line) => {
             editorCodeString += line + "\n";
         })
-
-        return editorCodeString;
+        const wordToReplace = "hahmo";
+        const newWord = getCurrentTheme(); // replace with the word you want
+        const regex = new RegExp(wordToReplace, 'gi'); // 'g' for global, 'i' for case-insensitive
+        return editorCodeString.replace(regex, newWord.toLowerCase());
     }
 
     /**
