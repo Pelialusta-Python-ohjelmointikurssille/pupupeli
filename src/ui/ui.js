@@ -297,29 +297,47 @@ function createChapterButtons() {
 
     selectContainer.innerHTML = '';
 
-    api.getCompletedTasks().then(taskList => {
-        let completedTasksList = taskList.tasks;
+    if (localStorage.getItem("token") !== null) {
+        api.getCompletedTasks().then(taskList => {
+            let completedTasksList = taskList.tasks;
+            for (let i = 0; i < totalChapters; i++) {
+                const button = document.createElement('button');
+                button.id = `chapter-button-${i + 1}`;
+                button.value = i + 1;
+                button.innerText = `Tehtäväsarja ${i + 1}`;
+                if (currentChapter === i + 1) button.classList.add("button-current-chapter")
+                //Check if 
+                let currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + (i + 1)).count;
+                let allTasksCompleted = true;
+                for (let j = 0; j < currentTotalTasks; j++) {
+                    let taskId = `chapter${i + 1}task${j + 1}`;
+                    if (!completedTasksList.includes(taskId)) {
+                        allTasksCompleted = false;
+                        break;
+                    }
+                }
+
+                if (allTasksCompleted) {
+                    button.classList.add("button-completed");
+                } else {
+                    button.classList.add("button-incompleted");
+                }
+
+                button.addEventListener('click', () => {
+                    currentChapter = i + 1;
+                    console.log(currentChapter)
+                    window.location.href = `/?chapter=${currentChapter}&task=1`;
+                });
+                selectContainer.appendChild(button);
+            }
+        })
+    } else {
         for (let i = 0; i < totalChapters; i++) {
             const button = document.createElement('button');
             button.id = `chapter-button-${i + 1}`;
             button.value = i + 1;
             button.innerText = `Tehtäväsarja ${i + 1}`;
-            //Check if 
-            let currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + (i + 1)).count;
-            let allTasksCompleted = true;
-            for (let j = 0; j < currentTotalTasks; j++) {
-                let taskId = `chapter${i + 1}task${j + 1}`;
-                if (!completedTasksList.includes(taskId)) {
-                    allTasksCompleted = false;
-                    break;
-                }
-            }
-
-            if (allTasksCompleted) {
-                button.classList.add("button-completed");
-            } else {
-                button.classList.add("button-incompleted");
-            }
+            if (currentChapter === i + 1) button.classList.add("button-current-chapter")
 
             button.addEventListener('click', () => {
                 currentChapter = i + 1;
@@ -328,7 +346,7 @@ function createChapterButtons() {
             });
             selectContainer.appendChild(button);
         }
-    })
+    } 
 }
 
 
