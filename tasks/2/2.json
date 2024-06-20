@@ -1,6 +1,7 @@
 {
   "taskType": "collectibles",
   "title": "Pupu-spiraali",
+  "enableAddRemove": false,
   "description": [
     "Pupu-spiraali!",
     "Prokrastinoi ilman tuomituksi tulemista laittamalla pupu pyörimään!"

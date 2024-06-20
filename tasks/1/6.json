@@ -1,6 +1,7 @@
 {
   "taskType": "multiple-choice",
   "title": "En tykkää tästä UX:stä",
+  "enableAddRemove": false,
   "description": [
     "Kuinka monta kertaa pupun pitää hypätä päästäkseen oikeaan alakulmaan mahdollisimman pienellä määrällä hyppyjä?",
     "",
