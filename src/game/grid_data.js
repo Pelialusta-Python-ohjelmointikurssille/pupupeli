@@ -28,6 +28,8 @@ export class GridData {
      * @returns The number of gridobjects of given type in the game grid.
      */
     getGridObjectsOfTypeCount(type) {
+        console.log("type: " + type);
+        console.log("count: " + this.goDict[type]);
         if ((this.goDict[type] === undefined)) return 0;
         return this.goDict[type].length;
     }

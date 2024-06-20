@@ -67,12 +67,12 @@ export function toggleTrail() {
  * @returns the number of gridobjects of given type currently on screen
  */
 export function getGridObjectsOfTypeLeft(type) {
-    let trueName = getVariableTrueName(type);
-    console.log("amountOfObjects? : " + trueName);
+    type = getVariableTrueName(type);
+    console.log("amountOfObjects? : " + type);
     //objects in the game have different names depending on theme,
     //in game logic we have different names as well, the "true names"
     //Example, "collectible" can be "porkkana" or "jakoavain" 
-    if (!trueName) { //not found    
+    if (!type) { //not found
         return -1;
     }
     return game.grid.data.getGridObjectsOfTypeCount(type);
