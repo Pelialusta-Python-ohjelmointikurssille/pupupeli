@@ -9,12 +9,10 @@ import { GameModeGetCollectibles, GameModeMultipleChoice } from "./gameModes.js"
  * @returns Object containing the task: { grid: grid, gameMode: gameMode }
  */
 export function getGameTask() {
-    //taskFactory or gridfactory?
     const task = globals.task;
     const playerStartPosition = task.getPlayerStartPosition();
     const gridWidth = task.getGridDimensions().width;
     const gridHeight = task.getGridDimensions().height;
-
     let gridIntTable = globals.task.getGrid();
     let newGrid = getNewGrid(gridWidth, gridHeight, playerStartPosition.y, playerStartPosition.x);
 
@@ -31,6 +29,14 @@ export function getGameTask() {
     return { grid: newGrid, gameMode: currentGameMode };
 };
 
+/**
+ * Creates a new initialized grid with player.
+ * @param {*} gridWidth 
+ * @param {*} gridHeight 
+ * @param {*} playerStartPositionY 
+ * @param {*} playerStartPositionX 
+ * @returns the newly initialized Grid object
+ */
 function getNewGrid(gridWidth, gridHeight, playerStartPositionY, playerStartPositionX) {
     let player = getNewGridObject(Constants.PLAYER_STR);
     let newGrid = new Grid(player, gridWidth, gridHeight);
