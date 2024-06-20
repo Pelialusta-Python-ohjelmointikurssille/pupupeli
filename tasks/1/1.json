@@ -1,5 +1,5 @@
 {
-  "title": "Eka fdsgfdsgfds",
+  "title": "Eka pupu",
   "taskType": "collectibles",
   "enableAddRemove": false,
   "description": [
@@ -18,7 +18,7 @@
   ],
   "multipleChoiceQuestions": [],
   "grid": [
-    [0,1,1,1,1,1,1,2],
+    [0,1,1,1,1,1,2,2],
     [1,1,3,3,1,1,1,1],
     [1,1,1,3,1,1,1,1],
     [1,1,1,3,1,1,2,1],
