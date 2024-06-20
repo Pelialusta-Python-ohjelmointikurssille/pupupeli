@@ -25,7 +25,10 @@ const COLLECTIBLE_ALIASES = ["porkkana", "jakoavain"];
 const OBSTACLE_ALIASES = ["kivi", "viemäri"];
 
 /**
- * 
+ * Objects in the game have different names depending on theme.
+ * In game logic we have different names as well, the "true names".
+ * Example, "collectible" can be "porkkana" or "jakoavain" in the game,
+ * but are referred always as "collectible" in the game logic.
  * @param {*} name Name of the variable we want the true name of. True names are the constant strings used in game logic.
  * @returns The string that the variable translates into. If not found, returns false.
  */

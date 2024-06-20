@@ -68,11 +68,8 @@ export function toggleTrail() {
  */
 export function getGridObjectsOfTypeLeft(type) {
     type = getVariableTrueName(type);
-    //objects in the game have different names depending on theme,
-    //in game logic we have different names as well, the "true names"
-    //Example, "collectible" can be "porkkana" or "jakoavain" 
     if (!type) { //not found
-        return -1;
+        return -1; //Player will know that object like that didn't exist.
     }
     return game.grid.data.getGridObjectsOfTypeCount(type);
 }
