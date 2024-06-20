@@ -365,7 +365,7 @@ export function onTaskComplete(won) {
         if (globals.task.getTaskType() != instructionsStr) {
         celebration();
         }
-        if (button.getAttribute("class") === "button-incompleted") {
+        if (button.classList.contains("button-incompleted")) {
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
