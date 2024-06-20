@@ -1,4 +1,4 @@
-const PYODIDE_INTERRUPT_INPUT = "pyodide_interrupt_input_666"
+const PYODIDE_INTERRUPT_INPUT = "pyodide_interrupt_input_1337"
 let pyodide;
 let pythonFileStr;
 let continuePythonExecution;
