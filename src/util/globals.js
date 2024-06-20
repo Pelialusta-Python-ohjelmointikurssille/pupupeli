@@ -33,6 +33,8 @@ export const task = (function () {
  * Only use functions starting with "get", as other functions are used by the current grids logic.
  */
 export let globalGridData = { data: undefined };
+//^^^actually, why is this even global...?
+
 //not sexy to count every object in the grid every time you want the total amount... (task.getTotalCollectibles())
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
