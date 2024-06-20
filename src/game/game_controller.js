@@ -1,6 +1,7 @@
 import { onTaskComplete } from "../ui/ui.js";
 import { Game } from "./game.js";
 import { postMessage } from "../event_handler.js";
+import { getVariableTrueName } from './commonstrings.js';
 
 //This file controls game. 
 // - Creates new game instances (Game contains both logic and rendering)
@@ -60,10 +61,24 @@ export function toggleTrail() {
     game.toggleTrail();
 }
 
+/**
+ * 
+ * @param {*} type name of the gridobject type as string
+ * @returns the number of gridobjects of given type currently on screen
+ */
+export function getGridObjectsOfTypeLeft(type) {
+    type = getVariableTrueName(type);
+    if (!type) { //not found
+        return -1; //Player will know that object like that didn't exist.
+    }
+    return game.grid.data.getGridObjectsOfTypeCount(type);
+}
+
 export function createObject(commandParameters) {
     let name = commandParameters[0]
     let x = commandParameters[1];
     let y = commandParameters[2];
+    name = getVariableTrueName(name);
     game.createNewPlayerCreatedGridObject(name, x, y);
 }
 

@@ -57,13 +57,11 @@ class Pelaaja:
         #        if reset_flag:
         #            raise Exception("Interpreter was reset")
         if variableName == self.__name:
-        #    self.sano("Minua voi olla vain yksi!")
             return 1
         count = int(js.getInt(variableName))  # returns -1 if not found
         if count < 0:
-        #    self.sano("En tiedä minkä asian lukumäärää kysyit!")
+            self.sano("En tiedä minkä asian lukumäärää laskea!")
             return 0
-        #self.sano("Ai " + variableName + "? Näen niitä " + str(count) + "!")
         return count
     
     def luo(self, gridObjectType : str, x = -1, y = -1):
