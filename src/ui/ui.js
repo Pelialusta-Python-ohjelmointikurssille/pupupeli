@@ -255,6 +255,9 @@ function createTaskButtons(str="") {
 
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
                 button.id = buttonIdText
+                if (currentChapter === globals.chapterIdentifier && i+1 === globals.taskIdentifier) {
+                    button.classList.add("button-current-task")
+                }
                 if (completedTasksList.includes(buttonIdText)) {
                     button.classList.add("button-completed");
                 } else {

@@ -443,3 +443,7 @@ button:hover {
         margin: 1rem;
     }
   }
+
+  .button-current-task {
+    filter: brightness(0.75);
+  }
