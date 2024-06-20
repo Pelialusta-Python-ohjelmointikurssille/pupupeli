@@ -1,0 +1,34 @@
+{
+    "title": "",
+    "taskType": "collectibles",
+    "enableAddRemove": false,
+    "description": [
+      ""
+    ],
+    "editorCode": [
+      ""
+    ],
+    "multipleChoiceQuestions": [],
+    "grid": [
+      [0,1],
+      [1,2]
+    ],
+    "conditions": [
+      {
+        "condition": "conditionUsedWhile",
+        "parameter": false
+      },
+      {
+        "condition": "conditionUsedFor",
+        "parameter": false
+      },
+      {
+        "condition": "conditionUsedInput",
+        "parameter": false
+      },
+      {
+        "condition": "conditionMaxLines",
+        "parameter": false
+      }
+    ]
+  }

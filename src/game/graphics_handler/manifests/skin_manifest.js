@@ -8,6 +8,8 @@ import
     createCollectibleWrenchSkin,
     createObstacleRockSkin,
     createObstacleWellSkin,
+    createQuestionCollectibleBunnySkin,
+    createQuestionCollectibleRobotSkin,
     createSpeechBubbleBunnySkin,
     createSpeechBubbleRobotSkin
 } from "../entity_skins/factories/entity_skin_factories.js";
@@ -62,6 +64,16 @@ export const ENTITY_SKINS = [
         typeName: "skin_ui_speechbubble_robot",
         theme: "robot",
         factoryFunction: createSpeechBubbleRobotSkin
+    },
+    {
+        typeName: "skin_collectible_question_bunny",
+        theme: "bunny",
+        factoryFunction: createQuestionCollectibleBunnySkin
+    },
+    {
+        typeName: "skin_collectible_question_robot",
+        theme: "robot",
+        factoryFunction: createQuestionCollectibleRobotSkin
     }
 ]
 
@@ -70,5 +82,6 @@ export const SKIN_BUNDLES = {
     "obstacle": ["skin_obstacle_rock", "skin_obstacle_well"],
     "collectible": ["skin_collectible_carrot", "skin_collectible_wrench"],
     "background": ["skin_background_grass", "skin_background_metal"],
-    "speech_bubble": ["skin_ui_speechbubble_bunny", "skin_ui_speechbubble_robot"]
+    "speech_bubble": ["skin_ui_speechbubble_bunny", "skin_ui_speechbubble_robot"],
+    "question_collectible": ["skin_collectible_question_bunny", "skin_collectible_question_robot"]
 }

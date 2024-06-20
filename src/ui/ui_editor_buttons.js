@@ -4,6 +4,7 @@ import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inp
 import { getEditor, resetLineHighlight } from "../input/editor.js";
 import { resetGame, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
+import { isWaitingForInput, resetInputWaiting } from "../game/game_input_controller.js";
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode } from "./ui.js";
 
@@ -68,6 +69,7 @@ function onResetButtonClick() {
     _buttonsState = States.INITIAL;
     setMessagePassingState({ paused: false });
     resetLineHighlight();
+    resetInputWaiting();
 }
 
 function resetNotificationPopUps() {
@@ -110,6 +112,7 @@ function onNextStepButtonClick() {
         onRunButtonClick(); //changes state to paused
     }
     if (_buttonsState == States.PAUSED) {
+        if(isWaitingForInput) return;
         runSingleCommand();
     }
 }
@@ -168,9 +171,11 @@ function onRunButtonClick() {
             postMessage({ type: 'start', details: getEditor().getValue() });
             break;
         case States.RUNNING:
+            if(isWaitingForInput) return;
             setMessagePassingState({ paused: true });
             break;
         case States.PAUSED:
+            if(isWaitingForInput) return;
             setMessagePassingState({ paused: false });
             break;
 

@@ -65,7 +65,11 @@ export class GraphicsEntitySystem {
             this.mainGridEntityUUID = entityId;
         }
         this.entityDict.set(entityId, entity);
-        this.renderer.addToStage(entity.container);
+        if (type === "textbox") {
+            this.renderer.addToUI(entity.container);
+        } else {
+            this.renderer.addToStage(entity.container);
+        }
         entity.onCreate();
     }
 
@@ -75,6 +79,7 @@ export class GraphicsEntitySystem {
      */
     destroyGraphicsEntity(entityId) {
         this.renderer.removeFromStage(this.entityDict.get(entityId).container);
+        this.renderer.removeFromUI(this.entityDict.get(entityId).container);
         this.entityDict.delete(entityId);
     }
 

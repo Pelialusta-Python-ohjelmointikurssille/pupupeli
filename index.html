@@ -46,7 +46,7 @@
                     <div id="task-name-div">
                         <div id="task-header">
                             <h1>
-                                <a id="prev-task-link" href="/?task=1" style="text-decoration:none;">< </a>
+                                <a id="prev-task-link" href="/?task=1" style="text-decoration:none;"></a>
                                     <a id="taskTitle"></a>
                                 <a id="next-task-link" href="/?task=2" style="text-decoration:none;"> ></a>
                             </h1>
@@ -79,6 +79,7 @@
                             <image id="run-icon" src="src/static/skipbutton.png"></image>
                             <span id="buttonText">Seuraava askel</span>
                         </button>
+
                         <input type="text" id="input-box" class="is-margin-half-rem-x is-flex-1 is-invisible"
                             placeholder="Syöte">
                         <button id="editor-stop-button" class="editor-button is-margin-half-rem-x" type="button" disabled>
@@ -91,7 +92,16 @@
                 </div>
             </div>
             <div id="right-container">
-
+                <div id="game-container" class="game-layered">
+                    <div id="input-box-container">
+                        <input type="text" id="input-box" class="is-invisible" placeholder="Syöte">
+                        <button id="input-box-send-button" class="is-invisible" type="button">
+                            <image id="run-icon" src="src/static/runbutton.png"></image>
+                            <span id="buttonText">Vastaa</span>
+                        </button>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>

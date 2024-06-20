@@ -77,3 +77,17 @@ export function createSpeechBubbleRobotSkin(skinName, theme, assets) {
     }
     return new EntitySkin(skinName, theme, skinOptions);
 }
+
+export function createQuestionCollectibleBunnySkin(skinName, theme, assets) {
+    let skinOptions = {
+        defaultTexture: assets.collectibles.question,
+    }
+    return new EntitySkin(skinName, theme, skinOptions);
+}
+
+export function createQuestionCollectibleRobotSkin(skinName, theme, assets) {
+    let skinOptions = {
+        defaultTexture: assets.collectibles.question,
+    }
+    return new EntitySkin(skinName, theme, skinOptions);
+}

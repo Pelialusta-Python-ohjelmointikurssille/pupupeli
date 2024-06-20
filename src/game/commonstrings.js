@@ -3,6 +3,8 @@ import { Direction } from "./direction.js";
 export class Constants {
     static COLLECTIBLE = "collectible";
     static OBSTACLE = "obstacle";
+    static EMPTY_TILE = "";
+    static QUESTION_COLLECTIBLE = "question_collectible";
     //Following are the valid command strings:
     static MOVE_STR = "move";
     static SAY_STR = "say";
