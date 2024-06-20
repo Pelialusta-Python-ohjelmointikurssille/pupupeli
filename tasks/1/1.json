@@ -3,7 +3,7 @@
   "taskType": "collectibles",
   "enableAddRemove": false,
   "description": [
-    "Aseta hahmo liikkumaan oikeaan alareunaan. Saat hahmon liikkumaan seuraavilla komennoilla:",
+    "Aseta hahmo liikkumaan oikeaan alareunaan. Laita hahmo liikkumaan seuraavilla komennoilla:",
     "",
     "hahmo.liiku(\"oikea\")",
     "hahmo.liiku(\"alas\")",
