@@ -30,6 +30,9 @@ async function main() {
         initializeEditorButtons();
         await initGameAndCanvas();
     }
+
+    // Move somewhere that makes more sense. Disables scrolling on top of game window.
+    document.getElementById("game-container").addEventListener("wheel", (event) => { event.preventDefault() });
 }
 
 /**
