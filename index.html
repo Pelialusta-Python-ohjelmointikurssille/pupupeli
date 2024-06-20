@@ -28,11 +28,11 @@
             </div>
             <div id="header-buttons" class="is-flex">
                 <div id="logged-in-as-container" class="is-hidden"><h4><span id="logged-in-as-user"></span></h4></div>
-                <div id="user-container" class="is-flex is-hidden">
-                    <input id="username" placeholder="username">
-                    <input type="password" id="password" placeholder="********" onkeydown="(event.key==='Enter')?this.nextElementSibling.click():{}">
+                <form id="user-container" class="is-flex is-hidden" onsubmit="event.preventDefault()">
+                    <input id="username" placeholder="username" autocomplete="username">
+                    <input type="password" id="password" placeholder="password" autocomplete="current-password" onkeydown="(event.key==='Enter')?this.nextElementSibling.click():{}">
                     <button id="login-button" value="login">Kirjaudu sisään</button>
-                </div>
+                </form>
                 <button id="logout-button" class="is-hidden" value="logout">Kirjaudu ulos</button>
                 <div id="login-failed" class=""><h1>Voi ei! Käyttäjää ei ole olemassa tai salasana on väärin!</h1></div>
             </div>
