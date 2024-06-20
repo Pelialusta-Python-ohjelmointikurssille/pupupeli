@@ -68,7 +68,6 @@ export function toggleTrail() {
  */
 export function getGridObjectsOfTypeLeft(type) {
     type = getVariableTrueName(type);
-    console.log("amountOfObjects? : " + type);
     //objects in the game have different names depending on theme,
     //in game logic we have different names as well, the "true names"
     //Example, "collectible" can be "porkkana" or "jakoavain" 
