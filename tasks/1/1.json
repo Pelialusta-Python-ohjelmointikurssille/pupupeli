@@ -1,6 +1,6 @@
 {
+  "title": "Eka fdsgfdsgfds",
   "taskType": "collectibles",
-  "title": "Eka pupu",
   "enableAddRemove": false,
   "description": [
     "Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:",
@@ -27,5 +27,22 @@
     [1,1,1,1,1,1,1,1],
     [2,1,1,1,1,1,1,2]
   ],
-  "conditions": []
+  "conditions": [
+    {
+      "condition": "conditionUsedWhile",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedFor",
+      "parameter": true
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": false
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": false
+    }
+  ]
 }
