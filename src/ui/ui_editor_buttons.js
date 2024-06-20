@@ -5,6 +5,7 @@ import { getEditor, resetLineHighlight } from "../input/editor.js";
 import { resetGame, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 import { setCurrentTheme } from "../util/globals.js";
+import { setDescription, setEditorCode } from "./ui.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -159,6 +160,7 @@ function onRunButtonClick() {
 
 function initThemeSelect() {
     if (localStorage.getItem("theme") === null) localStorage.setItem("theme", "Pupu");
+    let descriptionTargetDiv = document.getElementById("task-description");
     themeSelectDropdown = document.getElementById("theme-select");
     themeSelectDropdown.value = localStorage.getItem("theme");
     themeSelectDropdown.addEventListener('change', function (event) {
@@ -166,6 +168,9 @@ function initThemeSelect() {
         setCurrentTheme(selectedValue);
         themeChangeToWorker()
         setTheme(selectedValue);
+        setEditorCode();
+        descriptionTargetDiv.innerHTML = ''; // clear content
+        setDescription(descriptionTargetDiv);
     });
 }
 
