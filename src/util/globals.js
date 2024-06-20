@@ -89,7 +89,10 @@ export function addClearedConditions(conditionsFromEventHandler) {
 }
 
 export function allConditionsCleared() {
-    return conditionChecker(conditions, conditionsCleared) && collectibles.current === collectibles.total;
+    let otherConditions = conditionChecker(conditions, conditionsCleared);
+    let collectiblesCondition = collectibles.current === collectibles.total;
+    if (!collectiblesCondition) conditionsNotCleared.push("conditionCollectAllCollectibles");
+    return otherConditions && collectiblesCondition;
 }
 
 /**
