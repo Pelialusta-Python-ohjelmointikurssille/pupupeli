@@ -65,7 +65,7 @@ export class GraphicsEntitySystem {
             this.mainGridEntityUUID = entityId;
         }
         this.entityDict.set(entityId, entity);
-        if (type === "textbox") {
+        if (type === "textbox" && entity.useWorldCoordinates === false) {
             this.renderer.addToUI(entity.container);
         } else {
             this.renderer.addToStage(entity.container);

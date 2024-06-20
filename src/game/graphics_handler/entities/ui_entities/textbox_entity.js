@@ -11,6 +11,7 @@ export class TextBoxEntity extends GraphicsEntity {
         this.textObject = new PIXI.Text({ text: "", style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0x000000 } });       
         this.container.addChild(this.lineGraphic);
         this.container.addChild(this.textObject);
+        this.useWorldCoordinates = true;
     }
 
     applyEntityData() {
@@ -37,6 +38,9 @@ export class TextBoxEntity extends GraphicsEntity {
         }
         if (this.entityData.alignTextTop != null) {
             this.alignTextTop = this.entityData.alignTextTop;
+        }
+        if (this.entityData.useWorldCoordinates != null) {
+            this.useWorldCoordinates = this.entityData.useWorldCoordinates;
         }
     }
 

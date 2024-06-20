@@ -131,7 +131,8 @@ export class AskCommand {
                 size: new Vector2(1000, 200),
                 targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
                 text: this.askString,
-                alignTextTop: true
+                alignTextTop: true,
+                useWorldCoordinates: false
             },
             SKIN_BUNDLES["speech_bubble"]
         );
