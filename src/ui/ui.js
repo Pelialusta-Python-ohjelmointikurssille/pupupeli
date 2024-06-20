@@ -98,6 +98,7 @@ function createGamePage() {
         // set editor code
         window.addEventListener('load', function () {
             getEditor().setValue(globals.task.getEditorCode());
+            getEditor().clearSelection();
             createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
         });
         let titleTargetDiv = document.getElementById("taskTitle");
