@@ -27,6 +27,7 @@ export class GraphicsCamera {
         this.container.position.x = this.screenCenter.x;
         this.container.position.y = this.screenCenter.y;
         this.totalRenderScale = this.getTotalRenderScale();
+        this.linearZoomValue = 100;
         this.updatePosition();
     }
 
@@ -97,6 +98,7 @@ export class GraphicsCamera {
         if (width > height) zoom = 1024 / width;
         else zoom = 1024 / height;
         this.setZoom(zoom * (1 - (this.focusPaddingPercent * zoom)));
+        
     }
 
     /**
@@ -107,5 +109,19 @@ export class GraphicsCamera {
         if (value > this.maxZoom) this.zoomScale = this.maxZoom;
         else if (value < this.minZoom) this.zoomScale = this.minZoom;
         else this.zoomScale = value;
+        this.linearZoomValue = this.zoomScale * 100;
+    }
+
+    changeZoomLinear(valueDelta) {
+        
+        this.linearZoomValue += valueDelta / (1 - (this.linearZoomValue / 100));
+        if (this.linearZoomValue < 1) this.linearZoomValue = 1;
+        if (this.linearZoomValue > 90) this.linearZoomValue = 90;
+        this.setZoom(this.linearZoomValue / 100);
+    }
+
+    setMinZoom(value) {
+        this.minZoom = value;
+
     }
 }
