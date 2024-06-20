@@ -65,12 +65,15 @@ export class GraphicsEntitySystem {
             this.mainGridEntityUUID = entityId;
         }
         this.entityDict.set(entityId, entity);
+        console.log(data)
+        console.log(entity.useWorldCoordinates)
+        
+        entity.onCreate();
         if (type === "textbox" && entity.useWorldCoordinates === false) {
             this.renderer.addToUI(entity.container);
         } else {
             this.renderer.addToStage(entity.container);
         }
-        entity.onCreate();
     }
 
     /**

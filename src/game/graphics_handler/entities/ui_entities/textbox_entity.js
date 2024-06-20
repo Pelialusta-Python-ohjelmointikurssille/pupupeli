@@ -39,6 +39,7 @@ export class TextBoxEntity extends GraphicsEntity {
         if (this.entityData.alignTextTop != null) {
             this.alignTextTop = this.entityData.alignTextTop;
         }
+        console.log(this.entityData.useWorldCoordinates)
         if (this.entityData.useWorldCoordinates != null) {
             this.useWorldCoordinates = this.entityData.useWorldCoordinates;
         }
