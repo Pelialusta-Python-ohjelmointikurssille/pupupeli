@@ -126,7 +126,6 @@ export class GraphicsCamera {
         if (delta > 10) delta = 2;
         if (delta < -10) delta = -10;
         this.linearZoomValue += delta;
-        console.log(delta);
         if (this.linearZoomValue < 1) this.linearZoomValue = 1;
         if (this.linearZoomValue > 99) this.linearZoomValue = 95;
         this.setZoom(this.linearZoomValue / 100);
