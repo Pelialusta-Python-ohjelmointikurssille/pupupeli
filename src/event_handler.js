@@ -54,7 +54,7 @@ export function initWorker() {
     try {
         let pythonFileStr = tryGetFileAsText("./src/python/pelaaja.py");
         postMessage({ type: 'init', details: pythonFileStr });
-        postMessage({ type: 'theme', details: globals.theme.toLowerCase() });
+        postMessage({ type: 'theme', details: globals.getCurrentTheme().toLowerCase() });
     } catch (error) {
         displayErrorMessage(error);
     }
