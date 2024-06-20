@@ -23,8 +23,8 @@ export class Constants {
 }
 
 //Todo: aliases change depending on current theme
-const COLLECTIBLE_ALIASES = ["porkkana", "jakoavain"];
-const OBSTACLE_ALIASES = ["kivi", "viemäri"];
+const COLLECTIBLE_ALIASES = ["porkkana", "jakoavain", "ruoka"];
+const OBSTACLE_ALIASES = ["kivi", "viemäri", "este"];
 
 /**
  * Objects in the game have different names depending on theme.
