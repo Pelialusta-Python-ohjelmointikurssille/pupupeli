@@ -133,7 +133,6 @@ export class Game {
     }
 
     createNewPlayerCreatedGridObject(type, x, y) {
-        type = getVariableTrueName(type);
         if (!type) {
             this.makeSayCommand("Ups, luonti ei onnistunut koska en tiedä mitä objektia tarkoitat.");
             return;

@@ -76,11 +76,13 @@ export function getGridObjectsOfTypeLeft(type) {
         return -1;
     }
     return game.grid.data.getGridObjectsOfTypeCount(type);
-=======
+}
+
 export function createObject(commandParameters) {
     let name = commandParameters[0]
     let x = commandParameters[1];
     let y = commandParameters[2];
+    name = getVariableTrueName(name);
     game.createNewPlayerCreatedGridObject(name, x, y);
 }
 
