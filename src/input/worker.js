@@ -6,6 +6,7 @@ let saveState;
 let resetFlag = false;
 let codeString;
 let interruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
+let theme;
 //remember to update this when new commands are added
 const validCommands = ["move", "say", "ask"];
 
@@ -21,11 +22,14 @@ importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
 self.onmessage = async function (event) {
     let message = event.data
     if (message.type === 'init') {
-        initializePyodide(message.details);
+        initializePyodide(message.details.details);
     }
     if (message.type === 'start') {
         setResetFlag(false);
         runPythonCode(pyodide, message.details);
+    }
+    if (message.type === 'theme') {
+        theme = message.details;
     }
 }
 
