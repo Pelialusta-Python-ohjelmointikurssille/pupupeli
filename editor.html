@@ -69,6 +69,11 @@
             min-height: 50rem;
         }
 
+        #enable-add-remove-checkbox {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
         @media (max-width:1280px) {
             #app {
                 grid-template-columns: 1fr;
@@ -273,6 +278,11 @@
                 
                     <input type="radio" id="taskTypeInstructions" name="taskType" value="instructions" style="margin-right: 10px;">
                     <label for="taskTypeInstructions">Ohjeistus</label>
+                </div>
+
+                <div id="task-enable-add-remove" class="is-flex is-flex-center">
+                    <h3>Esineiden lisääminen ja poistaminen:</h3>
+                    <input type="checkbox" id="enable-add-remove-checkbox">
                 </div>
                 <div>
                     <textarea id="instructions-input" class="is-hidden" rows="10" cols="50" placeholder="Kirjoita ohje tänne"></textarea>
