@@ -143,7 +143,8 @@ export function disablePlayButton(cause = null) {
 export function enableEditorButtons() {
     let buttons = document.getElementsByClassName("editor-button");
     Array.from(buttons).forEach(button => {
-        if (button.querySelector("#runButtonText") !== null) button.querySelector("#runButtonText").innerHTML = "Suorita";
+        let runButtonText = button.querySelector("#runButtonText");
+        if (runButtonText !== null) runButtonText.innerHTML = "Suorita";
         button.disabled = false;
     });
 }
