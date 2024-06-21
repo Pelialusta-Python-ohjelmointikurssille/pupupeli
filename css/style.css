@@ -6,6 +6,8 @@
     --color-primary: #ddd;
     --color-secondary: rgb(231, 231, 231);
 
+    --color-completed-task: rgb(0, 255, 0);
+
     --color-button: #fff;
     --color-text: #000;
     --color-border: #000;
@@ -93,7 +95,7 @@ button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem; /* Optional: add some space below the task name div */
+    margin-bottom: var(--default-margin); /* Optional: add some space below the task name div */
 }
 
 #toggle-buttons-div {
@@ -187,16 +189,11 @@ button:hover {
 
 #instruction-head {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: var(--default-margin);
 }
 
 #instruction-desc {
     white-space: pre-wrap;
-}
-
-#prev-task-link, #next-task-link {
-    text-decoration: none;
-    margin: 0 0.5rem;
 }
 
 #task-selector-container {
@@ -263,7 +260,7 @@ button:hover {
 }
 
 .selected-choice {
-    background-color: rgba(0, 0, 0, 0.15) !important;
+    filter: brightness(0.75);
 }
 
 .show-error {
@@ -306,18 +303,19 @@ button:hover {
 }
 
 .button-completed {
-    background: rgb(0, 255, 0);
+    background-color: var(--color-completed-task);
 }
 
 .button-completed:hover {
-    background: rgb(0, 231, 0);
+    background-color: var(--color-completed-task);
+    filter: brightness(0.85);
 }
 
 #multiple-choice-questions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    margin: 2.5rem 1rem 1rem 1rem;
+    margin: calc(var(--default-margin) * 2.5) var(--default-margin) var(--default-margin) var(--default-margin);
     padding: 0;
 }
 
@@ -330,7 +328,7 @@ button:hover {
 }
 
 .multiple-choice-question:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    filter: brightness(0.75);
 }
 
 .ace_marker-layer .executing-line {
@@ -343,7 +341,7 @@ button:hover {
     display: none;
     position: absolute;
     top: calc(6rem - 1px);
-    right: 1.5rem;
+    right: 1rem;
     padding: 1rem;
     z-index: 99;
 }
@@ -422,10 +420,10 @@ button:hover {
 }
 
 #input-container {
-    margin-bottom: 1rem;
+    margin-bottom: var(--default-margin);
     padding: 0.5rem;
     border: 1px solid var(--color-primary);
-    border-radius: 4px;
+    border-radius: var(--default-border-radius);
     background-color: #f9f9f9;
     max-height: 200px;
     overflow-y: auto;
