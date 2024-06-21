@@ -1,6 +1,8 @@
 :root {
     --canvas-width: 768px;
     --canvas-height: var(--canvas-width);
+
+    --default-margin: 1rem;
 }
 
 body {
@@ -68,6 +70,10 @@ body {
 
 #right-container {
     min-height: var(--canvas-height);
+}
+
+#left-container {
+    max-width: var(--canvas-width);
 }
 
 .is-margin-half-rem-x {
@@ -443,6 +449,10 @@ button:hover {
 
     #task-container, #editor {
         margin: 1rem;
+    }
+
+    #left-container {
+        max-width: unset;
     }
   }
 
