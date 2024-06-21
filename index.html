@@ -18,7 +18,7 @@
         </div>
     </div>
     <div id="header" class="is-flex">
-        <div id="header-container" class="is-flex">
+        <div id="header-container" class="box is-flex">
             <h1>Pupupeli</h1>
             <div id="chapter-selector-container" class="is-flex">
                 <div id="chapter-selector-box" class="is-flex">
@@ -33,22 +33,20 @@
                     <button id="login-button" value="login">Kirjaudu sisään</button>
                 </form>
                 <button id="logout-button" class="is-hidden" value="logout">Kirjaudu ulos</button>
-                <div id="login-failed" class=""><h1>Voi ei! Käyttäjää ei ole olemassa tai salasana on väärin!</h1></div>
-                <div id="condition-failed" class=""><h1></h1></div>
+                <div id="login-failed" class="box"><h1>Voi ei! Käyttäjää ei ole olemassa tai salasana on väärin!</h1></div>
+                <div id="condition-failed" class="box"><h1></h1></div>
             </div>
         </div>
 
     </div>
     <div id="app" class="is-flex">
-        <div id="app-container" class="is-flex">
+        <div id="app-container" class="box is-flex">
             <div id="left-container" class="is-flex">
                 <div id="task-container">
                     <div id="task-name-div">
                         <div id="task-header">
                             <h1>
-                                <a id="prev-task-link" href="/?task=1" style="text-decoration:none;"></a>
-                                    <a id="taskTitle"></a>
-                                <a id="next-task-link" href="/?task=2" style="text-decoration:none;"> ></a>
+                                <a id="taskTitle"></a>
                             </h1>
                         </div>
                         <div id="toggle-buttons-div">
@@ -104,8 +102,14 @@
         </div>
     </div>
     <div id="task-selector-container" class="is-flex">
+        <div id="previous-task">
+            <button class="task-navigation-button" value="previous">Edellinen tehtävä</button>
+        </div>
         <div id="task-selector-box" class="is-flex">
             <div id="buttonTable"></div>
+        </div>
+        <div id="next-task">
+            <button class="task-navigation-button" value="next">Seuraava tehtävä</button>
         </div>
     </div>
 </body>

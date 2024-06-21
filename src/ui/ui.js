@@ -62,12 +62,6 @@ async function initPage() {
     } else {
         createInstructionPage();
     }
-    const prevTaskLink = document.getElementById('prev-task-link');
-    const nextTaskLink = document.getElementById('next-task-link');
-
-    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
-
-
 }
 
 /**
@@ -106,6 +100,11 @@ function createGamePage() {
         });
         let titleTargetDiv = document.getElementById("taskTitle");
         setTitle(titleTargetDiv);
+
+        // set previous/next task button eventlisteners
+        Array.from(document.getElementsByClassName("task-navigation-button")).forEach(button => {
+            button.addEventListener("click", moveToTask);
+        });
 }
 
 /**
@@ -119,6 +118,7 @@ function createInstructionPage() {
 
     let insAppDiv = document.createElement('div');
     insAppDiv.id = 'instructions-container';
+    insAppDiv.classList.add("box");
     insAppDiv.style.flexDirection = "row";
     insAppDiv.style.display = "flex";
     window.addEventListener('load', function () {
@@ -147,8 +147,6 @@ function createInstructionPage() {
     insHeadline.appendChild(prevTaskLink);
     insHeadline.appendChild(instructionTitle);
     insHeadline.appendChild(nextTaskLink);
-
-    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
 
     insHead.appendChild(insHeadline);
     
@@ -186,33 +184,6 @@ export function setDescription(descriptionDiv){
         line = line === "" ? "<br>" : line;
         descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + marked.parse(line) + "</div>");
     });
-}
-
-/**
- * Sets previous and next task buttons if there are any. This was refactored to make initPage cleaner.
- * @param {number} taskIdentifier 
- * @param {number} chapterIdentifier 
- * @param {number} totalTasks 
- * @param {string} prevTaskLink 
- * @param {string} nextTaskLink 
- */
-function setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink) {
-    // Changes href of prevtasklink and hides it if no prev task exists
-    if (taskIdentifier > 1) {
-        prevTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier - 1}`;
-
-        prevTaskLink.style.display = 'inline'; // Ensure it's visible
-    } else {
-        prevTaskLink.style.display = 'none'; // Hide if on the first task
-    }
-    // Changes href of nexttasklink and hides it if no prev task exists
-    if (taskIdentifier < totalTasks) {
-        nextTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier + 1}`;
-
-        nextTaskLink.style.display = 'inline'; // Ensure it's visible
-    } else {
-        nextTaskLink.style.display = 'none'; // Hide if on the last task
-    }
 }
 
 export function enableEditorButtons() {
@@ -415,6 +386,25 @@ export function onTaskComplete(won) {
         showPopUpNotification("condition-failed");
         
         api.sendTask(apiTaskIdentifier);
+    }
+}
+
+/**
+ * a function used by the previous/next task buttons on the page
+ */
+function moveToTask(event) {
+    let currentTask = globals.taskIdentifier;
+    if (currentTask === 1) return;
+    
+    let which = event.target.value;
+
+    switch (which) {
+        case "previous":
+            window.location.href = `/?chapter=${currentChapter}&task=${currentTask-1}`;
+            break;
+        case "next":
+            window.location.href = `/?chapter=${currentChapter}&task=${currentTask+1}`;
+            break;
     }
 }
 
