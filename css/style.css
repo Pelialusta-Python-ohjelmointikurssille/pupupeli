@@ -496,7 +496,7 @@ button:hover {
     #left-container, #right-container {
         max-width: unset;
         margin: unset;
-        margin-bottom: 1rem;
+        margin-bottom: var(--default-margin);
     }
 
     .editor-button {
