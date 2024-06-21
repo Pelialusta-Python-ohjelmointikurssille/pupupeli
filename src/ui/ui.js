@@ -394,9 +394,8 @@ export function onTaskComplete(won) {
  */
 function moveToTask(event) {
     let currentTask = globals.taskIdentifier;
-    if (currentTask === 1) return;
-    
     let which = event.target.value;
+    if (currentTask === 1 && which === "previous") return;
 
     switch (which) {
         case "previous":
