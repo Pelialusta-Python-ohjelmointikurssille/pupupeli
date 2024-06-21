@@ -125,10 +125,6 @@ button:hover {
     flex: 1;
 }
 
-.is-invisible {
-    visibility: hidden;
-}
-
 .is-hidden {
     display: none !important;
 }
