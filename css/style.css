@@ -6,6 +6,7 @@
     --color-primary: #ddd;
     --color-secondary: rgb(231, 231, 231);
 
+    --color-multiple-choice: rgba(255, 255, 255, 1);
     --color-completed-task: rgb(0, 255, 0);
 
     --color-button: #fff;
@@ -314,13 +315,13 @@ button:hover {
 #multiple-choice-questions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: var(--default-margin);
     margin: calc(var(--default-margin) * 2.5) var(--default-margin) var(--default-margin) var(--default-margin);
     padding: 0;
 }
 
 .multiple-choice-question {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: var(--color-multiple-choice);
     box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.1);
     border-radius: var(--default-border-radius);
     padding: 0.5rem;
@@ -333,7 +334,7 @@ button:hover {
 
 .ace_marker-layer .executing-line {
     background: rgba(255, 255, 0, 0.5);
-    position: absolute; /* without this positions will be erong */
+    position: absolute; /* without this positions will be wrong */
     z-index: 1000; /* in front of all other markers */ 
 }
 
@@ -341,7 +342,7 @@ button:hover {
     display: none;
     position: absolute;
     top: calc(6rem - 1px);
-    right: 1rem;
+    right: var(--default-margin);
     padding: 1rem;
     z-index: 99;
 }
@@ -484,12 +485,4 @@ button:hover {
 #chapter-selector-container, #chapter-selector-box, #chapterbuttontable {
   justify-content: center;
   align-items: center;
-}
-
-#chapter-selector-text {
-  font-size: 0.875rem;
-}
-
-#chapterbuttontable button {
-  margin: 0 0 0 0.5rem;
 }
