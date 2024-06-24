@@ -29,8 +29,8 @@ export class Task {
     }
 
     /**
-     * From given json, gives properties to object
-     * @param {json} json 
+     * given a JSON object representing a task, creates a task object
+     * @param {json} a json object representing a task
      */
     fromJSON(json) {
         for (let key in json) {
@@ -42,7 +42,7 @@ export class Task {
 
     /**
      * Create Task object from json. Calls (the other) fromJSON to give properties
-     * @param {json} json 
+     * @param {json} json json object representing a task
      * @returns {Task} - An object representing a task
      */
     static fromJSON(json) {
@@ -106,8 +106,9 @@ export class Task {
     }
 
     /**
-     * Return pre-loaded code in the editor, if there is
-     * @returns {string} editorCode
+     * Return pre-loaded code in the editor, if there is any. Replaces the string in "wordToReplace"
+     * with the correct character depending on the theme.
+     * @returns {string} editorCode - the code pre-loaded in the editor
      */
     getEditorCode() {
         let editorCodeString = "";
@@ -122,8 +123,9 @@ export class Task {
     }
 
     /**
-     * Returns objects of multiple choice options and correct answer
-     * @returns {array} multipleChoiceQuestions objects
+     * Returns a list of objects of multiple choice options and correct answer
+     * @returns {Array[object]} multipleChoiceQuestions objects, for example [{ "question": "2", "isCorrectAnswer": true }]
+    },
      */
     getMultipleChoiceQuestions() {
         return this.multipleChoiceQuestions;
@@ -131,7 +133,7 @@ export class Task {
 
     /**
      *  Returns a double array of numbers representing grid objects in their positions. Also gives implicit grid size.
-     * @returns {array} grid - Grid objects in double array
+     * @returns {Array[int[]]} grid - Grid objects in double array
      */
     getGrid() {
         return this.grid;

@@ -1,6 +1,9 @@
 import { tryGetFileAsJson } from "../file_reader.js";
 import { Task } from "../util/task.js";
 
+/**
+ * returns the current task's identifier by parsing the URL and retrieving the value for key "task"
+ */
 export const taskIdentifier = (function () {
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.size === 0) return 1;
@@ -10,6 +13,9 @@ export const taskIdentifier = (function () {
     return taskIdentifier;
 })();
 
+/**
+ * returns the current chapter's identifier by parsing the URL and retrieving value for key "chapter"
+ */
 export const chapterIdentifier = (function () {
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.size === 0) return 1;
@@ -19,12 +25,14 @@ export const chapterIdentifier = (function () {
     return chapterIdentifier
 })();
 
+/**
+ * returns the matching task object for the page using the chapter and task identifiers
+ */
 export const task = (function () {
     const path = `/tasks/${chapterIdentifier}/${taskIdentifier}.json`;
     return Task.fromJSON(tryGetFileAsJson(path));
 })();
 
-//not sexy to count every object in the grid every time you want the total amount... (task.getTotalCollectibles())
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
 
@@ -68,6 +76,10 @@ export function getCurrentSAB() {
     return currentSAB;
 }
 
+/**
+ * retrieves the current theme, or if there is no theme set, the default Pupu theme
+ * @returns a string representing the current theme
+ */
 export function getCurrentTheme() {
     if (localStorage.getItem("theme") === null) {
         console.log("No theme set, setting to Pupu");
@@ -94,6 +106,10 @@ export function incrementCollectibles() {
     collectibles.current += 1;
 }
 
+/**
+ * a function used to add cleared conditions to a list of cleared conditions
+ * @param {*} conditionsFromEventHandler An array of condition objects, for example [{ condition: "conditionUsedWhile", parameter: true }]
+ */
 export function addClearedConditions(conditionsFromEventHandler) {
     conditionsNotCleared.length = 0;
     conditionsCleared.length = 0; // reset cleared conditions
@@ -102,6 +118,10 @@ export function addClearedConditions(conditionsFromEventHandler) {
     });
 }
 
+/**
+ * a function used to check if all conditions are cleared and all collectibles are collected
+ * @returns true if all conditions are cleared and collectibles are collected, otherwise false
+ */
 export function allConditionsCleared() {
     let otherConditions = conditionChecker(conditions, conditionsCleared);
     let collectiblesCondition = collectibles.current === collectibles.total;
