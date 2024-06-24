@@ -1,4 +1,4 @@
-import { onUserSendInputToWorker, setMessagePassingState } from "../event_handler.js";
+import { onUserSendInputToWorker, setMessagePassingState } from "../worker_messenger.js";
 import { displayPreviousInputs, hideAndClearInputBox, showInputBox } from "../ui/inputBox.js";
 
 let userInputs = [];

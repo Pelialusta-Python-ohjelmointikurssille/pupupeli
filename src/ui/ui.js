@@ -3,7 +3,7 @@ import * as fileReader from "../file_reader.js";
 import * as api from "../api/api.js";
 import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
 import { getEditor } from "../input/editor.js"
-import { initWorker } from "../event_handler.js";
+import { initWorker } from "../worker_messenger.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, setTheme } from "../game/game_controller.js";
@@ -21,7 +21,7 @@ const instructionsStr = "instructions";
 
 
 /**
- * Runs ui initialisation functions + atm the event_handlers worker
+ * Runs ui initialisation functions + atm the worker_messenger worker
  */
 async function main() {
     initPage(); // creates task json global variable
@@ -51,9 +51,6 @@ async function initGameAndCanvas() {
  * Game and instructions task types require different elements.
  */
 async function initPage() {
-    const taskIdentifier = globals.taskIdentifier;
-    const chapterIdentifier = globals.chapterIdentifier;
-
     createChapterButtons();
     isUserLoggedIn();
     // checking if task type is instructions
@@ -111,8 +108,6 @@ function createGamePage() {
  * Clears app-container, creates a new one and adds elements for instruction page
  */
 function createInstructionPage() {
-    const taskIdentifier = globals.taskIdentifier;
-    const chapterIdentifier = globals.chapterIdentifier;
     const appDiv = document.getElementById("app-container");
     appDiv.classList.add("is-hidden");
 
