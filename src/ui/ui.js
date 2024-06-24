@@ -132,21 +132,11 @@ function createInstructionPage() {
 
     let insHeadline = document.createElement('h1');
     
-    let prevTaskLink = document.createElement('a');
-    prevTaskLink.id = 'prev-task-link';
-    prevTaskLink.textContent = '< ';
-    
     let instructionTitle = document.createElement('a');
     instructionTitle.id = 'instructionTitle';
     setTitle(instructionTitle);
     
-    let nextTaskLink = document.createElement('a');
-    nextTaskLink.id = 'next-task-link';
-    nextTaskLink.textContent = ' >';
-    
-    insHeadline.appendChild(prevTaskLink);
     insHeadline.appendChild(instructionTitle);
-    insHeadline.appendChild(nextTaskLink);
 
     insHead.appendChild(insHeadline);
     
@@ -159,6 +149,11 @@ function createInstructionPage() {
     insAppDiv.appendChild(insDiv);
     insDiv.appendChild(insHead);
     insDiv.appendChild(insDesc);
+
+    // set previous/next task button eventlisteners
+    Array.from(document.getElementsByClassName("task-navigation-button")).forEach(button => {
+        button.addEventListener("click", moveToTask);
+    });
 }
 /**
  * Sets the text from task.title to given div. Useful since game and instructions tasks use different title div.
