@@ -1,4 +1,5 @@
 import { Vector2 } from "../vector.js";
+import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 /**
  * Entity used for changing viewport position and resolution scaling.
@@ -28,11 +29,17 @@ export class GraphicsCamera {
         this.container.position.y = this.screenCenter.y;
         this.totalRenderScale = this.getTotalRenderScale();
         this.linearZoomValue = 100;
+        this.debug = new PIXI.Graphics();
+        this.debug.zIndex = 100000000;
+        this.container.addChild(this.debug);
+        
+
         this.updatePosition();
         this.minX = 0;
         this.minY = 0;
         this.maxX = 1024;
         this.maxY = 1024;
+        
     }
 
     /**
@@ -50,7 +57,7 @@ export class GraphicsCamera {
         this.container.pivot.x = this.position.x;
         this.container.pivot.y = this.position.y;
         this.container.rotation = this.rotation;
-        this.container.scale = this.totalRenderScale;
+        this.container.scale = this.totalRenderScale;        
     }
 
     /**
@@ -69,6 +76,7 @@ export class GraphicsCamera {
     // eslint-disable-next-line no-unused-vars
     onUpdate(deltaTime) {
         this.updatePosition();
+        this.drawDebug();
     }
 
 
@@ -134,5 +142,24 @@ export class GraphicsCamera {
     setMinZoom(value) {
         this.minZoom = value;
 
+    }
+
+    drawDebug() {
+        this.debug.clear();
+        this.debug
+        .rect(this.container.pivot.x - 16, this.container.pivot.y - 16, 32, 32)
+        .fill({color: 0xff0000});
+        this.debug
+        .rect(this.container.pivot.x - (512 / this.totalRenderScale) - 16, this.container.pivot.y - (512 / this.totalRenderScale) - 16, 32, 32)
+        .fill({color: 0xff0000});
+        this.debug
+        .rect(this.container.pivot.x + (512 / this.totalRenderScale) - 16, this.container.pivot.y - (512 / this.totalRenderScale) - 16, 32, 32)
+        .fill({color: 0xff0000});
+        this.debug
+        .rect(this.container.pivot.x - (512 / this.totalRenderScale) - 16, this.container.pivot.y + (512 / this.totalRenderScale) - 16, 32, 32)
+        .fill({color: 0xff0000});
+        this.debug
+        .rect(this.container.pivot.x + (512 / this.totalRenderScale) - 16, this.container.pivot.y + (512 / this.totalRenderScale) - 16, 32, 32)
+        .fill({color: 0xff0000});
     }
 }
