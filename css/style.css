@@ -1,275 +1,32 @@
-/* remove below before release */
-#devtaskbuttoncontainer {
-    max-height: 30px;
-    margin-right: 1rem;
-}
-
-#devtaskbuttoncontainer > input {
-    min-height: 26px;
-}
-/* remove above before elease */
-
+/* variables */
 :root {
     --canvas-width: 768px;
     --canvas-height: var(--canvas-width);
+
+    --color-background: rgb(255, 255, 255);
+    --color-primary: rgb(221, 221, 221);
+    --color-secondary: rgb(231, 231, 231);
+
+    --color-multiple-choice: rgb(255, 255, 255);
+    --color-completed-task: rgb(0, 255, 0);
+    --color-currently-executing-line: rgba(255, 255, 0, 0.5);
+
+    --color-button: rgb(255, 255, 255);
+    --color-text: rgb(0, 0, 0);
+    --color-border: rgb(0, 0, 0);
+    --color-divider: rgb(0, 0, 0, 0.25);
+
+    --filter-less-bright: brightness(0.75);
+    --filter-less-bright-2: brightness(0.85);
+
+    --default-margin: 1rem;
+    --default-border-radius: 5px;
 }
 
+/* tags */
 body {
     font-family: 'Courier New', Courier, monospace;
-}
-
-#task-container, #editor {
-    margin: 1rem 0.5rem 1rem 1rem;
-}
-
-#app, #game, #editor-button, #header-container, #task-selector-container {
-    margin: 1rem;
-}
-
-#game {
-    margin: 1rem 1rem 1rem 0.5rem;
-    max-height: var(--canvas-width);
-    max-width: var(--canvas-height);
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-#input-box-send-button {
-    margin: 4px;
-    align-self: center;
-    grid-column-start: 2;
-    grid-row-start: 1;
-}
-
-#input-box-container {
-    margin-bottom: 48px;
-    display: grid;
-}
-
-#input-box {
-    height: 40px;
-    min-width: 512px;
-    border: 1px solid black;
-    font-size: 18px;
-    grid-column-start: 1;
-    grid-row-start: 1;
-    margin: 4px;
-}
-
-/* This one includes both task header and toggle buttons div, we want them on the same level */
-#task-name-div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem; /* Optional: add some space below the task name div */
-}
-
-#toggle-buttons-div {
-    display: flex;
-}
-
-#left-container, #editor-container {
-    flex-direction: column;
-}
-
-#left-container, #right-container {
-    min-width: var(--canvas-width);
-    justify-content: space-between;
-}
-
-#right-container {
-    min-height: var(--canvas-height);
-}
-
-.is-margin-half-rem-x {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-}
-
-.is-flex-1 {
-    flex: 1;
-}
-
-.is-invisible {
-    visibility: hidden;
-}
-
-.is-hidden {
-    display: none !important;
-}
-
-#header {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-#header-container {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: calc(var(--canvas-width) * 2.5 - 2rem);
-    padding: 0.5rem 1rem 0.5rem 1rem;
-    margin-bottom: 0rem;
-    background-color: #ddd;
-    border-radius: 8px;
-    border: 1px solid black;
-}
-
-#chapter-selector-text {
-    margin-top: 0px;
-}
-
-#user-container {
-    min-height: 32px;
-}
-
-#username, #password {
-    min-height: 100%;
-    margin: 0 0.5rem;
-}
-
-#header-buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    margin-bottom: 0rem;
-}
-
-#app {
-    position: relative; /* This makes the #app div a positioning context for absolutely positioned children */
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-#app-container, #instructions-container {
-    max-width: calc(var(--canvas-width) * 2.5);
-    background-color: #ddd;
-    border-radius: 8px;
-    border: 1px solid black;
-}
-
-#instruction-div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: calc(var(--canvas-width) * 2.5);
-    padding: 2rem;
-    height: 100%;
-}
-
-#instruction-head {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-#instruction-desc {
-    white-space: pre-wrap;
-}
-
-#prev-task-link, #next-task-link {
-    text-decoration: none;
-    margin: 0 0.5rem;
-}
-
-#task-selector-container {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-#task-selector-box{
-    max-width: 1565px;
-    background-color: #ddd;
-    border-radius: 8px;
-    border: 1px solid black;
-    padding: 1px;
-} 
-
-.is-flex {
-    display: flex;
-}
-
-#editor {
-    border-radius: 5px;
-    margin-bottom: 0.2rem;
-    font-size: 15px;
-    width: calc(100% - 2rem);
-    height: 274px;
-    border: 1px solid black;
-}
-
-#error-box {
-    transition: 0.5s all ease-in-out;
-    padding: 0rem;
-    max-height: 1rem;
-    min-height: 1rem;
-}
-
-#error {
-    word-wrap: break-word;
-    color: red;
-    text-align: center;
-}
-
-.selected-choice {
-    background-color: rgba(0, 0, 0, 0.15) !important;
-}
-
-.show-error {
-    transition: 0.5s all ease-in-out;
-    padding: 1rem !important;
-    max-height: unset !important;
-}
-
-#editor-button {
-    height: 40px;
-    width: calc(100% - 2rem);
-}
-
-#grid-toggle-button, #theme-select, #login-button, #trail-toggle-button {
-    float: right;
-    min-height: 32px;
-    min-width: calc(10% - 1rem);
-    margin: 0 0.5rem;
-    border-radius: 5px;
-}
-
-#logout-button {
-    margin-bottom: 0;
-    margin-left: 1rem;
-}
-
-#task-selector-box button {
-    justify-content: center;
-    margin: 0.1rem;
-    font-size: 30px; /* Increase the font size */
-    padding: 15px; /* Add padding around the text */
-    width: 75px; /* Set a fixed width */
-    height: 75px; /* Set a fixed height */
-}
-
-#task-title {
-    width: 100%;
-}
-
-#task-description {
-    padding: 0rem 1rem 0rem 1rem;
-}
-
-#run-icon {
-    width: 32px;
-    height: 32px;
-    margin-left: -6px;
-}
-
-#editor-stop-button {
-    float: right;
+    margin: var(--default-margin);
 }
 
 h1 {
@@ -289,63 +46,82 @@ button {
     display: inline-flex;
     align-items: center;
     padding: 5px 10px;
-    margin-bottom: 1rem;
     font-size: 1rem;
     cursor: pointer;
-    border: 1px solid #000;
-    border-radius: 5px;
-    background-color: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--default-border-radius);
+    background-color: var(--color-button);
+}
+
+button ~ button {
+    margin-left: var(--default-margin);
 }
 
 button:hover {
-    background: rgb(231, 231, 231);
+    background: var(--color-secondary)
 }
 
-.button-completed {
-    background: rgb(0, 255, 0);
+/* most used classes */
+.box {
+    background-color: var(--color-primary);
+    border-radius: var(--default-border-radius);
+    border: 1px solid var(--color-border);
 }
 
-.button-completed:hover {
-    background: rgb(0, 231, 0);
+.is-flex {
+    display: flex;
 }
 
-#multiple-choice-questions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin: 2.5rem 1rem 1rem 1rem;
-    padding: 0;
+.is-flex-1 {
+    flex: 1;
 }
 
+.is-hidden {
+    display: none !important;
+}
+
+/* less used classes */
 .multiple-choice-question {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: var(--color-multiple-choice);
     box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    border-radius: var(--default-border-radius);
     padding: 0.5rem;
+    text-align: center;
     cursor: pointer;
 }
 
 .multiple-choice-question:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    filter: var(--filter-less-bright);
+}
+
+.selected-choice {
+    filter: var(--filter-less-bright);
+}
+
+.show-error {
+    transition: 0.5s all ease-in-out;
+    padding: 1rem !important;
+}
+
+.button-completed {
+    background-color: var(--color-completed-task);
+}
+
+.button-completed:hover {
+    background-color: var(--color-completed-task);
+    filter: var(--filter-less-bright-2);
+}
+
+.button-current-task, .button-current-chapter {
+    filter: var(--filter-less-bright);
 }
 
 .ace_marker-layer .executing-line {
-    background: rgba(255, 255, 0, 0.5);
-    position: absolute; /* without this positions will be erong */
-    z-index: 1000; /* in front of all other markers */ 
+    background: var(--color-currently-executing-line);
+    position: absolute;
+    z-index: 1000;
 }
 
-#login-failed, #condition-failed {
-    display: none;
-    position: absolute;
-    top: calc(6rem - 1px);
-    right: 1.5rem;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 1rem;
-    z-index: 99;
-}
 .pop-up-notification-show, .pop-up-notification-show-login {
     display: block !important;
 }
@@ -355,15 +131,15 @@ button:hover {
     animation-duration: 3s;
 }
 
-.pop-up-notification-show-login {
-    animation: popup-show-anim-login;
-    animation-duration: 6s;
-}
-
 @keyframes popup-show-anim {
     0% {transform: scaleX(0);}
     10% {transform: scaleX(1);}
     100% {transform: scaleX(1);}
+}
+
+.pop-up-notification-show-login {
+    animation: popup-show-anim-login;
+    animation-duration: 6s;
 }
 
 @keyframes popup-show-anim-login {
@@ -371,32 +147,6 @@ button:hover {
     10% {transform: scaleX(1);}
     90% {transform: scaleX(1);}
     100% {transform: scaleX(0);}
-}
-
-#celebration{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* This ensures the center of #celebration-content, not its top-left corner, is at the center of #app */
-    padding: 1rem;
-    background-color: #248944;
-    color: white;
-    border-radius: 8px;
-    font-size: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    z-index: 1000;
-}
-
-#celebration-confetti-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Ensures the confettis do not block user interactions */
-    overflow: hidden;
-    z-index: 1000; /* Ensures the confettis appear on top of other content */
 }
 
 .celebration-confetti {
@@ -420,43 +170,6 @@ button:hover {
     }
 }
 
-#input-container {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-#input-container div {
-    padding: 0.25rem 0;
-    border-bottom: 1px solid #eee;
-}
-
-#input-container div:last-child {
-    border-bottom: none;
-}
-
-@media (max-width: calc((768px * 2) + 3rem)) {
-    #app-container {
-        flex-direction: column;
-    }
-
-    #editor, #editor-button {
-        width: calc(100% - 2rem);
-    }
-
-    #game {
-        margin: 1rem;
-    }
-
-    #task-container, #editor {
-        margin: 1rem;
-    }
-  }
-
 .game-layered {
     display: grid;
     justify-items: center;
@@ -468,8 +181,287 @@ button:hover {
     grid-row-start: 1;
 }
 
-.button-current-task, .button-current-chapter {
-  filter: brightness(0.75);
+/* identifiers */
+#app {
+    position: relative; /* This makes the #app div a positioning context for absolutely positioned children */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: var(--default-margin);
+}
+
+#left-container, #editor-container {
+    flex-direction: column;
+}
+
+#left-container, #right-container {
+    min-width: var(--canvas-width);
+    justify-content: space-between;
+}
+
+#left-container {
+    max-width: var(--canvas-width);
+    margin: var(--default-margin) 0 var(--default-margin) var(--default-margin);
+}
+    
+#right-container {
+    min-height: var(--canvas-height);
+    margin: var(--default-margin) var(--default-margin) var(--default-margin) 0;
+}
+
+#header {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: var(--default-margin);
+}
+
+#header-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(var(--canvas-width) * 2.5 - 2rem);
+    min-height: 3.25rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+#game-container {
+    min-width: var(--canvas-width);
+}
+
+#game {
+    max-height: var(--canvas-width);
+    max-width: var(--canvas-height);
+    border: 1px solid var(--color-border);
+    border-radius: var(--default-border-radius);
+    box-sizing: border-box;
+}
+
+#input-box-container {
+    margin-bottom: 48px;
+    display: grid;
+}
+
+#input-box {
+    padding: calc(var(--default-margin) / 4);
+    min-width: calc(var(--canvas-width) - calc(var(--canvas-width) / 3));
+    border: 1px solid var(--color-border);
+    border-radius: var(--default-border-radius);
+    font-size: 1.125rem;
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+
+#input-box-send-button {
+    margin-left: calc(var(--default-margin) / 4);
+    padding: calc(var(--default-margin) / 2);
+    align-self: center;
+    grid-column-start: 2;
+    grid-row-start: 1;
+}
+
+/* This one includes both task header and toggle buttons div, we want them on the same level */
+#task-name-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--default-margin); /* Optional: add some space below the task name div */
+    border-bottom: 2px solid var(--color-divider);
+    padding-bottom: calc(var(--default-margin) / 2);
+}
+
+#toggle-buttons-div {
+    display: flex;
+}
+
+#user-container {
+    min-height: 2rem;
+}
+
+#username, #password {
+    min-height: 100%;
+    margin: 0 0.5rem;
+}
+
+#header-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.875rem;
+}
+
+#app-container, #instructions-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--default-margin);
+    max-width: calc(var(--canvas-width) * 2.5);
+}
+
+#instruction-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: calc(var(--canvas-width) * 2.5);
+    padding: 2rem;
+    height: 100%;
+}
+
+#instruction-head {
+    font-size: 1.5rem;
+    margin-bottom: var(--default-margin);
+}
+
+#instruction-desc {
+    white-space: pre-wrap;
+}
+
+#task-selector-container {
+    flex-direction: row;
+    justify-content: center;
+    margin: auto;
+    max-width: calc((var(--canvas-width) * 2.115));
+}
+
+#buttonTable {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#task-selector-box button {
+    justify-content: center;
+    font-size: 1.5rem;
+    padding: 1rem;
+    margin: 0 calc(var(--default-margin) / 4) var(--default-margin) calc(var(--default-margin) / 4);
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+#previous-task button, #next-task button {
+    font-size: 1.5rem;
+    height: 3.5rem;
+    margin: 0 var(--default-margin);
+    min-width: 13.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#editor {
+    border-radius: var(--default-border-radius);
+    min-height: 17.125rem;
+    border: 1px solid var(--color-border);
+    resize: vertical;
+}
+
+#error-box {
+    transition: 0.5s all ease-in-out;
+    min-height: 1rem;
+    padding: 0rem;
+}
+
+#error {
+    word-wrap: break-word;
+    color: red;
+    text-align: center;
+}
+
+#grid-toggle-button, #theme-select, #login-button, #trail-toggle-button {
+    float: right;
+    min-height: 2rem;
+    min-width: calc(10% - 1rem);
+    border-radius: var(--default-border-radius);
+}
+
+#theme-select {
+    margin-right: var(--default-margin);
+}
+
+#task-title {
+    width: 100%;
+}
+
+#task-description {
+    padding: 0rem 1rem 0rem 1rem;
+}
+
+#run-icon {
+    width: 2rem;
+    height: 2rem;
+    margin-left: -6px;
+}
+
+#editor-stop-button {
+    float: right;
+}
+
+#logout-button {
+    margin-left: var(--default-margin);
+}
+
+#multiple-choice-questions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--default-margin);
+    margin: calc(var(--default-margin) * 2.5) var(--default-margin) var(--default-margin) var(--default-margin);
+    padding: 0;
+}
+
+#login-failed, #condition-failed {
+    display: none;
+    position: absolute;
+    top: calc(6rem - 1px);
+    right: var(--default-margin);
+    padding: 1rem;
+    z-index: 99;
+}
+
+#celebration{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* This ensures the center of #celebration-content, not its top-left corner, is at the center of #app */
+    padding: 1rem;
+    background-color: #248944;
+    color: white;
+    border-radius: var(--default-border-radius);
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
+}
+
+#celebration-confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Ensures the confettis do not block user interactions */
+    overflow: hidden;
+    z-index: 1000; /* Ensures the confettis appear on top of other content */
+}
+
+#input-container {
+    margin-top: var(--default-margin);
+    padding: 0.5rem;
+    border: 1px solid var(--color-primary);
+    border-radius: var(--default-border-radius);
+    background-color: rgb(249, 249, 249);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#input-container div {
+    padding: 0.25rem 0;
+    border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+#input-container div:last-child {
+    border-bottom: none;
 }
 
 #chapter-selector-container, #chapter-selector-box, #chapterbuttontable {
@@ -477,10 +469,37 @@ button:hover {
   align-items: center;
 }
 
-#chapter-selector-text {
-  font-size: 14px;
-}
+/* media queries */
+@media (max-width: calc((768px * 2) + 3rem)) {
+    #app-container {
+        grid-template-columns: 1fr;
+        gap: unset;
+    }
 
-#chapterbuttontable button {
-  margin: 0 0 0 0.5rem;
+    #editor {
+        margin: 0 var(--default-margin);
+    }
+
+    #task-selector-box {
+        max-width: calc((var(--canvas-width) * 0.775));
+    }
+
+    #game {
+        max-width: unset;
+        max-height: unset;
+    }
+
+    #task-container {
+        margin: var(--default-margin);
+    }
+
+    #left-container, #right-container {
+        max-width: unset;
+        margin: unset;
+        margin-bottom: var(--default-margin);
+    }
+
+    .editor-button {
+        margin-left: var(--default-margin);
+    }
 }
