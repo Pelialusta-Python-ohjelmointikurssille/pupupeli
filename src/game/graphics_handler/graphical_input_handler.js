@@ -49,15 +49,15 @@ export class GraphicalInputHandler {
         this.mouseStartPos.y = event.global.y;
     }
 
-    onMouseUp(event) {
+    onMouseUp() {
         this.holdingMouse = false;
     }
 
-    onMouseEnter(event) {
+    onMouseEnter() {
         this.holdingMouse = false;
     }
 
-    onMouseLeave(event) {
+    onMouseLeave() {
         this.holdingMouse = false;
     }
 }

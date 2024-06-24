@@ -60,13 +60,7 @@ function getNewGrid(gridWidth, gridHeight, playerStartPositionY, playerStartPosi
 function buildGrid(gridIntTable, grid) {
     for (let y = 0; y < grid.height; y++) {
         for (let x = 0; x < grid.width; x++) {
-            if (gridIntTable[y][x] === 2) {
-                let collectible = getNewGridObject(Constants.COLLECTIBLE);
-                grid.addToGrid(collectible, x, y);
-            } else if (gridIntTable[y][x] === 3) {
-                let obstacle = getNewGridObject(Constants.OBSTACLE);
-                grid.addToGrid(obstacle, x, y);
-            }
+            addToGridById(gridIntTable[y][x], grid, x, y);
         }
     }
     grid.saveCurrentStateForReset(); //Important!
