@@ -21,7 +21,7 @@ const instructionsStr = "instructions";
 
 
 /**
- * Runs ui initialisation functions + atm the event_handlers worker
+ * Runs ui initialisation functions + atm the workerMessenger worker
  */
 async function main() {
     initPage(); // creates task json global variable
