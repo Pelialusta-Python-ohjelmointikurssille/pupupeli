@@ -73,8 +73,8 @@ export class GraphicalInputHandler {
         this.debug.clear();
         this.debug
         .moveTo(this.mouseStartPos.x, this.mouseStartPos.y)
-        .lineTo(this.mouseStartPos.x+(this.lastMousePos.x-this.mouseStartPos.x) * this.dragSensitivity * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor), this.mouseStartPos.y+(this.lastMousePos.y-this.mouseStartPos.y) * this.dragSensitivity * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor))
-        .stroke({width: 2, color: 0x0000ff});
+        .lineTo(this.mouseStartPos.x-(this.lastMousePos.x-this.mouseStartPos.x) * this.dragSensitivity * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor), this.mouseStartPos.y-(this.lastMousePos.y-this.mouseStartPos.y) * this.dragSensitivity * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor))
+        .stroke({width: 2, color: 0xffff00});
         this.debug
         .rect(this.lastMousePos.x - 5, this.lastMousePos.y - 5, 10, 10)
         .fill({color: 0x00ffff});
