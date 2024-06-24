@@ -3,7 +3,7 @@
   "taskType": "collectibles",
   "enableAddRemove": false,
   "description": [
-    "Kerää kaikki porkkanat. Laita hahmo liikkumaan seuraavilla komennoilla:",
+    "Kerää kaikki kerättävät. Laita hahmo liikkumaan seuraavilla komennoilla:",
     "",
     "hahmo.liiku(\"oikea\")",
     "hahmo.liiku(\"alas\")",
