@@ -106,7 +106,7 @@ function runCommand(command, parameters) {
     const sab = new SharedArrayBuffer(8);
     const waitArray = new Int32Array(sab, 0, 2);
     if (validCommands.includes(command)) {
-        //Posted to eventHandler
+        // posted to workerMessenger
         self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
     } else {
         postError(`Command '${command}' is not a valid command.`);

@@ -3,7 +3,7 @@ import * as fileReader from "../file_reader.js";
 import * as api from "../api/api.js";
 import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
 import { getEditor } from "../input/editor.js"
-import { initWorker } from "../event_handler.js";
+import { initWorker } from "../workerMessenger.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, setTheme } from "../game/game_controller.js";
