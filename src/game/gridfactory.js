@@ -17,19 +17,14 @@ const gridObjectManifest = {
  * @returns Object containing the task: { grid: grid, gameMode: gameMode }
  */
 export function getGameTask() {
-    //taskFactory or gridfactory?
-    let player = getNewGridObject(Constants.PLAYER_STR);
     const task = globals.task;
     const playerStartPosition = task.getPlayerStartPosition();
     const gridWidth = task.getGridDimensions().width;
     const gridHeight = task.getGridDimensions().height;
-
     let gridIntTable = globals.task.getGrid();
-    let newGrid = new Grid(player, gridWidth, gridHeight);
+    let newGrid = getNewGrid(gridWidth, gridHeight, playerStartPosition.y, playerStartPosition.x);
 
-    newGrid.addToGrid(player, playerStartPosition.y, playerStartPosition.x);
     buildGrid(gridIntTable, newGrid, gridWidth, gridHeight);
-    newGrid.saveCurrentStateForReset(); //Important!
     //make new gamemode last, make it here cause the info on gamemode is contained in the json?
     let currentGameMode;
     if (task.getMultipleChoiceQuestions().length > 0) {
@@ -43,18 +38,38 @@ export function getGameTask() {
 };
 
 /**
+ * Creates a new initialized grid with player.
+ * @param {*} gridWidth 
+ * @param {*} gridHeight 
+ * @param {*} playerStartPositionY 
+ * @param {*} playerStartPositionX 
+ * @returns the newly initialized Grid object
+ */
+function getNewGrid(gridWidth, gridHeight, playerStartPositionY, playerStartPositionX) {
+    let player = getNewGridObject(Constants.PLAYER_STR);
+    let newGrid = new Grid(player, gridWidth, gridHeight);
+    newGrid.addToGrid(player, playerStartPositionY, playerStartPositionX);
+    return newGrid;
+}
+
+/**
  * Builds the grid. Doesn't add Player.
  * @param {array} gridIntTable | double array of grid objects represented by numbers
- * @param {Grid} newGrid 
- * @param {number} width
- * @param {number} height 
+ * @param {Grid} grid grid to add the new gridobjects. Expects the dimensions to match the gridIntTable.
  */
-function buildGrid(gridIntTable, newGrid, width, height) {
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            addToGridById(gridIntTable[y][x], newGrid, x, y);
+function buildGrid(gridIntTable, grid) {
+    for (let y = 0; y < grid.height; y++) {
+        for (let x = 0; x < grid.width; x++) {
+            if (gridIntTable[y][x] === 2) {
+                let collectible = getNewGridObject(Constants.COLLECTIBLE);
+                grid.addToGrid(collectible, x, y);
+            } else if (gridIntTable[y][x] === 3) {
+                let obstacle = getNewGridObject(Constants.OBSTACLE);
+                grid.addToGrid(obstacle, x, y);
+            }
         }
     }
+    grid.saveCurrentStateForReset(); //Important!
 }
 
 function addToGridById(objectId, newGrid, x, y) {
