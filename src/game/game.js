@@ -70,7 +70,7 @@ export class Game {
 
     makeMoveCommand(commandParameter) {
         let dir = translatePythonMoveStringToDirection(commandParameter);
-        let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh);
+        let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh, this);
         //we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
     }
@@ -81,8 +81,8 @@ export class Game {
     }
 
     makeAskCommand(commandParameter) {
-        let moveCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
-        moveCommand.execute();
+        let askCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
+        askCommand.execute();
         this.onAnimsReady();
     }
 

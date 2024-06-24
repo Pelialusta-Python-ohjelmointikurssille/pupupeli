@@ -1,10 +1,12 @@
 import * as gameController from './game/game_controller.js';
 import { getInputBoxValue, showInputBox } from './ui/inputBox.js';
-import { disablePlayButton } from './ui/ui_editor_buttons.js'
+import { disablePlayButton, enableEditorButtons } from './ui/ui_editor_buttons.js'
 import { displayErrorMessage } from './ui/ui.js';
 import * as globals from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
+import { getVariableTrueName } from './game/commonstrings.js';
+import { requestInputFromPython } from './game/game_input_controller.js';
 
 let worker;
 let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
@@ -15,15 +17,17 @@ let syncArray;
  * Creates a new worker
  */
 export function initWorker() {
-    console.log("Initializing pyodide worker...")
     worker = new Worker('/src/input/worker.js');
     worker.onmessage = (message) => {
         message = message.data;
         switch (message.type) {
+            case "init-finish":
+                enableEditorButtons();
+                break;
             case "input":
                 sharedArray = new Uint16Array(message.sab, 4);
                 syncArray = new Int32Array(message.sab, 0, 1);
-                showInputBox();
+                requestInputFromPython();
                 break;
             case "command": //commands are game commands without return values
                 globals.setCurrentSAB(message.sab);
@@ -132,8 +136,7 @@ export function runSingleCommand() {
  * @param {*} event The event when the user inputs something in the input box,
  * in this case, the relevant part is the key the user inputs.
  */
-export function onUserSendInputToWorker() {
-    let word = getInputBoxValue();
+export function onUserSendInputToWorker(word) {
     inputToWorker(word);
 }
 
@@ -180,4 +183,8 @@ function postMessageToWorker(message) {
  */
 function saveLastMessage(message) {
     lastMessage = message;
+}
+
+export function getWorkerMessageState() {
+    return isMessagePassingPaused;
 }

@@ -3,6 +3,8 @@ import { Direction } from "./direction.js";
 export class Constants {
     static COLLECTIBLE = "collectible";
     static OBSTACLE = "obstacle";
+    static EMPTY_TILE = "";
+    static QUESTION_COLLECTIBLE = "question_collectible";
     //Following are the valid command strings:
     static MOVE_STR = "move";
     static SAY_STR = "say";
@@ -21,8 +23,8 @@ export class Constants {
 }
 
 //Todo: aliases change depending on current theme
-const COLLECTIBLE_ALIASES = ["porkkana", "jakoavain"];
-const OBSTACLE_ALIASES = ["kivi", "viemäri"];
+const COLLECTIBLE_ALIASES = ["porkkana", "jakoavain", "ruoka"];
+const OBSTACLE_ALIASES = ["kivi", "viemäri", "este"];
 
 /**
  * Objects in the game have different names depending on theme.

@@ -5,6 +5,7 @@ import { GraphicsRegistry } from "./graphics_registry.js";
 import { ENTITIES } from "./manifests/entity_manifest.js";
 import { ENTITY_SKINS, SKIN_BUNDLES } from "./manifests/skin_manifest.js";
 import { ANIMATIONS } from "./manifests/animation_manifest.js";
+import { GraphicalInputHandler } from "./graphical_input_handler.js";
 
 /**
  * Used for handling pixiJS integration and drawing/animating sprites.
@@ -25,6 +26,7 @@ export class GraphicsHandler {
         this.isReady = true;
         this.onReadyFunc = onReadyFunc;
         this.onReadyFuncContext = onReadyFuncContext;
+        this.graphicalInputHandler = null;
     }
 
     /**
@@ -55,6 +57,8 @@ export class GraphicsHandler {
         
         this.renderer.addFunctionToRenderLoop(this.graphicsEntityHandler.updateAllEntities, this.graphicsEntityHandler);
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
+
+        this.graphicalInputHandler = new GraphicalInputHandler(this.renderer, this.graphicsEntityHandler.camera);
 
         this.createGrid();
 
@@ -129,9 +133,14 @@ export class GraphicsHandler {
      */
     createGrid() {
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
-        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 300, this.gridHeight * 300) } , SKIN_BUNDLES["background"]);
+        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 300 + 2048, this.gridHeight * 300 + +2048) } , SKIN_BUNDLES["background"]);
         let gridObject = this.graphicsEntityHandler.getMainGridObject();
         this.graphicsEntityHandler.camera.focusOnAreaMiddle(gridObject.getMiddlePixelPosition(), gridObject.pixelSize);
+        this.graphicsEntityHandler.camera.setMinZoom(this.graphicsEntityHandler.camera.zoomScale);
+        this.graphicsEntityHandler.camera.minX = 0;
+        this.graphicsEntityHandler.camera.minY = 0;
+        this.graphicsEntityHandler.camera.maxX = (this.gridWidth) * 128;
+        this.graphicsEntityHandler.camera.maxY = (this.gridHeight) * 128;
     }
 
     /**

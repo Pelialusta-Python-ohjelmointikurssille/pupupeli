@@ -1,6 +1,7 @@
 {
   "taskType": "collectibles",
   "title": "Pläääääähhhh",
+  "enableAddRemove": false,
   "description": [
     "Aseta pupu liikkumaan oikeaan alareunaan. Saat pupun liikkumaan seuraavilla komennoilla:",
     "",

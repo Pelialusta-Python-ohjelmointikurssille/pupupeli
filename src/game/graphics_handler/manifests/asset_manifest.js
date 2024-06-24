@@ -77,6 +77,10 @@ export const ASSETS = {
                 {
                     alias: "wrench",
                     src: "src/static/game_assets/collectibles/wrench.png"
+                },
+                {
+                    alias: "question",
+                    src: "src/static/game_assets/collectibles/ask_collectible.png"
                 }
             ]
         },

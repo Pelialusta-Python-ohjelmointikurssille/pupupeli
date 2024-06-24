@@ -1,9 +1,9 @@
 {
-  "taskType": "collectibles",
   "title": "Eka pupu",
+  "taskType": "collectibles",
   "enableAddRemove": false,
   "description": [
-    "Aseta hahmo liikkumaan oikeaan alareunaan. Saat hahmon liikkumaan seuraavilla komennoilla:",
+    "Aseta hahmo liikkumaan oikeaan alareunaan. Laita hahmo liikkumaan seuraavilla komennoilla:",
     "",
     "hahmo.liiku(\"oikea\")",
     "hahmo.liiku(\"alas\")",
@@ -18,7 +18,8 @@
   ],
   "multipleChoiceQuestions": [],
   "grid": [
-    [0,1,1,1,1,1,1,2],
+
+    [0,1,1,1,1,1,2,2],
     [1,1,3,3,1,1,1,1],
     [1,1,1,3,1,1,1,1],
     [1,1,1,3,1,1,2,1],
@@ -27,5 +28,22 @@
     [1,1,1,1,1,1,1,1],
     [2,1,1,1,1,1,1,2]
   ],
-  "conditions": []
+  "conditions": [
+    {
+      "condition": "conditionUsedWhile",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedFor",
+      "parameter": true
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": false
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": false
+    }
+  ]
 }

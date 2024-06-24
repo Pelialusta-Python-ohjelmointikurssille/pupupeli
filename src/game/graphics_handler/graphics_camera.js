@@ -22,18 +22,28 @@ export class GraphicsCamera {
         this.zoomScale = 1;
         this.rotation = 0;
         this.minZoom = 0.08;
-        this.maxZoom = 1;
-        this.focusPaddingPercent = 0.025;
+        this.maxZoom = 0.95;
+        this.focusPaddingPercent = 0.1;
         this.container.position.x = this.screenCenter.x;
         this.container.position.y = this.screenCenter.y;
         this.totalRenderScale = this.getTotalRenderScale();
+        this.linearZoomValue = 100;
         this.updatePosition();
+        this.minX = 0;
+        this.minY = 0;
+        this.maxX = 1024;
+        this.maxY = 1024;
     }
 
     /**
      * Update the camera's position and associated variables
      */
     updatePosition() {
+        if (this.position.x < this.minX) this.position.x = this.minX;
+        if (this.position.x > this.maxX) this.position.x = this.maxX;
+        if (this.position.y < this.minY) this.position.y = this.minY;
+        if (this.position.y > this.maxY) this.position.y = this.maxY;
+
         this.totalRenderScale = this.getTotalRenderScale();
         //this.container.position.x = -this.position.x;
         //this.container.position.y = -this.position.y;
@@ -96,7 +106,8 @@ export class GraphicsCamera {
 
         if (width > height) zoom = 1024 / width;
         else zoom = 1024 / height;
-        this.setZoom(zoom * (1 - this.focusPaddingPercent));
+        this.setZoom(zoom * (1 - (this.focusPaddingPercent * zoom)));
+        
     }
 
     /**
@@ -107,5 +118,21 @@ export class GraphicsCamera {
         if (value > this.maxZoom) this.zoomScale = this.maxZoom;
         else if (value < this.minZoom) this.zoomScale = this.minZoom;
         else this.zoomScale = value;
+        this.linearZoomValue = this.zoomScale * 100;
+    }
+
+    changeZoomLinear(valueDelta) {
+        let delta = valueDelta / (1 - (this.linearZoomValue / 100))
+        if (delta > 10) delta = 2;
+        if (delta < -10) delta = -10;
+        this.linearZoomValue += delta;
+        if (this.linearZoomValue < 1) this.linearZoomValue = 1;
+        if (this.linearZoomValue > 99) this.linearZoomValue = 95;
+        this.setZoom(this.linearZoomValue / 100);
+    }
+
+    setMinZoom(value) {
+        this.minZoom = value;
+
     }
 }
