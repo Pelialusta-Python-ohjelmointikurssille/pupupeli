@@ -141,25 +141,35 @@ export class GraphicsCamera {
 
     setMinZoom(value) {
         this.minZoom = value;
-
     }
 
     drawDebug() {
+        let topLeft = this.screenToWorld(new Vector2(0, 0));
+        let topRight = this.screenToWorld(new Vector2(1024, 0));
+        let bottomLeft = this.screenToWorld(new Vector2(0, 1024));
+        let bottomRight = this.screenToWorld(new Vector2(1024, 1024));
+        let center = this.screenToWorld(new Vector2(512, 512));
+
         this.debug.clear();
         this.debug
-        .rect(this.container.pivot.x - 16, this.container.pivot.y - 16, 32, 32)
+        .rect(center.x - 16, center.y - 16, 32, 32)
+        .fill({color: 0xff0000});
+        
+        this.debug
+        .rect(topLeft.x - 16, topLeft.y - 16, 32, 32)
         .fill({color: 0xff0000});
         this.debug
-        .rect(this.container.pivot.x - (512 / this.totalRenderScale) - 16, this.container.pivot.y - (512 / this.totalRenderScale) - 16, 32, 32)
+        .rect(topRight.x - 16, topRight.y - 16, 32, 32)
         .fill({color: 0xff0000});
         this.debug
-        .rect(this.container.pivot.x + (512 / this.totalRenderScale) - 16, this.container.pivot.y - (512 / this.totalRenderScale) - 16, 32, 32)
+        .rect(bottomLeft.x - 16, bottomLeft.y - 16, 32, 32)
         .fill({color: 0xff0000});
         this.debug
-        .rect(this.container.pivot.x - (512 / this.totalRenderScale) - 16, this.container.pivot.y + (512 / this.totalRenderScale) - 16, 32, 32)
+        .rect(bottomRight.x - 16, bottomRight.y - 16, 32, 32)
         .fill({color: 0xff0000});
-        this.debug
-        .rect(this.container.pivot.x + (512 / this.totalRenderScale) - 16, this.container.pivot.y + (512 / this.totalRenderScale) - 16, 32, 32)
-        .fill({color: 0xff0000});
+    }
+
+    screenToWorld(screenVector) {
+        return new Vector2(this.container.pivot.x + ((screenVector.x-512) / this.totalRenderScale), this.container.pivot.y + ((screenVector.y-512) / this.totalRenderScale));
     }
 }
