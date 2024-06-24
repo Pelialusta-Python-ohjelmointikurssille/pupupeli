@@ -1,6 +1,6 @@
 import { onTaskComplete } from "../ui/ui.js";
 import { Game } from "./game.js";
-import { postMessage } from "../workerMessenger.js";
+import { postMessage } from "../worker_messenger.js";
 import { getVariableTrueName } from './commonstrings.js';
 
 //This file controls game. 

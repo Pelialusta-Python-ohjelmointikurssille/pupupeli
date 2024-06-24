@@ -94,7 +94,7 @@ function getStringFromSharedArray(sharedArray) {
 }
 
 /**
- * Delivers commands to execute to the event handler. Can be extended with more commands 
+ * Delivers commands to execute to the worker_messenger. Can be extended with more commands 
  * by adding more cases to the switch statement.
  * @param {string} command The command to execute. Examples: "move", "say", ...
  * @param {string} parameters The parameters for the command. Examples: "oikea", "vasen", 
@@ -106,14 +106,14 @@ function runCommand(command, parameters) {
     const sab = new SharedArrayBuffer(8);
     const waitArray = new Int32Array(sab, 0, 2);
     if (validCommands.includes(command)) {
-        // posted to workerMessenger
+        // posted to worker_messenger
         self.postMessage({ type: 'command', details: { command: command, parameters: parameters }, sab: sab });
     } else {
         postError(`Command '${command}' is not a valid command.`);
     }
     Atomics.wait(waitArray, 0, 0);
 
-    // waitarray[1] will be "1" if resetWorker() is called in event handler, otherwise 0
+    // waitarray[1] will be "1" if resetWorker() is called in worker_messenger, otherwise 0
     if (waitArray[1] === 0) {
         try {
             continuePythonExecution;
@@ -195,7 +195,7 @@ async function runPythonCode(pyodide, codeString) {
             postError(error.message);
         }
 
-        // no more python left to run; let the event handler know
+        // no more python left to run; let the worker_messenger know
         postMessage({ type: 'finish' });
     } catch (error) {
         // also reset pyodide state on errors/exceptions such as when we reset the game mid-execution

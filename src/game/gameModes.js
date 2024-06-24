@@ -30,7 +30,7 @@ export class GameModeGetCollectibles {
         }
     }
 
-    // called by workerMessenger after checking conditions
+    // called by worker_messenger after checking conditions
     checkIfGameWon() {
         if (globals.allConditionsCleared()) {
             this.eventTarget.dispatchEvent(new Event("victory"));
@@ -65,7 +65,7 @@ export class GameModeMultipleChoice {
         }
     }
 
-    // called by workerMessenger after checking conditions
+    // called by worker_messenger after checking conditions
     checkIfGameWon() {
         if (globals.allConditionsCleared() && globals.getMultipleChoiceCorrect()) {
             this.eventTarget.dispatchEvent(new Event("victory"));

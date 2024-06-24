@@ -26,7 +26,7 @@ module.exports = {
         //"!src/**/rendering.js", // Exclude specific file
         "!src/util/version_strings.js",
         "!src/input/worker.js",
-        "!src/workerMessenger.js",
+        "!src/worker_messenger.js",
         "!src/**/index.js",
         "!src/**/game.js",
         "!src/**/editor.js",
