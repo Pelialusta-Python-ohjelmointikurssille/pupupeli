@@ -5,7 +5,7 @@ import * as globals from "../util/globals.js";
 
 /**
  * If you want to add more gridObject types, add them to commonstrings.js files
- * class "Constants" as a static variable.
+ * class "Constants" as a static string variable.
  */
 const gridObjectManifest = {
     0: Constants.PLAYER_STR,
