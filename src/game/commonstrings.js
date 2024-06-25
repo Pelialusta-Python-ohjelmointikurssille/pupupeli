@@ -1,6 +1,7 @@
 import { Direction } from "./direction.js";
 
 export class Constants {
+    //grid object names:
     static COLLECTIBLE = "collectible";
     static OBSTACLE = "obstacle";
     static EMPTY_TILE = "";
