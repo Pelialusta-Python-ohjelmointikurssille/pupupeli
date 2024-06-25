@@ -132,7 +132,8 @@ export class GraphicsCamera {
     }
 
     /**
-     * Set camera zoom. Will be clamped if too big or small. Smaller value means more zoomed out. Bigger means more zoomed in.
+     * Set camera zoom. Will be clamped if too big or small.
+     * Smaller value means more zoomed out. Bigger means more zoomed in.
      * @param {number} value 
      */
     setZoom(value) {
@@ -158,7 +159,10 @@ export class GraphicsCamera {
     }
 
     screenToWorld(screenVector) {
-        return new Vector2(this.position.x + ((screenVector.x-512) / this.totalRenderScale), this.position.y + ((screenVector.y-512) / this.totalRenderScale));
+        return new Vector2(
+            this.position.x + ((screenVector.x-512) / this.totalRenderScale),
+            this.position.y + ((screenVector.y-512) / this.totalRenderScale)
+        );
     }
 
     clampPositionToBounds() {
@@ -177,9 +181,13 @@ export class GraphicsCamera {
         if (this.minY == null) return;
         if (this.maxX == null) return;
         if (this.maxY == null) return;
-        if (this.viewPortCorners[0].x < this.minX) this.position.x = this.minX + this.screenToWorld(new Vector2(512, 512)).x - this.viewPortCorners[0].x;
-        if (this.viewPortCorners[0].y < this.minY) this.position.y = this.minY + this.screenToWorld(new Vector2(512, 512)).y - this.viewPortCorners[0].y;
-        if (this.viewPortCorners[3].x > this.maxX) this.position.x = this.maxX - (this.viewPortCorners[3].x - this.screenToWorld(new Vector2(512, 512)).x);
-        if (this.viewPortCorners[3].y > this.maxY) this.position.y = this.maxY - (this.viewPortCorners[3].y - this.screenToWorld(new Vector2(512, 512)).y);
+        if (this.viewPortCorners[0].x < this.minX)
+            this.position.x = this.minX + this.screenToWorld(new Vector2(512, 512)).x - this.viewPortCorners[0].x;
+        if (this.viewPortCorners[0].y < this.minY)
+            this.position.y = this.minY + this.screenToWorld(new Vector2(512, 512)).y - this.viewPortCorners[0].y;
+        if (this.viewPortCorners[3].x > this.maxX)
+            this.position.x = this.maxX - (this.viewPortCorners[3].x - this.screenToWorld(new Vector2(512, 512)).x);
+        if (this.viewPortCorners[3].y > this.maxY)
+            this.position.y = this.maxY - (this.viewPortCorners[3].y - this.screenToWorld(new Vector2(512, 512)).y);
     }
 }
