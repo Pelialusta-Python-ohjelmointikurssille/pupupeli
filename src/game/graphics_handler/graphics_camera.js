@@ -41,10 +41,10 @@ export class GraphicsCamera {
             this.screenToWorld(new Vector2(0, 1024)),
             this.screenToWorld(new Vector2(1024, 1024))
         ];
-        this.minX = 0;
-        this.minY = 0;
-        this.maxX = 1024;
-        this.maxY = 1024;
+        this.minX = null;
+        this.minY = null;
+        this.maxX = null;
+        this.maxY = null;
         this.updatePosition();
         
     }
@@ -128,7 +128,11 @@ export class GraphicsCamera {
         if (width > height) zoom = 1024 / width;
         else zoom = 1024 / height;
         this.setZoom(zoom * (1 - (this.focusPaddingPercent * zoom)));
-        
+        this.updatePosition();
+        this.minX = this.viewPortCorners[0].x;
+        this.minY = this.viewPortCorners[0].y;
+        this.maxX = this.viewPortCorners[3].x;
+        this.maxY = this.viewPortCorners[3].y;
     }
 
     /**
@@ -193,6 +197,10 @@ export class GraphicsCamera {
     }
 
     clampPositionByViewPort() {
+        if (this.minX == null) return;
+        if (this.minY == null) return;
+        if (this.maxX == null) return;
+        if (this.maxY == null) return;
         if (this.viewPortCorners[0].x < this.minX) this.position.x = this.minX + this.screenToWorld(new Vector2(512, 512)).x - this.viewPortCorners[0].x;
         if (this.viewPortCorners[0].y < this.minY) this.position.y = this.minY + this.screenToWorld(new Vector2(512, 512)).y - this.viewPortCorners[0].y;
         if (this.viewPortCorners[3].x > this.maxX) this.position.x = this.maxX - (this.viewPortCorners[3].x - this.screenToWorld(new Vector2(512, 512)).x);
