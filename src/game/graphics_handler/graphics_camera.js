@@ -29,11 +29,6 @@ export class GraphicsCamera {
         this.container.position.y = this.screenCenter.y;
         this.totalRenderScale = this.getTotalRenderScale();
         this.linearZoomValue = 100;
-        this.debug = new PIXI.Graphics();
-        this.postext = new PIXI.Text({ text: "", style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0xffffff } });
-        this.debug.zIndex = 100000000;
-        this.container.addChild(this.debug);
-        this.container.addChild(this.postext);
 
         this.viewPortCorners = [
             this.screenToWorld(new Vector2(0, 0)),
@@ -89,11 +84,8 @@ export class GraphicsCamera {
      * Called every frame.
      * @param {number} deltaTime Time delta in seconds 
      */
-    // deltaTime is used to sychronize the camera with the game loop
-    // eslint-disable-next-line no-unused-vars
-    onUpdate(deltaTime) {
+    onUpdate() {
         this.updatePosition();
-        this.drawDebug();
     }
 
 
@@ -164,31 +156,6 @@ export class GraphicsCamera {
         this.minZoom = value;
     }
 
-    drawDebug() {
-        let center = this.screenToWorld(new Vector2(512, 512));
-
-        this.debug.clear();
-        this.debug
-        .rect(center.x - 16, center.y - 16, 32, 32)
-        .fill({color: 0xff0000});
-        
-        this.debug
-        .rect(this.viewPortCorners[0].x - 16, this.viewPortCorners[0].y - 16, 32, 32)
-        .fill({color: 0xff0000});
-        this.debug
-        .rect(this.viewPortCorners[1].x - 16, this.viewPortCorners[1].y - 16, 32, 32)
-        .fill({color: 0xff0000});
-        this.debug
-        .rect(this.viewPortCorners[2].x - 16, this.viewPortCorners[2].y - 16, 32, 32)
-        .fill({color: 0xff0000});
-        this.debug
-        .rect(this.viewPortCorners[3].x - 16, this.viewPortCorners[3].y - 16, 32, 32)
-        .fill({color: 0xff0000});
-        this.postext.position.x = this.viewPortCorners[0].x;
-        this.postext.position.y = this.viewPortCorners[0].y + 64;
-        this.postext.text = `${this.container.pivot.x} ${this.container.pivot.y}`
-    }
-
     screenToWorld(screenVector) {
         return new Vector2(this.position.x + ((screenVector.x-512) / this.totalRenderScale), this.position.y + ((screenVector.y-512) / this.totalRenderScale));
     }
@@ -213,7 +180,5 @@ export class GraphicsCamera {
         if (this.viewPortCorners[0].y < this.minY) this.position.y = this.minY + this.screenToWorld(new Vector2(512, 512)).y - this.viewPortCorners[0].y;
         if (this.viewPortCorners[3].x > this.maxX) this.position.x = this.maxX - (this.viewPortCorners[3].x - this.screenToWorld(new Vector2(512, 512)).x);
         if (this.viewPortCorners[3].y > this.maxY) this.position.y = this.maxY - (this.viewPortCorners[3].y - this.screenToWorld(new Vector2(512, 512)).y);
-        //console.log(this.viewPortCorners[3].x - this.screenToWorld(new Vector2(512, 512)).x)
-        //if (this.viewPortCorners[3].y > this.maxY) this.position.y = 512;
     }
 }
