@@ -80,7 +80,7 @@ describe('GraphicsCamera', () => {
     expect(camera.zoomScale).toBe(0.5);
 
     camera.setZoom(1.5);
-    expect(camera.zoomScale).toBe(1);
+    expect(camera.zoomScale).toBe(0.95);
 
     camera.setZoom(0.05);
     expect(camera.zoomScale).toBe(0.08);
