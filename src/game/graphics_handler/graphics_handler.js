@@ -133,7 +133,7 @@ export class GraphicsHandler {
      */
     createGrid() {
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
-        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 300 + 2048, this.gridHeight * 300 + 2048) } , SKIN_BUNDLES["background"]);
+        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 300 + 512, this.gridHeight * 300 + 512) } , SKIN_BUNDLES["background"]);
         let gridObject = this.graphicsEntityHandler.getMainGridObject();
         let boundPaddingX = 0;
         let boundPaddingY = 0;
