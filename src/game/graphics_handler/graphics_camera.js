@@ -140,6 +140,7 @@ export class GraphicsCamera {
         else if (value < this.minZoom) this.zoomScale = this.minZoom;
         else this.zoomScale = value;
         this.linearZoomValue = this.zoomScale * 100;
+        this.updatePosition();
     }
 
     changeZoomLinear(valueDelta) {
