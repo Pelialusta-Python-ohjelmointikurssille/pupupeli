@@ -58,26 +58,8 @@ function createGamePage() {
     let descriptionTargetDiv = document.getElementById("task-description");
         setDescription(descriptionTargetDiv);
 
-        // set multiple choice questions
-        let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
         if (globals.task.getMultipleChoiceQuestions().length > 0) {
-            multipleChoiceContainer.classList.remove("is-hidden");
-            let optionIdCounter = 0;
-            globals.task.getMultipleChoiceQuestions().forEach((option) => {
-                const optionId = `option-${optionIdCounter++}`;
-                multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
-
-                // if option is correct, add eventlistener which calls onTaskComplete
-                if (option.isCorrectAnswer === true) {
-                    let questionButton = document.getElementById(optionId);
-                    questionButton.dataset.correct = true;
-                }
-            });
-            let questions = document.getElementsByClassName("multiple-choice-question");
-
-            Array.from(questions).forEach(question => {
-                question.addEventListener("click", colorSelectedChoice);
-            });
+            setMultipleChoice();
         }
         // set editor code
         window.addEventListener('load', function () {
@@ -94,6 +76,31 @@ function createGamePage() {
         });
 }
 
+/**
+ * Adds multiple choice container to the game page and multiple choice options to the container
+ */
+function setMultipleChoice() {
+    // set multiple choice questions
+    let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
+
+    multipleChoiceContainer.classList.remove("is-hidden");
+    let optionIdCounter = 0;
+    globals.task.getMultipleChoiceQuestions().forEach((option) => {
+        const optionId = `option-${optionIdCounter++}`;
+        multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
+
+        // if option is correct, add eventlistener which calls onTaskComplete
+        if (option.isCorrectAnswer === true) {
+            let questionButton = document.getElementById(optionId);
+            questionButton.dataset.correct = true;
+        }
+    });
+    let questions = document.getElementsByClassName("multiple-choice-question");
+
+    Array.from(questions).forEach(question => {
+        question.addEventListener("click", colorSelectedChoice);
+    });
+}
 /**
  * Sets the text from task.title to given div. Useful since game and instructions tasks use different title div.
  * @param {object} titleDiv | the title div where we want title text as a html element
