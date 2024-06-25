@@ -85,5 +85,14 @@ describe('GraphicsCamera', () => {
     camera.setZoom(0.05);
     expect(camera.zoomScale).toBe(0.08);
   });
+
+  test("screen to world coordinate conversion works when at middle of screen", () => {
+    camera.moveToPoint(new Vector2(512, 512));
+    expect(camera.screenToWorld(new Vector2(945, 230))).toEqual(new Vector2(945, 230));
+  });
+
+  test("screen to world coordinate conversion works when at 0,0", () => {
+    expect(camera.screenToWorld(new Vector2(945, 230))).toEqual(new Vector2(433, -282));
+  });
 });
 
