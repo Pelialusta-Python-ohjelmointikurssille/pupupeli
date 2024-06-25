@@ -14,7 +14,9 @@ describe('BackgroundEntity', () => {
     beforeEach(() => {
         mockUUID = 'test-uuid';
         mockEntityHandler = {};
-        mockContainer = {};
+        mockContainer = { 
+            pivot: { x: 0, y: 0 }
+        };
         mockSprite = {
             position: { x: 0, y: 0 },
             anchor: { set: jest.fn() },
