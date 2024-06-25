@@ -94,10 +94,10 @@ export function incrementCollectibles() {
     collectibles.current += 1;
 }
 
-export function addClearedConditions(conditionsFromEventHandler) {
+export function addClearedConditions(conditionsFromWorkerMessenger) {
     conditionsNotCleared.length = 0;
     conditionsCleared.length = 0; // reset cleared conditions
-    conditionsFromEventHandler.forEach(condition => {
+    conditionsFromWorkerMessenger.forEach(condition => {
         conditionsCleared.push(condition);
     });
 }
