@@ -29,6 +29,8 @@ export class GraphicalInputHandler {
     }
 
     onWheel(event) {
+        // Fixes weird camera bug that makes everything disappear
+        if (event.deltaY === 0) return;
         let deltaNormalized = event.deltaY / Math.abs(event.deltaY);
         this.renderingCamera.changeZoomLinear((-deltaNormalized * 2));
         if (this.renderingCamera.zoomScale <= this.renderingCamera.minZoom || this.renderingCamera.zoomScale >= this.renderingCamera.maxZoom) return;
