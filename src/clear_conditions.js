@@ -1,17 +1,10 @@
 import { onTaskComplete } from "./ui/ui.js";
 import { task, getMultipleChoiceCorrect } from "./util/globals.js";
+import { collectibles } from "./util/globals.js";
 
 export const conditionsCleared = [];
 export const conditions = task.getConditions();
 export const conditionsNotCleared = [];
-
-export function checkIfGameWon() {
-    if (getMultipleChoiceCorrect()) {
-        onTaskComplete(true);
-    } else {
-        onTaskComplete(false);
-    }
-}
 
 export function addClearedConditions(conditionsFromWorkerMessenger) {
     conditionsNotCleared.length = 0;
@@ -21,11 +14,24 @@ export function addClearedConditions(conditionsFromWorkerMessenger) {
     });
 }
 
-export function allConditionsCleared() {
+export function checkIfGameWon() {
+    if (allConditionsCleared()) {
+        onTaskComplete(true);
+    } else {
+        onTaskComplete(false);
+    }
+}
+
+function allConditionsCleared() {
+    if (task.getMultipleChoiceQuestions().length > 0) {
+        //In multiple choice question tasks we only care about the correct answer. 
+        return getMultipleChoiceCorrect();
+    }
     let otherConditions = conditionChecker(conditions, conditionsCleared);
-    let collectiblesCondition = collectibles.current === collectibles.total;
-    if (!collectiblesCondition) conditionsNotCleared.push("conditionCollectAllCollectibles");
-    return otherConditions && collectiblesCondition;
+    //other conditions are checked from conditionCheker, if collectables are collected is checked here.
+    let isCCollected = (collectibles.current >= collectibles.total);
+    if (!isCCollected) conditionsNotCleared.push("conditionCollectAllCollectibles");
+    return otherConditions && isCCollected;
 }
 
 /**

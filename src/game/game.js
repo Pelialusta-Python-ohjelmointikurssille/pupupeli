@@ -2,7 +2,7 @@ import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
-import { commandsDone, onAllCollectiblesCollected } from "./game_controller.js";
+import { commandsDone } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { GridObject } from "./gridobject.js";
@@ -13,7 +13,6 @@ export class Game {
     constructor() {
         this.grid = getGameTask();
         this.collectibleCounter = new CollectibleCounter(this.grid);
-        this.collectibleCounter.onAllCollectiblesCollected?.addEventListener("done", onAllCollectiblesCollected);
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
@@ -89,7 +88,6 @@ export class Game {
         this.grid.resetGrid();
         this.gh.resetGridObjects();
         this.gh.destroyTextBoxes();
-        this.gameMode.reset();
         this.gh.destroyTextBoxes();
         this.destroyTempObjects();
     }
