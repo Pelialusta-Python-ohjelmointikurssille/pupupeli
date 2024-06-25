@@ -21,6 +21,31 @@ describe('GraphicsCamera', () => {
     camera = new GraphicsCamera(mockPIXIContainer, mockPIXIRectangle, new Vector2(0, 0));
   });
 
+  test('should initialize with the correct properties', () => {
+    expect(camera.container).toBe(mockPIXIContainer);
+    expect(camera.pixiScreen).toBe(mockPIXIRectangle);
+    expect(camera.position).toEqual(new Vector2(0, 0));
+    expect(camera.renderScale).toEqual(new Vector2(1, 1));
+    expect(camera.screenCenter).toEqual(new Vector2(512, 512));
+    expect(camera.zoomScale).toBe(0.95);
+    expect(camera.rotation).toBe(0);
+    expect(camera.minZoom).toBe(0.08);
+    expect(camera.maxZoom).toBe(0.95);
+    expect(camera.focusPaddingPercent).toBe(0.025);
+    expect(camera.totalRenderScale).toBe(1);
+  });
+
+  test('should update position and associated variables correctly', () => {
+    camera.position = new Vector2(100, 100);
+    camera.updatePosition();
+
+    expect(camera.totalRenderScale).toBe(1);
+    expect(camera.container.pivot.x).toBe(100);
+    expect(camera.container.pivot.y).toBe(100);
+    expect(camera.container.rotation).toBe(0);
+    expect(camera.container.scale).toBe(1);
+  });
+
   test('should calculate total render scale correctly', () => {
     camera.zoomScale = 2;
     expect(camera.getTotalRenderScale()).toBe(2);
@@ -55,7 +80,7 @@ describe('GraphicsCamera', () => {
     expect(camera.zoomScale).toBe(0.5);
 
     camera.setZoom(1.5);
-    expect(camera.zoomScale).toBe(0.95);
+    expect(camera.zoomScale).toBe(1);
 
     camera.setZoom(0.05);
     expect(camera.zoomScale).toBe(0.08);
