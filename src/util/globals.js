@@ -24,9 +24,7 @@ export const task = (function () {
     return Task.fromJSON(tryGetFileAsJson(path));
 })();
 
-//Only called at the start by the collectible counter to know when to notify that all have been collected
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
-
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
 
 export let currentSAB;
