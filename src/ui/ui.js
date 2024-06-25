@@ -8,6 +8,7 @@ import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.
 import { initGame, setTheme } from "../game/game_controller.js";
 import { conditionsNotCleared } from "../clear_conditions.js";
 import { createTaskButtons, createChapterButtons, createInstructionPage } from "./ui_buttons.js";
+import { checkIfGameWon } from "../clear_conditions.js";
 
 const instructionsStr = "instructions";
 let currentChapter = globals.chapterIdentifier;
@@ -57,23 +58,23 @@ async function initPage() {
  */
 function createGamePage() {
     let descriptionTargetDiv = document.getElementById("task-description");
-        setDescription(descriptionTargetDiv);
+    setDescription(descriptionTargetDiv);
 
-        if (globals.task.getMultipleChoiceQuestions().length > 0) {
-            setMultipleChoice();
-        }
-        // set editor code
-        window.addEventListener('load', function () {
-            setEditorCode()
-            createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
-        });
-        let titleTargetDiv = document.getElementById("taskTitle");
-        setTitle(titleTargetDiv);
+    if (globals.task.getMultipleChoiceQuestions().length > 0) {
+        setMultipleChoice();
+    }
+    // set editor code
+    window.addEventListener('load', function () {
+        setEditorCode()
+        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
+    });
+    let titleTargetDiv = document.getElementById("taskTitle");
+    setTitle(titleTargetDiv);
 
-        // set previous/next task button eventlisteners
-        Array.from(document.getElementsByClassName("task-navigation-button")).forEach(button => {
-            button.addEventListener("click", moveToTask);
-        });
+    // set previous/next task button eventlisteners
+    Array.from(document.getElementsByClassName("task-navigation-button")).forEach(button => {
+        button.addEventListener("click", moveToTask);
+    });
 }
 
 /**
@@ -99,6 +100,7 @@ function setMultipleChoice() {
 
     Array.from(questions).forEach(question => {
         question.addEventListener("click", colorSelectedChoice);
+        question.addEventListener("click", checkIfGameWon);
     });
 }
 /**
@@ -120,7 +122,7 @@ export function setEditorCode() {
  * Sets the text from task.description to given div. Useful since game and instructions tasks use different description div.
  * @param {object} descriptionDiv | the description div where we want description text as a html element
  */
-export function setDescription(descriptionDiv){
+export function setDescription(descriptionDiv) {
     // set description
     globals.task.getDescription().forEach((line) => {
         line = line === "" ? "<br>" : line;
@@ -171,7 +173,7 @@ export function onTaskComplete(isWon) {
         const buttonid = apiTaskIdentifier;
         let button = document.getElementById(buttonid);
         if (globals.task.getTaskType() != instructionsStr) {
-        celebration();
+            celebration();
         }
         if (button.classList.contains("button-incompleted")) {
             button.classList.replace("button-incompleted", "button-completed");
@@ -206,7 +208,7 @@ export function onTaskComplete(isWon) {
 
         document.getElementById("condition-failed").innerHTML = errorMessage;
         showPopUpNotification("condition-failed");
-        
+
         api.sendTask(apiTaskIdentifier);
     }
 }
@@ -221,10 +223,10 @@ export function moveToTask(event) {
 
     switch (which) {
         case "previous":
-            window.location.href = `/?chapter=${currentChapter}&task=${currentTask-1}`;
+            window.location.href = `/?chapter=${currentChapter}&task=${currentTask - 1}`;
             break;
         case "next":
-            window.location.href = `/?chapter=${currentChapter}&task=${currentTask+1}`;
+            window.location.href = `/?chapter=${currentChapter}&task=${currentTask + 1}`;
             break;
     }
 }
@@ -275,7 +277,7 @@ export function showPopUpNotification(elementId) {
         setTimeout(() => {
             element.classList.remove("pop-up-notification-show-login");
         }, 6000);
-    element.classList.add("pop-up-notification-show-login");
+        element.classList.add("pop-up-notification-show-login");
     } else {
         element.classList.add("pop-up-notification-show");
     }
