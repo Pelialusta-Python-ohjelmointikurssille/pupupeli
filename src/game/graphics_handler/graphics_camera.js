@@ -30,28 +30,36 @@ export class GraphicsCamera {
         this.totalRenderScale = this.getTotalRenderScale();
         this.linearZoomValue = 100;
         this.debug = new PIXI.Graphics();
+        this.postext = new PIXI.Text({ text: "", style: { fontFamily: "Roboto Light", fontSize: 32, fill : 0xffffff } });
         this.debug.zIndex = 100000000;
         this.container.addChild(this.debug);
-        
-        this.updatePosition();
-        this.minX = 0;
-        this.minY = 0;
-        this.maxX = 1024;
-        this.maxY = 1024;
-        
+        this.container.addChild(this.postext);
+
         this.viewPortCorners = [
             this.screenToWorld(new Vector2(0, 0)),
             this.screenToWorld(new Vector2(1024, 0)),
             this.screenToWorld(new Vector2(0, 1024)),
             this.screenToWorld(new Vector2(1024, 1024))
         ];
+        this.minX = 0;
+        this.minY = 0;
+        this.maxX = 1024;
+        this.maxY = 1024;
+        this.updatePosition();
+        
     }
 
     /**
      * Update the camera's position and associated variables
      */
     updatePosition() {
-        this.clampPositionToBounds();
+        this.viewPortCorners = [
+            this.screenToWorld(new Vector2(0, 0)),
+            this.screenToWorld(new Vector2(1024, 0)),
+            this.screenToWorld(new Vector2(0, 1024)),
+            this.screenToWorld(new Vector2(1024, 1024))
+        ];
+        this.clampPositionByViewPort();
         this.totalRenderScale = this.getTotalRenderScale();
         this.container.pivot.x = this.position.x;
         this.container.pivot.y = this.position.y;
@@ -62,7 +70,7 @@ export class GraphicsCamera {
             this.screenToWorld(new Vector2(1024, 0)),
             this.screenToWorld(new Vector2(0, 1024)),
             this.screenToWorld(new Vector2(1024, 1024))
-        ];      
+        ];
     }
 
     /**
@@ -168,10 +176,13 @@ export class GraphicsCamera {
         this.debug
         .rect(this.viewPortCorners[3].x - 16, this.viewPortCorners[3].y - 16, 32, 32)
         .fill({color: 0xff0000});
+        this.postext.position.x = this.viewPortCorners[0].x;
+        this.postext.position.y = this.viewPortCorners[0].y + 64;
+        this.postext.text = `${this.container.pivot.x} ${this.container.pivot.y}`
     }
 
     screenToWorld(screenVector) {
-        return new Vector2(this.container.pivot.x + ((screenVector.x-512) / this.totalRenderScale), this.container.pivot.y + ((screenVector.y-512) / this.totalRenderScale));
+        return new Vector2(this.position.x + ((screenVector.x-512) / this.totalRenderScale), this.position.y + ((screenVector.y-512) / this.totalRenderScale));
     }
 
     clampPositionToBounds() {
@@ -179,5 +190,14 @@ export class GraphicsCamera {
         if (this.position.x > this.maxX) this.position.x = this.maxX;
         if (this.position.y < this.minY) this.position.y = this.minY;
         if (this.position.y > this.maxY) this.position.y = this.maxY;
+    }
+
+    clampPositionByViewPort() {
+        if (this.viewPortCorners[0].x < this.minX) this.position.x = this.minX + this.screenToWorld(new Vector2(512, 512)).x - this.viewPortCorners[0].x;
+        if (this.viewPortCorners[0].y < this.minY) this.position.y = this.minY + this.screenToWorld(new Vector2(512, 512)).y - this.viewPortCorners[0].y;
+        if (this.viewPortCorners[3].x > this.maxX) this.position.x = this.maxX - (this.viewPortCorners[3].x - this.screenToWorld(new Vector2(512, 512)).x);
+        if (this.viewPortCorners[3].y > this.maxY) this.position.y = this.maxY - (this.viewPortCorners[3].y - this.screenToWorld(new Vector2(512, 512)).y);
+        //console.log(this.viewPortCorners[3].x - this.screenToWorld(new Vector2(512, 512)).x)
+        //if (this.viewPortCorners[3].y > this.maxY) this.position.y = 512;
     }
 }

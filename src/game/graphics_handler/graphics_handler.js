@@ -135,12 +135,16 @@ export class GraphicsHandler {
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
         this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 300 + 2048, this.gridHeight * 300 + 2048) } , SKIN_BUNDLES["background"]);
         let gridObject = this.graphicsEntityHandler.getMainGridObject();
+        let boundPaddingX = 0;
+        let boundPaddingY = 0;
+        boundPaddingX = this.gridWidth * 8;
+        boundPaddingY = this.gridHeight * 8;
         this.graphicsEntityHandler.camera.focusOnAreaMiddle(gridObject.getMiddlePixelPosition(), gridObject.pixelSize);
         this.graphicsEntityHandler.camera.setMinZoom(this.graphicsEntityHandler.camera.zoomScale);
-        this.graphicsEntityHandler.camera.minX = 0;
-        this.graphicsEntityHandler.camera.minY = 0;
-        this.graphicsEntityHandler.camera.maxX = (this.gridWidth) * 128;
-        this.graphicsEntityHandler.camera.maxY = (this.gridHeight) * 128;
+        this.graphicsEntityHandler.camera.minX = -boundPaddingX;
+        this.graphicsEntityHandler.camera.minY = -boundPaddingY;
+        this.graphicsEntityHandler.camera.maxX = (this.gridWidth) * 128 + boundPaddingX;
+        this.graphicsEntityHandler.camera.maxY = (this.gridHeight) * 128 + boundPaddingY;
     }
 
     /**
