@@ -16,25 +16,24 @@ luo uusi constant commonstrings.js
 
 luo geneerinen nimi ja jos kuva muuttuu teeman mukaisesti voi antaa teeman mukaisia nimiä
 
-Lisää editor.html:ssä createTable  funktion sisällä uusi case-arvo
-```
- cell.addEventListener('click', function () {
-                        switch (this.dataset.value) {
-                            case '1':
-                                this.dataset.value = '2';
-                                this.innerHTML = '<img src="/src/static/game_assets/collectibles/carrot.png"></img>'
-                                break;
-                            case '2':
-                                this.dataset.value = '3';
-                                this.innerHTML = '<img src="/src/static/game_assets/obstacles/rock.png"></img>'
-                                break;
-                            case '3':
-                                this.innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>'
-                                this.dataset.value = '1';
-                                break;
-                        }
+Aseta var _maxImageIndex arvo yhden suuremmaksi 
 
-                    });
+Lisää editor.html:ssä getImage funktion sisällä uusi case-arvo
 ```
-this.dataset.value tulee muuttua niin, että arvoksi muuttuu aina seuraavalla klikkauksella halutun kuvan arvo.
+function getImage(index) {
+            //Player is 0, grass is 1 and is used as the default
+            switch (index) {
+                case '0':
+                    return '<img src="/src/static/game_assets/characters/bunny_right.png"></img>';
+                case '2':
+                    return '<img src="/src/static/game_assets/collectibles/carrot.png"></img>';
+                case '3':
+                    return '<img src="/src/static/game_assets/obstacles/rock.png"></img>';
+                default:
+                    return '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>';
+            }
+        }
+```
+Kuvat vaihtuvat case-numeroiden mukaan. Ruoho on alustettu arvolla 1 ja pelaaj on alustettu arvolla 0
+
 
