@@ -831,12 +831,15 @@
 
         //Change this value if you add more images to the switch statement in getImage() below
         var _maxImageIndex = 3;
-
-        //The image and the value it represents in gamecode when it creates the grid in game logic.
-        //IMPORTANT! "maxImageIndex" above must be the same as the max value used in the switch statement
-        function getImage(index) {
+        //IMPORTANT! "maxImageIndex" above must be the same as the max value used in the switch statement below
+        /**
+         * Get the image path by using the value it represents in gamecode when it creates the grid in game logic.
+         * Remember that if you change the values below, change the values of "gridObjectManifest" in gridfactory.js.
+         * They must be the same.
+         */
+        function getImage(value) {
             //Player is 0, grass is 1 and is used as the default
-            switch (index) {
+            switch (value) {
                 case '0':
                     return '<img src="/src/static/game_assets/characters/bunny_right.png"></img>';
                 case '2':
