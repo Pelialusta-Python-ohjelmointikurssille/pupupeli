@@ -79,7 +79,6 @@ export class GraphicsCamera {
         this.updatePosition();
     }
 
-
     /**
      * Move camera to a Vector2 point.
      * @param {Vector2} point 
