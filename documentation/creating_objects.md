@@ -26,4 +26,16 @@ function getImage(index) {
 ```
 Kuvat vaihtuvat case-numeroiden mukaan. Ruoho on alustettu arvolla 1 ja pelaaja on alustettu arvolla 0
 
+Mene gridfactory.js tiedostoon, lisää gridObjectManifest vakiomuuttujaan objetkin arvo, joka vastaa case arvoa
+editor.html:ssä. Huom! muista käyttää Constants. - muotoa.
+Esimerkki:
 
+```
+const gridObjectManifest = {
+    0: Constants.PLAYER_STR,
+    1: "",
+    2: Constants.COLLECTIBLE,
+    3: Constants.OBSTACLE,
+    4: Constants.QUESTION_COLLECTIBLE
+}
+```
