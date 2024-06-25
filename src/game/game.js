@@ -2,20 +2,18 @@ import { GraphicsHandler } from "./graphics_handler/graphics_handler.js";
 import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
-import { commandsDone } from "./game_controller.js";
+import { commandsDone, onAllCollectiblesCollected } from "./game_controller.js";
 import { Constants } from "./commonstrings.js";
-import * as globals from "../util/globals.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { GridObject } from "./gridobject.js";
 import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.js";
+import { CollectibleCounter } from "./collectible_counter.js";
 
 export class Game {
     constructor() {
-        //getGameTask() returns object containing the grid and the gamemode
-        let gameTask = getGameTask();
-        this.grid = gameTask.grid;
-        this.gameMode = gameTask.gameMode // this.initGameMode(gameTask);
-        this.gameMode.eventTarget?.addEventListener("victory", this.gameHasBeenWon.bind(this));
+        this.grid = getGameTask();
+        this.collectibleCounter = new CollectibleCounter(this.grid);
+        this.collectibleCounter.onAllCollectiblesCollected?.addEventListener("done", onAllCollectiblesCollected);
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.gameWon = false;
@@ -106,9 +104,8 @@ export class Game {
     /**
      * changes gameWon attribute to true
      */
-    gameHasBeenWon() {
-        console.log("Olet voittanut pelin!");
-        console.log("Loppupisteesi on: " + globals.collectibles.current);
+    allCollectablesGained() {
+        console.log("Kaikki porkkanat kerätty!");
         this.gameWon = true;
     }
 

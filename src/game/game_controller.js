@@ -1,4 +1,3 @@
-import { onTaskComplete } from "../ui/ui.js";
 import { Game } from "./game.js";
 import { postMessage } from "../worker_messenger.js";
 import { getVariableTrueName } from './commonstrings.js';
@@ -45,10 +44,6 @@ export function resetGame() {
     game.resetGame();
 }
 
-export function notifyGameWon(won) {
-    onTaskComplete(won);
-}
-
 export function setTheme(theme) {
     game.setTheme(theme);
 }
@@ -86,4 +81,11 @@ export function destroyObject(commandParameters) {
     let x = commandParameters[0];
     let y = commandParameters[1];
     game.destroyObject(x, y);
+}
+
+/**
+ * Called by game when all collectables are collected.
+ */
+export function onAllCollectiblesCollected() {
+    console.log("onAllCollectiblesCollected");
 }

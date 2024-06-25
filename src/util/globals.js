@@ -24,13 +24,12 @@ export const task = (function () {
     return Task.fromJSON(tryGetFileAsJson(path));
 })();
 
-//not sexy to count every object in the grid every time you want the total amount... (task.getTotalCollectibles())
+//Only called at the start by the collectible counter to know when to notify that all have been collected
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
+
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
 
 export let currentSAB;
-export let currentGameMode;
-
 export let isGameWon = 0;
 export let multipleChoiceCorrect = false;
 
@@ -49,7 +48,7 @@ export function setMultipleChoiceCorrect(isCorrect = true) {
 }
 
 export function getMultipleChoiceCorrect() {
-    if (currentGameMode.name === "GameModeMultipleChoice") {
+    if (task.getMultipleChoiceQuestions().length > 0) {
         return multipleChoiceCorrect;
     }
     return true; //default in any other gamemode
@@ -75,14 +74,6 @@ export function getCurrentTheme() {
 
 export function setCurrentTheme(theme) {
     localStorage.setItem("theme", theme);
-}
-
-export function setCurrentGameMode(gameMode) {
-    currentGameMode = gameMode;
-}
-
-export function getCurrentGameMode() {
-    return currentGameMode;
 }
 
 export function incrementCollectibles() {

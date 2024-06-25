@@ -1,6 +1,5 @@
 import { onTaskComplete } from "./ui/ui.js";
 import { task, getMultipleChoiceCorrect } from "./util/globals.js";
-import { notifyGameWon } from "./game/game_controller.js";
 
 export const conditionsCleared = [];
 export const conditions = task.getConditions();
@@ -8,10 +7,9 @@ export const conditionsNotCleared = [];
 
 export function checkIfGameWon() {
     if (getMultipleChoiceCorrect()) {
-        onTaskComplete();
-        notifyGameWon(true);
+        onTaskComplete(true);
     } else {
-        notifyGameWon(false);
+        onTaskComplete(false);
     }
 }
 
