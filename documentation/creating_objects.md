@@ -5,6 +5,7 @@
 Lisää haluamasi objekti listaan, joka löytyy commonstrings.js tiedostosta:
 
 const COLLECTIBLE_ALIASES = ["porkkana", "jakoavain", "ruoka"];
+
 const OBSTACLE_ALIASES = ["kivi", "viemäri", "este"];
 
 lisää objektin kuvat kansioon static, game_assets, collectibles/obstacles
