@@ -453,9 +453,8 @@
                     cell.addEventListener('click', function () {
                         //Case 1 is is the default value, grass.
                         //Case 0 is reserved for player, so we skip it
-                        let maxValue = 3;
                         this.dataset.value++;
-                        if (this.dataset.value > maxValue) this.dataset = 1;
+                        if (this.dataset.value > _maxImageIndex) this.dataset = 1;
                         this.innerHTML = getImage(this.dataset.value);
                     });
 
@@ -830,7 +829,11 @@
             }
         }
 
-        //The image and the value it represents in gamecode when it creates the grid in game logic
+        //Change this value if you add more images to the switch statement in getImage() below
+        var _maxImageIndex = 3;
+
+        //The image and the value it represents in gamecode when it creates the grid in game logic.
+        //IMPORTANT! "maxImageIndex" above must be the same as the max value used in the switch statement
         function getImage(index) {
             //Player is 0, grass is 1 and is used as the default
             switch (index) {
