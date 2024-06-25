@@ -5,7 +5,7 @@ import * as globals from "../util/globals.js";
 
 const gridObjectManifest = {
     0: Constants.PLAYER_STR,
-    1: "",
+    1: "", //empty space
     2: Constants.COLLECTIBLE,
     3: Constants.OBSTACLE,
     4: Constants.QUESTION_COLLECTIBLE
