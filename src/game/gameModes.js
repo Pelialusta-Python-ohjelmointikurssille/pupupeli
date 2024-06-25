@@ -67,7 +67,7 @@ export class GameModeMultipleChoice {
 
     // called by eventhandler after checking conditions
     checkIfGameWon() {
-        if (globals.allConditionsCleared() && globals.getMultipleChoiceCorrect()) {
+        if (globals.getMultipleChoiceCorrect()) {
             this.eventTarget.dispatchEvent(new Event("victory"));
             gameController.notifyGameWon(true);
         } else {

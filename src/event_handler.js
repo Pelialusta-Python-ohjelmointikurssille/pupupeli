@@ -5,6 +5,7 @@ import * as globals from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
 import { requestInputFromPython } from './game/game_input_controller.js';
+import { checkIfGameWon } from './clear_conditions.js';
 
 let worker;
 let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
@@ -36,7 +37,7 @@ export function initWorker() {
                 break;
             case "finish":
                 // final check to see if all win conditions are achieved
-                globals.getCurrentGameMode().checkIfGameWon();
+                checkIfGameWon();
                 disablePlayButton();
                 console.log("Last command finished");
                 break;
@@ -54,7 +55,7 @@ export function initWorker() {
                     gameController.createObject(message.details);
                 }
                 break;
-                
+
             case "destroyObject":
                 if (globals.task.getEnableAddRemove()) {
                     gameController.destroyObject(message.details);
