@@ -141,7 +141,6 @@ export function createChapterButtons() {
                 button.value = i + 1;
                 button.innerText = `Tehtäväsarja ${i + 1}`;
                 if (currentChapter === i + 1) button.classList.add("button-current-chapter")
-                //Check if 
                 let currentTotalTasks = fileReader.countForTaskFilesInDirectory("/tasks/" + (i + 1)).count;
                 let allTasksCompleted = true;
                 for (let j = 0; j < currentTotalTasks; j++) {
@@ -176,7 +175,6 @@ export function createChapterButtons() {
 
             button.addEventListener('click', () => {
                 currentChapter = i + 1;
-                console.log(currentChapter)
                 window.location.href = `/?chapter=${currentChapter}&task=1`;
             });
             selectContainer.appendChild(button);
