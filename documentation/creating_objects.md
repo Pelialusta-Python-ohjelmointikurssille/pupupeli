@@ -2,8 +2,6 @@
 
 ## Lisää uudenlainen objekti
 
-luo geneerinen nimi ja jos kuva muuttuu teeman mukaisesti voi antaa teeman mukaisia nimiä
-
 Lisää editor.html:ssä getImage funktion sisällä uusi case-arvo
 ```
 function getImage(index) {
@@ -22,11 +20,13 @@ function getImage(index) {
 ```
 Muista asettaa var _maxImageIndex arvo yhden suuremmaksi, vastaamaan uutta suurinta arvoa switch statementissa.
 
-Kuvat vaihtuvat case-numeroiden mukaan. Ruoho on alustettu arvolla 1 ja pelaaja on alustettu arvolla 0. 
+Kuvat vaihtuvat case-numeroiden mukaan editorissa. Ruoho on alustettu arvolla 1 ja pelaaja on alustettu arvolla 0. 
 Näitä samoja arvoja käytetään taulukossa joka luodaan json-tiedostoon. Pelilogiikka lukee sitä taulukkoa luodakseen peliruudukon.
 
 Mene gridfactory.js tiedostoon, lisää gridObjectManifest vakiomuuttujaan objetkin arvo, joka vastaa case arvoa
-editor.html:ssä. Huom! muista käyttää Constants. - muotoa. Luo uusi vakiomuuttuja commonstrings.js tiedostoon
+editor.html:ssä. Huom! muista käyttää Constants. - muotoa. 
+
+Luo uusi vakiomuuttuja commonstrings.js tiedostoon. Luo geneerinen nimi ja jos kuva muuttuu teeman mukaisesti voi antaa teeman mukaisia nimiä.
 Esimerkki:
 
 ```
