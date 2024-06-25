@@ -1,11 +1,13 @@
 import { Direction } from "./direction.js";
 
 export class Constants {
-    //grid object names:
+    //grid object type:
     static COLLECTIBLE = "collectible";
     static OBSTACLE = "obstacle";
     static EMPTY_TILE = "";
     static QUESTION_COLLECTIBLE = "question_collectible";
+    //^ Add new gridObjects types above ^
+
     //Following are the valid command strings:
     static MOVE_STR = "move";
     static SAY_STR = "say";
