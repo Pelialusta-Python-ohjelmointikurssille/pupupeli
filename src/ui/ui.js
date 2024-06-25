@@ -7,6 +7,7 @@ import { initWorker } from "../worker_messenger.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, setTheme } from "../game/game_controller.js";
+import { conditionsNotCleared } from "../clear_conditions.js";
 
 
 const chapterDir = "/tasks/" + globals.chapterIdentifier;
@@ -351,7 +352,7 @@ export function onTaskComplete(won) {
     } else {
         let errorMessage = "<h2>Voi juku, et vielä läpäissyt tasoa koska:<ol>";
         if (!globals.getMultipleChoiceCorrect()) errorMessage += "\n<li>monivalintatehtävän vastaus oli väärä</li>"
-        globals.conditionsNotCleared.forEach(failedCondition => {
+        conditionsNotCleared.forEach(failedCondition => {
             switch (failedCondition) {
                 case "conditionCollectAllCollectibles":
                     errorMessage += "\n<li>et kerännyt kaikkia tarvittavia asioita</li>"

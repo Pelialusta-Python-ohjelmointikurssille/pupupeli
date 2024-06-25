@@ -5,7 +5,7 @@ import * as globals from './util/globals.js';
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
 import { requestInputFromPython } from './game/game_input_controller.js';
-import { checkIfGameWon } from './clear_conditions.js';
+import { checkIfGameWon, addClearedConditions } from './clear_conditions.js';
 
 let worker;
 let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
@@ -16,6 +16,7 @@ let syncArray;
  * Creates a new worker
  */
 export function initWorker() {
+    //TODO: this function is long and will potentially grow longer. Stop the madness before it's too late.
     worker = new Worker('/src/input/worker.js');
     worker.onmessage = (message) => {
         message = message.data;
@@ -33,7 +34,7 @@ export function initWorker() {
                 gameController.giveCommand({ data: message.details, sab: message.sab });
                 break;
             case "conditionsCleared":
-                globals.addClearedConditions(message.details);
+                addClearedConditions(message.details);
                 break;
             case "finish":
                 // final check to see if all win conditions are achieved
