@@ -144,10 +144,10 @@ export class GraphicsHandler {
         boundPaddingY = this.gridHeight * 8;
         this.graphicsEntityHandler.camera.focusOnAreaMiddle(gridObject.getMiddlePixelPosition(), gridObject.pixelSize);
         this.graphicsEntityHandler.camera.setMinZoom(this.graphicsEntityHandler.camera.zoomScale);
-        //this.graphicsEntityHandler.camera.minX = -boundPaddingX;
-        //this.graphicsEntityHandler.camera.minY = -boundPaddingY;
-        //this.graphicsEntityHandler.camera.maxX = (this.gridWidth) * 128 + boundPaddingX;
-        //this.graphicsEntityHandler.camera.maxY = (this.gridHeight) * 128 + boundPaddingY;
+        this.graphicsEntityHandler.camera.minXPos = 0;
+        this.graphicsEntityHandler.camera.minYPos = 0;
+        this.graphicsEntityHandler.camera.maxXPos = (this.gridWidth) * 128;
+        this.graphicsEntityHandler.camera.maxYPos = (this.gridHeight) * 128;
     }
 
     /**

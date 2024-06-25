@@ -45,8 +45,11 @@ export class GraphicsCamera {
         this.minY = null;
         this.maxX = null;
         this.maxY = null;
+        this.minXPos = null;
+        this.minYPos = null;
+        this.maxXPos = null;
+        this.maxYPos = null;
         this.updatePosition();
-        
     }
 
     /**
@@ -60,6 +63,7 @@ export class GraphicsCamera {
             this.screenToWorld(new Vector2(1024, 1024))
         ];
         this.clampPositionByViewPort();
+        this.clampPositionToBounds();
         this.totalRenderScale = this.getTotalRenderScale();
         this.container.pivot.x = this.position.x;
         this.container.pivot.y = this.position.y;
@@ -190,10 +194,14 @@ export class GraphicsCamera {
     }
 
     clampPositionToBounds() {
-        if (this.position.x < this.minX) this.position.x = this.minX;
-        if (this.position.x > this.maxX) this.position.x = this.maxX;
-        if (this.position.y < this.minY) this.position.y = this.minY;
-        if (this.position.y > this.maxY) this.position.y = this.maxY;
+        if (this.minXPos == null) return;
+        if (this.minYPos == null) return;
+        if (this.maxXPos == null) return;
+        if (this.maxYPos == null) return;
+        if (this.position.x < this.minXPos) this.position.x = this.minXPos;
+        if (this.position.x > this.maxXPos) this.position.x = this.maxXPos;
+        if (this.position.y < this.minYPos) this.position.y = this.minYPos;
+        if (this.position.y > this.maxYPos) this.position.y = this.maxYPos;
     }
 
     clampPositionByViewPort() {
