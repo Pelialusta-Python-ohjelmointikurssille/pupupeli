@@ -33,13 +33,18 @@ export class GraphicsCamera {
         this.debug.zIndex = 100000000;
         this.container.addChild(this.debug);
         
-
         this.updatePosition();
         this.minX = 0;
         this.minY = 0;
         this.maxX = 1024;
         this.maxY = 1024;
         
+        this.viewPortCorners = [
+            this.screenToWorld(new Vector2(0, 0)),
+            this.screenToWorld(new Vector2(1024, 0)),
+            this.screenToWorld(new Vector2(0, 1024)),
+            this.screenToWorld(new Vector2(1024, 1024))
+        ];
     }
 
     /**
@@ -51,7 +56,13 @@ export class GraphicsCamera {
         this.container.pivot.x = this.position.x;
         this.container.pivot.y = this.position.y;
         this.container.rotation = this.rotation;
-        this.container.scale = this.totalRenderScale;        
+        this.container.scale = this.totalRenderScale;  
+        this.viewPortCorners = [
+            this.screenToWorld(new Vector2(0, 0)),
+            this.screenToWorld(new Vector2(1024, 0)),
+            this.screenToWorld(new Vector2(0, 1024)),
+            this.screenToWorld(new Vector2(1024, 1024))
+        ];      
     }
 
     /**
@@ -138,10 +149,6 @@ export class GraphicsCamera {
     }
 
     drawDebug() {
-        let topLeft = this.screenToWorld(new Vector2(0, 0));
-        let topRight = this.screenToWorld(new Vector2(1024, 0));
-        let bottomLeft = this.screenToWorld(new Vector2(0, 1024));
-        let bottomRight = this.screenToWorld(new Vector2(1024, 1024));
         let center = this.screenToWorld(new Vector2(512, 512));
 
         this.debug.clear();
@@ -150,16 +157,16 @@ export class GraphicsCamera {
         .fill({color: 0xff0000});
         
         this.debug
-        .rect(topLeft.x - 16, topLeft.y - 16, 32, 32)
+        .rect(this.viewPortCorners[0].x - 16, this.viewPortCorners[0].y - 16, 32, 32)
         .fill({color: 0xff0000});
         this.debug
-        .rect(topRight.x - 16, topRight.y - 16, 32, 32)
+        .rect(this.viewPortCorners[1].x - 16, this.viewPortCorners[1].y - 16, 32, 32)
         .fill({color: 0xff0000});
         this.debug
-        .rect(bottomLeft.x - 16, bottomLeft.y - 16, 32, 32)
+        .rect(this.viewPortCorners[2].x - 16, this.viewPortCorners[2].y - 16, 32, 32)
         .fill({color: 0xff0000});
         this.debug
-        .rect(bottomRight.x - 16, bottomRight.y - 16, 32, 32)
+        .rect(this.viewPortCorners[3].x - 16, this.viewPortCorners[3].y - 16, 32, 32)
         .fill({color: 0xff0000});
     }
 
