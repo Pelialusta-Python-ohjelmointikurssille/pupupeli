@@ -138,10 +138,6 @@ export class GraphicsHandler {
             size: new Vector2(this.gridWidth * 128 + 4096, this.gridHeight * 128 + 4096),
             position: gridObject.getMiddlePixelPosition()
         } , SKIN_BUNDLES["background"]);
-        let boundPaddingX = 0;
-        let boundPaddingY = 0;
-        boundPaddingX = this.gridWidth * 8;
-        boundPaddingY = this.gridHeight * 8;
         this.graphicsEntityHandler.camera.focusOnAreaMiddle(gridObject.getMiddlePixelPosition(), gridObject.pixelSize);
         this.graphicsEntityHandler.camera.setMinZoom(this.graphicsEntityHandler.camera.zoomScale);
         this.graphicsEntityHandler.camera.minXPos = 0;

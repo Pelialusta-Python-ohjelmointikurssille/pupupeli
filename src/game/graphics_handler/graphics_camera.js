@@ -1,5 +1,4 @@
 import { Vector2 } from "../vector.js";
-import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 
 /**
  * Entity used for changing viewport position and resolution scaling.
