@@ -452,23 +452,11 @@
 
                     cell.addEventListener('click', function () {
                         //Case 1 is is the default value, grass.
-                        //Case 0 is reserved for player.
-                        //change "maxValue" below if you add new tiles:
+                        //Case 0 is reserved for player, so we skip it
                         let maxValue = 3;
                         this.dataset.value++;
                         if (this.dataset.value > maxValue) this.dataset = 1;
-                        switch (this.dataset.value) {
-                            case '2':
-                                this.innerHTML = '<img src="/src/static/game_assets/collectibles/carrot.png"></img>'
-                                break;
-                            case '3':
-                                this.innerHTML = '<img src="/src/static/game_assets/obstacles/rock.png"></img>'
-                                break;
-                            default:
-                                this.innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>'
-                                break;
-                        }
-
+                        this.innerHTML = getImage(this.dataset.value);
                     });
 
 
@@ -828,20 +816,7 @@
                 }
 
                 for (let i = 0; i < cells.length; i++) {
-                    switch (cells[i].dataset.value) {
-                        case '0':
-                            cells[i].innerHTML = '<img src="/src/static/game_assets/characters/bunny_right.png"></img>'
-                            break;
-                        case '2':
-                            cells[i].innerHTML = '<img src="/src/static/game_assets/collectibles/carrot.png"></img>'
-                            break;
-                        case '3':
-                            cells[i].innerHTML = '<img src="/src/static/game_assets/obstacles/rock.png"></img>'
-                            break;
-                        case '1':
-                            cells[i].innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>'
-                            break;
-                    }
+                    cells[i].innerHTML = getImage(cells[i].dataset.value);
                 }
             }
 
@@ -857,8 +832,16 @@
 
         //The image and the value it represents in gamecode when it creates the grid in game logic
         function getImage(index) {
+            //Player is 0, grass is 1 and is used as the default
             switch (index) {
-                
+                case '0':
+                    return '<img src="/src/static/game_assets/characters/bunny_right.png"></img>';
+                case '2':
+                    return '<img src="/src/static/game_assets/collectibles/carrot.png"></img>';
+                case '3':
+                    return '<img src="/src/static/game_assets/obstacles/rock.png"></img>';
+                default:
+                    return '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>';
             }
         }
 
