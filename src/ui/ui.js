@@ -278,6 +278,7 @@ export function showPopUpNotification(elementId) {
             element.classList.remove("pop-up-notification-show-login");
         }, 6000);
         element.classList.add("pop-up-notification-show-login");
+
     } else {
         element.classList.add("pop-up-notification-show");
     }
