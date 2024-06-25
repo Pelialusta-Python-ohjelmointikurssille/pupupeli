@@ -1,7 +1,7 @@
 import * as api from "../api/api.js";
 import * as globals from "../util/globals.js";
 import * as fileReader from "../file_reader.js";
-import { setTitle, setDescription, moveToTask } from "./ui.js";
+import { setTitle, setDescription, moveToTask, onTaskComplete } from "./ui.js";
 
 const chapterDir = "/tasks/" + globals.chapterIdentifier;
 const countTaskResponse = fileReader.countForTaskFilesInDirectory(chapterDir);
@@ -122,6 +122,11 @@ export function createTaskButtons(str="") {
     }
 }
 
+/**
+ * Creates chapter buttons and appends them to the 'chapterbuttontable' container.
+ * If the user is logged in, it will fetch the list of completed tasks from the API and mark the chapters
+ * as completed or incompleted based on the task completion status.
+ */
 export function createChapterButtons() {
     const selectContainer = document.getElementById('chapterbuttontable');
 

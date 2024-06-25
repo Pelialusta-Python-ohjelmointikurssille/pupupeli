@@ -1,5 +1,4 @@
 import * as globals from "../util/globals.js";
-import * as fileReader from "../file_reader.js";
 import * as api from "../api/api.js";
 import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
 import { getEditor } from "../input/editor.js"
