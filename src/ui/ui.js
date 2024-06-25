@@ -3,7 +3,7 @@ import * as fileReader from "../file_reader.js";
 import * as api from "../api/api.js";
 import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
 import { getEditor } from "../input/editor.js"
-import { initWorker } from "../event_handler.js";
+import { initWorker } from "../worker_messenger.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, setTheme } from "../game/game_controller.js";
@@ -21,7 +21,7 @@ const instructionsStr = "instructions";
 
 
 /**
- * Runs ui initialisation functions + atm the event_handlers worker
+ * Runs ui initialisation functions + atm the worker_messenger worker
  */
 async function main() {
     initPage(); // creates task json global variable
@@ -51,9 +51,6 @@ async function initGameAndCanvas() {
  * Game and instructions task types require different elements.
  */
 async function initPage() {
-    const taskIdentifier = globals.taskIdentifier;
-    const chapterIdentifier = globals.chapterIdentifier;
-
     createChapterButtons();
     isUserLoggedIn();
     // checking if task type is instructions
@@ -62,12 +59,6 @@ async function initPage() {
     } else {
         createInstructionPage();
     }
-    const prevTaskLink = document.getElementById('prev-task-link');
-    const nextTaskLink = document.getElementById('next-task-link');
-
-    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
-
-
 }
 
 /**
@@ -106,19 +97,23 @@ function createGamePage() {
         });
         let titleTargetDiv = document.getElementById("taskTitle");
         setTitle(titleTargetDiv);
+
+        // set previous/next task button eventlisteners
+        Array.from(document.getElementsByClassName("task-navigation-button")).forEach(button => {
+            button.addEventListener("click", moveToTask);
+        });
 }
 
 /**
  * Clears app-container, creates a new one and adds elements for instruction page
  */
 function createInstructionPage() {
-    const taskIdentifier = globals.taskIdentifier;
-    const chapterIdentifier = globals.chapterIdentifier;
     const appDiv = document.getElementById("app-container");
     appDiv.classList.add("is-hidden");
 
     let insAppDiv = document.createElement('div');
     insAppDiv.id = 'instructions-container';
+    insAppDiv.classList.add("box");
     insAppDiv.style.flexDirection = "row";
     insAppDiv.style.display = "flex";
     window.addEventListener('load', function () {
@@ -132,23 +127,11 @@ function createInstructionPage() {
 
     let insHeadline = document.createElement('h1');
     
-    let prevTaskLink = document.createElement('a');
-    prevTaskLink.id = 'prev-task-link';
-    prevTaskLink.textContent = '< ';
-    
     let instructionTitle = document.createElement('a');
     instructionTitle.id = 'instructionTitle';
     setTitle(instructionTitle);
     
-    let nextTaskLink = document.createElement('a');
-    nextTaskLink.id = 'next-task-link';
-    nextTaskLink.textContent = ' >';
-    
-    insHeadline.appendChild(prevTaskLink);
     insHeadline.appendChild(instructionTitle);
-    insHeadline.appendChild(nextTaskLink);
-
-    setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink);
 
     insHead.appendChild(insHeadline);
     
@@ -161,6 +144,11 @@ function createInstructionPage() {
     insAppDiv.appendChild(insDiv);
     insDiv.appendChild(insHead);
     insDiv.appendChild(insDesc);
+
+    // set previous/next task button eventlisteners
+    Array.from(document.getElementsByClassName("task-navigation-button")).forEach(button => {
+        button.addEventListener("click", moveToTask);
+    });
 }
 /**
  * Sets the text from task.title to given div. Useful since game and instructions tasks use different title div.
@@ -186,33 +174,6 @@ export function setDescription(descriptionDiv){
         line = line === "" ? "<br>" : line;
         descriptionDiv.insertAdjacentHTML("beforeend", "<div>" + marked.parse(line) + "</div>");
     });
-}
-
-/**
- * Sets previous and next task buttons if there are any. This was refactored to make initPage cleaner.
- * @param {number} taskIdentifier 
- * @param {number} chapterIdentifier 
- * @param {number} totalTasks 
- * @param {string} prevTaskLink 
- * @param {string} nextTaskLink 
- */
-function setPrevNextButtons(taskIdentifier, chapterIdentifier, totalTasks, prevTaskLink, nextTaskLink) {
-    // Changes href of prevtasklink and hides it if no prev task exists
-    if (taskIdentifier > 1) {
-        prevTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier - 1}`;
-
-        prevTaskLink.style.display = 'inline'; // Ensure it's visible
-    } else {
-        prevTaskLink.style.display = 'none'; // Hide if on the first task
-    }
-    // Changes href of nexttasklink and hides it if no prev task exists
-    if (taskIdentifier < totalTasks) {
-        nextTaskLink.href = `/?chapter=${chapterIdentifier}&task=${taskIdentifier + 1}`;
-
-        nextTaskLink.style.display = 'inline'; // Ensure it's visible
-    } else {
-        nextTaskLink.style.display = 'none'; // Hide if on the last task
-    }
 }
 
 export function enableEditorButtons() {
@@ -415,6 +376,24 @@ export function onTaskComplete(won) {
         showPopUpNotification("condition-failed");
         
         api.sendTask(apiTaskIdentifier);
+    }
+}
+
+/**
+ * a function used by the previous/next task buttons on the page
+ */
+function moveToTask(event) {
+    let currentTask = globals.taskIdentifier;
+    let which = event.target.value;
+    if (currentTask === 1 && which === "previous") return;
+
+    switch (which) {
+        case "previous":
+            window.location.href = `/?chapter=${currentChapter}&task=${currentTask-1}`;
+            break;
+        case "next":
+            window.location.href = `/?chapter=${currentChapter}&task=${currentTask+1}`;
+            break;
     }
 }
 

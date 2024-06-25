@@ -5,7 +5,7 @@ let inputBoxSendButton = document.getElementById("input-box-send-button");
 let inputContainer = document.getElementById('input-container')
 
 /**
- * Set input box invisible and clears the text.
+ * Set input box hidden and clears the text.
  */
 export function hideAndClearInputBox() {
     setUserInputBoxVisibility(false);
@@ -29,19 +29,19 @@ export function resetInputHistory() {
 }
 
 /**
- * @param {*} isVisible boolean, if true set box visible. Else, invisible. 
+ * @param {*} isVisible boolean, if true set box visible. Else, hidden. 
  */
 function setUserInputBoxVisibility(isVisible) {
     if (isVisible) {
-        inputBox.classList.remove("is-invisible");
-        inputBoxSendButton.classList.remove("is-invisible");
+        inputBox.classList.remove("is-hidden");
+        inputBoxSendButton.classList.remove("is-hidden");
         inputBox.addEventListener("keydown", addInputToUserInputs);
         inputBoxSendButton.addEventListener("click", onInputSendButtonClick, false);
         inputBox.focus();
         return;
     }
-    inputBox.classList.add("is-invisible");
-    inputBoxSendButton.classList.add("is-invisible");
+    inputBox.classList.add("is-hidden");
+    inputBoxSendButton.classList.add("is-hidden");
     inputBox.removeEventListener("keydown", addInputToUserInputs);
     inputBoxSendButton.removeEventListener("click", onInputSendButtonClick, false);
 }
