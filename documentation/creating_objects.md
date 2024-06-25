@@ -2,8 +2,6 @@
 
 ## Lisää uudenlainen objekti
 
-luo uusi constant commonstrings.js
-
 luo geneerinen nimi ja jos kuva muuttuu teeman mukaisesti voi antaa teeman mukaisia nimiä
 
 Lisää editor.html:ssä getImage funktion sisällä uusi case-arvo
@@ -28,7 +26,7 @@ Kuvat vaihtuvat case-numeroiden mukaan. Ruoho on alustettu arvolla 1 ja pelaaja 
 Näitä samoja arvoja käytetään taulukossa joka luodaan json-tiedostoon. Pelilogiikka lukee sitä taulukkoa luodakseen peliruudukon.
 
 Mene gridfactory.js tiedostoon, lisää gridObjectManifest vakiomuuttujaan objetkin arvo, joka vastaa case arvoa
-editor.html:ssä. Huom! muista käyttää Constants. - muotoa.
+editor.html:ssä. Huom! muista käyttää Constants. - muotoa. Luo uusi vakiomuuttuja commonstrings.js tiedostoon
 Esimerkki:
 
 ```
