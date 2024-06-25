@@ -11,6 +11,7 @@ describe('GraphicsEntitySystem', () => {
             builtinAssets: {},
             addToStage: jest.fn(),
             removeFromStage: jest.fn(),
+            removeFromUI: jest.fn(),
             cameraWorldContainer: {},
             pixiApp: { screen: {} }
         };
