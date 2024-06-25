@@ -297,4 +297,4 @@ export function displayErrorMessage(error) {
     disablePlayButton("error");
 }
 
-await main();
+main();
