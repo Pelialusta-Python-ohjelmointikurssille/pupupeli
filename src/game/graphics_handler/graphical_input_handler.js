@@ -5,7 +5,7 @@ import { Vector2 } from "../vector.js";
 export class GraphicalInputHandler {
     constructor(renderer, renderingCamera) {
         this.inputHitSprite = new PIXI.Sprite();
-        this.inputHitSprite.hitArea = new PIXI.Rectangle(0, 0, 10000, 10000);
+        this.inputHitSprite.hitArea = new PIXI.Rectangle(0, 0, 1024, 1024);
         this.inputHitSprite.eventMode = "static";
         this.inputHitSprite.on("wheel", this.onWheel, this);
         this.inputHitSprite.on("mousemove", this.onMouseMove, this);
