@@ -130,6 +130,17 @@ export class GraphicsCamera {
         this.maxY = this.viewPortCorners[3].y;
     }
 
+    setCameraArea(middle, size) {
+        this.focusOnAreaMiddle(middle, size);
+        this.setMinZoom(this.zoomScale);
+        let topLeft = new Vector2(middle.x - (size.x / 2), middle.y - (size.y / 2));
+        let bottomRight = new Vector2(middle.x + (size.x / 2), middle.y + (size.y / 2));
+        this.minXPos = topLeft.x;
+        this.minYPos = topLeft.y;
+        this.maxXPos = bottomRight.x;
+        this.maxYPos = bottomRight.y;
+    }
+
     /**
      * Set camera zoom. Will be clamped if too big or small.
      * Smaller value means more zoomed out. Bigger means more zoomed in.
