@@ -46,14 +46,8 @@ export class GraphicsCamera {
      * Update the camera's position and associated variables
      */
     updatePosition() {
-        if (this.position.x < this.minX) this.position.x = this.minX;
-        if (this.position.x > this.maxX) this.position.x = this.maxX;
-        if (this.position.y < this.minY) this.position.y = this.minY;
-        if (this.position.y > this.maxY) this.position.y = this.maxY;
-
+        this.clampPositionToBounds();
         this.totalRenderScale = this.getTotalRenderScale();
-        //this.container.position.x = -this.position.x;
-        //this.container.position.y = -this.position.y;
         this.container.pivot.x = this.position.x;
         this.container.pivot.y = this.position.y;
         this.container.rotation = this.rotation;
@@ -171,5 +165,12 @@ export class GraphicsCamera {
 
     screenToWorld(screenVector) {
         return new Vector2(this.container.pivot.x + ((screenVector.x-512) / this.totalRenderScale), this.container.pivot.y + ((screenVector.y-512) / this.totalRenderScale));
+    }
+
+    clampPositionToBounds() {
+        if (this.position.x < this.minX) this.position.x = this.minX;
+        if (this.position.x > this.maxX) this.position.x = this.maxX;
+        if (this.position.y < this.minY) this.position.y = this.minY;
+        if (this.position.y > this.maxY) this.position.y = this.maxY;
     }
 }
