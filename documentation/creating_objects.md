@@ -17,7 +17,7 @@ luo uusi constant commonstrings.js
 luo geneerinen nimi ja jos kuva muuttuu teeman mukaisesti voi antaa teeman mukaisia nimiä
 
 Lisää editor.html:ssä createTable  funktion sisällä uusi case-arvo
-
+```
  cell.addEventListener('click', function () {
                         switch (this.dataset.value) {
                             case '1':
@@ -35,5 +35,6 @@ Lisää editor.html:ssä createTable  funktion sisällä uusi case-arvo
                         }
 
                     });
-this.dataset.value tulee muuttua niin, että arvoksi siirtyy aina seuraavalla klikkauksella haluttu kuva
+```
+this.dataset.value tulee muuttua niin, että arvoksi muuttuu aina seuraavalla klikkauksella halutun kuvan arvo.
 
