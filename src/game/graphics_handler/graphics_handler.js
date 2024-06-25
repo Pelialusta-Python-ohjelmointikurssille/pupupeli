@@ -6,6 +6,7 @@ import { ENTITIES } from "./manifests/entity_manifest.js";
 import { ENTITY_SKINS, SKIN_BUNDLES } from "./manifests/skin_manifest.js";
 import { ANIMATIONS } from "./manifests/animation_manifest.js";
 import { GraphicalInputHandler } from "./graphical_input_handler.js";
+import { SCREEN } from "./graphics_constants.js";
 
 /**
  * Used for handling pixiJS integration and drawing/animating sprites.
@@ -43,7 +44,7 @@ export class GraphicsHandler {
         let t1 = new Date().getTime();
 
         this.renderer = new PixiRenderer();
-        await this.renderer.initialize({ screenHeight: 1024, screenWidth: 1024, maxFPS: 60, antialias: true });
+        await this.renderer.initialize({ screenHeight: SCREEN.WIDTH, screenWidth: SCREEN.HEIGHT, maxFPS: 60, antialias: true });
         this.graphicsRegistry = new GraphicsRegistry(this, this.renderer.builtinAssets);
         this.graphicsEntityHandler = new GraphicsEntitySystem(
             this.renderer,

@@ -1,4 +1,5 @@
 import { Vector2 } from "../vector.js";
+import { SCREEN } from "./graphics_constants.js";
 
 /**
  * Entity used for changing viewport position and resolution scaling.
@@ -15,9 +16,10 @@ export class GraphicsCamera {
         this.container = container;
         this.pixiScreen = pixiScreen;
         this.position = startPosition;
+        // DEFAULT RES in graphics constants
         // 1024 is an arbitrary value, just used to get consistant scales
         // accross resolutions. Default resolution is 1024x1024
-        this.renderScale = new Vector2(pixiScreen.width / 1024, pixiScreen.height / 1024);
+        this.renderScale = new Vector2(pixiScreen.width / SCREEN.DEFAULT_WIDTH, pixiScreen.height / SCREEN.DEFAULT_WIDTH);
         this.screenCenter = new Vector2(pixiScreen.width / 2, pixiScreen.height / 2)
         this.zoomScale = 1;
         this.rotation = 0;
@@ -29,11 +31,11 @@ export class GraphicsCamera {
         this.totalRenderScale = this.getTotalRenderScale();
         this.linearZoomValue = 100;
 
-        this.viewPortCorners = [
+        this.viewportCorners = [
             this.screenToWorld(new Vector2(0, 0)),
-            this.screenToWorld(new Vector2(1024, 0)),
-            this.screenToWorld(new Vector2(0, 1024)),
-            this.screenToWorld(new Vector2(1024, 1024))
+            this.screenToWorld(new Vector2(SCREEN.WIDTH, 0)),
+            this.screenToWorld(new Vector2(0, SCREEN.HEIGHT)),
+            this.screenToWorld(new Vector2(SCREEN.WIDTH, SCREEN.HEIGHT))
         ];
         this.minX = null;
         this.minY = null;
@@ -50,12 +52,7 @@ export class GraphicsCamera {
      * Update the camera's position and associated variables
      */
     updatePosition() {
-        this.viewPortCorners = [
-            this.screenToWorld(new Vector2(0, 0)),
-            this.screenToWorld(new Vector2(1024, 0)),
-            this.screenToWorld(new Vector2(0, 1024)),
-            this.screenToWorld(new Vector2(1024, 1024))
-        ];
+        this.updateViewportCorners();
         this.clampPositionByViewPort();
         this.clampPositionToBounds();
         this.totalRenderScale = this.getTotalRenderScale();
@@ -63,12 +60,7 @@ export class GraphicsCamera {
         this.container.pivot.y = this.position.y;
         this.container.rotation = this.rotation;
         this.container.scale = this.totalRenderScale;  
-        this.viewPortCorners = [
-            this.screenToWorld(new Vector2(0, 0)),
-            this.screenToWorld(new Vector2(1024, 0)),
-            this.screenToWorld(new Vector2(0, 1024)),
-            this.screenToWorld(new Vector2(1024, 1024))
-        ];
+        this.updateViewportCorners();
     }
 
     /**
@@ -120,14 +112,14 @@ export class GraphicsCamera {
         let middle = new Vector2(topLeft.x + width / 2, topLeft.y + height / 2);
         this.moveToPoint(middle);
 
-        if (width > height) zoom = 1024 / width;
-        else zoom = 1024 / height;
+        if (width > height) zoom = SCREEN.WIDTH / width;
+        else zoom = SCREEN.HEIGHT / height;
         this.setZoom(zoom * (1 - (this.focusPaddingPercent * zoom)));
         this.updatePosition();
-        this.minX = this.viewPortCorners[0].x;
-        this.minY = this.viewPortCorners[0].y;
-        this.maxX = this.viewPortCorners[3].x;
-        this.maxY = this.viewPortCorners[3].y;
+        this.minX = this.viewportCorners[0].x;
+        this.minY = this.viewportCorners[0].y;
+        this.maxX = this.viewportCorners[3].x;
+        this.maxY = this.viewportCorners[3].y;
     }
 
     setCameraArea(middle, size) {
@@ -170,8 +162,8 @@ export class GraphicsCamera {
 
     screenToWorld(screenVector) {
         return new Vector2(
-            this.position.x + ((screenVector.x-512) / this.totalRenderScale),
-            this.position.y + ((screenVector.y-512) / this.totalRenderScale)
+            this.position.x + ((screenVector.x-(SCREEN.WIDTH / 2)) / this.totalRenderScale),
+            this.position.y + ((screenVector.y-(SCREEN.HEIGHT / 2)) / this.totalRenderScale)
         );
     }
 
@@ -191,13 +183,22 @@ export class GraphicsCamera {
         if (this.minY == null) return;
         if (this.maxX == null) return;
         if (this.maxY == null) return;
-        if (this.viewPortCorners[0].x < this.minX)
-            this.position.x = this.minX + this.screenToWorld(new Vector2(512, 512)).x - this.viewPortCorners[0].x;
-        if (this.viewPortCorners[0].y < this.minY)
-            this.position.y = this.minY + this.screenToWorld(new Vector2(512, 512)).y - this.viewPortCorners[0].y;
-        if (this.viewPortCorners[3].x > this.maxX)
-            this.position.x = this.maxX - (this.viewPortCorners[3].x - this.screenToWorld(new Vector2(512, 512)).x);
-        if (this.viewPortCorners[3].y > this.maxY)
-            this.position.y = this.maxY - (this.viewPortCorners[3].y - this.screenToWorld(new Vector2(512, 512)).y);
+        if (this.viewportCorners[0].x < this.minX)
+            this.position.x = this.minX + this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).x - this.viewportCorners[0].x;
+        if (this.viewportCorners[0].y < this.minY)
+            this.position.y = this.minY + this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).y - this.viewportCorners[0].y;
+        if (this.viewportCorners[3].x > this.maxX)
+            this.position.x = this.maxX - (this.viewportCorners[3].x - this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).x);
+        if (this.viewportCorners[3].y > this.maxY)
+            this.position.y = this.maxY - (this.viewportCorners[3].y - this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).y);
+    }
+
+    updateViewportCorners() {
+        this.viewportCorners = [
+            this.screenToWorld(new Vector2(0, 0)),
+            this.screenToWorld(new Vector2(SCREEN.WIDTH, 0)),
+            this.screenToWorld(new Vector2(0, SCREEN.HEIGHT)),
+            this.screenToWorld(new Vector2(SCREEN.WIDTH, SCREEN.HEIGHT))
+        ];
     }
 }

@@ -1,11 +1,12 @@
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 import { Vector2 } from "../vector.js";
+import { SCREEN } from "./graphics_constants.js";
 
 
 export class GraphicalInputHandler {
     constructor(renderer, renderingCamera) {
         this.inputHitSprite = new PIXI.Sprite();
-        this.inputHitSprite.hitArea = new PIXI.Rectangle(0, 0, 1024, 1024);
+        this.inputHitSprite.hitArea = new PIXI.Rectangle(0, 0, SCREEN.WIDTH, SCREEN.HEIGHT);
         this.inputHitSprite.eventMode = "static";
         this.inputHitSprite.on("wheel", this.onWheel, this);
         this.inputHitSprite.on("mousemove", this.onMouseMove, this);
@@ -30,8 +31,8 @@ export class GraphicalInputHandler {
         let deltaNormalized = event.deltaY / Math.abs(event.deltaY);
         this.renderingCamera.changeZoomLinear((-deltaNormalized * 2));
         if (this.renderingCamera.zoomScale <= this.renderingCamera.minZoom || this.renderingCamera.zoomScale >= this.renderingCamera.maxZoom) return;
-        this.renderingCamera.position.x += (event.global.x - 512) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
-        this.renderingCamera.position.y += (event.global.y - 512) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
+        this.renderingCamera.position.x += (event.global.x - SCREEN.WIDTH / 2) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
+        this.renderingCamera.position.y += (event.global.y - SCREEN.HEIGHT / 2) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
         
     }
 
