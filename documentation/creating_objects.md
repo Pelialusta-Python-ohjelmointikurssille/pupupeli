@@ -1,15 +1,5 @@
 # Uusien objektien lisääminen peliin
 
-## Keräilyesineiden tai esteiden lisääminen
-
-Lisää haluamasi objekti listaan, joka löytyy commonstrings.js tiedostosta:
-```
-const COLLECTIBLE_ALIASES = ["porkkana", "jakoavain", "ruoka"];
-
-const OBSTACLE_ALIASES = ["kivi", "viemäri", "este"];
-```
-lisää objektin kuvat kansioon static, game_assets, collectibles/obstacles
-
 ## Lisää uudenlainen objekti
 
 luo uusi constant commonstrings.js
@@ -34,6 +24,6 @@ function getImage(index) {
             }
         }
 ```
-Kuvat vaihtuvat case-numeroiden mukaan. Ruoho on alustettu arvolla 1 ja pelaaj on alustettu arvolla 0
+Kuvat vaihtuvat case-numeroiden mukaan. Ruoho on alustettu arvolla 1 ja pelaaja on alustettu arvolla 0
 
 
