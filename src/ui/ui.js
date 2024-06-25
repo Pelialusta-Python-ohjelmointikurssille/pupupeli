@@ -329,14 +329,14 @@ function createChapterButtons() {
 
 /**
  * a function that turns the current button green and sends a PUSH request to the api indicating the user has completed a task
- * @param {boolean} won a boolean indicating whether the task was completed successfully or not
+ * @param {boolean} isWon a boolean indicating whether the task was completed successfully or not
  */
 
 
-export function onTaskComplete(won) {
+export function onTaskComplete(isWon) {
     const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
-
-    if (won) {
+    console.log("is game won? " + isWon);
+    if (isWon) {
         const buttonid = apiTaskIdentifier;
         let button = document.getElementById(buttonid);
         if (globals.task.getTaskType() != instructionsStr) {

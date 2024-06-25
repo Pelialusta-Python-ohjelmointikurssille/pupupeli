@@ -50,10 +50,9 @@ export function setMultipleChoiceCorrect(isCorrect = true) {
 
 export function getMultipleChoiceCorrect() {
     if (currentGameMode.name === "GameModeMultipleChoice") {
-        return multipleChoiceCorrect
-    } else {
-        return true; // ignore check if gamemode isn't multiple choice
+        return multipleChoiceCorrect;
     }
+    return true; //default in any other gamemode
 }
 
 export function setCurrentSAB(sab) {
@@ -70,7 +69,7 @@ export function getCurrentTheme() {
         localStorage.setItem("theme", "Pupu");
         return ("Pupu")
     } else {
-    return localStorage.getItem("theme");
+        return localStorage.getItem("theme");
     }
 }
 
