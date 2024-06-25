@@ -24,6 +24,6 @@ function getImage(index) {
             }
         }
 ```
-Kuvat vaihtuvat case-numeroiden mukaan. Ruoho on alustettu arvolla 1 ja pelaaj on alustettu arvolla 0
+Kuvat vaihtuvat case-numeroiden mukaan. Ruoho on alustettu arvolla 1 ja pelaaja on alustettu arvolla 0
 
 
