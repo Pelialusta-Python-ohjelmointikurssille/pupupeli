@@ -37,14 +37,9 @@ export class GraphicsCamera {
             this.screenToWorld(new Vector2(0, SCREEN.HEIGHT)),
             this.screenToWorld(new Vector2(SCREEN.WIDTH, SCREEN.HEIGHT))
         ];
-        this.minX = null;
-        this.minY = null;
-        this.maxX = null;
-        this.maxY = null;
-        this.minXPos = null;
-        this.minYPos = null;
-        this.maxXPos = null;
-        this.maxYPos = null;
+
+        this.viewportBounds = [null, null];
+        this.positionBounds = [null, null];
         this.updatePosition();
     }
 
@@ -115,10 +110,7 @@ export class GraphicsCamera {
         else zoom = SCREEN.HEIGHT / height;
         this.setZoom(zoom * (1 - (this.focusPaddingPercent * zoom)));
         this.updatePosition();
-        this.minX = this.viewportCorners[0].x;
-        this.minY = this.viewportCorners[0].y;
-        this.maxX = this.viewportCorners[3].x;
-        this.maxY = this.viewportCorners[3].y;
+        this.setViewportBounds(this.viewportCorners[0], this.viewportCorners[3]);
     }
 
     setCameraArea(middle, size) {
@@ -126,10 +118,7 @@ export class GraphicsCamera {
         this.setMinZoom(this.zoomScale);
         let topLeft = new Vector2(middle.x - (size.x / 2), middle.y - (size.y / 2));
         let bottomRight = new Vector2(middle.x + (size.x / 2), middle.y + (size.y / 2));
-        this.minXPos = topLeft.x;
-        this.minYPos = topLeft.y;
-        this.maxXPos = bottomRight.x;
-        this.maxYPos = bottomRight.y;
+        this.setPositionBounds(topLeft, bottomRight);
     }
 
     /**
@@ -167,29 +156,25 @@ export class GraphicsCamera {
     }
 
     clampPositionToBounds() {
-        if (this.minXPos == null) return;
-        if (this.minYPos == null) return;
-        if (this.maxXPos == null) return;
-        if (this.maxYPos == null) return;
-        if (this.position.x < this.minXPos) this.position.x = this.minXPos;
-        if (this.position.x > this.maxXPos) this.position.x = this.maxXPos;
-        if (this.position.y < this.minYPos) this.position.y = this.minYPos;
-        if (this.position.y > this.maxYPos) this.position.y = this.maxYPos;
+        if (this.positionBounds == null) return;
+        if (this.positionBounds[0] == null || this.positionBounds[1] == null) return;
+        if (this.position.x < this.positionBounds[0].x) this.position.x = this.positionBounds[0].x;
+        if (this.position.x > this.positionBounds[1].x) this.position.x = this.positionBounds[1].x;
+        if (this.position.y < this.positionBounds[0].y) this.position.y = this.positionBounds[0].y;
+        if (this.position.y > this.positionBounds[1].y) this.position.y = this.positionBounds[1].y;
     }
 
     clampPositionByViewPort() {
-        if (this.minX == null) return;
-        if (this.minY == null) return;
-        if (this.maxX == null) return;
-        if (this.maxY == null) return;
-        if (this.viewportCorners[0].x < this.minX)
-            this.position.x = this.minX + this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).x - this.viewportCorners[0].x;
-        if (this.viewportCorners[0].y < this.minY)
-            this.position.y = this.minY + this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).y - this.viewportCorners[0].y;
-        if (this.viewportCorners[3].x > this.maxX)
-            this.position.x = this.maxX - (this.viewportCorners[3].x - this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).x);
-        if (this.viewportCorners[3].y > this.maxY)
-            this.position.y = this.maxY - (this.viewportCorners[3].y - this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).y);
+        if (this.viewportBounds == null) return;
+        if (this.viewportBounds[0] == null || this.viewportBounds[1] == null) return;
+        if (this.viewportCorners[0].x < this.viewportBounds[0].x) 
+            this.position.x = this.viewportBounds[0].x + this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).x - this.viewportCorners[0].x;
+        if (this.viewportCorners[0].y < this.viewportBounds[0].y)
+            this.position.y = this.viewportBounds[0].y + this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).y - this.viewportCorners[0].y;
+        if (this.viewportCorners[3].x > this.viewportBounds[1].x)
+            this.position.x = this.viewportBounds[1].x - (this.viewportCorners[3].x - this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).x);
+        if (this.viewportCorners[3].y > this.viewportBounds[1].y)
+            this.position.y = this.viewportBounds[1].y - (this.viewportCorners[3].y - this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).y);
     }
 
     updateViewportCorners() {
@@ -199,5 +184,13 @@ export class GraphicsCamera {
             this.screenToWorld(new Vector2(0, SCREEN.HEIGHT)),
             this.screenToWorld(new Vector2(SCREEN.WIDTH, SCREEN.HEIGHT))
         ];
+    }
+
+    setViewportBounds(topLeft, bottomRight) {
+        this.viewportBounds = [topLeft, bottomRight];
+    }
+
+    setPositionBounds(topLeft, bottomRight) {
+        this.positionBounds = [topLeft, bottomRight];
     }
 }
