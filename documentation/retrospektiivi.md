@@ -149,3 +149,32 @@ Retrospektiivi
 
 
 ### LESS OF vähemmän
+
+## Retro 6, 24.6.2024
+
+### START aloitetaan
+- priorisointi
+- feature -> test -> pull
+- dokumentaatio semmoiselle joka ei ole osa projektia
+- VIDEO!!!!!!!!
+- in progress -osio github-backlogissa
+
+### STOP lopetetaan
+- EI YLIMÄÄRÄSIÄ FEATUREITA!
+- ei magic stringejä
+- kommunikaation katko
+- eteenpäin siirtyminen ilman testejä jne.
+
+
+### CONTINUE jatketaan
+- JSDOCIT grafiikkafunktioihin
+- feature branch / pull request
+- tehtävien jakaminen
+- taskit: harjoittelija kirjoittaa ja ohjaaja auttaa
+- kommunikointia
+
+### MORE OF lisää
+- Kysy voiko auttaa jos loppuu tekeminen
+- enemmän läpinäkyvyyttä taskeissa
+
+### LESS OF vähemmän
