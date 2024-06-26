@@ -90,6 +90,7 @@ export class Game {
         this.gh.destroyTextBoxes();
         this.gh.destroyTextBoxes();
         this.destroyTempObjects();
+        this.collectibleCounter.reset();
     }
 
     destroyTempObjects() {
