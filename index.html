@@ -26,15 +26,22 @@
                 </div>
             </div>
             <div id="header-buttons" class="is-flex">
-                <div id="logged-in-as-container" class="is-hidden"><h4><span id="logged-in-as-user"></span></h4></div>
+                <div id="logged-in-as-container" class="is-hidden">
+                    <h4><span id="logged-in-as-user"></span></h4>
+                </div>
                 <form id="user-container" class="is-flex is-hidden" onsubmit="event.preventDefault()">
                     <input id="username" placeholder="username" autocomplete="username">
-                    <input type="password" id="password" placeholder="password" autocomplete="current-password" onkeydown="(event.key==='Enter')?this.nextElementSibling.click():{}">
+                    <input type="password" id="password" placeholder="password" autocomplete="current-password"
+                        onkeydown="(event.key==='Enter')?this.nextElementSibling.click():{}">
                     <button id="login-button" value="login">Kirjaudu sisään</button>
                 </form>
                 <button id="logout-button" class="is-hidden" value="logout">Kirjaudu ulos</button>
-                <div id="login-failed" class="box"><h1>Voi ei! Käyttäjää ei ole olemassa tai salasana on väärin!</h1></div>
-                <div id="condition-failed" class="box"><h1></h1></div>
+                <div id="login-failed" class="box">
+                    <h1>Voi ei! Käyttäjää ei ole olemassa tai salasana on väärin!</h1>
+                </div>
+                <div id="condition-failed" class="box">
+                    <h1></h1>
+                </div>
             </div>
         </div>
 
@@ -53,6 +60,7 @@
                             <select id="theme-select" type="button">
                                 <option>Pupu</option>
                                 <option>Robo</option>
+                                <!-- Add new themes here to add them to dropdown! -->
                             </select>
                             <button id="trail-toggle-button" type="button">Jälkiviiva</button>
                             <button id="grid-toggle-button" type="button">Ruudukko</button>
@@ -69,16 +77,19 @@
                         <div id="error"></div>
                     </div>
                     <div id="editor-buttons-container" class="is-flex is-margin-half-rem-x">
-                        <button id="editor-run-pause-button" class="editor-button is-margin-half-rem-x" type="button" disabled>
+                        <button id="editor-run-pause-button" class="editor-button is-margin-half-rem-x" type="button"
+                            disabled>
                             <image id="run-icon" src="src/static/runbutton.png"></image>
                             <span id="runButtonText">Ladataan...</span>
                         </button>
-                        <button id="editor-skip-button" class="editor-button is-margin-half-rem-x" type="button" disabled>
+                        <button id="editor-skip-button" class="editor-button is-margin-half-rem-x" type="button"
+                            disabled>
                             <image id="run-icon" src="src/static/skipbutton.png"></image>
                             <span id="buttonText">Seuraava askel</span>
                         </button>
 
-                        <button id="editor-stop-button" class="editor-button is-margin-half-rem-x" type="button" disabled>
+                        <button id="editor-stop-button" class="editor-button is-margin-half-rem-x" type="button"
+                            disabled>
                             <image id="run-icon" src="src/static/resetbutton2.png"></image>
                             <span id="buttonText">Resetoi</span>
                         </button>
@@ -97,7 +108,7 @@
                         </button>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
