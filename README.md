@@ -16,6 +16,6 @@ Pelialusta Python-ohjelmointikurssille
 
 - [Uusien teemojen lisääminen](documentation/add_theme.md)
 - [Uusien objektien lisääminen](documentation/creating_objects.md)
-- [Tehtäväeditorin käyttöohje](documentation/task_editor.md)
+- [Tasoeditorin käyttöohje](documentation/task_editor.md)
 - [Pelihahmon komentojen käyttöohje](documentation/user_commands.md)
 - [Uusien grafiikoiden luomisohje](documentation/graphics_handler_tutorials.md)
