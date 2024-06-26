@@ -36,13 +36,7 @@ export const task = (function () {
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
 
-export const conditions = task.getConditions();
-export const conditionsCleared = [];
-export const conditionsNotCleared = [];
-
 export let currentSAB;
-export let currentGameMode;
-
 export let isGameWon = 0;
 export let multipleChoiceCorrect = false;
 
@@ -61,11 +55,10 @@ export function setMultipleChoiceCorrect(isCorrect = true) {
 }
 
 export function getMultipleChoiceCorrect() {
-    if (currentGameMode.name === "GameModeMultipleChoice") {
-        return multipleChoiceCorrect
-    } else {
-        return true; // ignore check if gamemode isn't multiple choice
+    if (task.getMultipleChoiceQuestions().length > 0) {
+        return multipleChoiceCorrect;
     }
+    return true; //default in any other gamemode
 }
 
 export function setCurrentSAB(sab) {
@@ -86,7 +79,7 @@ export function getCurrentTheme() {
         localStorage.setItem("theme", "Pupu");
         return ("Pupu")
     } else {
-    return localStorage.getItem("theme");
+        return localStorage.getItem("theme");
     }
 }
 
@@ -94,16 +87,9 @@ export function setCurrentTheme(theme) {
     localStorage.setItem("theme", theme);
 }
 
-export function setCurrentGameMode(gameMode) {
-    currentGameMode = gameMode;
-}
-
-export function getCurrentGameMode() {
-    return currentGameMode;
-}
-
 export function incrementCollectibles() {
     collectibles.current += 1;
+<<<<<<< HEAD
 }
 
 /**
@@ -170,4 +156,6 @@ function conditionChecker(conditionsToClear, conditionsCleared) {
     } else {
         return true;
     }
+=======
+>>>>>>> main
 }

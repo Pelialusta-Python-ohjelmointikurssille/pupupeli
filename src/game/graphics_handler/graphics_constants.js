@@ -1,0 +1,6 @@
+export const SCREEN = {
+    DEFAULT_WIDTH: 1024,
+    DEFAULT_HEIGHT: 1024,
+    WIDTH: 1024,
+    HEIGHT: 1024
+}

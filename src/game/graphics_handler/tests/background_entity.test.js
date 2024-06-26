@@ -14,7 +14,9 @@ describe('BackgroundEntity', () => {
     beforeEach(() => {
         mockUUID = 'test-uuid';
         mockEntityHandler = {};
-        mockContainer = {};
+        mockContainer = { 
+            pivot: { x: 0, y: 0 }
+        };
         mockSprite = {
             position: { x: 0, y: 0 },
             anchor: { set: jest.fn() },
@@ -27,6 +29,7 @@ describe('BackgroundEntity', () => {
         GraphicsEntity.mockImplementation(() => {
             return {
                 sprite: mockSprite,
+                container: mockContainer
             };
         });
     });
@@ -51,10 +54,8 @@ describe('BackgroundEntity', () => {
             mockSkins
         );
 
-        expect(mockSprite.position.x).toBe(mockEntityData.size.x / 4);
-        expect(mockSprite.position.y).toBe(mockEntityData.size.y / 4);
-
-        expect(mockSprite.anchor.set).toHaveBeenCalledWith(0.5);
+        expect(mockContainer.pivot.x).toBe(mockEntityData.size.x / 2);
+        expect(mockContainer.pivot.y).toBe(mockEntityData.size.y / 2);
     });
 
 });

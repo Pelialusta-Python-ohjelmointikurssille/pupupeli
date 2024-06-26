@@ -6,6 +6,7 @@ import { ENTITIES } from "./manifests/entity_manifest.js";
 import { ENTITY_SKINS, SKIN_BUNDLES } from "./manifests/skin_manifest.js";
 import { ANIMATIONS } from "./manifests/animation_manifest.js";
 import { GraphicalInputHandler } from "./graphical_input_handler.js";
+import { SCREEN } from "./graphics_constants.js";
 
 /**
  * Used for handling pixiJS integration and drawing/animating sprites.
@@ -43,7 +44,7 @@ export class GraphicsHandler {
         let t1 = new Date().getTime();
 
         this.renderer = new PixiRenderer();
-        await this.renderer.initialize({ screenHeight: 1024, screenWidth: 1024, maxFPS: 60, antialias: true });
+        await this.renderer.initialize({ screenHeight: SCREEN.WIDTH, screenWidth: SCREEN.HEIGHT, maxFPS: 60, antialias: true });
         this.graphicsRegistry = new GraphicsRegistry(this, this.renderer.builtinAssets);
         this.graphicsEntityHandler = new GraphicsEntitySystem(
             this.renderer,
@@ -133,14 +134,12 @@ export class GraphicsHandler {
      */
     createGrid() {
         this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
-        this.createEntity("bgtest", "background", { size: new Vector2(this.gridWidth * 300 + 2048, this.gridHeight * 300 + +2048) } , SKIN_BUNDLES["background"]);
         let gridObject = this.graphicsEntityHandler.getMainGridObject();
-        this.graphicsEntityHandler.camera.focusOnAreaMiddle(gridObject.getMiddlePixelPosition(), gridObject.pixelSize);
-        this.graphicsEntityHandler.camera.setMinZoom(this.graphicsEntityHandler.camera.zoomScale);
-        this.graphicsEntityHandler.camera.minX = 0;
-        this.graphicsEntityHandler.camera.minY = 0;
-        this.graphicsEntityHandler.camera.maxX = (this.gridWidth) * 128;
-        this.graphicsEntityHandler.camera.maxY = (this.gridHeight) * 128;
+        this.createEntity("bgtest", "background", { 
+            size: new Vector2(gridObject.pixelSize.x + 4096, gridObject.pixelSize.y + 4096),
+            position: gridObject.getMiddlePixelPosition()
+        } , SKIN_BUNDLES["background"]);
+        this.graphicsEntityHandler.camera.setCameraArea(gridObject.getMiddlePixelPosition(), gridObject.pixelSize);
     }
 
     /**

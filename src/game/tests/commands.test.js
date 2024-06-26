@@ -3,6 +3,10 @@ import { Constants } from '../commonstrings';
 import { AnimationNames } from '../graphics_handler/manifests/animation_manifest';
 import { Direction } from '../direction';
 
+jest.mock("../game_input_controller.js", () => {
+    
+});
+
 // Mock dependencies
 const mockGrid = {
     moveGridObjectToDir: jest.fn(),

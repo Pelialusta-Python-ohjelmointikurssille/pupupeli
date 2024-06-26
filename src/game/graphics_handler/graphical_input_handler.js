@@ -1,13 +1,13 @@
 import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
 import { Vector2 } from "../vector.js";
+import { SCREEN } from "./graphics_constants.js";
 
 
 export class GraphicalInputHandler {
     constructor(renderer, renderingCamera) {
         this.inputHitSprite = new PIXI.Sprite();
-        this.inputHitSprite.hitArea = new PIXI.Rectangle(0, 0, 10000, 10000);
+        this.inputHitSprite.hitArea = new PIXI.Rectangle(0, 0, SCREEN.WIDTH, SCREEN.HEIGHT);
         this.inputHitSprite.eventMode = "static";
-        //this.inputHitSprite.cursor = "pointer";
         this.inputHitSprite.on("wheel", this.onWheel, this);
         this.inputHitSprite.on("mousemove", this.onMouseMove, this);
         this.inputHitSprite.on("mouseup", this.onMouseUp, this);
@@ -22,18 +22,23 @@ export class GraphicalInputHandler {
         this.lastMousePos = new Vector2(0, 0);
         this.dragSensitivity = 2;
         this.zoomDragFactor = 0.5;
+        this.screenCursorPos = new Vector2(0, 0);
     }
 
     onWheel(event) {
+        // Fixes weird camera bug that makes everything disappear
+        if (event.deltaY === 0) return;
         let deltaNormalized = event.deltaY / Math.abs(event.deltaY);
         this.renderingCamera.changeZoomLinear((-deltaNormalized * 2));
         if (this.renderingCamera.zoomScale <= this.renderingCamera.minZoom || this.renderingCamera.zoomScale >= this.renderingCamera.maxZoom) return;
-        this.renderingCamera.position.x += (event.global.x - 512) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
-        this.renderingCamera.position.y += (event.global.y - 512) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
+        this.renderingCamera.position.x += (event.global.x - SCREEN.WIDTH / 2) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
+        this.renderingCamera.position.y += (event.global.y - SCREEN.HEIGHT / 2) / 4 * -deltaNormalized * (1 / this.renderingCamera.zoomScale * this.zoomDragFactor);
         
     }
 
     onMouseMove(event) {
+        this.screenCursorPos.x = event.global.x;
+        this.screenCursorPos.y = event.global.y;
         if (this.holdingMouse === false) return;
         this.lastMousePos.x = event.global.x;
         this.lastMousePos.y = event.global.y;

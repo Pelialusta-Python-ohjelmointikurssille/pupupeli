@@ -178,7 +178,7 @@
             max-width: calc(var(--canvas-width)* 1.5);
             min-height: 3rem;
         }
-    
+
         #task-input,
         #editor-input,
         #instructions-input {
@@ -196,7 +196,8 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
 
-        #add-multiple-choice-button, #del-multiple-choice-button {
+        #add-multiple-choice-button,
+        #del-multiple-choice-button {
             margin: 0;
         }
 
@@ -255,28 +256,37 @@
                     </div>
                 </div>
                 <div id="grid-input-submit-container" class="is-flex">
-                    <button class="grid-input-submit" type="submit" value="Submit" onclick="createTable()">Luo ruudukko</button>
-                    <button class="grid-input-submit" type="submit" value="Generate" onclick="generateTaskOutput()">Tulosta taso</button>
-                    <button id="save-button" class="grid-input-submit is-hidden" type="submit" value="Save" onclick="downloadOutput()">Tallenna</button>
-                    <input type="file" id="import-task-input" class="" type="input" value="Import" onchange="importTaskFromJSON()">
-                        <button type="submit" id="import-task-button" class="grid-input-submit" value="Import" onclick="document.getElementById('import-task-input').click();">Import</button>
+                    <button class="grid-input-submit" type="submit" value="Submit" onclick="createTable()">Luo
+                        ruudukko</button>
+                    <button class="grid-input-submit" type="submit" value="Generate"
+                        onclick="generateTaskOutput()">Tulosta taso</button>
+                    <button id="save-button" class="grid-input-submit is-hidden" type="submit" value="Save"
+                        onclick="downloadOutput()">Tallenna</button>
+                    <input type="file" id="import-task-input" class="" type="input" value="Import"
+                        onchange="importTaskFromJSON()">
+                    <button type="submit" id="import-task-button" class="grid-input-submit" value="Import"
+                        onclick="document.getElementById('import-task-input').click();">Import</button>
                     </input>
                 </div>
             </div>
             <div id="options-container" class="is-flex is-flex-column">
                 <div id="task-title-container" class="is-flex is-flex-center">
                     <h3>Tehtävän nimi:</h3>
-                    <input type="text" id="task-title-input" placeholder="Tehtävän nimi" style="text-align:center; width: 200px; height: 25px;">
+                    <input type="text" id="task-title-input" placeholder="Tehtävän nimi"
+                        style="text-align:center; width: 200px; height: 25px;">
                 </div>
                 <div id="task-type" class="is-flex is-flex-center">
                     <h3>Tehtävän tyyppi:</h3>
-                    <input type="radio" id="taskTypeCollectibles" name="taskType" value="collectibles" style="margin-right: 10px;" checked>
+                    <input type="radio" id="taskTypeCollectibles" name="taskType" value="collectibles"
+                        style="margin-right: 10px;" checked>
                     <label for="taskTypeCollectibles" style="margin-right: 20px;">Kerää esineet</label>
-                
-                    <input type="radio" id="taskTypeMultipleChoice" name="taskType" value="multiple-choice" style="margin-right: 10px;">
+
+                    <input type="radio" id="taskTypeMultipleChoice" name="taskType" value="multiple-choice"
+                        style="margin-right: 10px;">
                     <label for="taskTypeMultipleChoice" style="margin-right: 20px;">Monivalinta</label>
-                
-                    <input type="radio" id="taskTypeInstructions" name="taskType" value="instructions" style="margin-right: 10px;">
+
+                    <input type="radio" id="taskTypeInstructions" name="taskType" value="instructions"
+                        style="margin-right: 10px;">
                     <label for="taskTypeInstructions">Ohjeistus</label>
                 </div>
 
@@ -285,27 +295,33 @@
                     <input type="checkbox" id="enable-add-remove-checkbox">
                 </div>
                 <div>
-                    <textarea id="instructions-input" class="is-hidden" rows="10" cols="50" placeholder="Kirjoita ohje tänne"></textarea>
+                    <textarea id="instructions-input" class="is-hidden" rows="10" cols="50"
+                        placeholder="Kirjoita ohje tänne"></textarea>
                 </div>
                 <div id="other-conditions-head">
                     <h3 class="headline">Valitse muut ehdot:</h3>
                 </div>
                 <div id="options-conditions" class="is-flex is-flex-1 is-flex-center">
                     <div class="checkbox-container is-flex is-flex-center">
-                        <input type="checkbox" id="conditionUsedWhile" class="checkbox" name="conditionUsedWhile" value="conditionUsedWhile" onclick="clickConditionBox(this)">
+                        <input type="checkbox" id="conditionUsedWhile" class="checkbox" name="conditionUsedWhile"
+                            value="conditionUsedWhile" onclick="clickConditionBox(this)">
                         <label class="checkbox-label" for="conditionUsedWhile">käytä while-silmukkaa</label><br>
                     </div>
                     <div class="checkbox-container is-flex is-flex-center">
-                        <input type="checkbox" id="conditionUsedFor" class="checkbox" name="conditionUsedFor" value="conditionUsedFor" onclick="clickConditionBox(this)">
+                        <input type="checkbox" id="conditionUsedFor" class="checkbox" name="conditionUsedFor"
+                            value="conditionUsedFor" onclick="clickConditionBox(this)">
                         <label class="checkbox-label" for="conditionUsedFor">käytä for-silmukkaa</label><br>
                     </div>
                     <div class="checkbox-container is-flex is-flex-center">
-                        <input type="checkbox" id="conditionUsedInput" class="checkbox" name="conditionUsedInput" value="conditionUsedInput" onclick="clickConditionBox(this)">
+                        <input type="checkbox" id="conditionUsedInput" class="checkbox" name="conditionUsedInput"
+                            value="conditionUsedInput" onclick="clickConditionBox(this)">
                         <label class="checkbox-label" for="conditionUsedInput">käytä input()</label><br>
                     </div>
                     <div class="checkbox-container is-flex is-flex-center">
-                        <input type="checkbox" id="conditionMaxLines" class="checkbox" name="conditionMaxLines" value="conditionMaxLines" onclick="clickConditionBox(this)">
-                        <label class="checkbox-label" for="conditionMaxLines">vastaus enintään <input id="maxLinesInput" type="text" placeholder="0" value="0" style="text-align:center;"> riviä</label><br>
+                        <input type="checkbox" id="conditionMaxLines" class="checkbox" name="conditionMaxLines"
+                            value="conditionMaxLines" onclick="clickConditionBox(this)">
+                        <label class="checkbox-label" for="conditionMaxLines">vastaus enintään <input id="maxLinesInput"
+                                type="text" placeholder="0" value="0" style="text-align:center;"> riviä</label><br>
                     </div>
                 </div>
                 <div id="options-input" class="is-flex is-flex-1 is-flex-column">
@@ -313,14 +329,21 @@
                         <h3 id="box-type-indicator">Tehtävän kuvaus:</h3>
                     </div>
                     <div id="options-input-buttons-container">
-                        <button class="options-input-buttons" value="inputDescription" onclick="inputButtonsToggler(event)">Tehtävän kuvaus</button>
-                        <button class="options-input-buttons" value="inputEditorCode" onclick="inputButtonsToggler(event)">Editorin koodi</button>
-                        <button class="options-input-buttons" value="inputMultipleChoice" onclick="inputButtonsToggler(event)">Monivalintatehtävät</button>
-                        <button id="add-multiple-choice-button" class="is-hidden" onclick="addMultipleChoiceQuestion()">+</button>
-                        <button id="del-multiple-choice-button" class="is-hidden" onclick="delMultipleChoiceQuestion()">x</button>
+                        <button class="options-input-buttons" value="inputDescription"
+                            onclick="inputButtonsToggler(event)">Tehtävän kuvaus</button>
+                        <button class="options-input-buttons" value="inputEditorCode"
+                            onclick="inputButtonsToggler(event)">Editorin koodi</button>
+                        <button class="options-input-buttons" value="inputMultipleChoice"
+                            onclick="inputButtonsToggler(event)">Monivalintatehtävät</button>
+                        <button id="add-multiple-choice-button" class="is-hidden"
+                            onclick="addMultipleChoiceQuestion()">+</button>
+                        <button id="del-multiple-choice-button" class="is-hidden"
+                            onclick="delMultipleChoiceQuestion()">x</button>
                     </div>
-                    <textarea rows="3" name="task-input" id="task-input" value="" placeholder="Lisää tehtävän kuvaus"></textarea>
-                    <textarea rows="3" name="editor-input" id="editor-input" class="is-hidden" value="" placeholder="Lisää tehtävän tekstieditoriin etukäteen asetettu koodi"></textarea>
+                    <textarea rows="3" name="task-input" id="task-input" value=""
+                        placeholder="Lisää tehtävän kuvaus"></textarea>
+                    <textarea rows="3" name="editor-input" id="editor-input" class="is-hidden" value=""
+                        placeholder="Lisää tehtävän tekstieditoriin etukäteen asetettu koodi"></textarea>
                     <div id="multiple-choice-container" class="is-hidden">
                     </div>
                 </div>
@@ -352,7 +375,7 @@
         let headlines = document.querySelectorAll('.headline');
         // Add the event listener to each radio button
         taskTypeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
+            radio.addEventListener('change', function () {
                 // If the selected task type is 'instructions', show the text box and hide the divs
                 if (this.value === 'instructions') {
                     showInstructions()
@@ -363,28 +386,30 @@
             });
         });
         // hides regular view and shows instruction view
-        function showInstructions() {                    
-                    optionsConditionsDiv.style.display = 'none';
-                    optionsInputDiv.style.display = 'none';
-                    optionsAppContainer.style.display = 'none';
-                    optionsAddRemoveDiv.style.display = 'none';
-                    instructionsInput.style.display = 'block';
-                    instructionsInput.classList.remove('is-hidden');
-                    headlines.forEach(headline => {
-                    headline.style.display = 'none';});
-                }
+        function showInstructions() {
+            optionsConditionsDiv.style.display = 'none';
+            optionsInputDiv.style.display = 'none';
+            optionsAppContainer.style.display = 'none';
+            optionsAddRemoveDiv.style.display = 'none';
+            instructionsInput.style.display = 'block';
+            instructionsInput.classList.remove('is-hidden');
+            headlines.forEach(headline => {
+                headline.style.display = 'none';
+            });
+        }
 
         // hides instruction view and shows regular view
         function hideInstructions() {
-                    instructionsInput.style.display = 'none';
-                    optionsConditionsDiv.style.display = 'flex';
-                    optionsInputDiv.style.display = 'flex';
-                    optionsAppContainer.style.display = 'flex';
-                    optionsAddRemoveDiv.style.display = 'flex';
-                    instructionsInput.classList.add('is-hidden');
-                    headlines.forEach(headline => {
-                    headline.style.display = 'block';});
-                }
+            instructionsInput.style.display = 'none';
+            optionsConditionsDiv.style.display = 'flex';
+            optionsInputDiv.style.display = 'flex';
+            optionsAppContainer.style.display = 'flex';
+            optionsAddRemoveDiv.style.display = 'flex';
+            instructionsInput.classList.add('is-hidden');
+            headlines.forEach(headline => {
+                headline.style.display = 'block';
+            });
+        }
 
         class Level {
             constructor(description, taskTitle, enableAddRemove, taskType, editorCode, multipleChoiceQuestions, grid, conditions) {
@@ -426,21 +451,11 @@
 
 
                     cell.addEventListener('click', function () {
-                        switch (this.dataset.value) {
-                            case '1':
-                                this.dataset.value = '2';
-                                this.innerHTML = '<img src="/src/static/game_assets/collectibles/carrot.png"></img>'
-                                break;
-                            case '2':
-                                this.dataset.value = '3';
-                                this.innerHTML = '<img src="/src/static/game_assets/obstacles/rock.png"></img>'
-                                break;
-                            case '3':
-                                this.innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>'
-                                this.dataset.value = '1';
-                                break;
-                        }
-
+                        //Case 1 is is the default value, grass.
+                        //Case 0 is reserved for player, so we skip it
+                        this.dataset.value++;
+                        if (this.dataset.value > _maxImageIndex) this.dataset = 1;
+                        this.innerHTML = getImage(this.dataset.value);
                     });
 
 
@@ -549,7 +564,7 @@
             }
 
             // use Level class to get json output
-            let output = new Level(taskDescriptionLines, getTitle(), getEnableAddRemove(),getTaskType(), getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
+            let output = new Level(taskDescriptionLines, getTitle(), getEnableAddRemove(), getTaskType(), getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
             let outputField = document.getElementById("output-field");
             outputField.value = customJSONStringify(output);
             // need to fire input event to resize output field
@@ -638,7 +653,7 @@
             let multipleChoiceContainer = document.getElementById("multiple-choice-container");
             let multipleChoiceElement = document.createElement("div");
             multipleChoiceElement.classList.add("multiple-choice", "is-flex", "is-flex-column");
-            if (question === null) { 
+            if (question === null) {
                 multipleChoiceElement.innerHTML = `<input type='text' id='multiple-choice-input-box' placeholder='Lisää vastaus'><div class='multiple-choice-input'><input name='multipleChoice${multipleChoiceContainer.childNodes.length - 1}' type='checkbox'><label for='multipleChoice${multipleChoiceContainer.childNodes.length - 1} style="line-height: 20px;'>Oikea vastaus?</label></div>`;
             } else {
                 if (question.isCorrectAnswer) {
@@ -652,7 +667,7 @@
 
         function delMultipleChoiceQuestion() {
             let multipleChoiceContainer = document.getElementById("multiple-choice-container");
-            multipleChoiceContainer.childNodes[multipleChoiceContainer.childNodes.length-1].remove();
+            multipleChoiceContainer.childNodes[multipleChoiceContainer.childNodes.length - 1].remove();
         }
 
         // creates a downloadable file from the text in the output field
@@ -722,7 +737,7 @@
             function importTaskType(taskType) {
                 let taskTypeRadios = document.getElementsByName("taskType");
 
-                for (let i=0; i < taskTypeRadios.length; i++) {
+                for (let i = 0; i < taskTypeRadios.length; i++) {
                     if (taskTypeRadios[i].value === taskType) {
                         taskTypeRadios[i].checked = true;
                         if (taskType === "instructions") {
@@ -752,7 +767,7 @@
 
                 for (let i = 0; i < conditions.length; i++) {
                     if (conditions[i].condition === "conditionMaxLines") {
-                        if (conditions[i].parameter !== false)  {
+                        if (conditions[i].parameter !== false) {
                             document.getElementById(conditions[i].condition).checked = true;
                             document.getElementById(conditions[i].condition).parentNode.classList.add("active");
                             document.getElementById("maxLinesInput").value = conditions[i].parameter;
@@ -774,7 +789,7 @@
                 taskInput.value = "";
 
                 for (let i = 0; i < description.length; i++) {
-                    taskInput.value += (i === description.length -1) ? description[i] : description[i]+"\n";
+                    taskInput.value += (i === description.length - 1) ? description[i] : description[i] + "\n";
                 }
             }
 
@@ -783,7 +798,7 @@
                 editorCodeInput.value = "";
 
                 for (let i = 0; i < editorCode.length; i++) {
-                    editorCodeInput.value += (i === editorCode.length-1 ) ? editorCode[i] : editorCode[i]+"\n";
+                    editorCodeInput.value += (i === editorCode.length - 1) ? editorCode[i] : editorCode[i] + "\n";
                 }
             }
 
@@ -800,20 +815,7 @@
                 }
 
                 for (let i = 0; i < cells.length; i++) {
-                    switch (cells[i].dataset.value) {
-                            case '0':
-                                cells[i].innerHTML = '<img src="/src/static/game_assets/characters/bunny_right.png"></img>'
-                                break;
-                            case '2':
-                                cells[i].innerHTML = '<img src="/src/static/game_assets/collectibles/carrot.png"></img>'
-                                break;
-                            case '3':
-                                cells[i].innerHTML = '<img src="/src/static/game_assets/obstacles/rock.png"></img>'
-                                break;
-                            case '1':
-                                cells[i].innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>'
-                                break;
-                        }
+                    cells[i].innerHTML = getImage(cells[i].dataset.value);
                 }
             }
 
@@ -824,6 +826,28 @@
                 questions.forEach(question => {
                     addMultipleChoiceQuestion(question);
                 })
+            }
+        }
+
+        //Change this value if you add more images to the switch statement in getImage() below
+        var _maxImageIndex = 3;
+        //IMPORTANT! "maxImageIndex" above must be the same as the max value used in the switch statement below
+        /**
+         * Get the image path by using the value it represents in gamecode when it creates the grid in game logic.
+         * Remember that if you change the values below, change the values of "gridObjectManifest" in gridfactory.js.
+         * They must be the same.
+         */
+        function getImage(value) {
+            //Player is 0, grass is 1 and is used as the default
+            switch (value) {
+                case '0':
+                    return '<img src="/src/static/game_assets/characters/bunny_right.png"></img>';
+                case '2':
+                    return '<img src="/src/static/game_assets/collectibles/carrot.png"></img>';
+                case '3':
+                    return '<img src="/src/static/game_assets/obstacles/rock.png"></img>';
+                default:
+                    return '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>';
             }
         }
 

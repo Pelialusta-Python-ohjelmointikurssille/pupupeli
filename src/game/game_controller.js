@@ -1,6 +1,5 @@
-import { onTaskComplete } from "../ui/ui.js";
 import { Game } from "./game.js";
-import { postMessage } from "../event_handler.js";
+import { postMessage } from "../worker_messenger.js";
 import { getVariableTrueName } from './commonstrings.js';
 
 //This file controls game. 
@@ -43,10 +42,6 @@ export function getCanvas() {
 
 export function resetGame() {
     game.resetGame();
-}
-
-export function notifyGameWon(won) {
-    onTaskComplete(won);
 }
 
 export function setTheme(theme) {
