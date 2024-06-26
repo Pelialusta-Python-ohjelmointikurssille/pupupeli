@@ -41,3 +41,10 @@ const gridObjectManifest = {
 siirry src -> game -> graphics_handler -> manifests -> asset_manifest
 
 Lisää objekti assets listaan. Katso että lisäät objektin objektin tyyppiä vastaavaan listaan. Aseta uudelle objektille alias-nimi ja src johon asetetaan kuvan osoite kansiorakenteessa.
+
+entity_skin_factories: Tee uusi funktio. Jos objektilla on vain yksi kuva, aseta skinOptions sanakirjaan defaultTexture : assets.collectibles.(aliasnimi)
+
+skin_manifest: aseta entity skins listassa typeName, joka toimii id:nä
+teema, jossa skiniä käytetään
+factoryFunctioniin asetetaan entity_skin_factories tiedostossa tehty funktion nimi
+
