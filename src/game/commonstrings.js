@@ -25,6 +25,11 @@ export class Constants {
     static RIGHT_STR = "right";
 }
 
+export class ThemeNames {
+    static BUNNY = "bunny";
+    static ROBOT = "robot";
+}
+
 //Todo: aliases change depending on current theme
 const COLLECTIBLE_ALIASES = ["porkkana", "jakoavain", "ruoka"];
 const OBSTACLE_ALIASES = ["kivi", "viemäri", "este"];
