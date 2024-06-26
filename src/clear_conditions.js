@@ -22,9 +22,9 @@ export function checkIfGameWon() {
     }
 }
 
-function allConditionsCleared() {
+export function allConditionsCleared() {
     if (task.getMultipleChoiceQuestions().length > 0) {
-        //In multiple choice question tasks we only care about the correct answer. 
+        //In multiple choice question tasks we only care about the correct answer.
         return getMultipleChoiceCorrect();
     }
     let otherConditions = conditionChecker(conditions, conditionsCleared);
