@@ -18,6 +18,8 @@ export class FailMoveAnimation {
         this.pawnEntity.updatePosition();
         this.progress.start();
         this.inProgress = true;
+        this.pawnEntity.direction = this.data.direction
+        this.pawnEntity.updateTextures();
     }
 
     increment(deltaTime) {
