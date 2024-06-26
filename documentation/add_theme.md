@@ -12,6 +12,6 @@ Aseta index.html tiedostossa dropdown-menuun uuden teeman hahmon nimi
 ```
 Lisää game.js tiedostossa setTheme funktioon uusi teema. Aseta teeman nimeksi uuden hahmon mukainen nimi. 
 
-entity_skin_factories: luo uudet funktiot uusille objekteille. Lisää uusi entity type commonstringsistä
+entity_skin_factories: luo uudet funktiot uusille objekteille.
 
 skin_manifest: ENTITY SKINS sanakirjaan uusi typeName, uusi theme ja factoryFunctioniin luodun funktion nimi entity_skin_factoriesista
