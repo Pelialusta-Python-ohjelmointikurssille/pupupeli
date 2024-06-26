@@ -144,10 +144,19 @@ export class GraphicsCamera {
         this.setZoom(this.linearZoomValue / 100);
     }
 
+    /**
+     * Sets minimum zoom value. Smaller value means objects look smaller in-game.
+     * @param {number} value 
+     */
     setMinZoom(value) {
         this.minZoom = value;
     }
 
+    /**
+     * Converts screen space coordinates to world space.
+     * @param {Vector2} screenVector 
+     * @returns Vector2 of coordinates in world space.
+     */
     screenToWorld(screenVector) {
         return new Vector2(
             this.position.x + ((screenVector.x-(SCREEN.WIDTH / 2)) / this.totalRenderScale),
@@ -155,6 +164,9 @@ export class GraphicsCamera {
         );
     }
 
+    /**
+     * Clamps camera center position based on given bounds. 
+     */
     clampPositionToBounds() {
         if (this.positionBounds == null) return;
         if (this.positionBounds[0] == null || this.positionBounds[1] == null) return;
@@ -164,6 +176,9 @@ export class GraphicsCamera {
         if (this.position.y > this.positionBounds[1].y) this.position.y = this.positionBounds[1].y;
     }
 
+    /**
+     * Clamps camera viewport corners based on given bounds. Tries to keep corners of camera inside the rectangle. 
+     */
     clampPositionByViewPort() {
         if (this.viewportBounds == null) return;
         if (this.viewportBounds[0] == null || this.viewportBounds[1] == null) return;
@@ -177,6 +192,9 @@ export class GraphicsCamera {
             this.position.y = this.viewportBounds[1].y - (this.viewportCorners[3].y - this.screenToWorld(new Vector2(SCREEN.WIDTH / 2, SCREEN.HEIGHT / 2)).y);
     }
 
+    /**
+     * Updates values of the corners of the camera viewport.
+     */
     updateViewportCorners() {
         this.viewportCorners = [
             this.screenToWorld(new Vector2(0, 0)),
@@ -185,11 +203,20 @@ export class GraphicsCamera {
             this.screenToWorld(new Vector2(SCREEN.WIDTH, SCREEN.HEIGHT))
         ];
     }
-
+    /**
+     * 
+     * @param {Vector2} topLeft 
+     * @param {Vector2} bottomRight 
+     */
     setViewportBounds(topLeft, bottomRight) {
         this.viewportBounds = [topLeft, bottomRight];
     }
 
+    /**
+     * 
+     * @param {Vector2} topLeft 
+     * @param {Vector2} bottomRight 
+     */
     setPositionBounds(topLeft, bottomRight) {
         this.positionBounds = [topLeft, bottomRight];
     }
