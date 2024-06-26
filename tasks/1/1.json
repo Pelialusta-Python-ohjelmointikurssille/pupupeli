@@ -3,6 +3,7 @@
   "taskType": "collectibles",
   "enableAddRemove": false,
   "description": [
+    "(Käytä for-silmukkaa ja input-toimintoa (pupu.kysy() tai input()). Vastauksen tulee olla alle 5 riviä.)",
     "Aseta hahmo liikkumaan oikeaan alareunaan. Laita hahmo liikkumaan seuraavilla komennoilla:",
     "",
     "hahmo.liiku(\"oikea\")",
@@ -22,11 +23,11 @@
     [0,1,1,1,1,1,2,2],
     [1,1,3,3,1,1,1,1],
     [1,1,1,3,1,1,1,1],
-    [1,1,1,3,1,1,2,1],
+    [1,1,1,3,1,1,1,1],
     [1,1,1,3,1,1,1,1],
     [1,1,1,3,1,1,1,1],
     [1,1,1,1,1,1,1,1],
-    [2,1,1,1,1,1,1,2]
+    [1,1,1,1,1,1,1,2]
   ],
   "conditions": [
     {
@@ -39,11 +40,11 @@
     },
     {
       "condition": "conditionUsedInput",
-      "parameter": false
+      "parameter": true
     },
     {
       "condition": "conditionMaxLines",
-      "parameter": false
+      "parameter": 5
     }
   ]
 }
