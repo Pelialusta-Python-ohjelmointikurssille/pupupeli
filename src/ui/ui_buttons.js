@@ -15,8 +15,9 @@ let currentChapter = globals.chapterIdentifier;
  * Clears app-container, creates a new one and adds elements for instruction page
  */
 export function createInstructionPage() {
-    const taskIdentifier = globals.taskIdentifier;
-    const chapterIdentifier = globals.chapterIdentifier;
+    //Commenting fixes lint, is this even used?
+    //const taskIdentifier = globals.taskIdentifier;
+    //const chapterIdentifier = globals.chapterIdentifier;
     const appDiv = document.getElementById("app-container");
     appDiv.classList.add("is-hidden");
 
