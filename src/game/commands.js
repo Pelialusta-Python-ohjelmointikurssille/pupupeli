@@ -33,7 +33,7 @@ export class MoveCommand {
      */
     execute() {
         let isSuccess = this.grid.moveGridObjectToDir(this.gridObject, this.dir);
-        if (isSuccess) this.#checkForObjects();
+        if (isSuccess) this.reactToObjects();
         let dirObj = { direction: this.dir, time: this.moveSpeed };
         if (isSuccess) {
             this.graphicsHandler.doAction(this.gridObject.id, AnimationNames.PAWN_MOVE, dirObj);
@@ -47,39 +47,43 @@ export class MoveCommand {
      * Used to check the cell we are entering to see if anything happens. For example, collectibles are picked up.
      * Assumes that we are entering that cell.
      */
-    #checkForObjects() {
+    reactToObjects() {
         let gridobjects = this.grid.getAdjacentObjectsAtDir(this.moveStartPos.x, this.moveStartPos.y, this.dir);
         for (let i = 0; i < gridobjects.length; i++) {
             if (gridobjects[i].type === Constants.COLLECTIBLE) {
-                let go = gridobjects[i];
-                this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
-                
-                this.grid.removeFromGrid(go);
+                this.reactToCollectibles(gridobjects[i]);
             }
-            if (gridobjects[i].type === Constants.QUESTION_COLLECTIBLE) {
-                let go = gridobjects[i];
-                this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
-                
-                this.grid.removeFromGrid(go);
-
-                requestInputFromGame();
-                this.graphicsHandler.destroyTextBoxes();
-                let textboxId = crypto.randomUUID().toString();
-                this.graphicsHandler.createEntity(
-                    textboxId,
-                    "textbox",
-                    {
-                        position: new Vector2(512, 940),
-                        size: new Vector2(1000, 200),
-                        targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
-                        text: "Testikysymys?",
-                        alignTextTop: true,
-                        useWorldCoordinates: false
-                    },
-                    SKIN_BUNDLES["speech_bubble"]
-                );
+            else if (gridobjects[i].type === Constants.QUESTION_COLLECTIBLE) {
+                this.reactToQuestionCollectible(gridobjects[i]);
             }
         }
+    }
+
+    reactToCollectibles(collectibleGO) {
+        this.graphicsHandler.doAction(collectibleGO.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
+        this.grid.removeFromGrid(collectibleGO);
+    }
+
+    reactToQuestionCollectible(go) {
+        this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
+        this.grid.removeFromGrid(go);
+
+        requestInputFromGame();
+        this.graphicsHandler.destroyTextBoxes();
+        let textboxId = crypto.randomUUID().toString();
+        this.graphicsHandler.createEntity(
+            textboxId,
+            "textbox",
+            {
+                position: new Vector2(512, 940),
+                size: new Vector2(1000, 200),
+                targetPosition: new Vector2(this.gridObject.cell.x * 128 + 64, this.gridObject.cell.y * 128 + 64),
+                text: "Testikysymys?",
+                alignTextTop: true,
+                useWorldCoordinates: false
+            },
+            SKIN_BUNDLES["speech_bubble"]
+        );
     }
 
 }

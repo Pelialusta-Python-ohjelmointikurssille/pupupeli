@@ -3,9 +3,13 @@ import { Grid } from "./grid.js";
 import { Constants } from "./commonstrings.js";
 import * as globals from "../util/globals.js";
 
+/**
+ * If you want to add more gridObject types, add them to commonstrings.js files
+ * class "Constants" as a static string variable.
+ */
 const gridObjectManifest = {
     0: Constants.PLAYER_STR,
-    1: "",
+    1: "", //empty space
     2: Constants.COLLECTIBLE,
     3: Constants.OBSTACLE,
     4: Constants.QUESTION_COLLECTIBLE

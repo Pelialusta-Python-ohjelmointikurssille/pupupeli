@@ -1,11 +1,13 @@
 import { Direction } from "./direction.js";
 
 export class Constants {
-    //grid object names:
+    //grid object types:
     static COLLECTIBLE = "collectible";
     static OBSTACLE = "obstacle";
     static EMPTY_TILE = "";
     static QUESTION_COLLECTIBLE = "question_collectible";
+    //^ Add new gridObjects types above ^
+
     //Following are the valid command strings:
     static MOVE_STR = "move";
     static SAY_STR = "say";
@@ -21,6 +23,11 @@ export class Constants {
     static DOWN_STR = "down";
     static LEFT_STR = "left";
     static RIGHT_STR = "right";
+}
+
+export class ThemeNames {
+    static BUNNY = "bunny";
+    static ROBOT = "robot";
 }
 
 //Todo: aliases change depending on current theme
