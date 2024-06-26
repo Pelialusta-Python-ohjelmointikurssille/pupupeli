@@ -38,3 +38,6 @@ const gridObjectManifest = {
     4: Constants.QUESTION_COLLECTIBLE
 }
 ```
+siirry src -> game -> graphics_handler -> manifests -> asset_manifest
+
+Lisää objekti assets listaan. Katso että lisäät objektin objektin tyyppiä vastaavaan listaan. Aseta uudelle objektille alias-nimi ja src johon asetetaan kuvan osoite kansiorakenteessa.
