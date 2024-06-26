@@ -66,6 +66,11 @@ export class GraphicsEntity {
             this.sprite.width = this.entityData.size.x;
             this.sprite.height = this.entityData.size.y;
         }
+        // Fix entitydata values not being accounted for when resetting
+        this.containerStartPosition = new Vector2(this.container.position.x, this.container.position.y);
+        this.containerStartScale = this.container.scale;
+        this.containerStartAlpha = this.container.alpha;
+        this.containerStartRotation = this.container.rotation;
     }
 
     /**

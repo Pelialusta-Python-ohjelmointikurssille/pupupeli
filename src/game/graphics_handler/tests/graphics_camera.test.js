@@ -30,8 +30,8 @@ describe('GraphicsCamera', () => {
     expect(camera.zoomScale).toBe(1);
     expect(camera.rotation).toBe(0);
     expect(camera.minZoom).toBe(0.08);
-    expect(camera.maxZoom).toBe(1);
-    expect(camera.focusPaddingPercent).toBe(0.025);
+    expect(camera.maxZoom).toBe(0.95);
+    expect(camera.focusPaddingPercent).toBe(0.1);
     expect(camera.totalRenderScale).toBe(1);
   });
 
@@ -80,10 +80,19 @@ describe('GraphicsCamera', () => {
     expect(camera.zoomScale).toBe(0.5);
 
     camera.setZoom(1.5);
-    expect(camera.zoomScale).toBe(1);
+    expect(camera.zoomScale).toBe(0.95);
 
     camera.setZoom(0.05);
     expect(camera.zoomScale).toBe(0.08);
+  });
+
+  test("screen to world coordinate conversion works when at middle of screen", () => {
+    camera.moveToPoint(new Vector2(512, 512));
+    expect(camera.screenToWorld(new Vector2(945, 230))).toEqual(new Vector2(945, 230));
+  });
+
+  test("screen to world coordinate conversion works when at 0,0", () => {
+    expect(camera.screenToWorld(new Vector2(945, 230))).toEqual(new Vector2(433, -282));
   });
 });
 
