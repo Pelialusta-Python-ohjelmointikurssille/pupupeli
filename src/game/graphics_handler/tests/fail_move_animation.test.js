@@ -16,7 +16,8 @@ describe('FailMoveAnimation', () => {
             screenPosition: { x: 0, y: 0 },
             container: { x: 0, y: 0 },
             gridReference: { gridScale: 1 },
-            fakeZPosition: 0
+            fakeZPosition: 0,
+            updateTextures: jest.fn()
         };
         name = 'failMove';
         data = { time: 1000, direction: 'NORTH' };
