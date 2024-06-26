@@ -1,5 +1,4 @@
-import
-{
+import {
     createBackgroundGrassSkin,
     createBackgroundMetalSkin,
     createCharacterBunnySkin,
@@ -15,6 +14,7 @@ import
 } from "../entity_skins/factories/entity_skin_factories.js";
 
 export const ENTITY_SKINS = [
+    //bunny theme starts here:
     {
         typeName: "skin_character_bunny",
         theme: "bunny",
@@ -41,6 +41,12 @@ export const ENTITY_SKINS = [
         factoryFunction: createSpeechBubbleBunnySkin
     },
     {
+        typeName: "skin_collectible_question_bunny",
+        theme: "bunny",
+        factoryFunction: createQuestionCollectibleBunnySkin
+    },
+    //Robot theme starts here
+    {
         typeName: "skin_character_robot",
         theme: "robot",
         factoryFunction: createCharacterRobotSkin
@@ -66,15 +72,13 @@ export const ENTITY_SKINS = [
         factoryFunction: createSpeechBubbleRobotSkin
     },
     {
-        typeName: "skin_collectible_question_bunny",
-        theme: "bunny",
-        factoryFunction: createQuestionCollectibleBunnySkin
-    },
-    {
         typeName: "skin_collectible_question_robot",
         theme: "robot",
         factoryFunction: createQuestionCollectibleRobotSkin
     }
+    //To make new theme, copypaste an existing theme above here and rename the types (have to be unique). 
+    //Additionally, make and add factory functions to them 
+    // ----------------------------------------------------------
 ]
 
 export const SKIN_BUNDLES = {
