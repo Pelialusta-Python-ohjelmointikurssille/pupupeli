@@ -2,6 +2,8 @@
 
 ## Lisää uudenlainen objekti
 
+Mene kansioon static/game_assets. Luo uusi kansio, jonka nimi vastaa uudenlaista objektia. Lisää kuva tämän luodun kansion sisään.
+
 Lisää editor.html:ssä getImage funktion sisällä uusi case-arvo
 ```
 function getImage(index) {
