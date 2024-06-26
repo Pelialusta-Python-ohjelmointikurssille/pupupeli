@@ -1,4 +1,4 @@
-Aseta index.html tiedostossa dropdown-menuun uuden teeman hahmon nimi
+- Aseta index.html tiedostossa dropdown-menuun uuden teeman hahmon nimi
 ```
 <div id="toggle-buttons-div">
                             <select id="theme-select" type="button">
@@ -10,12 +10,12 @@ Aseta index.html tiedostossa dropdown-menuun uuden teeman hahmon nimi
                             <button id="grid-toggle-button" type="button">Ruudukko</button>
                         </div>
 ```
-Aseta uuden teeman kuvat static/game_assets kansioon. Lisää kuvat eri kansioihin kuvan tyypin mukaisesti.
+- Aseta uuden teeman kuvat static/game_assets kansioon. Lisää kuvat eri kansioihin kuvan tyypin mukaisesti.
 
-Mene asset_manifestiin ja lisää kuville alias-nimet sekä osoitteet kansiorakenteen mukaan. 
+- Mene asset_manifestiin ja lisää kuville alias-nimet sekä osoitteet kansiorakenteen mukaan. 
 
-Lisää game.js tiedostossa setTheme funktioon uusi teema. Aseta teeman nimeksi uuden hahmon mukainen nimi. 
+- Lisää game.js tiedostossa setTheme funktioon uusi teema. Aseta teeman nimeksi uuden hahmon mukainen nimi. 
 
-entity_skin_factories: luo uudet funktiot uusille objekteille.
+- entity_skin_factories: luo uudet funktiot uusille objekteille.
 
-skin_manifest: ENTITY SKINS sanakirjaan uusi typeName, uusi theme ja factoryFunctioniin luodun funktion nimi entity_skin_factoriesista. Lisää myös SKIN BUNDLES sanakirjaan avaimia vastaavat nimet, jotka ovat typeName:n mukaiset.
+- skin_manifest: ENTITY SKINS sanakirjaan uusi typeName, uusi theme ja factoryFunctioniin luodun funktion nimi entity_skin_factoriesista. Lisää myös SKIN BUNDLES sanakirjaan avaimia vastaavat nimet, jotka ovat typeName:n mukaiset.
