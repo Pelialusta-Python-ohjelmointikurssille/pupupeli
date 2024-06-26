@@ -50,3 +50,5 @@ skin_manifest: aseta entity skins listassa typeName, joka toimii id:nä
 teema, jossa skiniä käytetään
 factoryFunctioniin asetetaan entity_skin_factories tiedostossa tehty funktion nimi
 
+Aseta SKIN BUNDLES sanakirjassa avaimeksi Entity.type ja lisää listaan avainta vastaavat typeName-tiedot listaan. 
+
