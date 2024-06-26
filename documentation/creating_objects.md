@@ -52,3 +52,13 @@ factoryFunctioniin asetetaan entity_skin_factories tiedostossa tehty funktion ni
 
 Aseta SKIN BUNDLES sanakirjassa avaimeksi Entity.type ja lisää listaan avainta vastaavat typeName-tiedot listaan. 
 
+entity_factories: luo uusi funktio tai kopio olemassa oleva funktio ja muut entity.type commons_stringsissä olevaksi vastaavaksi typeksi
+
+Jos haluat, että objekti reagoi pelihahmoon, käy tutkimassa command.jsää
+
+
+
+
+
+
+
