@@ -11,3 +11,11 @@ Pelialusta Python-ohjelmointikurssille
 ## [Deploy Instructions](documentation/deploy_instructions.md)
 
 ## [Retrospective](documentation/retrospektiivi.md)
+
+## Guide
+
+- [How to add new themes](documentation/add_theme.md)
+- [How to create new objects](documentation/creating_objects.md)
+- [How to use task editor](documentation/task_editor.md)
+- [How to use player character commands](documentation/user_commands.md)
+- [How to create new graphics](documentation/graphics_handler_tutorials.md)
