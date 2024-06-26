@@ -10,4 +10,9 @@ export class BackgroundEntity extends GraphicsEntity {
         this.container.pivot.x = entityData.size.x / 2;
         this.container.pivot.y = entityData.size.y / 2;
     }
+
+    reset() {
+        // override base graphics entity reset method
+        // fixes bug where resetting changes bg position
+    }
 }
