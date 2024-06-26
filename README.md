@@ -12,10 +12,10 @@ Pelialusta Python-ohjelmointikurssille
 
 ## [Retrospective](documentation/retrospektiivi.md)
 
-## Guide
+## Käyttöohje
 
-- [How to add new themes](documentation/add_theme.md)
-- [How to create new objects](documentation/creating_objects.md)
-- [How to use task editor](documentation/task_editor.md)
-- [How to use player character commands](documentation/user_commands.md)
-- [How to create new graphics](documentation/graphics_handler_tutorials.md)
+- [Uusien teemojen lisääminen](documentation/add_theme.md)
+- [Uusien objektien lisääminen](documentation/creating_objects.md)
+- [Tehtäväeditorin käyttöohje](documentation/task_editor.md)
+- [Pelihahmon komentojen käyttöohje](documentation/user_commands.md)
+- [Uusien grafiikoiden luomisohje](documentation/graphics_handler_tutorials.md)
