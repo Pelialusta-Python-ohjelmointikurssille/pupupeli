@@ -197,7 +197,7 @@ export function onTaskComplete(isWon) {
                     errorMessage += "\n<li>et käyttänyt while-silmukkaa</li>"
                     break;
                 case "conditionUsedInput":
-                    errorMessage += "\n<li>et käyttänyt input-toiminnallisuutta</li>"
+                    errorMessage += "\n<li>et käyttänyt input-toiminnallisuutta (esim. pupu.kysy())</li>"
                     break;
                 case "conditionMaxLines":
                     errorMessage += "\n<li>vastauksessasi oli liian monta riviä</li>"
