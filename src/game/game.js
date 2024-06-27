@@ -10,7 +10,7 @@ import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.
 import { CollectibleCounter } from "./collectible_counter.js";
 
 /**
- * The game logic controlled by game_controller.js
+ * The game logic controlled by game_controller.js. Handles grid logic and rendering.
  */
 export class Game {
     constructor() {
