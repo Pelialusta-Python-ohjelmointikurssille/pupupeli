@@ -8,15 +8,16 @@ import { requestInputFromPython } from './game/game_input_controller.js';
 import { checkIfGameWon, addClearedConditions } from './clear_conditions.js';
 
 let worker;
-let lastMessage = { type: "foo", message: "bar", sab: "baz" }; // necessary for reasons i forgot
-let isMessagePassingPaused = false; //keep as default, trust me bro
+let lastMessage = { type: "foo", message: "bar", sab: "baz" };
+let isMessagePassingPaused = false; //keep default as false
 let sharedArray; //array shared with worker
-let syncArray;
+let syncArray; //used to notifie worker when it has permission to continue 
 /**
  * Creates a new worker
  */
 export function initWorker() {
-    //TODO: this function is long and will potentially grow longer. Stop the madness before it's too late.
+    //TODO: this function is long and will potentially grow longer.
+    //One solution: Dictionary with strings function pairs.
     worker = new Worker('/src/input/worker.js');
     worker.onmessage = (message) => {
         message = message.data;
