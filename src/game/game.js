@@ -132,7 +132,12 @@ export class Game {
         this.tempObjectIds = [];
     }
 
+    /**
+     * Changes theme, currently uses the finnish name of the theme
+     * @param {*} theme theme to change into in finnish
+     */
     setTheme(theme) {
+        console.log(localStorage.getItem("theme"));
         if (theme === "Pupu") {
             this.gh.setEntityThemes("bunny");
         }
@@ -141,17 +146,33 @@ export class Game {
         }
     }
 
+    /**
+     * Toggles a grid that is drawn to see the grid easier and the indexes of the x and y in the grid
+     */
     toggleGrid() {
         this.isGridEnabled = !this.isGridEnabled;
         this.gh.setGridState(this.isGridEnabled);
     }
 
+    /**
+     * Toggles the rendering of the trail on and off. It draws a line representing the route of player in the grid. 
+     */
     toggleTrail() {
         let id = this.grid.player.id;
         let playerGraphicsPawn = this.gh.getEntity(id);
         playerGraphicsPawn.lineDrawer?.toggle();
     }
 
+    /**
+     * Creates a new object to the grid. This is not a command, and is executed immediately. 
+     * When failing, creates a speech bubble that tells the reason for failure.
+     * New player can't be created.
+     * Objects are destroyed on reset.
+     * @param {*} type 
+     * @param {*} x 
+     * @param {*} y 
+     * @returns none
+     */
     createNewPlayerCreatedGridObject(type, x, y) {
         if (!type) {
             this.makeSayCommand("Ups, luonti ei onnistunut koska en tiedä mitä objektia tarkoitat.");
@@ -172,6 +193,13 @@ export class Game {
         this.setTheme(localStorage.getItem("theme"));
     }
 
+    /**
+     * Destroys any object from the grid, with the exception of player.
+     * Objects are restored after reset.
+     * @param {*} x 
+     * @param {*} y 
+     * @returns 
+     */
     destroyObject(x, y) {
         let list = this.grid.getObjectsAtGridPosition(x, y);
         if (list.length <= 0) {
