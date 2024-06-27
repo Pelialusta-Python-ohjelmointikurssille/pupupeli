@@ -28,7 +28,7 @@ export class Grid {
     };
 
     /**
-     * Saves the starting positions of grid objects
+     * Saves the starting positions of grid objects in the grid, this state can be restored with "resetGrid()"
      */
     saveCurrentStateForReset() {
         for (let i = 0; i < this.gridObjects.length; i++) {
@@ -154,7 +154,6 @@ export class Grid {
      * @returns {array} newDoubleArray
      */
     CreateDoubleArray(width, height) {
-        //js doesn't have double arrays T:Tommi
         let newDoubleArray = [];
         for (let x = 0; x < width; x++) {
             newDoubleArray[x] = [];
@@ -165,10 +164,17 @@ export class Grid {
         return newDoubleArray;
     }
 
+    /**
+     * Uses consoleDebugDoubleArray to print the current gamegrid and it's objects.
+     */
     consoleDebug() {
         this.consoleDebugDoubleArray(this.doubleArray);
     }
 
+    /**
+     * Nicely console.logs an array, can be copypasted elsewhere if needed.
+     * @param {*} doubleArray 
+     */
     consoleDebugDoubleArray(doubleArray) {
         for (let x = 0; x < doubleArray.length; x++) {
             let row = "";
