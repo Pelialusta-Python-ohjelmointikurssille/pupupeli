@@ -1,5 +1,9 @@
 import { Direction } from "./direction.js";
 
+/**
+ * Includes commonly used constant strings. 
+ * Use this to avoid magic strings so you don't have to change every single instance of a string if you change it.
+ */
 export class Constants {
     //grid object types:
     static COLLECTIBLE = "collectible";
