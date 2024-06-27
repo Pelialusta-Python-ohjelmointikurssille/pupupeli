@@ -20,6 +20,9 @@ export class Game {
         this.tempObjectIds = [];
     }
 
+    /**
+     * Init function starts rendering of all the objects in the game grid.
+     */
     async init() {
         await this.gh.initialize();
         this.grid.gridObjects.forEach(item => {
@@ -145,6 +148,7 @@ export class Game {
         this.grid.addToGrid(newGO, x, y);
         this.createGridEntityForRendering(newGO);
         this.tempObjectIds.push(newGO.id);
+        this.setTheme(localStorage.getItem("theme"));
     }
 
     destroyObject(x, y) {
