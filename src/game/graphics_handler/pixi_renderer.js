@@ -1,4 +1,4 @@
-import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
+import { PIXI } from "../../external_dependencies.js";
 import { ASSETS } from "./manifests/asset_manifest.js";
 
 export class PixiRenderer {
