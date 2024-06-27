@@ -11,7 +11,7 @@
     "pupu.liiku(\"ylös\")"
   ],
   "editorCode": [
-    "for i in range(7):",
+    "for i in range(7:",
     "\tpupu.liiku(\"oikea\")",
     "for i in range(7):",
     "\tpupu.liiku(\"alas\")"
@@ -27,5 +27,26 @@
     [1,3,3,3,3,3,1,1],
     [1,1,1,1,1,1,1,2]
   ],
-  "conditions": []
+  "conditions": [
+    {
+      "condition": "conditionUsedWhile",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedFor",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": false
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": false
+    },
+    {
+      "condition": "conditionIdenticalCode",
+      "parameter": "for i in range(7):\n\tpupu.liiku(\"oikea\")\nfor i in range(7):\n\tpupu.liiku(\"alas\")"
+    }
+  ]
 }
