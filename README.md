@@ -19,3 +19,4 @@ Pelialusta Python-ohjelmointikurssille
 - [Tasoeditorin käyttöohje](documentation/task_editor.md)
 - [Pelihahmon komentojen käyttöohje](documentation/user_commands.md)
 - [Uusien grafiikoiden luomisohje](documentation/graphics_handler_tutorials.md)
+- [Uusien voittoehtojen lisäys](documentation/add_win_condition.md)
