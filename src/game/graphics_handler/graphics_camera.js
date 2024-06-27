@@ -113,6 +113,11 @@ export class GraphicsCamera {
         this.setViewportBounds(this.viewportCorners[0], this.viewportCorners[3]);
     }
 
+    /**
+     * Sets camera focus area and also sets bounds based on that.
+     * @param {Vector2} middle Middle point of the area that the camera should focus on.
+     * @param {Vector2} size Width and height of the area as a Vector2.
+     */
     setCameraArea(middle, size) {
         this.focusOnAreaMiddle(middle, size);
         this.setMinZoom(this.zoomScale);
@@ -134,6 +139,10 @@ export class GraphicsCamera {
         this.updatePosition();
     }
 
+    /**
+     * Tries to change zoom linearly. Used by input handler for scroll wheel zooming. Pretty bad but works i guess.
+     * @param {number} valueDelta Scrollwheel move delta.
+     */
     changeZoomLinear(valueDelta) {
         let delta = valueDelta / (1 - (this.linearZoomValue / 100))
         if (delta > 10) delta = 2;
@@ -204,7 +213,7 @@ export class GraphicsCamera {
         ];
     }
     /**
-     * 
+     * Sets bounds for the viewport corners.
      * @param {Vector2} topLeft 
      * @param {Vector2} bottomRight 
      */
@@ -213,7 +222,7 @@ export class GraphicsCamera {
     }
 
     /**
-     * 
+     * Sets bounds for the camera center point position.
      * @param {Vector2} topLeft 
      * @param {Vector2} bottomRight 
      */

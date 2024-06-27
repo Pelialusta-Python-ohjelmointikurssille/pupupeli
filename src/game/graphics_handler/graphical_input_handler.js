@@ -1,4 +1,4 @@
-import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.1.5/pixi.mjs";
+import { PIXI } from "../../external_dependencies.js";
 import { Vector2 } from "../vector.js";
 import { SCREEN } from "./graphics_constants.js";
 
