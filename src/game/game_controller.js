@@ -9,7 +9,10 @@ import { getVariableTrueName } from './commonstrings.js';
 var game;
 var currentCommand;
 
-
+/**
+ * Initializes the game. It loads the current level using the instuctions from current task and initializes the rendering.
+ * @returns pixiApp.canvas, the canvas object that pixi uses, needs to be added to the page.
+ */
 export async function initGame() {
     game = new Game();
     await game.init();

@@ -30,6 +30,11 @@ export class Game {
         });
     }
 
+    /**
+     * Graphics handler creates it's own entities from gridobjects that it renders.
+     * The entities can then be refrenced later with the id of gridobjects.
+     * @param {*} gridObject gridObject you want to render
+     */
     createGridEntityForRendering(gridObject) {
         let data = { gridPosition: gridObject.getVector2Position() };
         let skins = SKIN_BUNDLES[gridObject.type];
