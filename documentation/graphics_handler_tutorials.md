@@ -12,14 +12,13 @@ Laajenna PawnEntity-luokkaa niille Entityille, joiden tulisi seurata ruudukkoa.
 
 4. Jos haluat Entitylle graafisia elementtejä, sinun on myös luotava sille Skinit, yksi jokaiselle olemassa olevalle teemalle. Katso lisätietoja uusien skinien lisäämisestä.
 
-### Adding a new Animation
+### Uuden animaation lisääminen
 
-1. Create a class in the **animations/** folder.
+1. Luo luokka **animations/** kansioon.
 
-2. Create a factory function in **animations/factories/**. Currently all are located in **animations/factories/animation_factories.js**.
+2. Luo factory function **animations/factories/**-hakemistoon. Tällä hetkellä kaikki on sijoitettuna tiedostoon **animations/factories/animation_factories.js**.
 
-3. Register the factory function in **manifests/animation_manifest.js**. Along with the factory function you should give a typeName, which is used to refer which animation should be played. The compatibleEntities list defines all entities that can play the animation. An empty list means all entities can play it.
-
+3. Rekisteröi factory function tiedostoon **manifests/animation_manifest.js**. Factory functionin lisäksi tulisi antaa typeName, jolla määritetään toistettava animaatio. Yhteensopivien Entitien luettelossa määritellään kaikki entiteetit, jotka voivat toistaa animaation. Tyhjä lista tarkoittaa, että kaikki entiteetit voivat toistaa sen.
 
 ### Adding a new Skin
 
