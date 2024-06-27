@@ -1,6 +1,6 @@
 /**
  * GridData is given data by grid when grid logic happens. 
- * GridDatas responsibility is to update globals values to represent the current state of the grid.
+ * It quickly gets the amount of certain objects, and because it has data on all the objects, it can be used to get additional data in the future easily.
  */
 export class GridData {
     constructor() {
@@ -18,10 +18,17 @@ export class GridData {
         return true;
     }
 
+    /**
+     * Removes all data.
+     */
     reset() {
         this.goDict = {};
     }
 
+    /**
+     * Adds a gridobject, it adds it to a dictionary where it's key is it's type.
+     * @param {*} gridObject 
+     */
     add(gridObject) {
         if (this.goDict[gridObject.type] === undefined) {
             this.goDict[gridObject.type] = [];
@@ -29,7 +36,6 @@ export class GridData {
         this.goDict[gridObject.type].push(gridObject);
     }
     /**
-     * 
      * @returns The number of gridobjects of given type in the game grid.
      */
     getGridObjectsOfTypeCount(type) {
