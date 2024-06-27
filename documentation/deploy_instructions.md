@@ -1,46 +1,46 @@
-## Running linting and tests
+## Lintin ja testien suorittaminen
 
-First install npm packages:
+Asenna ensin npm-paketit:
 ~~~
 npm install
 ~~~
 
-Run tests:
+Suorita testit:
 ~~~
 npm test
 ~~~
 
-Run linting:
+Suorita lint:
 ~~~
 npm run lint
 ~~~
 
-## Run locally
+## Suorita paikallisesti
 
-Start a webserver from root folder using:
+Käynnistä verkkopalvelin juurikansiosta komennolla:
 
 ~~~
 python3 server.py
 ~~~
 
-This is done because of CORS policy requirements on the server side. Webworkers won't work properly otherwise.
+Tämä tehdään palvelinpuolen CORS-käytäntövaatimusten vuoksi. Webworkerit eivät muuten toimi kunnolla.
 
-## Run locally with HTTPS
+## Suorita paikallisesti HTTPS:llä
 
-First, run the following in the git root to generate a self-signed certificate (for https):
+Suorita ensin seuraava komento git-juuressa luodaksesi itse allekirjoitettu varmenne (https:lle):
 
 ~~~
 openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
 ~~~
 
-Then, start a webserver from root folder using:
+Käynnistä sitten verkkopalvelin juurikansiosta käyttämällä:
 
 ~~~
 python3 server_https.py
 ~~~
 
-Since it uses a self-signed certificate, the browser will warn you before you enter the page.
+Koska selain käyttää itse allekirjoitettua varmennetta, saat varoituksen ennen kuin siirryt sivulle.
 
-## OpenShift deployment
+## OpenShift-käyttöönotto
 
-The Httpd option works for running on OpenShift.
+Httpd-vaihtoehto toimii OpenShift-tilassa.
