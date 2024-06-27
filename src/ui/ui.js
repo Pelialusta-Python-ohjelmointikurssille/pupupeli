@@ -168,7 +168,6 @@ function colorSelectedChoice(selectedChoice) {
 
 export function onTaskComplete(isWon) {
     const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
-    console.error("is game won? " + isWon);
     if (isWon) {
         const buttonid = apiTaskIdentifier;
         let button = document.getElementById(buttonid);
