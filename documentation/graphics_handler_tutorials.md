@@ -20,10 +20,10 @@ Laajenna PawnEntity-luokkaa niille Entityille, joiden tulisi seurata ruudukkoa.
 
 3. Rekisteröi factory function tiedostoon **manifests/animation_manifest.js**. Factory functionin lisäksi tulisi antaa typeName, jolla määritetään toistettava animaatio. Yhteensopivien Entitien luettelossa määritellään kaikki entiteetit, jotka voivat toistaa animaation. Tyhjä lista tarkoittaa, että kaikki entiteetit voivat toistaa sen.
 
-### Adding a new Skin
+### Uuden Skinin lisääminen
 
-1. Create a factory function in **entity_skins/factories/**. Currently all are located in **entity_skins/factories/entity_skin_factories.js**.
+1. Luo factory function **entity_skins/factories/**-hakemistoon. Tällä hetkellä kaikki sijaitsevat tiedostossa **entity_skins/factories/entity_skin_factories.js**.
 
-2. Register the factory function in **manifests/skin_manifest.js**. Along with the factory function you should give a typeName, which is is used to refer to the skin. Along with it you should define a theme, used when a user switches between themes. For example, currently the two themes are "bunny" and "robot".
+2. Rekisteröi factory function tiedostoon **manifests/skin_manifest.js**. Factory functionin lisäksi tulisi antaa typeName, jota käytetään Skiniin viittaamiseen. Sen lisäksi sinun tulee määrittää teema, jota käytetään, kun käyttäjä vaihtaa teemojen välillä. Esimerkiksi tällä hetkellä kaksi teemaa ovat "bunny" ja "robot".
 
-3. Register skins that are used on a same type of object in SKIN_BUNDLES in **skin_manifest.js**. This is used when creating an entity.
+3. Rekisteröi Skinit, joita käytetään samantyyppisissä objekteissa SKIN_BUNDLES-tiedostossa **skin_manifest.js**:ssa. Tätä käytetään Entityä luotaessa.
