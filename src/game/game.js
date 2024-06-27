@@ -41,15 +41,23 @@ export class Game {
         this.gh.createEntity(gridObject.id, gridObject.type, data, skins);
     }
 
+    /**
+     * @returns Gets the pixiApp.canvas.
+     */
     getCanvas() {
         return this.gh.getCanvas();
     }
 
+    /**
+     * Tries to execute received command in the game.
+     * @param {*} commandName String describing the command. You can find them from commonstring.js Constants.
+     * @param {*} commandParameter Additional parameters needed for the command. Check user_commands.md.
+     */
     receiveInput(commandName, commandParameter) {
         if (!this.gh.isReady) {
             this.gh.finishAnimationsImmediately();
         }
-        this.gh.destroyTextBoxes(); //just a extra check?
+        this.gh.destroyTextBoxes();
         switch (commandName) {
             case Constants.MOVE_STR:
                 this.makeMoveCommand(commandParameter);
@@ -73,24 +81,39 @@ export class Game {
         this.gameWon = false;
     }
 
+    /**
+     * Moves the character to the given direction. If it hits a wall, plays an animation hitting the wall.
+     * @param {*} commandParameter String containing the direction in finnish.
+     */
     makeMoveCommand(commandParameter) {
         let dir = translatePythonMoveStringToDirection(commandParameter);
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh, this);
-        //we can save moveCommand for later when/if we want to add undo functionality
+        //(possibility) we can save moveCommand for later when/if we want to add undo functionality
         moveCommand.execute();
     }
 
+    /**
+     * Creates a speech bubble above player containing text.
+     * @param {*} commandParameter text added to the speech bubble
+     */
     makeSayCommand(commandParameter) {
         let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
         sayCommand.execute();
     }
 
+    /**
+     * Asks input from player. The input happens alongside a speechbubble.
+     * @param {*} commandParameter The question asked and added to the speechbubble.
+     */
     makeAskCommand(commandParameter) {
         let askCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
         askCommand.execute();
         this.onAnimsReady();
     }
 
+    /**
+     * Restores the gamestate back to the beginning of the task.
+     */
     resetGame() {
         this.gh.destroyTextBoxes();
         this.grid.resetGrid();
@@ -101,6 +124,11 @@ export class Game {
         this.collectibleCounter.reset();
     }
 
+    /**
+     * Adding gridobjects trough "createNewPlayerCreatedGridObject" adds them to the grid and renders them.
+     * They dissappear from the grid by themselves on reset, but this function
+     * removes them also from rendering.
+     */
     destroyTempObjects() {
         for (let i = 0; i < this.tempObjectIds.length; i++) {
             this.gh.destroyEntity(this.tempObjectIds[i]);
