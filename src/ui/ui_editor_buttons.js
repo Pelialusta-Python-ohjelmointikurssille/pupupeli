@@ -188,7 +188,7 @@ function initThemeSelect() {
     themeSelectDropdown = document.getElementById("theme-select");
     themeSelectDropdown.value = localStorage.getItem("theme");
     themeSelectDropdown.addEventListener('change', function (event) {
-        let isUserSure = window.confirm("Oletko varma että haluta vaihtaa teeman? Teeman vaihto resettaa tehtävään kirjoitetun koodin.");
+        let isUserSure = window.confirm("Oletko varma että haluat vaihtaa teeman? Teeman vaihtaminen nollaa tehtävään kirjoitetun koodin.");
         if (isUserSure === false) {
             themeSelectDropdown.value = localStorage.getItem("theme");
             return;
