@@ -68,6 +68,12 @@ function conditionChecker(conditionsToClear, conditionsCleared) {
                 conditionsNotCleared.push(obj.condition);
             }
         }
+        // are strings identical (= conditionIdenticalCode)
+        if (typeof param1 === 'string' && typeof param2 === 'string') {
+            if (param1 !== param2) {
+                conditionsNotCleared.push(obj.condition);
+            }
+        }
     }
 
     if (conditionsNotCleared.length > 0) {
