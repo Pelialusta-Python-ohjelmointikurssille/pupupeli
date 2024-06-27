@@ -1,16 +1,16 @@
-### Adding a new Entity
+### Uuden Entityn lisääminen
 
-1. Create a class in the **entities/** folder.
-You can choose to extend GraphicsEntity if you want a general purpose graphical entity.
-For entities that should follow the grid, extend PawnEntity. 
+1. Luo luokka **entities/** kansioon.
+Voit halutessasi laajentaa GraphicsEntity-luokkaa, jos haluat yleiskäyttöisen graafisen Entityn.
+Laajenna PawnEntity-luokkaa niille Entityille, joiden tulisi seurata ruudukkoa.
 
-    **All entities must derive from GraphicsEntity!**
+    **Kaikki Entityt on johdettava GraphicsEntity-luokasta**
 
-2. Create a factory function in **entities/factories/**. Currently all are located in **entities/factories/entity_factories.js**.
+2. Luo factory function **entities/factories/**-hakemistoon. Tällä hetkellä kaikki ovat sijoitettuna tiedostoon **entities/factories/entity_factories.js**.
 
-3. Register the factory function in **manifests/entity_manifest.js**. Along with the factory function you should give a typeName, which is used when Graphicshandler's createEntity is called.
+3. Rekisteröi factory function tiedostoon **manifests/entity_manifest.js**. Factory functionin lisäksi tulisi antaa typeName, jota käytetään, kun GraphicsHandler-luokan createEntity-metodia kutsutaan.
 
-4. If you want your entity to have graphical elements you must also create skins for it, one for each theme that exists. See the section on adding new skins for more information.
+4. Jos haluat Entitylle graafisia elementtejä, sinun on myös luotava sille Skinit, yksi jokaiselle olemassa olevalle teemalle. Katso lisätietoja uusien skinien lisäämisestä.
 
 ### Adding a new Animation
 
