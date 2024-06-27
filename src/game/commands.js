@@ -8,6 +8,10 @@ import { getRandomUUID } from "./uuid_generator.js";
 //Maybe do a base Command class and extend that, if you want. 
 //    https://refactoring.guru/design-patterns/command
 //    https://gameprogrammingpatterns.com/command.html
+//Idea is that the command is given everything it needs in constructor,
+//and then executed in execute(). Then it's easy to add undo in the future if needed, because you can save the objects executed in order.
+//Currently there are couple of commands (creating and destroying objects) that aren't done this way, but undo function was never asked
+//by the customer either.
 
 /**
  * MoveCommand is created to execute the MoveCommand action in game logic and rendering.
@@ -59,11 +63,19 @@ export class MoveCommand {
         }
     }
 
+    /**
+     * Handles what happens when player moves to a cell containing a collectible
+     * @param {*} collectibleGO 
+     */
     reactToCollectibles(collectibleGO) {
         this.graphicsHandler.doAction(collectibleGO.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
         this.grid.removeFromGrid(collectibleGO);
     }
 
+    /**
+     * Handles what happens when player moves to a cell containing a Question Collectible
+     * @param {*} go 
+     */
     reactToQuestionCollectible(go) {
         this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
         this.grid.removeFromGrid(go);
@@ -88,6 +100,9 @@ export class MoveCommand {
 
 }
 
+/**
+ * Handles drawing a speech bubble above the player containing the sayString
+ */
 export class SayCommand {
     constructor(gridObject, graphicsHandler, sayString) {
         this.gridObject = gridObject;
@@ -97,9 +112,6 @@ export class SayCommand {
     }
 
     execute() {
-        // TEMPORARY HACK!! REPLACE THIS!
-        //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
-
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = getRandomUUID();
         this.graphicsHandler.createEntity(
@@ -115,6 +127,9 @@ export class SayCommand {
     }
 }
 
+/**
+ * Handles drawing a speech bubble above the player containing askString and asking player for input
+ */
 export class AskCommand {
     constructor(gridObject, graphicsHandler, askString) {
         this.gridObject = gridObject;
@@ -124,8 +139,6 @@ export class AskCommand {
     }
 
     execute() {
-        // TEMPORARY HACK!! REPLACE THIS!
-        //this.graphicsHandler.doAction(this.gridObject.id, "say", { time: this.time, text: this.sayString });
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = getRandomUUID();
         this.graphicsHandler.createEntity(
@@ -141,6 +154,5 @@ export class AskCommand {
             },
             SKIN_BUNDLES["speech_bubble"]
         );
-        //this.graphicsHandler.doAction(textboxId, "ask", { time: 2 });
     }
 }
