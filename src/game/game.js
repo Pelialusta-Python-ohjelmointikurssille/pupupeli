@@ -9,6 +9,9 @@ import { GridObject } from "./gridobject.js";
 import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.js";
 import { CollectibleCounter } from "./collectible_counter.js";
 
+/**
+ * The game logic controlled by game_controller.js
+ */
 export class Game {
     constructor() {
         this.grid = getGameTask();
