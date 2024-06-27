@@ -15,7 +15,6 @@ export class Game {
         this.collectibleCounter = new CollectibleCounter(this.grid);
         this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
         this.canDoNextMove = true;
-        this.gameWon = false;
         this.isGridEnabled = true;
         this.tempObjectIds = [];
     }
@@ -72,13 +71,10 @@ export class Game {
     }
 
     /**
-     * Calls game_controller.commandsDone. if gameWon is true, calls game_controller.notifyGameWon.
-     * This.gameWon is changed to FALSE after this method, to reset that state without initialising new game entirely.
-     * This is necessary to not call gamewon and display celebration box after inputting wrong code after a succesful pass.
+     * Calls game_controller.commandsDone. This can be used to wait for game animations before continuing.
      */
     onAnimsReady() {
         commandsDone();
-        this.gameWon = false;
     }
 
     /**
@@ -134,14 +130,6 @@ export class Game {
             this.gh.destroyEntity(this.tempObjectIds[i]);
         }
         this.tempObjectIds = [];
-    }
-
-    /**
-     * changes gameWon attribute to true
-     */
-    allCollectablesGained() {
-        console.log("Kaikki porkkanat kerätty!");
-        this.gameWon = true;
     }
 
     setTheme(theme) {
