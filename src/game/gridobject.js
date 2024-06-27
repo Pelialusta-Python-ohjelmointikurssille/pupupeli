@@ -8,7 +8,6 @@
  * @method toString - Returns a string representation of the object
  * @returns {GridObject} - A grid object
  */
-
 import { getRandomUUID } from "./uuid_generator.js";
 import { Vector2 } from "./vector.js";
 
@@ -18,7 +17,7 @@ export class GridObject {
         this.cell = null;
         this.id = this.#generateUniqueID();
     }
-
+    
     #generateUniqueID() {
         return getRandomUUID();
     }
@@ -33,6 +32,7 @@ export class GridObject {
     }
 }
 
+//TODO: Someday, remove this
 // write doc for getNewGridObject
 /** 
  * Creates a new GridObject with the specified name
