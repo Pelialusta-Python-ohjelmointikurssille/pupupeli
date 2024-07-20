@@ -107,3 +107,39 @@ export function checkIfFileExists(path) {
         return null;
     }
 }
+
+// Assuming tasksInit.json is accessible at a certain URL
+const tasksInitUrl = '/tasks/tasksInit.json';
+
+// Function to load the tasksInit structure
+async function loadTasksInit() {
+  const response = await fetch(tasksInitUrl);
+  return response.json();
+}
+
+// Function to fetch all task files and store them
+export async function fetchAllTasks() {
+    const tasksInit = await loadTasksInit();
+    const tasksContent = [];
+  
+    // Convert chapter keys to integers and sort them
+    const chapters = Object.keys(tasksInit).map(chapter => parseInt(chapter.replace('Chapter', ''))).sort((a, b) => a - b);
+  
+    for (const chapter of chapters) {
+      const chapterIndex = chapter - 1; // Arrays are 0-indexed
+      tasksContent[chapterIndex] = [];
+  
+      // Assuming task names are 'Task1', 'Task2', etc., and tasks are sorted in order
+      const tasks = Object.keys(tasksInit[`Chapter${chapter}`]).map(task => parseInt(task.replace('Task', ''))).sort((a, b) => a - b);
+  
+      for (const task of tasks) {
+        const taskIndex = task - 1; // Arrays are 0-indexed
+        const taskFile = tasksInit[`Chapter${chapter}`][`Task${task}`];
+        const taskResponse = await fetch(`/tasks/${chapter}/${taskFile}`);
+        const taskData = await taskResponse.json(); // Assuming the task files are in JSON format
+        tasksContent[chapterIndex][taskIndex] = taskData;
+        }
+    }
+
+  return tasksContent;
+}

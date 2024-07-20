@@ -3,13 +3,13 @@ import * as globals from "../util/globals.js";
 import * as fileReader from "../file_reader.js";
 import { setTitle, setDescription, moveToTask, onTaskComplete } from "./ui.js";
 
-const chapterDir = "/tasks/" + globals.chapterIdentifier;
+const chapterDir = "/tasks/" + globals.identifiers.chapterIdentifier;
 const countTaskResponse = fileReader.countForTaskFilesInDirectory(chapterDir);
-const totalTasks = countTaskResponse.count;
+globals.totalCounts.totalTasks = countTaskResponse.count;
+globals.totalCounts.totalChapters = fileReader.countForChaptersInDirectory();
 const instructionTasks = countTaskResponse.instructionNumbers;
-const totalChapters = fileReader.countForChaptersInDirectory();
-let currentChapter = globals.chapterIdentifier;
-
+let currentChapter = globals.identifiers.chapterIdentifier;
+let currentTask = globals.identifiers.taskIdentifier;
 
 /**
  * Clears app-container, creates a new one and adds elements for instruction page
@@ -73,7 +73,7 @@ export function createTaskButtons(str="") {
         api.getCompletedTasks().then(taskList => {
             let completedTasksList = taskList.tasks;
             // Create and append buttons
-            for (let i = 0; i < totalTasks; i++) {
+            for (let i = 0; i < globals.totalCounts.totalTasks; i++) {
                 const button = document.createElement('button');
                 let taskNumber = i+1;
             // if task is task, increase tasknumber.
@@ -86,7 +86,7 @@ export function createTaskButtons(str="") {
 
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
                 button.id = buttonIdText
-                if (currentChapter === globals.chapterIdentifier && i+1 === globals.taskIdentifier) {
+                if (currentChapter === globals.chapterIdentifier && i+1 === currentTask) {
                     button.classList.add("button-current-task")
                 }
                 if (completedTasksList.includes(buttonIdText)) {
@@ -95,7 +95,7 @@ export function createTaskButtons(str="") {
                     button.classList.add("button-incompleted");
                 }
                     button.addEventListener('click', () => {
-                    window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
+                    globals.identifiers.taskIdentifier = i + 1;
                 });
                 buttonContainer.appendChild(button);
             }
@@ -104,7 +104,7 @@ export function createTaskButtons(str="") {
         }
     });
     } else { // user is not logged in
-        for (let i = 0; i < totalTasks; i++) {
+        for (let i = 0; i < globals.totalCounts.totalTasks; i++) {
             const button = document.createElement('button');
             let taskNumber = i+1;
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
@@ -116,7 +116,7 @@ export function createTaskButtons(str="") {
                 button.innerText = `${taskNumber}`;
             }
             button.addEventListener('click', () => {
-                window.location.href = `?chapter=${currentChapter}&task=${i + 1}`;
+                globals.identifiers.taskIdentifier = i + 1;
             });
             buttonContainer.appendChild(button);
         }
@@ -136,7 +136,7 @@ export function createChapterButtons() {
     if (localStorage.getItem("token") !== null) {
         api.getCompletedTasks().then(taskList => {
             let completedTasksList = taskList.tasks;
-            for (let i = 0; i < totalChapters; i++) {
+            for (let i = 0; i < globals.totalCounts.totalChapters; i++) {
                 const button = document.createElement('button');
                 button.id = `chapter-button-${i + 1}`;
                 button.value = i + 1;
@@ -159,15 +159,13 @@ export function createChapterButtons() {
                 }
 
                 button.addEventListener('click', () => {
-                    currentChapter = i + 1;
-                    console.log(currentChapter)
-                    window.location.href = `/?chapter=${currentChapter}&task=1`;
+                    globals.identifiers.chapterIdentifier = i + 1;
                 });
                 selectContainer.appendChild(button);
             }
         })
     } else {
-        for (let i = 0; i < totalChapters; i++) {
+        for (let i = 0; i < globals.totalCounts.totalChapters; i++) {
             const button = document.createElement('button');
             button.id = `chapter-button-${i + 1}`;
             button.value = i + 1;
@@ -175,8 +173,7 @@ export function createChapterButtons() {
             if (currentChapter === i + 1) button.classList.add("button-current-chapter")
 
             button.addEventListener('click', () => {
-                currentChapter = i + 1;
-                window.location.href = `/?chapter=${currentChapter}&task=1`;
+                globals.identifiers.chapterIdentifier = i + 1;
             });
             selectContainer.appendChild(button);
         }

@@ -11,7 +11,8 @@ import { createTaskButtons, createChapterButtons, createInstructionPage } from "
 import { checkIfGameWon } from "../clear_conditions.js";
 
 const instructionsStr = "instructions";
-let currentChapter = globals.chapterIdentifier;
+let currentChapter = globals.identifiers.chapterIdentifier;
+let currentTask = globals.identifiers.taskIdentifier;
 /**
  * Runs ui initialisation functions + atm the worker_messenger worker
  */
@@ -108,7 +109,7 @@ function setMultipleChoice() {
  * @param {object} titleDiv | the title div where we want title text as a html element
  */
 export function setTitle(titleDiv) {
-    let chapterAndTaskNumberPeriod = `${globals.chapterIdentifier}.${globals.taskIdentifier}. `
+    let chapterAndTaskNumberPeriod = `${currentChapter}.${currentTask}. `
     let titleStr = chapterAndTaskNumberPeriod + globals.task.getTitle();
     titleDiv.innerHTML = titleStr;
 }
@@ -167,7 +168,7 @@ function colorSelectedChoice(selectedChoice) {
 
 
 export function onTaskComplete(isWon) {
-    const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
+    const apiTaskIdentifier = "chapter" + currentChapter + "task" + currentTask;
     if (isWon) {
         const buttonid = apiTaskIdentifier;
         let button = document.getElementById(buttonid);
@@ -216,16 +217,17 @@ export function onTaskComplete(isWon) {
  * a function used by the previous/next task buttons on the page
  */
 export function moveToTask(event) {
-    let currentTask = globals.taskIdentifier;
     let which = event.target.value;
-    if (currentTask === 1 && which === "previous") return;
+    if (globals.identifiers.taskIdentifier === 1 && which === "previous") return;
+    console.log(globals.identifiers.taskIdentifier, globals.totalCounts.totalTasks)
+    if (globals.identifiers.taskIdentifier === globals.totalCounts.totalTasks && which === "next") return;
 
     switch (which) {
         case "previous":
-            window.location.href = `/?chapter=${currentChapter}&task=${currentTask - 1}`;
+            globals.identifiers.taskIdentifier = globals.identifiers.taskIdentifier - 1;
             break;
         case "next":
-            window.location.href = `/?chapter=${currentChapter}&task=${currentTask + 1}`;
+            globals.identifiers.taskIdentifier = globals.identifiers.taskIdentifier + 1;
             break;
     }
 }
@@ -296,5 +298,23 @@ export function displayErrorMessage(error) {
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
     disablePlayButton("error");
 }
+
+export function loadNextTask() {
+    currentChapter = globals.identifiers.chapterIdentifier;
+    currentTask = globals.identifiers.taskIdentifier;
+    console.log(globals.task)
+    let descriptionTargetDiv = document.getElementById("task-description");
+    descriptionTargetDiv.innerHTML = '';
+    setDescription(descriptionTargetDiv);
+
+    if (globals.task.getMultipleChoiceQuestions().length > 0) {
+        setMultipleChoice();
+    }
+    setEditorCode();
+    let titleTargetDiv = document.getElementById("taskTitle");
+    descriptionTargetDiv.innerHTML = '';
+    setTitle(titleTargetDiv);
+};
+
 
 main();

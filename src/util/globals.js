@@ -1,37 +1,77 @@
-import { tryGetFileAsJson } from "../file_reader.js";
+import { tryGetFileAsJson, fetchAllTasks } from "../file_reader.js";
+import { loadNextTask } from "../ui/ui.js";
 import { Task } from "../util/task.js";
 
-/**
- * returns the current task's identifier by parsing the URL and retrieving the value for key "task"
- */
-export const taskIdentifier = (function () {
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.size === 0) return 1;
+export const identifiers = (function() {
+    let _taskIdentifier = 1;
+    let _chapterIdentifier = 1;
 
-    const taskIdentifier = parseInt(searchParams.get("task"));
-    if (isNaN(taskIdentifier)) return 1;
-    return taskIdentifier;
+    // Listener functions
+    const taskListener = async (newValue) => { // Mark function as async
+        console.log(`New taskIdentifier: ${newValue}`);
+        task = fetchTask(); // Wait for fetchTask to complete
+        loadNextTask(); // Then load the next task
+    };
+
+    const chapterListener = async (newValue) => { // Mark function as async
+        console.log(`New chapterIdentifier: ${newValue}`);
+        task = fetchTask(); // Wait for fetchTask to complete
+        loadNextTask(); // Then load the next task
+    };
+
+    return {
+        get taskIdentifier() {
+            return _taskIdentifier;
+        },
+        set taskIdentifier(newValue) {
+            _taskIdentifier = newValue;
+            taskListener(newValue); // Notify listener
+        },
+        get chapterIdentifier() {
+            return _chapterIdentifier;
+        },
+        set chapterIdentifier(newValue) {
+            _chapterIdentifier = newValue;
+            chapterListener(newValue); // Notify listener
+        }
+    };
 })();
 
-/**
- * returns the current chapter's identifier by parsing the URL and retrieving value for key "chapter"
- */
-export const chapterIdentifier = (function () {
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.size === 0) return 1;
+export const totalCounts = (function() {
+    let _totalTasks;
+    let _totalChapters;
 
-    const chapterIdentifier = parseInt(searchParams.get("chapter"));
-    if (isNaN(chapterIdentifier)) return 1;
-    return chapterIdentifier
+    return {
+        get totalTasks() {
+            return _totalTasks;
+        },
+        set totalTasks(newValue) {
+            _totalTasks = newValue;
+        },
+        get totalChapters() {
+            return _totalChapters;
+        },
+        set totalChapters(newValue) {
+            _totalChapters = newValue;
+        }
+    };
 })();
+
+export const allTasks = fetchAllTasks();
+console.log(allTasks);
+
+
+export function fetchTask() {
+    console.log(`Fetching task ${identifiers.taskIdentifier} from chapter ${identifiers.chapterIdentifier}`);
+    const path = `/tasks/${identifiers.chapterIdentifier}/${identifiers.taskIdentifier}.json`;
+    console.log(Task.fromJSON(tryGetFileAsJson(path)));
+    return Task.fromJSON(tryGetFileAsJson(path));
+}
 
 /**
  * returns the matching task object for the page using the chapter and task identifiers
  */
-export const task = (function () {
-    const path = `/tasks/${chapterIdentifier}/${taskIdentifier}.json`;
-    return Task.fromJSON(tryGetFileAsJson(path));
-})();
+export let task = fetchTask();
 
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };

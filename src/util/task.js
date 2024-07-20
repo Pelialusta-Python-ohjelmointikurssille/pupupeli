@@ -33,6 +33,17 @@ export class Task {
      * @param {json} a json object representing a task
      */
     fromJSON(json) {
+        // Reset task properties to default values
+        this.taskType = '';
+        this.title = '';
+        this.enableAddRemove = false;
+        this.description = '';
+        this.editorCode = '';
+        this.multipleChoiceQuestions = [];
+        this.grid = [];
+        this.conditions = [];
+    
+        // Assign new values from JSON
         for (let key in json) {
             if (Object.prototype.hasOwnProperty.call(json, key) && Object.prototype.hasOwnProperty.call(this, key)) {
                 this[key] = json[key];
