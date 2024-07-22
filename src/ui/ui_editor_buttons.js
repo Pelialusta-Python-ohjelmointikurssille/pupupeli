@@ -2,7 +2,7 @@ import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
 import { getEditor, resetLineHighlight } from "../input/editor.js";
-import { resetGame, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
+import { resetAndInitContent, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 import { isWaitingForInput, resetInputWaiting } from "../game/game_input_controller.js";
 import { setCurrentTheme } from "../util/globals.js";
@@ -64,7 +64,7 @@ function onResetButtonClick() {
     hideAndClearInputBox();
     resetCelebrationBox();
     resetWorker();
-    resetGame();
+    resetAndInitContent();
     resetInputHistory();
     _buttonsState = States.INITIAL;
     setMessagePassingState({ paused: false });

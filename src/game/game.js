@@ -27,7 +27,7 @@ export class Game {
      */
     async init() {
         await this.gh.initialize();
-        this.resetAndInitGameContent();
+        this.resetAndInitContent();
     }
 
     /**
