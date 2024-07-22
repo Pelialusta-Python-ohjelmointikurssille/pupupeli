@@ -1,5 +1,5 @@
 import { fetchAllTasks } from "../file_reader.js";
-import { loadNextTask } from "../ui/ui.js";
+import { loadNextTaskInfo } from "../ui/ui.js";
 import { Task } from "../util/task.js";
 import { createTaskButtons, updateCurrentChapterButton, updateCurrentTaskButton } from "../ui/ui_buttons.js";
 
@@ -15,17 +15,17 @@ export const identifiers = (function() {
         console.log(`New taskIdentifier: ${newValue}`);
         updateCurrentTaskButton();
         task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
-        loadNextTask();
+        loadNextTaskInfo();
+        // Create a function to load new task on Pixi and call it here <-- Riku
+        // Maybe also some game logic updates to here to reflect new task if needeed <-- Tommi
     };
 
     const chapterListener = async (newValue) => {
         console.log(`New chapterIdentifier: ${newValue}`);
-        _taskIdentifier = 1;
+        identifiers.taskIdentifier = 1;
         updateCurrentChapterButton();
         totalCounts.totalTasks = allTasks[newValue - 1].length;
         createTaskButtons();
-        task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
-        loadNextTask();
     };
 
     return {

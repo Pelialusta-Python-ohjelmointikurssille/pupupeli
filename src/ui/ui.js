@@ -312,7 +312,7 @@ export function displayErrorMessage(error) {
     disablePlayButton("error");
 }
 
-export function loadNextTask() {
+export function loadNextTaskInfo() {
     currentChapter = globals.identifiers.chapterIdentifier;
     currentTask = globals.identifiers.taskIdentifier;
     const appDiv = document.getElementById("app-container");
