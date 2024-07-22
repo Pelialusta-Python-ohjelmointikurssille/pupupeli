@@ -27,7 +27,7 @@ export class Game {
      */
     async init() {
         await this.gh.initialize();
-        this.resetGame();
+        this.resetAndInitGameContent();
     }
 
     /**
@@ -111,7 +111,7 @@ export class Game {
     /**
      * Restores the gamestate back to the beginning of the task.
      */
-    resetGame() {
+    resetAndInitContent() {
         this.gh.destroyAllEntities();
         this.gh.createGrid();
         this.grid = getGameTask();
