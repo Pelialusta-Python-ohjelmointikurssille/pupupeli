@@ -9,6 +9,7 @@ import { initGame, resetAndInitContent, setTheme } from "../game/game_controller
 import { conditionsNotCleared } from "../clear_conditions.js";
 import { createTaskButtons, createChapterButtons, createInstructionPage } from "./ui_buttons.js";
 import { checkIfGameWon } from "../clear_conditions.js";
+import { resetInputController } from "../game/game_input_controller.js";
 
 const instructionsStr = "instructions";
 let currentChapter = globals.identifiers.chapterIdentifier;
@@ -346,6 +347,7 @@ export function loadNextTaskInfo() {
     let titleTargetDiv = document.getElementById("taskTitle");
     setTitle(titleTargetDiv);
     resetAndInitContent();
+    resetInputController();
 };
 
 function loadIstructionTask(appDiv, insAppDiv) {
