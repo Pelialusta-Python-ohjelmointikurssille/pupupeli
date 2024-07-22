@@ -108,12 +108,8 @@ export function checkIfFileExists(path) {
     }
 }
 
-// Assuming tasksInit.json is accessible at a certain URL
-const tasksInitUrl = '/tasks/tasksInit.json';
-
-// Function to load the tasksInit structure
 async function loadTasksInit() {
-  const response = await fetch(tasksInitUrl);
+  const response = await fetch('/tasks/tasksInit.json');
   return response.json();
 }
 

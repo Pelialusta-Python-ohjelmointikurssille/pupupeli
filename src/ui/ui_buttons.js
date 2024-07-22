@@ -57,11 +57,9 @@ export function createInstructionPage() {
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
 export function createTaskButtons(str="") {
-    const currentTask = globals.identifiers.taskIdentifier;
     const buttonContainer = document.getElementById('buttonTable');
     buttonContainer.innerHTML = ''
     const currentChapter = globals.identifiers.chapterIdentifier;
-    console.log(currentTask, currentChapter);
     if (localStorage.getItem("token") !== null) { // user is logged in
         api.getCompletedTasks().then(taskList => {
             let completedTasksList = taskList.tasks;
