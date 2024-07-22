@@ -64,11 +64,16 @@ function createGamePage() {
     if (globals.task.getMultipleChoiceQuestions().length > 0) {
         setMultipleChoice();
     }
-    // set editor code
-    window.addEventListener('load', function () {
-        setEditorCode()
-        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
-    });
+
+//    window.addEventListener('load', function () {
+//        setEditorCode()
+//        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
+//    });
+
+    //Above listener never activated on page load, I hope this doesn't break anything calling them without waiting for load :D
+    setEditorCode()
+    createTaskButtons();
+
     let titleTargetDiv = document.getElementById("taskTitle");
     setTitle(titleTargetDiv);
 
@@ -85,24 +90,32 @@ function setMultipleChoice() {
     // set multiple choice questions
     let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
 
-    multipleChoiceContainer.classList.remove("is-hidden");
-    let optionIdCounter = 0;
-    globals.task.getMultipleChoiceQuestions().forEach((option) => {
-        const optionId = `option-${optionIdCounter++}`;
-        multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
+    while (multipleChoiceContainer.firstChild) {
+        multipleChoiceContainer.removeChild(multipleChoiceContainer.firstChild);
+    }
 
-        // if option is correct, add eventlistener which calls onTaskComplete
-        if (option.isCorrectAnswer === true) {
-            let questionButton = document.getElementById(optionId);
-            questionButton.dataset.correct = true;
-        }
-    });
-    let questions = document.getElementsByClassName("multiple-choice-question");
+    if (globals.task.getMultipleChoiceQuestions().length === 0) {
+        multipleChoiceContainer.classList.add("is-hidden");
+    } else {
+        multipleChoiceContainer.classList.remove("is-hidden");
+        let optionIdCounter = 0;
+        globals.task.getMultipleChoiceQuestions().forEach((option) => {
+            const optionId = `option-${optionIdCounter++}`;
+            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
 
-    Array.from(questions).forEach(question => {
-        question.addEventListener("click", colorSelectedChoice);
-        question.addEventListener("click", checkIfGameWon);
-    });
+            // if option is correct, add eventlistener which calls onTaskComplete
+            if (option.isCorrectAnswer === true) {
+                let questionButton = document.getElementById(optionId);
+                questionButton.dataset.correct = true;
+            }
+        });
+        let questions = document.getElementsByClassName("multiple-choice-question");
+
+        Array.from(questions).forEach(question => {
+            question.addEventListener("click", colorSelectedChoice);
+            question.addEventListener("click", checkIfGameWon);
+        });
+    }
 }
 /**
  * Sets the text from task.title to given div. Useful since game and instructions tasks use different title div.
@@ -302,19 +315,70 @@ export function displayErrorMessage(error) {
 export function loadNextTask() {
     currentChapter = globals.identifiers.chapterIdentifier;
     currentTask = globals.identifiers.taskIdentifier;
-    console.log(globals.task)
-    let descriptionTargetDiv = document.getElementById("task-description");
-    descriptionTargetDiv.innerHTML = '';
-    setDescription(descriptionTargetDiv);
+    const appDiv = document.getElementById("app-container");
 
-    if (globals.task.getMultipleChoiceQuestions().length > 0) {
-        setMultipleChoice();
+    // Check if insAppDiv already exists and remove it if it does
+    const existingInsAppDiv = document.getElementById('instructions-container');
+    if (existingInsAppDiv) {
+        existingInsAppDiv.parentNode.removeChild(existingInsAppDiv);
     }
+
+    const insAppDiv = document.createElement('div');
+    insAppDiv.id = 'instructions-container'; // Assign a unique ID
+
+    if (globals.task.getTaskType() === instructionsStr) {
+        appDiv.classList.add("is-hidden");
+        insAppDiv.classList.remove("is-hidden");
+        loadIstructionTask(appDiv, insAppDiv);
+    } else {
+        appDiv.classList.remove("is-hidden");
+        insAppDiv.classList.add("is-hidden");
+    }
+
+    let descriptionTargetDiv = document.getElementById("task-description");
+    while (descriptionTargetDiv.firstChild) {
+        descriptionTargetDiv.removeChild(descriptionTargetDiv.firstChild);
+    }
+    setDescription(descriptionTargetDiv);
+    setMultipleChoice();
     setEditorCode();
+
     let titleTargetDiv = document.getElementById("taskTitle");
-    descriptionTargetDiv.innerHTML = '';
     setTitle(titleTargetDiv);
 };
+
+function loadIstructionTask(appDiv, insAppDiv) {
+    insAppDiv.innerHTML = "";
+    insAppDiv.id = 'instructions-container';
+    insAppDiv.classList.add("box");
+    insAppDiv.style.flexDirection = "row";
+    insAppDiv.style.display = "flex";
+    const insDiv = document.createElement('div');
+    insDiv.id = 'instruction-div';
+    
+    let insHead = document.createElement('div');
+    insHead.id = 'instruction-head';
+
+    let insHeadline = document.createElement('h1');
+    
+    let instructionTitle = document.createElement('a');
+    instructionTitle.id = 'instructionTitle';
+    setTitle(instructionTitle);
+    
+    insHeadline.appendChild(instructionTitle);
+
+    insHead.appendChild(insHeadline);
+    
+    let insDesc = document.createElement('div');
+    setDescription(insDesc);
+    insDesc.id = 'instruction-desc';
+    
+    
+    appDiv.insertAdjacentElement("afterend", insAppDiv);
+    insAppDiv.appendChild(insDiv);
+    insDiv.appendChild(insHead);
+    insDiv.appendChild(insDesc);
+}
 
 
 main();

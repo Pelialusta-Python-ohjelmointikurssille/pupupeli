@@ -1,22 +1,31 @@
-import { tryGetFileAsJson, fetchAllTasks } from "../file_reader.js";
+import { fetchAllTasks } from "../file_reader.js";
 import { loadNextTask } from "../ui/ui.js";
 import { Task } from "../util/task.js";
+import { createTaskButtons, updateCurrentChapterButton, updateCurrentTaskButton } from "../ui/ui_buttons.js";
+
+export const allTasks = await fetchAllTasks();
+console.log(allTasks);
 
 export const identifiers = (function() {
     let _taskIdentifier = 1;
     let _chapterIdentifier = 1;
 
     // Listener functions
-    const taskListener = async (newValue) => { // Mark function as async
+    const taskListener = async (newValue) => {
         console.log(`New taskIdentifier: ${newValue}`);
-        task = fetchTask(); // Wait for fetchTask to complete
-        loadNextTask(); // Then load the next task
+        updateCurrentTaskButton();
+        task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
+        loadNextTask();
     };
 
-    const chapterListener = async (newValue) => { // Mark function as async
+    const chapterListener = async (newValue) => {
         console.log(`New chapterIdentifier: ${newValue}`);
-        task = fetchTask(); // Wait for fetchTask to complete
-        loadNextTask(); // Then load the next task
+        _taskIdentifier = 1;
+        updateCurrentChapterButton();
+        totalCounts.totalTasks = allTasks[newValue - 1].length;
+        createTaskButtons();
+        task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
+        loadNextTask();
     };
 
     return {
@@ -38,8 +47,8 @@ export const identifiers = (function() {
 })();
 
 export const totalCounts = (function() {
-    let _totalTasks;
-    let _totalChapters;
+    let _totalChapters = allTasks.length;
+    let _totalTasks = allTasks[identifiers.chapterIdentifier - 1].length;
 
     return {
         get totalTasks() {
@@ -57,21 +66,10 @@ export const totalCounts = (function() {
     };
 })();
 
-export const allTasks = fetchAllTasks();
-console.log(allTasks);
-
-
-export function fetchTask() {
-    console.log(`Fetching task ${identifiers.taskIdentifier} from chapter ${identifiers.chapterIdentifier}`);
-    const path = `/tasks/${identifiers.chapterIdentifier}/${identifiers.taskIdentifier}.json`;
-    console.log(Task.fromJSON(tryGetFileAsJson(path)));
-    return Task.fromJSON(tryGetFileAsJson(path));
-}
-
 /**
  * returns the matching task object for the page using the chapter and task identifiers
  */
-export let task = fetchTask();
+export let task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
 
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
@@ -85,6 +83,8 @@ export const theme = localStorage.getItem("theme");
 export function setGameAsWon() {
     isGameWon = 1;
 }
+
+export const totalTasksbyChapter = allTasks.map(chapter => chapter.length);
 
 export function setMultipleChoiceCorrect(isCorrect = true) {
     if (isCorrect.target.dataset.correct) {
