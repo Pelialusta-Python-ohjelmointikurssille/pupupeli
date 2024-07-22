@@ -16,7 +16,7 @@ export class Game {
     constructor() {
         this.grid = getGameTask();
         this.collectibleCounter = new CollectibleCounter(this.grid);
-        this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
+        this.gh = new GraphicsHandler(this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.isGridEnabled = true;
         this.tempObjectIds = [];
@@ -113,12 +113,12 @@ export class Game {
      */
     resetAndInitContent() {
         this.gh.destroyAllEntities();
-        this.gh.createGrid();
         this.grid = getGameTask();
         this.collectibleCounter = new CollectibleCounter(this.grid);
         this.canDoNextMove = true;
         this.isGridEnabled = true;
         this.tempObjectIds = [];
+        this.gh.createGrid(this.grid.height, this.grid.width);
         this.grid.gridObjects.forEach(item => {
             this.createGridEntityForRendering(item);
         });

@@ -100,6 +100,11 @@ export class GraphicsCamera {
      * @param {Vector2} bottomRight Bottom right point of the area bounds.
      */
     focusOnArea(topLeft, bottomRight) {
+        this.viewportBounds = [null, null];
+        this.positionBounds = [null, null];
+        this.minZoom = 0.08;
+        this.maxZoom = 0.95;
+
         let zoom = 1;
         let width = (bottomRight.x - topLeft.x);
         let height = (bottomRight.y - topLeft.y);
