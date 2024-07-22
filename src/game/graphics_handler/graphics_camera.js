@@ -103,7 +103,7 @@ export class GraphicsCamera {
         this.viewportBounds = [null, null];
         this.positionBounds = [null, null];
         this.minZoom = 0.08;
-        this.maxZoom = 0.95;
+        this.maxZoom = 0.9;
 
         let zoom = 1;
         let width = (bottomRight.x - topLeft.x);
