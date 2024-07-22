@@ -61,8 +61,6 @@ export class GraphicsHandler {
 
         this.graphicalInputHandler = new GraphicalInputHandler(this.renderer, this.graphicsEntityHandler.camera);
 
-        this.createGrid();
-
         let t2 = new Date().getTime();
         console.log(`Loading graphics engine took ${t2-t1}ms`);
     }
@@ -175,6 +173,10 @@ export class GraphicsHandler {
 
     getEntity(id) {
         return this.graphicsEntityHandler.getGraphicsEntity(id);
+    }
+
+    destroyAllEntities() {
+        this.graphicsEntityHandler.destroyAllEntities();
     }
 }
 

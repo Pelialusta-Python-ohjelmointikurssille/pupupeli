@@ -27,6 +27,21 @@ export class Game {
      */
     async init() {
         await this.gh.initialize();
+        //this.gh.createGrid();
+        //this.grid.gridObjects.forEach(item => {
+        //    this.createGridEntityForRendering(item);
+        //});
+        this.changeLevel();
+    }
+
+    changeLevel() {
+        this.gh.destroyAllEntities();
+        this.gh.createGrid();
+        this.grid = getGameTask();
+        this.collectibleCounter = new CollectibleCounter(this.grid);
+        this.canDoNextMove = true;
+        this.isGridEnabled = true;
+        this.tempObjectIds = [];
         this.grid.gridObjects.forEach(item => {
             this.createGridEntityForRendering(item);
         });

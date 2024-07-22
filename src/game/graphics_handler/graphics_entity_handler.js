@@ -158,4 +158,11 @@ export class GraphicsEntitySystem {
             value.setTheme(theme);
         });
     }
+
+    destroyAllEntities() {
+        this.entityDict.forEach(value => {
+            this.destroyGraphicsEntity(value.entityUUID);
+        });
+        this.mainGridEntityUUID = "";
+    }
 }

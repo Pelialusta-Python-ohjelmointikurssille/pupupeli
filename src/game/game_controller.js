@@ -112,3 +112,7 @@ export function destroyObject(commandParameters) {
     let y = commandParameters[1];
     game.destroyObject(x, y);
 }
+
+export function changeLevel() {
+    game.changeLevel();
+}
