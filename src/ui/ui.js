@@ -10,6 +10,7 @@ import { conditionsNotCleared } from "../clear_conditions.js";
 import { createTaskButtons, createChapterButtons, createInstructionPage } from "./ui_buttons.js";
 import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
+import { updateLoginUI } from "./ui_login.js";
 
 const instructionsStr = "instructions";
 let currentChapter = globals.identifiers.chapterIdentifier;
@@ -46,7 +47,7 @@ async function initGameAndCanvas() {
  */
 async function initPage() {
     createChapterButtons();
-    isUserLoggedIn();
+    updateLoginUI();
     // checking if task type is instructions
     if (globals.task.getTaskType() != instructionsStr) {
         createGamePage();
@@ -150,18 +151,6 @@ export function enableEditorButtons() {
     Array.from(buttons).forEach(button => {
         button.disabled = false;
     });
-}
-
-function isUserLoggedIn() {
-    if (localStorage.getItem("username") !== null) {
-        document.getElementById("logged-in-as-user").innerText = localStorage.getItem("username");
-    }
-    if (localStorage.getItem("token") !== null) {
-        document.getElementById("logout-button").classList.remove("is-hidden");
-        document.getElementById("logged-in-as-container").classList.remove("is-hidden");
-    } else {
-        document.getElementById("user-container").classList.remove("is-hidden");
-    }
 }
 
 function colorSelectedChoice(selectedChoice) {
