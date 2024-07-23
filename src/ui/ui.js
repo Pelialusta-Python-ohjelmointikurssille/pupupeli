@@ -47,6 +47,7 @@ async function initGameAndCanvas() {
  */
 async function initPage() {
     createChapterButtons();
+    createTaskButtons();
     updateLoginUI();
     // checking if task type is instructions
     if (globals.task.getTaskType() != instructionsStr) {
@@ -67,14 +68,15 @@ function createGamePage() {
         setMultipleChoice();
     }
 
+//-----------------------------------------------------REMOVE BELOW?
 //    window.addEventListener('load', function () {
 //        setEditorCode()
 //        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
 //    });
 
     //Above listener never activated on page load, I hope this doesn't break anything calling them without waiting for load :D
-    setEditorCode()
-    createTaskButtons();
+//--------------------------------------------------------????
+    setEditorCode();
 
     let titleTargetDiv = document.getElementById("taskTitle");
     setTitle(titleTargetDiv);

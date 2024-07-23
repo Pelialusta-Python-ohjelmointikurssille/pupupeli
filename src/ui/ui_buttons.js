@@ -2,6 +2,8 @@ import * as api from "../api/api.js";
 import * as globals from "../util/globals.js";
 import { setTitle, setDescription, moveToTask, onTaskComplete } from "./ui.js";
 
+const chapterAndTaskButtons = {};
+
 /**
  * Clears app-container, creates a new one and adds elements for instruction page
  */
@@ -22,25 +24,25 @@ export function createInstructionPage() {
     });
     const insDiv = document.createElement('div');
     insDiv.id = 'instruction-div';
-    
+
     let insHead = document.createElement('div');
     insHead.id = 'instruction-head';
 
     let insHeadline = document.createElement('h1');
-    
+
     let instructionTitle = document.createElement('a');
     instructionTitle.id = 'instructionTitle';
     setTitle(instructionTitle);
-    
+
     insHeadline.appendChild(instructionTitle);
 
     insHead.appendChild(insHeadline);
-    
+
     let insDesc = document.createElement('div');
     setDescription(insDesc);
     insDesc.id = 'instruction-desc';
-    
-    
+
+
     appDiv.insertAdjacentElement("afterend", insAppDiv);
     insAppDiv.appendChild(insDiv);
     insDiv.appendChild(insHead);
@@ -56,7 +58,7 @@ export function createInstructionPage() {
  * Create buttons for selecting tasks based on how many json files exist in tasks directory.
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
-export function createTaskButtons(str="") {
+export function createTaskButtons(str = "") {
     const buttonContainer = document.getElementById('buttonTable');
     buttonContainer.innerHTML = ''
     const currentChapter = globals.identifiers.chapterIdentifier;
@@ -66,14 +68,14 @@ export function createTaskButtons(str="") {
             // Create and append buttons
             for (let i = 0; i < globals.totalCounts.totalTasks; i++) {
                 const button = document.createElement('button');
-                let taskNumber = i+1;
-            // if task is task, increase tasknumber.
-            // if task is instruction, increase instructionnumber and dont increase tasknumber.
-            button.innerText = `${taskNumber}`;
+                let taskNumber = i + 1;
+                // if task is task, increase tasknumber.
+                // if task is instruction, increase instructionnumber and dont increase tasknumber.
+                button.innerText = `${taskNumber}`;
 
-            let buttonIdText = `chapter${currentChapter}task${i + 1}`;
+                let buttonIdText = `chapter${currentChapter}task${i + 1}`;
                 button.id = buttonIdText
-                if (i+1 === 1) {
+                if (i + 1 === 1) {
                     button.classList.add("button-current-task")
                 }
                 if (completedTasksList.includes(buttonIdText)) {
@@ -81,21 +83,21 @@ export function createTaskButtons(str="") {
                 } else {
                     button.classList.add("button-incompleted");
                 }
-                    button.addEventListener('click', () => {
+                button.addEventListener('click', () => {
                     globals.identifiers.taskIdentifier = i + 1;
                 });
                 buttonContainer.appendChild(button);
             }
             if (str === "instructions") {
-            onTaskComplete(true);
-        }
-    });
+                onTaskComplete(true);
+            }
+        });
     } else { // user is not logged in
         for (let i = 0; i < globals.totalCounts.totalTasks; i++) {
             const button = document.createElement('button');
-            let taskNumber = i+1;
+            let taskNumber = i + 1;
             let buttonIdText = `chapter${currentChapter}task${i + 1}`;
-            button.id = buttonIdText
+            button.id = buttonIdText;
             button.classList.add("button-incompleted");
             button.innerText = `${taskNumber}`;
             button.addEventListener('click', () => {
@@ -122,7 +124,7 @@ export function createChapterButtons() {
                 button.id = `chapter-button-${i + 1}`;
                 button.value = i + 1;
                 button.innerText = `Tehtäväsarja ${i + 1}`;
-                if (i+1 === 1) button.classList.add("button-current-chapter")
+                if (i + 1 === 1) button.classList.add("button-current-chapter")
                 let currentTotalTasks = globals.totalTasksbyChapter[i];
                 let allTasksCompleted = true;
                 for (let j = 0; j < currentTotalTasks; j++) {
@@ -151,7 +153,7 @@ export function createChapterButtons() {
             button.id = `chapter-button-${i + 1}`;
             button.value = i + 1;
             button.innerText = `Tehtäväsarja ${i + 1}`;
-            if (i+1 === 1) {
+            if (i + 1 === 1) {
                 button.classList.add("button-current-chapter")
             }
             button.addEventListener('click', () => {
@@ -159,7 +161,11 @@ export function createChapterButtons() {
             });
             selectContainer.appendChild(button);
         }
-    } 
+    }
+}
+
+export function updateAllTaskAndChapterButtonCompletion() {
+
 }
 
 export function updateCurrentTaskButton() {
