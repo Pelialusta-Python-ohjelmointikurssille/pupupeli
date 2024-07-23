@@ -46,10 +46,8 @@ async function initGameAndCanvas() {
  * Game and instructions task types require different elements.
  */
 async function initPage() {
-    createChapterButtons();
-    createTaskButtons();
-    updateLoginUI();
-    // checking if task type is instructions
+    updateLoginUI(); //currently also creates task and chapter buttons
+    // checking if current task type is instructions
     if (globals.task.getTaskType() != instructionsStr) {
         createGamePage();
     } else {

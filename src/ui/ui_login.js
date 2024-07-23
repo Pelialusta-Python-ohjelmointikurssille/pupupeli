@@ -1,6 +1,6 @@
 import { login, logout } from "../api/api.js";
 import { showPopUpNotification } from "../ui/ui.js";
-import { createChapterButtons, createTaskButtons } from "./ui_buttons.js";
+import { createChapterButtons, createTaskButtons, updateCurrentChapterButton, updateCurrentTaskButton } from "./ui_buttons.js";
 
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
@@ -60,4 +60,6 @@ export function updateLoginUI() {
     }
     createChapterButtons();
     createTaskButtons();
+    updateCurrentChapterButton();
+    updateCurrentTaskButton();
 }
