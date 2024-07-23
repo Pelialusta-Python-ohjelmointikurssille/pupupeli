@@ -8,7 +8,6 @@ let logoutButton = document.getElementById("logout-button");
 const url = 'http://localhost:3000/api/';
 
 // eventlisteners should probably eventually be moved elsewhere
-// getTaskButton and getCompletedTasksButton are for development only
 loginButton.addEventListener("click", () => {
     login(url)
         .then(data => {
