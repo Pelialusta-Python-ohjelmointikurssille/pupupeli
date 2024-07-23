@@ -4,7 +4,6 @@ import { showPopUpNotification } from "../ui/ui.js";
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
 
-// eventlisteners should probably eventually be moved elsewhere
 loginButton.addEventListener("click", () => {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
