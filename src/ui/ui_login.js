@@ -38,6 +38,8 @@ logoutButton.addEventListener("click", () => {
 export function updateLoginUI() {
     if (localStorage.getItem("username") !== null) {
         document.getElementById("logged-in-as-user").innerText = localStorage.getItem("username");
+    } else {
+        document.getElementById("logged-in-as-user").innerText = "";
     }
     if (localStorage.getItem("token") !== null) {
         document.getElementById("logout-button").classList.remove("is-hidden");
