@@ -1,17 +1,17 @@
-import { login, logout, getStoredUsername } from "../api/api.js";
+import { login, logout } from "../api/api.js";
 import { showPopUpNotification } from "../ui/ui.js";
 
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
 
 loginButton.addEventListener("click", () => {
-    const user = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
     login(user, pass)
         .then(data => {
             if (data.token !== undefined) {
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("username", getStoredUsername());
+                localStorage.setItem("username", user);
             } else {
                 showPopUpNotification("login-failed");
             }

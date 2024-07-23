@@ -1,13 +1,7 @@
 import * as globals from "../util/globals.js";
 import { getEditor } from "../input/editor.js";
 
-let stored_username;
 const url = 'http://localhost:3000/api/';
-
-
-export function getStoredUsername() {
-    return stored_username;
-}
 
 /**
  * a function used to create api URLs from a base URL and an object
@@ -67,8 +61,6 @@ export async function login(user, pass) {
     if (user === "") {
         showPopUpNotification("login-failed");
         return
-    } else {
-        stored_username = user;
     }
 
     const params = {
