@@ -1,3 +1,41 @@
+import { login, logout, getStoredUsername } from "../api/api.js";
+import { showPopUpNotification } from "../ui/ui.js";
+
+let loginButton = document.getElementById("login-button");
+let logoutButton = document.getElementById("logout-button");
+
+// eventlisteners should probably eventually be moved elsewhere
+loginButton.addEventListener("click", () => {
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+    login(user, pass)
+        .then(data => {
+            if (data.token !== undefined) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("username", getStoredUsername());
+                window.location.reload();
+            } else {
+                showPopUpNotification("login-failed");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
+logoutButton.addEventListener("click", () => {
+    logout()
+        .then(function() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("username");
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
+
 export function updateLoginUI() {
     if (localStorage.getItem("username") !== null) {
         document.getElementById("logged-in-as-user").innerText = localStorage.getItem("username");
