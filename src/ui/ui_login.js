@@ -54,5 +54,4 @@ export function updateLoginUI() {
         document.getElementById("logged-in-as-container").classList.add("is-hidden");
         document.getElementById("user-container").classList.remove("is-hidden");
     }
-    console.log("updated login UI");
 }
