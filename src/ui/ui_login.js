@@ -7,6 +7,10 @@ let logoutButton = document.getElementById("logout-button");
 loginButton.addEventListener("click", () => {
     let user = document.getElementById("username").value;
     let pass = document.getElementById("password").value;
+    if (user === "") {
+        showPopUpNotification("login-failed");
+        return
+    }
     login(user, pass)
         .then(data => {
             if (data.token !== undefined) {

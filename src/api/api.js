@@ -58,11 +58,6 @@ async function sendGetRequest(url) {
  * the token is stored in localstorage and is required for all other api calls.
  */
 export async function login(user, pass) {
-    if (user === "") {
-        showPopUpNotification("login-failed");
-        return
-    }
-
     const params = {
         username: user,
         password: pass
