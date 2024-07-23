@@ -7,7 +7,7 @@ import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, resetAndInitContent, setTheme } from "../game/game_controller.js";
 import { conditionsNotCleared } from "../clear_conditions.js";
-import { createTaskButtons, createChapterButtons, createInstructionPage } from "./ui_buttons.js";
+import { createChapterButtons, createInstructionPage } from "./ui_buttons.js";
 import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";

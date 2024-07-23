@@ -16,8 +16,6 @@ export const identifiers = (function() {
         updateCurrentTaskButton();
         task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
         loadNextTaskInfo();
-        // Create a function to load new task on Pixi and call it here <-- Riku
-        // Maybe also some game logic updates to here to reflect new task if needeed <-- Tommi
     };
 
     const chapterListener = async (newValue) => {
