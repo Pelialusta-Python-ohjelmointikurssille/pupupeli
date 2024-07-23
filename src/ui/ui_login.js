@@ -12,10 +12,10 @@ loginButton.addEventListener("click", () => {
             if (data.token !== undefined) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("username", getStoredUsername());
-                window.location.reload();
             } else {
                 showPopUpNotification("login-failed");
             }
+            updateLoginUI();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -27,7 +27,7 @@ logoutButton.addEventListener("click", () => {
         .then(function() {
             localStorage.removeItem("token");
             localStorage.removeItem("username");
-            window.location.reload();
+            updateLoginUI();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -42,7 +42,10 @@ export function updateLoginUI() {
     if (localStorage.getItem("token") !== null) {
         document.getElementById("logout-button").classList.remove("is-hidden");
         document.getElementById("logged-in-as-container").classList.remove("is-hidden");
+        document.getElementById("user-container").classList.add("is-hidden");
     } else {
+        document.getElementById("logout-button").classList.add("is-hidden");
+        document.getElementById("logged-in-as-container").classList.add("is-hidden");
         document.getElementById("user-container").classList.remove("is-hidden");
     }
     console.log("updated login UI");
