@@ -2,8 +2,6 @@ import * as api from "../api/api.js";
 import * as globals from "../util/globals.js";
 import { setTitle, setDescription, moveToTask, onTaskComplete } from "./ui.js";
 
-const chapterAndTaskButtons = {};
-
 /**
  * Clears app-container, creates a new one and adds elements for instruction page
  */
@@ -162,10 +160,6 @@ export function createChapterButtons() {
             selectContainer.appendChild(button);
         }
     }
-}
-
-export function updateAllTaskAndChapterButtonCompletion() {
-
 }
 
 export function updateCurrentTaskButton() {

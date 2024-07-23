@@ -1,5 +1,6 @@
 import { login, logout } from "../api/api.js";
 import { showPopUpNotification } from "../ui/ui.js";
+import { createChapterButtons, createTaskButtons } from "./ui_buttons.js";
 
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
@@ -38,7 +39,10 @@ logoutButton.addEventListener("click", () => {
         });
 });
 
-
+/**
+ * Updates login UI depending on if the user is logged in or out.
+ * Also calls ui_buttons to update task and chapter buttons.
+ */
 export function updateLoginUI() {
     if (localStorage.getItem("username") !== null) {
         document.getElementById("logged-in-as-user").innerText = localStorage.getItem("username");
@@ -54,4 +58,6 @@ export function updateLoginUI() {
         document.getElementById("logged-in-as-container").classList.add("is-hidden");
         document.getElementById("user-container").classList.remove("is-hidden");
     }
+    createChapterButtons();
+    createTaskButtons();
 }
