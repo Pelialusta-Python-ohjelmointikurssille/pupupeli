@@ -102,7 +102,7 @@ export async function sendTask(taskIdentifier) {
  */
 export async function getTask() {
     const token = localStorage.getItem("token");
-    const task = document.getElementById("task-get-input").value;
+    const task = "chapter" + globals.identifiers.chapterIdentifier + "task" + globals.identifiers.taskIdentifier;
     const params = {
         token: token,
         task: task

@@ -129,9 +129,22 @@ export function setTitle(titleDiv) {
     titleDiv.innerHTML = titleStr;
 }
 
-export function setEditorCode() {
-    getEditor().setValue(globals.task.getEditorCode());
-    getEditor().clearSelection();
+export async function setEditorCode() {
+    let editorCode = "";
+    if (localStorage.getItem("token")) {
+        api.getTask().then((task) => {
+            editorCode = task.data;
+        if (editorCode === "") {
+            editorCode = globals.task.getEditorCode();
+        }
+        getEditor().setValue(editorCode);
+        getEditor().clearSelection();
+    });
+    } else {
+        editorCode = globals.task.getEditorCode();
+        getEditor().setValue(editorCode);
+        getEditor().clearSelection();
+    }
 }
 
 /**
