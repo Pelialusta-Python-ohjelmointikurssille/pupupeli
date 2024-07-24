@@ -7,6 +7,7 @@ import { resetInputHistory } from "./inputBox.js";
 import { isWaitingForInput, resetInputWaiting } from "../game/game_input_controller.js";
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode } from "./ui.js";
+import { updateEditorData } from "../api/api.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -168,6 +169,9 @@ function onRunButtonClick() {
 
     switch (_buttonsState) {
         case States.INITIAL:
+            if (localStorage.getItem("token")){
+            console.log(updateEditorData(getEditor().getValue()));
+            }
             postMessage({ type: 'start', details: getEditor().getValue() });
             break;
         case States.RUNNING:

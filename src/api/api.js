@@ -95,6 +95,25 @@ export async function sendTask(taskIdentifier) {
     return sendPostRequest(url+"put", params);
 }
 
+export async function updateEditorData() {
+    getTask().then((response) => {
+        if (response) {
+            const token = localStorage.getItem("token");
+            const task =  "chapter" + globals.identifiers.chapterIdentifier + "task" + globals.identifiers.taskIdentifier;
+            const editorData = getEditor().getValue();
+            const result = response.result;
+            const params = {
+                token: token,
+                task: task,
+                data: editorData,
+                result: result
+            }
+            return sendPostRequest(url+"put", params);
+        }
+        return null;
+    });
+}
+
 /**
  * a function used to get information about a specific task from the api
  * @returns a JSON object containing data about the task, usually the code from the editor used to complete the task,
