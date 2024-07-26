@@ -99,6 +99,9 @@ export function createTaskButtons(str = "") {
             button.id = buttonIdText;
             button.classList.add("button-incompleted");
             button.innerText = `${taskNumber}`;
+            if (i + 1 === currentTask) {
+                button.classList.add("button-current-task")
+            }
             button.addEventListener('click', () => {
                 globals.identifiers.taskIdentifier = i + 1;
             });

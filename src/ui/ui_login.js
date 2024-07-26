@@ -60,6 +60,4 @@ export function updateLoginUI() {
     }
     createChapterButtons();
     createTaskButtons();
-    updateCurrentChapterButton();
-    updateCurrentTaskButton();
 }
