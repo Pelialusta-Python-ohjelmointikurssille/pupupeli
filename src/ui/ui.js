@@ -11,6 +11,7 @@ import { createChapterButtons, createInstructionPage } from "./ui_buttons.js";
 import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";
+import { translateToTheme } from "../util/theme_translator.js";
 
 const instructionsStr = "instructions";
 let currentChapter = globals.identifiers.chapterIdentifier;
@@ -133,7 +134,7 @@ export async function setEditorCode() {
     let editorCode = "";
     if (localStorage.getItem("token")) {
         api.getTask().then((task) => {
-            editorCode = task.data;
+            editorCode = translateToTheme(task.data);
         if (editorCode === "") {
             editorCode = globals.task.getEditorCode();
         }
@@ -195,7 +196,7 @@ export function onTaskComplete(isWon) {
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
-        api.sendTask(apiTaskIdentifier).then(() => {
+        api.sendTask().then(() => {
             createChapterButtons();
         });
     } else {
@@ -225,7 +226,7 @@ export function onTaskComplete(isWon) {
         document.getElementById("condition-failed").innerHTML = errorMessage;
         showPopUpNotification("condition-failed");
 
-        api.sendTask(apiTaskIdentifier);
+        api.sendTask();
     }
 }
 
@@ -235,7 +236,6 @@ export function onTaskComplete(isWon) {
 export function moveToTask(event) {
     let which = event.target.value;
     if (globals.identifiers.taskIdentifier === 1 && which === "previous") return;
-    console.log(globals.identifiers.taskIdentifier, globals.totalCounts.totalTasks)
     if (globals.identifiers.taskIdentifier === globals.totalCounts.totalTasks && which === "next") return;
 
     switch (which) {

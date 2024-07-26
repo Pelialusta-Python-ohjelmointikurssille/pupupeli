@@ -4,22 +4,19 @@ import { Task } from "../util/task.js";
 import { createTaskButtons, updateCurrentChapterButton, updateCurrentTaskButton } from "../ui/ui_buttons.js";
 
 export const allTasks = await fetchAllTasks();
-console.log(allTasks);
 
 export const identifiers = (function() {
     let _taskIdentifier = 1;
     let _chapterIdentifier = 1;
 
     // Listener functions
-    const taskListener = async (newValue) => {
-        console.log(`New taskIdentifier: ${newValue}`);
+    const taskListener = async () => {
         updateCurrentTaskButton();
         task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
         loadNextTaskInfo();
     };
 
     const chapterListener = async (newValue) => {
-        console.log(`New chapterIdentifier: ${newValue}`);
         identifiers.taskIdentifier = 1;
         updateCurrentChapterButton();
         totalCounts.totalTasks = allTasks[newValue - 1].length;
@@ -32,7 +29,7 @@ export const identifiers = (function() {
         },
         set taskIdentifier(newValue) {
             _taskIdentifier = newValue;
-            taskListener(newValue); // Notify listener
+            taskListener(); // Notify listener
         },
         get chapterIdentifier() {
             return _chapterIdentifier;
@@ -76,6 +73,7 @@ export let currentSAB;
 export let isGameWon = 0;
 export let multipleChoiceCorrect = false;
 
+export const availableThemes = ["pupu", "robo"];
 export const theme = localStorage.getItem("theme");
 
 export function setGameAsWon() {

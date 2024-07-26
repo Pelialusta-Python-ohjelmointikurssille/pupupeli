@@ -1,5 +1,6 @@
 import * as globals from "../util/globals.js";
 import { getEditor } from "../input/editor.js";
+import { translateToCommon } from "../util/theme_translator.js";
 
 const url = 'http://localhost:3000/api/';
 
@@ -81,10 +82,10 @@ export async function logout() {
  * @param {string} taskIdentifier a unique task identifier, for example "chapter1task1"
  * @returns ?
  */
-export async function sendTask(taskIdentifier) {
+export async function sendTask() {
     const token = localStorage.getItem("token");
-    const task =  taskIdentifier;
-    const editorData = getEditor().getValue();
+    const task =  "chapter" + globals.identifiers.chapterIdentifier + "task" + globals.identifiers.taskIdentifier;
+    const editorData = translateToCommon(getEditor().getValue());
     const result = globals.isGameWon;
     const params = {
         token: token,
@@ -93,25 +94,6 @@ export async function sendTask(taskIdentifier) {
         result: result
     }
     return sendPostRequest(url+"put", params);
-}
-
-export async function updateEditorData() {
-    getTask().then((response) => {
-        if (response) {
-            const token = localStorage.getItem("token");
-            const task =  "chapter" + globals.identifiers.chapterIdentifier + "task" + globals.identifiers.taskIdentifier;
-            const editorData = getEditor().getValue();
-            const result = response.result;
-            const params = {
-                token: token,
-                task: task,
-                data: editorData,
-                result: result
-            }
-            return sendPostRequest(url+"put", params);
-        }
-        return null;
-    });
 }
 
 /**
