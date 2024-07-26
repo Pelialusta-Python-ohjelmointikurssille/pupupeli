@@ -143,7 +143,6 @@ export class Game {
      * @param {*} theme theme to change into in finnish
      */
     setTheme(theme) {
-        console.log(localStorage.getItem("theme"));
         if (theme === "Pupu") {
             this.gh.setEntityThemes("bunny");
         }
