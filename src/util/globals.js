@@ -11,6 +11,10 @@ export const identifiers = (function() {
 
     // Listener functions
     const taskListener = async () => {
+        const stopButton = document.getElementById('editor-stop-button');
+        if (stopButton) {
+            stopButton.click();
+        }
         updateCurrentTaskButton();
         task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
         loadNextTaskInfo();
