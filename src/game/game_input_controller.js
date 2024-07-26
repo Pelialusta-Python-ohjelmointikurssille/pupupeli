@@ -41,3 +41,10 @@ export function resetInputs() {
 export function resetInputWaiting() {
     isWaitingForInput = false;
 }
+
+export function resetInputController() {
+    console.log("TOTALLY RESET INPUTS")
+    resetInputs();
+    resetInputWaiting();
+    hideAndClearInputBox();
+}

@@ -2,11 +2,12 @@ import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
 import { getEditor, resetLineHighlight } from "../input/editor.js";
-import { resetGame, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
+import { resetAndInitContent, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 import { isWaitingForInput, resetInputWaiting } from "../game/game_input_controller.js";
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode } from "./ui.js";
+import { sendTask } from "../api/api.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -64,7 +65,7 @@ function onResetButtonClick() {
     hideAndClearInputBox();
     resetCelebrationBox();
     resetWorker();
-    resetGame();
+    resetAndInitContent();
     resetInputHistory();
     _buttonsState = States.INITIAL;
     setMessagePassingState({ paused: false });
@@ -168,6 +169,9 @@ function onRunButtonClick() {
 
     switch (_buttonsState) {
         case States.INITIAL:
+            if (localStorage.getItem("token")){
+                sendTask();
+            }
             postMessage({ type: 'start', details: getEditor().getValue() });
             break;
         case States.RUNNING:
@@ -188,11 +192,6 @@ function initThemeSelect() {
     themeSelectDropdown = document.getElementById("theme-select");
     themeSelectDropdown.value = localStorage.getItem("theme");
     themeSelectDropdown.addEventListener('change', function (event) {
-        let isUserSure = window.confirm("Oletko varma että haluat vaihtaa teeman? Teeman vaihtaminen nollaa tehtävään kirjoitetun koodin.");
-        if (isUserSure === false) {
-            themeSelectDropdown.value = localStorage.getItem("theme");
-            return;
-        }
         let selectedValue = event.target.value;
         setCurrentTheme(selectedValue);
         themeChangeToWorker()

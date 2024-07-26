@@ -79,6 +79,7 @@ export class GraphicsEntitySystem {
      * @param {string} entityId The uuid of the entity that should be destroyed. 
      */
     destroyGraphicsEntity(entityId) {
+        this.entityDict.get(entityId).onDestroy();
         this.renderer.removeFromStage(this.entityDict.get(entityId).container);
         this.renderer.removeFromUI(this.entityDict.get(entityId).container);
         this.entityDict.delete(entityId);
@@ -157,5 +158,12 @@ export class GraphicsEntitySystem {
         this.entityDict.forEach((value) => {
             value.setTheme(theme);
         });
+    }
+
+    destroyAllEntities() {
+        this.entityDict.forEach(value => {
+            this.destroyGraphicsEntity(value.entityUUID);
+        });
+        this.mainGridEntityUUID = "";
     }
 }

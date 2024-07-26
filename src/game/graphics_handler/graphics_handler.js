@@ -13,14 +13,10 @@ import { SCREEN } from "./graphics_constants.js";
  */
 export class GraphicsHandler {
     /**
-     * @param {number} width 
-     * @param {number} height 
      * @param {object} onReadyFunc Called when all playing animations have finished
      * @param {object} onReadyFuncContext Context for the onReadyFunc, as in which object should execute the function
      */
-    constructor(width, height, onReadyFunc, onReadyFuncContext) {
-        this.gridWidth = width;
-        this.gridHeight = height;
+    constructor(onReadyFunc, onReadyFuncContext) {
         this.renderer = null;
         this.graphicsEntityHandler = null;
         this.graphicsRegistry = null;
@@ -60,8 +56,6 @@ export class GraphicsHandler {
         this.graphicsEntityHandler.createCamera(this.renderer.pixiApp.screen, this.renderer.cameraWorldContainer);
 
         this.graphicalInputHandler = new GraphicalInputHandler(this.renderer, this.graphicsEntityHandler.camera);
-
-        this.createGrid();
 
         let t2 = new Date().getTime();
         console.log(`Loading graphics engine took ${t2-t1}ms`);
@@ -132,8 +126,8 @@ export class GraphicsHandler {
      * 
      * Creates the grid object.
      */
-    createGrid() {
-        this.createEntity("gridenttest", "grid", { gridSize: new Vector2(this.gridWidth, this.gridHeight) });
+    createGrid(gridHeight, gridWidth) {
+        this.createEntity("gridenttest", "grid", { gridSize: new Vector2(gridWidth, gridHeight) });
         let gridObject = this.graphicsEntityHandler.getMainGridObject();
         this.createEntity("bgtest", "background", { 
             size: new Vector2(gridObject.pixelSize.x + 4096, gridObject.pixelSize.y + 4096),
@@ -175,6 +169,10 @@ export class GraphicsHandler {
 
     getEntity(id) {
         return this.graphicsEntityHandler.getGraphicsEntity(id);
+    }
+
+    destroyAllEntities() {
+        this.graphicsEntityHandler.destroyAllEntities();
     }
 }
 

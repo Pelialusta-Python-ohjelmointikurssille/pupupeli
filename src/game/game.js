@@ -16,7 +16,7 @@ export class Game {
     constructor() {
         this.grid = getGameTask();
         this.collectibleCounter = new CollectibleCounter(this.grid);
-        this.gh = new GraphicsHandler(this.grid.width, this.grid.height, this.onAnimsReady, this);
+        this.gh = new GraphicsHandler(this.onAnimsReady, this);
         this.canDoNextMove = true;
         this.isGridEnabled = true;
         this.tempObjectIds = [];
@@ -27,9 +27,7 @@ export class Game {
      */
     async init() {
         await this.gh.initialize();
-        this.grid.gridObjects.forEach(item => {
-            this.createGridEntityForRendering(item);
-        });
+        this.resetAndInitContent();
     }
 
     /**
@@ -113,14 +111,19 @@ export class Game {
     /**
      * Restores the gamestate back to the beginning of the task.
      */
-    resetGame() {
-        this.gh.destroyTextBoxes();
-        this.grid.resetGrid();
-        this.gh.resetGridObjects();
-        this.gh.destroyTextBoxes();
-        this.gh.destroyTextBoxes();
-        this.destroyTempObjects();
+    resetAndInitContent() {
+        this.gh.destroyAllEntities();
+        this.grid = getGameTask();
+        this.collectibleCounter = new CollectibleCounter(this.grid);
+        this.canDoNextMove = true;
+        this.isGridEnabled = true;
+        this.tempObjectIds = [];
+        this.gh.createGrid(this.grid.height, this.grid.width);
+        this.grid.gridObjects.forEach(item => {
+            this.createGridEntityForRendering(item);
+        });
         this.collectibleCounter.reset();
+        this.setTheme(localStorage.getItem("theme"));
     }
 
     /**
@@ -140,7 +143,6 @@ export class Game {
      * @param {*} theme theme to change into in finnish
      */
     setTheme(theme) {
-        console.log(localStorage.getItem("theme"));
         if (theme === "Pupu") {
             this.gh.setEntityThemes("bunny");
         }

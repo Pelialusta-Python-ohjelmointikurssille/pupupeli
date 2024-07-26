@@ -45,7 +45,7 @@ describe('GraphicsEntitySystem', () => {
 
     test('should destroy graphics entity', () => {
         const entityId = 'test-entity';
-        const entityMock = { container: {} };
+        const entityMock = { container: {}, onDestroy: jest.fn() };
         entitySystem.entityDict.set(entityId, entityMock);
 
         entitySystem.destroyGraphicsEntity(entityId);
@@ -90,8 +90,8 @@ describe('GraphicsEntitySystem', () => {
     });
 
     test('should destroy all textboxes', () => {
-        const entityMock1 = { type: 'textbox' };
-        const entityMock2 = { type: 'other' };
+        const entityMock1 = { type: 'textbox', onDestroy: jest.fn() };
+        const entityMock2 = { type: 'other', onDestroy: jest.fn() };
         entitySystem.entityDict.set('textbox-entity', entityMock1);
         entitySystem.entityDict.set('other-entity', entityMock2);
 

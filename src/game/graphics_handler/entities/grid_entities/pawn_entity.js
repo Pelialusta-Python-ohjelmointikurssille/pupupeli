@@ -53,6 +53,15 @@ export class PawnEntity extends GraphicsEntity {
         this.onFinishMove();
     }
 
+    onDestroy() {
+        if (this.lineDrawer !== null) {
+            this.entityHandler.renderer.removeFromStage(this.lineDrawer.graphics);
+            console.log("REMOVED LINE DRAWER")
+            this.lineDrawer = null;
+        }
+        super.onDestroy();
+    }
+
     /**
      * Skips/Fast forwards the currently playing animation to the end.
      * Extended from base class.

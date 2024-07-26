@@ -5,13 +5,17 @@ import { getEditor } from "../input/editor.js"
 import { initWorker } from "../worker_messenger.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
-import { initGame, setTheme } from "../game/game_controller.js";
+import { initGame, resetAndInitContent, setTheme } from "../game/game_controller.js";
 import { conditionsNotCleared } from "../clear_conditions.js";
-import { createTaskButtons, createChapterButtons, createInstructionPage } from "./ui_buttons.js";
+import { createChapterButtons, createInstructionPage } from "./ui_buttons.js";
 import { checkIfGameWon } from "../clear_conditions.js";
+import { resetInputController } from "../game/game_input_controller.js";
+import { updateLoginUI } from "./ui_login.js";
+import { translateToTheme } from "../util/theme_translator.js";
 
 const instructionsStr = "instructions";
-let currentChapter = globals.chapterIdentifier;
+let currentChapter = globals.identifiers.chapterIdentifier;
+let currentTask = globals.identifiers.taskIdentifier;
 /**
  * Runs ui initialisation functions + atm the worker_messenger worker
  */
@@ -43,9 +47,8 @@ async function initGameAndCanvas() {
  * Game and instructions task types require different elements.
  */
 async function initPage() {
-    createChapterButtons();
-    isUserLoggedIn();
-    // checking if task type is instructions
+    updateLoginUI(); //currently also creates task and chapter buttons
+    // checking if current task type is instructions
     if (globals.task.getTaskType() != instructionsStr) {
         createGamePage();
     } else {
@@ -63,11 +66,9 @@ function createGamePage() {
     if (globals.task.getMultipleChoiceQuestions().length > 0) {
         setMultipleChoice();
     }
-    // set editor code
-    window.addEventListener('load', function () {
-        setEditorCode()
-        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
-    });
+
+    setEditorCode();
+
     let titleTargetDiv = document.getElementById("taskTitle");
     setTitle(titleTargetDiv);
 
@@ -84,38 +85,59 @@ function setMultipleChoice() {
     // set multiple choice questions
     let multipleChoiceContainer = document.getElementById("multiple-choice-questions");
 
-    multipleChoiceContainer.classList.remove("is-hidden");
-    let optionIdCounter = 0;
-    globals.task.getMultipleChoiceQuestions().forEach((option) => {
-        const optionId = `option-${optionIdCounter++}`;
-        multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
+    while (multipleChoiceContainer.firstChild) {
+        multipleChoiceContainer.removeChild(multipleChoiceContainer.firstChild);
+    }
 
-        // if option is correct, add eventlistener which calls onTaskComplete
-        if (option.isCorrectAnswer === true) {
-            let questionButton = document.getElementById(optionId);
-            questionButton.dataset.correct = true;
-        }
-    });
-    let questions = document.getElementsByClassName("multiple-choice-question");
+    if (globals.task.getMultipleChoiceQuestions().length === 0) {
+        multipleChoiceContainer.classList.add("is-hidden");
+    } else {
+        multipleChoiceContainer.classList.remove("is-hidden");
+        let optionIdCounter = 0;
+        globals.task.getMultipleChoiceQuestions().forEach((option) => {
+            const optionId = `option-${optionIdCounter++}`;
+            multipleChoiceContainer.insertAdjacentHTML("beforeend", `<div class='multiple-choice-question' id='${optionId}'>${option.question}</div>`);
 
-    Array.from(questions).forEach(question => {
-        question.addEventListener("click", colorSelectedChoice);
-        question.addEventListener("click", checkIfGameWon);
-    });
+            // if option is correct, add eventlistener which calls onTaskComplete
+            if (option.isCorrectAnswer === true) {
+                let questionButton = document.getElementById(optionId);
+                questionButton.dataset.correct = true;
+            }
+        });
+        let questions = document.getElementsByClassName("multiple-choice-question");
+
+        Array.from(questions).forEach(question => {
+            question.addEventListener("click", colorSelectedChoice);
+            question.addEventListener("click", checkIfGameWon);
+        });
+    }
 }
 /**
  * Sets the text from task.title to given div. Useful since game and instructions tasks use different title div.
  * @param {object} titleDiv | the title div where we want title text as a html element
  */
 export function setTitle(titleDiv) {
-    let chapterAndTaskNumberPeriod = `${globals.chapterIdentifier}.${globals.taskIdentifier}. `
+    let chapterAndTaskNumberPeriod = `${currentChapter}.${currentTask}. `
     let titleStr = chapterAndTaskNumberPeriod + globals.task.getTitle();
     titleDiv.innerHTML = titleStr;
 }
 
-export function setEditorCode() {
-    getEditor().setValue(globals.task.getEditorCode());
-    getEditor().clearSelection();
+export async function setEditorCode() {
+    let editorCode = "";
+    if (localStorage.getItem("token")) {
+        api.getTask().then((task) => {
+            editorCode = translateToTheme(task.data);
+        if (editorCode === "") {
+            editorCode = globals.task.getEditorCode();
+        }
+        getEditor().setValue(editorCode);
+        getEditor().clearSelection();
+    });
+    } else {
+        editorCode = globals.task.getEditorCode();
+        getEditor().setValue(editorCode);
+        getEditor().clearSelection();
+    }
 }
 
 /**
@@ -137,18 +159,6 @@ export function enableEditorButtons() {
     });
 }
 
-function isUserLoggedIn() {
-    if (localStorage.getItem("username") !== null) {
-        document.getElementById("logged-in-as-user").innerText = localStorage.getItem("username");
-    }
-    if (localStorage.getItem("token") !== null) {
-        document.getElementById("logout-button").classList.remove("is-hidden");
-        document.getElementById("logged-in-as-container").classList.remove("is-hidden");
-    } else {
-        document.getElementById("user-container").classList.remove("is-hidden");
-    }
-}
-
 function colorSelectedChoice(selectedChoice) {
     let questions = document.getElementsByClassName("multiple-choice-question");
     globals.setMultipleChoiceCorrect(selectedChoice);
@@ -167,7 +177,7 @@ function colorSelectedChoice(selectedChoice) {
 
 
 export function onTaskComplete(isWon) {
-    const apiTaskIdentifier = "chapter" + globals.chapterIdentifier + "task" + globals.taskIdentifier;
+    const apiTaskIdentifier = "chapter" + currentChapter + "task" + currentTask;
     if (isWon) {
         const buttonid = apiTaskIdentifier;
         let button = document.getElementById(buttonid);
@@ -178,7 +188,7 @@ export function onTaskComplete(isWon) {
             button.classList.replace("button-incompleted", "button-completed");
         }
         globals.setGameAsWon();
-        api.sendTask(apiTaskIdentifier).then(() => {
+        api.sendTask().then(() => {
             createChapterButtons();
         });
     } else {
@@ -208,7 +218,7 @@ export function onTaskComplete(isWon) {
         document.getElementById("condition-failed").innerHTML = errorMessage;
         showPopUpNotification("condition-failed");
 
-        api.sendTask(apiTaskIdentifier);
+        api.sendTask();
     }
 }
 
@@ -216,16 +226,16 @@ export function onTaskComplete(isWon) {
  * a function used by the previous/next task buttons on the page
  */
 export function moveToTask(event) {
-    let currentTask = globals.taskIdentifier;
     let which = event.target.value;
-    if (currentTask === 1 && which === "previous") return;
+    if (globals.identifiers.taskIdentifier === 1 && which === "previous") return;
+    if (globals.identifiers.taskIdentifier === globals.totalCounts.totalTasks && which === "next") return;
 
     switch (which) {
         case "previous":
-            window.location.href = `/?chapter=${currentChapter}&task=${currentTask - 1}`;
+            globals.identifiers.taskIdentifier = globals.identifiers.taskIdentifier - 1;
             break;
         case "next":
-            window.location.href = `/?chapter=${currentChapter}&task=${currentTask + 1}`;
+            globals.identifiers.taskIdentifier = globals.identifiers.taskIdentifier + 1;
             break;
     }
 }
@@ -296,5 +306,76 @@ export function displayErrorMessage(error) {
     errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
     disablePlayButton("error");
 }
+
+export function loadNextTaskInfo() {
+    currentChapter = globals.identifiers.chapterIdentifier;
+    currentTask = globals.identifiers.taskIdentifier;
+    const appDiv = document.getElementById("app-container");
+
+    // Check if insAppDiv already exists and remove it if it does
+    const existingInsAppDiv = document.getElementById('instructions-container');
+    if (existingInsAppDiv) {
+        existingInsAppDiv.parentNode.removeChild(existingInsAppDiv);
+    }
+
+    const insAppDiv = document.createElement('div');
+    insAppDiv.id = 'instructions-container'; // Assign a unique ID
+
+    if (globals.task.getTaskType() === instructionsStr) {
+        appDiv.classList.add("is-hidden");
+        insAppDiv.classList.remove("is-hidden");
+        loadIstructionTask(appDiv, insAppDiv);
+    } else {
+        appDiv.classList.remove("is-hidden");
+        insAppDiv.classList.add("is-hidden");
+    }
+
+    let descriptionTargetDiv = document.getElementById("task-description");
+    while (descriptionTargetDiv.firstChild) {
+        descriptionTargetDiv.removeChild(descriptionTargetDiv.firstChild);
+    }
+    setDescription(descriptionTargetDiv);
+    setMultipleChoice();
+    setEditorCode();
+
+    let titleTargetDiv = document.getElementById("taskTitle");
+    setTitle(titleTargetDiv);
+    resetAndInitContent();
+    resetInputController();
+};
+
+function loadIstructionTask(appDiv, insAppDiv) {
+    insAppDiv.innerHTML = "";
+    insAppDiv.id = 'instructions-container';
+    insAppDiv.classList.add("box");
+    insAppDiv.style.flexDirection = "row";
+    insAppDiv.style.display = "flex";
+    const insDiv = document.createElement('div');
+    insDiv.id = 'instruction-div';
+    
+    let insHead = document.createElement('div');
+    insHead.id = 'instruction-head';
+
+    let insHeadline = document.createElement('h1');
+    
+    let instructionTitle = document.createElement('a');
+    instructionTitle.id = 'instructionTitle';
+    setTitle(instructionTitle);
+    
+    insHeadline.appendChild(instructionTitle);
+
+    insHead.appendChild(insHeadline);
+    
+    let insDesc = document.createElement('div');
+    setDescription(insDesc);
+    insDesc.id = 'instruction-desc';
+    
+    
+    appDiv.insertAdjacentElement("afterend", insAppDiv);
+    insAppDiv.appendChild(insDiv);
+    insDiv.appendChild(insHead);
+    insDiv.appendChild(insDesc);
+}
+
 
 main();

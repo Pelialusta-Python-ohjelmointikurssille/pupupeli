@@ -1,37 +1,70 @@
-import { tryGetFileAsJson } from "../file_reader.js";
+import { fetchAllTasks } from "../file_reader.js";
+import { loadNextTaskInfo } from "../ui/ui.js";
 import { Task } from "../util/task.js";
+import { createTaskButtons, updateCurrentChapterButton, updateCurrentTaskButton } from "../ui/ui_buttons.js";
 
-/**
- * returns the current task's identifier by parsing the URL and retrieving the value for key "task"
- */
-export const taskIdentifier = (function () {
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.size === 0) return 1;
+export const allTasks = await fetchAllTasks();
 
-    const taskIdentifier = parseInt(searchParams.get("task"));
-    if (isNaN(taskIdentifier)) return 1;
-    return taskIdentifier;
+export const identifiers = (function() {
+    let _taskIdentifier = 1;
+    let _chapterIdentifier = 1;
+
+    // Listener functions
+    const taskListener = async () => {
+        updateCurrentTaskButton();
+        task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
+        loadNextTaskInfo();
+    };
+
+    const chapterListener = async (newValue) => {
+        identifiers.taskIdentifier = 1;
+        updateCurrentChapterButton();
+        totalCounts.totalTasks = allTasks[newValue - 1].length;
+        createTaskButtons();
+    };
+
+    return {
+        get taskIdentifier() {
+            return _taskIdentifier;
+        },
+        set taskIdentifier(newValue) {
+            _taskIdentifier = newValue;
+            taskListener(); // Notify listener
+        },
+        get chapterIdentifier() {
+            return _chapterIdentifier;
+        },
+        set chapterIdentifier(newValue) {
+            _chapterIdentifier = newValue;
+            chapterListener(newValue); // Notify listener
+        }
+    };
 })();
 
-/**
- * returns the current chapter's identifier by parsing the URL and retrieving value for key "chapter"
- */
-export const chapterIdentifier = (function () {
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.size === 0) return 1;
+export const totalCounts = (function() {
+    let _totalChapters = allTasks.length;
+    let _totalTasks = allTasks[identifiers.chapterIdentifier - 1].length;
 
-    const chapterIdentifier = parseInt(searchParams.get("chapter"));
-    if (isNaN(chapterIdentifier)) return 1;
-    return chapterIdentifier
+    return {
+        get totalTasks() {
+            return _totalTasks;
+        },
+        set totalTasks(newValue) {
+            _totalTasks = newValue;
+        },
+        get totalChapters() {
+            return _totalChapters;
+        },
+        set totalChapters(newValue) {
+            _totalChapters = newValue;
+        }
+    };
 })();
 
 /**
  * returns the matching task object for the page using the chapter and task identifiers
  */
-export const task = (function () {
-    const path = `/tasks/${chapterIdentifier}/${taskIdentifier}.json`;
-    return Task.fromJSON(tryGetFileAsJson(path));
-})();
+export let task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
 
 export const collectibles = { total: task.getTotalCollectibles(), current: 0 };
 export const obstacles = { total: task.getTotalCollectibles(), current: 0 };
@@ -40,11 +73,14 @@ export let currentSAB;
 export let isGameWon = 0;
 export let multipleChoiceCorrect = false;
 
+export const availableThemes = ["pupu", "robo"];
 export const theme = localStorage.getItem("theme");
 
 export function setGameAsWon() {
     isGameWon = 1;
 }
+
+export const totalTasksbyChapter = allTasks.map(chapter => chapter.length);
 
 export function setMultipleChoiceCorrect(isCorrect = true) {
     if (isCorrect.target.dataset.correct) {

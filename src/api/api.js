@@ -1,41 +1,8 @@
 import * as globals from "../util/globals.js";
 import { getEditor } from "../input/editor.js";
-import { showPopUpNotification } from "../ui/ui.js";
+import { translateToCommon } from "../util/theme_translator.js";
 
-let stored_username;
-let loginButton = document.getElementById("login-button");
-let logoutButton = document.getElementById("logout-button");
 const url = 'http://localhost:3000/api/';
-
-// eventlisteners should probably eventually be moved elsewhere
-// getTaskButton and getCompletedTasksButton are for development only
-loginButton.addEventListener("click", () => {
-    login(url)
-        .then(data => {
-            if (data.token !== undefined) {
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("username", stored_username);
-                window.location.reload();
-            } else {
-                showPopUpNotification("login-failed");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
-
-logoutButton.addEventListener("click", () => {
-    logout(url)
-        .then(function() {
-            localStorage.removeItem("token");
-            localStorage.removeItem("username");
-            window.location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
 
 /**
  * a function used to create api URLs from a base URL and an object
@@ -89,19 +56,9 @@ async function sendGetRequest(url) {
 /**
  * a function used to login to the game
  * @returns a JSON object containing a token, for example: { token: "45h239809sdfy8s32g3h23u" }
- * the token is stored in localstorage and is required for all other api calls
+ * the token is stored in localstorage and is required for all other api calls.
  */
-export async function login() {
-    const user = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
-
-    if (user === "") {
-        showPopUpNotification("login-failed");
-        return
-    } else {
-        stored_username = user;
-    }
-
+export async function login(user, pass) {
     const params = {
         username: user,
         password: pass
@@ -125,10 +82,10 @@ export async function logout() {
  * @param {string} taskIdentifier a unique task identifier, for example "chapter1task1"
  * @returns ?
  */
-export async function sendTask(taskIdentifier) {
+export async function sendTask() {
     const token = localStorage.getItem("token");
-    const task =  taskIdentifier;
-    const editorData = getEditor().getValue();
+    const task =  "chapter" + globals.identifiers.chapterIdentifier + "task" + globals.identifiers.taskIdentifier;
+    const editorData = translateToCommon(getEditor().getValue());
     const result = globals.isGameWon;
     const params = {
         token: token,
@@ -146,7 +103,7 @@ export async function sendTask(taskIdentifier) {
  */
 export async function getTask() {
     const token = localStorage.getItem("token");
-    const task = document.getElementById("task-get-input").value;
+    const task = "chapter" + globals.identifiers.chapterIdentifier + "task" + globals.identifiers.taskIdentifier;
     const params = {
         token: token,
         task: task

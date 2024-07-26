@@ -1,0 +1,34 @@
+{
+  "Chapter1": {
+    "Task1": "Eka_pupu.json",
+    "Task2": "Voi_olla_mikavaan_nimi.json",
+    "Task3": "3.json",
+    "Task4": "4.json",
+    "Task5": "5.json",
+    "Task6": "6.json",
+    "Task7": "7.json",
+    "Task8": "8.json",
+    "Task9": "9.json"
+  },
+  "Chapter2": {
+    "Task1": "1.json",
+    "Task2": "2.json",
+    "Task3": "3.json",
+    "Task4": "4.json",
+    "Task5": "5.json"
+  },
+  "Chapter3": {
+    "Task1": "1.json",
+    "Task2": "2.json",
+    "Task3": "3.json"
+  },
+  "Chapter4": {
+    "Task1": "1.json",
+    "Task2": "2.json",
+    "Task3": "3.json",
+    "Task4": "4.json"
+  },
+  "Chapter5": {
+    "Task1": "1.json"
+  }
+}

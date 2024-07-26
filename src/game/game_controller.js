@@ -52,8 +52,8 @@ export function getCanvas() {
 /**
 * Restores the gamestate back to the beginning of the task.
 */
-export function resetGame() {
-    game.resetGame();
+export function resetAndInitContent() {
+    game.resetAndInitContent();
 }
 
 /**
