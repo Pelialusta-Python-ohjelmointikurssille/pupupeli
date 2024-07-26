@@ -67,14 +67,6 @@ function createGamePage() {
         setMultipleChoice();
     }
 
-//-----------------------------------------------------REMOVE BELOW?
-//    window.addEventListener('load', function () {
-//        setEditorCode()
-//        createTaskButtons(); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
-//    });
-
-    //Above listener never activated on page load, I hope this doesn't break anything calling them without waiting for load :D
-//--------------------------------------------------------????
     setEditorCode();
 
     let titleTargetDiv = document.getElementById("taskTitle");
