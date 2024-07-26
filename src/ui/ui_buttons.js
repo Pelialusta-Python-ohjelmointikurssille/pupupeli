@@ -60,6 +60,7 @@ export function createTaskButtons(str = "") {
     const buttonContainer = document.getElementById('buttonTable');
     buttonContainer.innerHTML = ''
     const currentChapter = globals.identifiers.chapterIdentifier;
+    const currentTask = globals.identifiers.taskIdentifier;
     if (localStorage.getItem("token") !== null) { // user is logged in
         api.getCompletedTasks().then(taskList => {
             let completedTasksList = taskList.tasks;
@@ -73,7 +74,7 @@ export function createTaskButtons(str = "") {
 
                 let buttonIdText = `chapter${currentChapter}task${i + 1}`;
                 button.id = buttonIdText
-                if (i + 1 === 1) {
+                if (i + 1 === currentTask) {
                     button.classList.add("button-current-task")
                 }
                 if (completedTasksList.includes(buttonIdText)) {
@@ -114,6 +115,7 @@ export function createTaskButtons(str = "") {
 export function createChapterButtons() {
     const selectContainer = document.getElementById('chapterbuttontable');
     selectContainer.innerHTML = '';
+    const currentChapter = globals.identifiers.chapterIdentifier;
     if (localStorage.getItem("token") !== null) {
         api.getCompletedTasks().then(taskList => {
             let completedTasksList = taskList.tasks;
@@ -122,7 +124,7 @@ export function createChapterButtons() {
                 button.id = `chapter-button-${i + 1}`;
                 button.value = i + 1;
                 button.innerText = `Tehtäväsarja ${i + 1}`;
-                if (i + 1 === 1) button.classList.add("button-current-chapter")
+                if (i + 1 === currentChapter) button.classList.add("button-current-chapter")
                 let currentTotalTasks = globals.totalTasksbyChapter[i];
                 let allTasksCompleted = true;
                 for (let j = 0; j < currentTotalTasks; j++) {
@@ -151,7 +153,7 @@ export function createChapterButtons() {
             button.id = `chapter-button-${i + 1}`;
             button.value = i + 1;
             button.innerText = `Tehtäväsarja ${i + 1}`;
-            if (i + 1 === 1) {
+            if (i + 1 === currentChapter) {
                 button.classList.add("button-current-chapter")
             }
             button.addEventListener('click', () => {
