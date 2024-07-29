@@ -1,8 +1,10 @@
 import js
 import ast
 from sys import settrace
+from time import sleep
 
 def tracer(frame, event, arg):
+    userCodeLength = js.getSourceLineCount()
     class_name = None
     code = frame.f_code
     func_name = code.co_qualname
@@ -12,34 +14,14 @@ def tracer(frame, event, arg):
         class_name = frame.f_locals["self"].__class__.__name__
     except:
         pass
-    
-
-    if (event == "call" and "<module>" not in func_name and class_name == "Pelaaja" and "__init__" not in func_name):
-        print(f"[{filename}]: {func_name}(), line {line_number}(prev: {frame.f_back.f_lineno}), class: {class_name}")
-        js.sendLine(frame.f_back.f_lineno - 8)
-        print(f"ASSUMED LINE: {frame.f_back.f_lineno - 8}")
-
+    if (filename == "<exec>"):
+        print(f"[e:{event} f:{filename}]: {func_name}(), line {line_number}, class: {class_name}")
+        if ("__init__" not in func_name and frame.f_lineno-1 <= userCodeLength-1):
+            js.sendLine(frame.f_lineno-1)
+            print(f"ASSUMED LINE: {frame.f_lineno-1}")
     return tracer
 
-
-def check_while_usage(source_code):
-    tree = ast.parse(source_code)
-
-    for node in ast.walk(tree):
-        if isinstance(node, ast.While):
-            return True
-
-    return False
-
-
-def check_for_usage(source_code):
-    tree = ast.parse(source_code)
-
-    for node in ast.walk(tree):
-        if isinstance(node, ast.For):
-            return True
-
-    return False
+settrace(tracer)
 
 
 def mock_input(prompt=""):
@@ -99,30 +81,3 @@ class Pelaaja:
     def rivi(self, line: int):
         #js.sendLine(line)
         pass
-
-
-class ErrorCheck:
-    def __init__(self, name="pupu"):
-        self.__name = name
-        self.__directions = ["oikea", "vasen", "ylös", "alas", 0]
-
-    def liiku(self, direction: str):
-        if direction in self.__directions:
-            return
-        else:
-            raise ValueError("Virheellinen suunta")
-
-    def sano(self, sentence: str):
-        return
-
-    def puhu(self, sentence: str):
-        return
-
-    def kysy(self, question: str = "?"):
-        return
-
-    def rivi(self, line: int):
-        return
-
-
-settrace(tracer)

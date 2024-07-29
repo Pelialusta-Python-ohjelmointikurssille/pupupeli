@@ -11,6 +11,9 @@ let hasUsedInput = false;
 //remember to update this when new commands are added
 const validCommands = ["move", "say", "ask"];
 
+// temp stuff, holds lines of code in the current pyodide execution
+let userCodeLength = 0;
+
 // eslint-disable-next-line no-undef
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
 
@@ -141,6 +144,10 @@ function sendLine(line) {
     }
 }
 
+function getSourceLineCount() {
+    return userCodeLength;
+}
+
 // Help function for printing from python to js console
 function printPython(output) {
     console.log(output)
@@ -185,16 +192,18 @@ async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
     let codeStringTest;
     codeStringTest = removeInputs(codeString);
-    codeStringTest = indentString(codeStringTest);
+    //codeStringTest = indentString(codeStringTest);
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
     console.log("Started running code...");
-    let asyncCode = codeStringTest + "\n" + codeStringLined;
+    let asyncCode = codeStringLined;
     self.continuePythonExecution = pyodide.runPythonAsync(asyncCode);
     console.log(asyncCode + "\n" + pythonFileStr);
+    userCodeLength = codeString.split(/\r\n|\r|\n/).length;
+    console.log("LENGTH AAA:", codeString.split(/\r\n|\r|\n/).length)
     try {
         await self.continuePythonExecution;
-        await checkClearedConditions(codeString);
+        //await checkClearedConditions(codeString);
 
         try {
             // reset pyodide state to where we saved it earlier after all commands are done
@@ -215,11 +224,11 @@ async function runPythonCode(pyodide, codeString) {
 
 async function checkClearedConditions(codeString) {
     let clearedConditions = [];
-    clearedConditions.push({ condition: "conditionUsedWhile", parameter: await pyodide.runPythonAsync(`check_while_usage("""${codeString}""")`) });
-    clearedConditions.push({ condition: "conditionUsedFor", parameter: await pyodide.runPythonAsync(`check_for_usage("""${codeString}""")`) });
-    clearedConditions.push({ condition: "conditionMaxLines", parameter: codeString.split("\n").filter(line => line.trim() !== "").length });
-    clearedConditions.push({ condition: "conditionUsedInput", parameter: hasUsedInput });
-    clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
+    //clearedConditions.push({ condition: "conditionUsedWhile", parameter: await pyodide.runPythonAsync(`check_while_usage("""${codeString}""")`) });
+    //clearedConditions.push({ condition: "conditionUsedFor", parameter: await pyodide.runPythonAsync(`check_for_usage("""${codeString}""")`) });
+    //clearedConditions.push({ condition: "conditionMaxLines", parameter: codeString.split("\n").filter(line => line.trim() !== "").length });
+    //clearedConditions.push({ condition: "conditionUsedInput", parameter: hasUsedInput });
+    //clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
     self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
 }
 
