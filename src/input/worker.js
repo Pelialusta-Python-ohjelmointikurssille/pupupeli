@@ -189,8 +189,9 @@ async function runPythonCode(pyodide, codeString) {
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
     console.log("Started running code...");
-    self.continuePythonExecution = pyodide.runPythonAsync(codeStringTest + '\n' + codeStringLined);
-
+    let asyncCode = codeStringTest + "\n" + codeStringLined;
+    self.continuePythonExecution = pyodide.runPythonAsync(asyncCode);
+    console.log(asyncCode + "\n" + pythonFileStr);
     try {
         await self.continuePythonExecution;
         await checkClearedConditions(codeString);
@@ -248,7 +249,8 @@ function addLineNumberOutputs(codeString) {
         else if (trimmedLine === '' || trimmedLine.startsWith('#')) {
             return line;
         } else {
-            return `${indentation}${theme}.rivi(${index + 1})\n${line}`;
+            return line;
+            //return `${indentation}${theme}.rivi(${index + 1})\n${line}`;
         }
     });
     codeString = lines.join('\n');

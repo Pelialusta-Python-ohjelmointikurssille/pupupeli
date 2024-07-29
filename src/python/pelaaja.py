@@ -12,9 +12,12 @@ def tracer(frame, event, arg):
         class_name = frame.f_locals["self"].__class__.__name__
     except:
         pass
+    
 
-    if (event == "call" and "<module>" not in func_name and class_name == "Pelaaja"):
+    if (event == "call" and "<module>" not in func_name and class_name == "Pelaaja" and "__init__" not in func_name):
         print(f"[{filename}]: {func_name}(), line {line_number}(prev: {frame.f_back.f_lineno}), class: {class_name}")
+        js.sendLine(frame.f_back.f_lineno - 8)
+        print(f"ASSUMED LINE: {frame.f_back.f_lineno - 8}")
 
     return tracer
 
