@@ -1,5 +1,22 @@
 import js
 import ast
+from sys import settrace
+
+def tracer(frame, event, arg):
+    class_name = None
+    code = frame.f_code
+    func_name = code.co_qualname
+    line_number = frame.f_lineno
+    filename = code.co_filename
+    try:
+        class_name = frame.f_locals["self"].__class__.__name__
+    except:
+        pass
+
+    if (event == "call" and "<module>" not in func_name and class_name == "Pelaaja"):
+        print(f"[{filename}]: {func_name}(), line {line_number}(prev: {frame.f_back.f_lineno}), class: {class_name}")
+
+    return tracer
 
 
 def check_while_usage(source_code):
@@ -30,7 +47,6 @@ class Pelaaja:
     def __init__(self, name="pupu"):
         self.__name = name
         self.__directions = ["oikea", "vasen", "ylös", "alas"]
-        js.printPython("heihei")
 
     def liiku(self, direction: str):
         # DO NOT COMMENT OUT
@@ -78,7 +94,8 @@ class Pelaaja:
         return
     
     def rivi(self, line: int):
-        js.sendLine(line)
+        #js.sendLine(line)
+        pass
 
 
 class ErrorCheck:
@@ -105,3 +122,4 @@ class ErrorCheck:
         return
 
 
+settrace(tracer)
