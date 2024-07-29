@@ -141,6 +141,11 @@ function sendLine(line) {
     }
 }
 
+// Help function for printing from python to js console
+function printPython(output) {
+    console.log(output)
+}
+
 /**
  * 
  * @param {*} variableName Name of the variable we want the value of.

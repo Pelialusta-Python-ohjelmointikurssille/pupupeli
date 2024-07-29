@@ -30,6 +30,7 @@ class Pelaaja:
     def __init__(self, name="pupu"):
         self.__name = name
         self.__directions = ["oikea", "vasen", "ylös", "alas"]
+        js.printPython("heihei")
 
     def liiku(self, direction: str):
         # DO NOT COMMENT OUT
