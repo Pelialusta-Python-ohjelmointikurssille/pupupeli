@@ -17,6 +17,7 @@ def tracer(frame, event, arg):
     if (filename == "<exec>"):
         print(f"[e:{event} f:{filename}]: {func_name}(), line {line_number}, class: {class_name}")
         if ("__init__" not in func_name and frame.f_lineno-1 <= userCodeLength-1):
+            sleep(0.05)
             js.sendLine(frame.f_lineno-1)
             print(f"ASSUMED LINE: {frame.f_lineno-1}")
     return tracer
