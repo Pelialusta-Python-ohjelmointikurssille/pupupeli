@@ -14,16 +14,14 @@ def tracer(frame, event, arg):
         class_name = frame.f_locals["self"].__class__.__name__
     except:
         pass
-    if (filename == "<exec>"):
-        print(f"[e:{event} f:{filename}]: {func_name}(), line {line_number}, class: {class_name}")
-        if ("__init__" not in func_name and frame.f_lineno-1 <= userCodeLength-1):
-            sleep(0.05)
-            js.sendLine(frame.f_lineno-1)
-            print(f"ASSUMED LINE: {frame.f_lineno-1}")
+    print(f"[e:{event} f:{filename}]: {func_name}(), line {line_number}, class: {class_name}")
+    if (filename == "<exec>" and "__init__" not in func_name and frame.f_lineno-1 <= userCodeLength-1):
+        js.sendLine(frame.f_lineno-1)
+        print(f"ASSUMED LINE: {frame.f_lineno-1}")
+        sleep(0.05)
     return tracer
 
 settrace(tracer)
-
 
 def mock_input(prompt=""):
     return 0
