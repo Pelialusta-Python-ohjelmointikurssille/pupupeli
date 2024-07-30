@@ -301,10 +301,26 @@ export function displayErrorMessage(error) {
     if (typeof error === "string") { console.log(error) } else { console.log(error.message) }
     let errorDetails = extractErrorDetails(error.message);
     if (errorDetails.text === "KeyboardInterrupt") return; // intended error; do not display to user
-    let errorContainer = document.getElementById("error-box");
-    errorContainer.classList.toggle("show-error");
-    errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
+    let errorContainer = document.getElementById("error");
+    toggleErrorVisibility(true)
+    errorContainer.textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
     disablePlayButton("error");
+}
+
+export function displayWarningMessage(message) {
+    console.warn(message);
+    let errorContainer = document.getElementById("warning");
+    toggleErrorVisibility(true)
+    errorContainer.textContent = message;
+}
+
+export function toggleErrorVisibility(toggle) {
+    let errorDiv = document.getElementById("error-box");
+    if (toggle) {
+        errorDiv.classList.add("show-error");
+    } else {
+        errorDiv.classList.remove("show-error");
+    }
 }
 
 export function loadNextTaskInfo() {
