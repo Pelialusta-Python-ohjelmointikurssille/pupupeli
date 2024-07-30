@@ -2,9 +2,15 @@ import js
 import ast
 from sys import settrace
 from time import sleep
+import ast
 
 def tracer(frame, event, arg):
-    userCodeLength = js.getSourceLineCount()
+    # DIRTY HACK, otherwise raises error in pyodide about js not being defined
+    userCodeLength = -1
+    try:
+        userCodeLength = js.getSourceLineCount()
+    except Exception as e:
+        pass
     class_name = None
     code = frame.f_code
     func_name = code.co_qualname
@@ -14,18 +20,49 @@ def tracer(frame, event, arg):
         class_name = frame.f_locals["self"].__class__.__name__
     except:
         pass
-    print(f"[e:{event} f:{filename}]: {func_name}(), line {line_number}, class: {class_name}")
-    if (filename == "<exec>" and "__init__" not in func_name and frame.f_lineno-1 <= userCodeLength-1):
-        js.sendLine(frame.f_lineno-1)
-        print(f"ASSUMED LINE: {frame.f_lineno-1}")
-        sleep(0.05)
-    return tracer
+    #print(f"[e:{event} f:{filename}]: {func_name}(), line {line_number}, class: {class_name}, codelen: {userCodeLength}")
+    if ("<exec>" in filename and frame.f_lineno-1 <= userCodeLength and frame.f_lineno-1 > 0):
+        # DIRTY HACK, otherwise raises error in pyodide about js not being defined
+        try:
+            js.sendLine(frame.f_lineno-1)
+            # Without sleep() the highlight wouldn't appear 
+            # since it will be immediatly changed
+            # Should be changed since this is really bad for performance
+            # and just bad in general
+            sleep(0.05)
+            pass
+        except Exception as e:
+            pass
+        #print(f"ASSUMED LINE: {frame.f_lineno-1}")
+    # DIRTY HACK, otherwise raises error in pyodide about tracer not being defined
+    try:
+        return tracer
+    except Exception as e:
+        pass
 
 settrace(tracer)
 
+def check_while_usage(source_code):
+    tree = ast.parse(source_code)
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.While):
+            return True
+
+    return False
+
+
+def check_for_usage(source_code):
+    tree = ast.parse(source_code)
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.For):
+            return True
+
+    return False
+
 def mock_input(prompt=""):
     return 0
-
 
 class Pelaaja:
     def __init__(self, name="pupu"):
@@ -76,7 +113,3 @@ class Pelaaja:
     def poista(self, x, y):
         js.removeObject(x, y)
         return
-    
-    def rivi(self, line: int):
-        #js.sendLine(line)
-        pass

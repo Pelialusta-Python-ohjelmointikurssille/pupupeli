@@ -192,7 +192,7 @@ async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
     let codeStringTest;
     codeStringTest = removeInputs(codeString);
-    //codeStringTest = indentString(codeStringTest);
+    codeStringTest = indentString(codeStringTest);
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
     console.log("Started running code...");
@@ -203,7 +203,7 @@ async function runPythonCode(pyodide, codeString) {
     console.log("LENGTH AAA:", codeString.split(/\r\n|\r|\n/).length)
     try {
         await self.continuePythonExecution;
-        //await checkClearedConditions(codeString);
+        await checkClearedConditions(codeString);
 
         try {
             // reset pyodide state to where we saved it earlier after all commands are done
@@ -224,11 +224,11 @@ async function runPythonCode(pyodide, codeString) {
 
 async function checkClearedConditions(codeString) {
     let clearedConditions = [];
-    //clearedConditions.push({ condition: "conditionUsedWhile", parameter: await pyodide.runPythonAsync(`check_while_usage("""${codeString}""")`) });
-    //clearedConditions.push({ condition: "conditionUsedFor", parameter: await pyodide.runPythonAsync(`check_for_usage("""${codeString}""")`) });
-    //clearedConditions.push({ condition: "conditionMaxLines", parameter: codeString.split("\n").filter(line => line.trim() !== "").length });
-    //clearedConditions.push({ condition: "conditionUsedInput", parameter: hasUsedInput });
-    //clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
+    clearedConditions.push({ condition: "conditionUsedWhile", parameter: await pyodide.runPythonAsync(`check_while_usage("""${codeString}""")`) });
+    clearedConditions.push({ condition: "conditionUsedFor", parameter: await pyodide.runPythonAsync(`check_for_usage("""${codeString}""")`) });
+    clearedConditions.push({ condition: "conditionMaxLines", parameter: codeString.split("\n").filter(line => line.trim() !== "").length });
+    clearedConditions.push({ condition: "conditionUsedInput", parameter: hasUsedInput });
+    clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
     self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
 }
 
