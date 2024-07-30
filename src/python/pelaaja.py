@@ -30,7 +30,6 @@ def tracer(frame, event, arg):
             # Should be changed since this is really bad for performance
             # and just bad in general
             sleep(0.05)
-            pass
         except Exception as e:
             pass
         #print(f"ASSUMED LINE: {frame.f_lineno-1}")
