@@ -7,7 +7,7 @@ import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, resetAndInitContent, setTheme } from "../game/game_controller.js";
 import { conditionsNotCleared } from "../clear_conditions.js";
-import { createChapterButtons, createInstructionPage } from "./ui_buttons.js";
+import { createChapterButtons } from "./ui_buttons.js";
 import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";
@@ -21,11 +21,10 @@ let currentTask = globals.identifiers.taskIdentifier;
  */
 async function main() {
     initPage(); // creates task json global variable
-    if (globals.task.getTaskType() != instructionsStr) {
-        initWorker();
-        initializeEditorButtons();
-        await initGameAndCanvas();
-    }
+    initWorker();
+    initializeEditorButtons();
+    await initGameAndCanvas();
+    loadNextTaskInfo();
 
     // Move somewhere that makes more sense. Disables scrolling on top of game window.
     document.getElementById("game-container").addEventListener("wheel", (event) => { event.preventDefault() });
@@ -49,11 +48,7 @@ async function initGameAndCanvas() {
 async function initPage() {
     updateLoginUI(); //currently also creates task and chapter buttons
     // checking if current task type is instructions
-    if (globals.task.getTaskType() != instructionsStr) {
-        createGamePage();
-    } else {
-        createInstructionPage();
-    }
+    createGamePage();
 }
 
 /**
@@ -375,6 +370,7 @@ function loadIstructionTask(appDiv, insAppDiv) {
     insAppDiv.appendChild(insDiv);
     insDiv.appendChild(insHead);
     insDiv.appendChild(insDesc);
+    onTaskComplete(true);
 }
 
 

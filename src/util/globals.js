@@ -18,6 +18,7 @@ export const identifiers = (function() {
         updateCurrentTaskButton();
         task = Task.fromJSON(allTasks[identifiers.chapterIdentifier - 1][identifiers.taskIdentifier - 1]);
         loadNextTaskInfo();
+        updateURL();
     };
 
     const chapterListener = async (newValue) => {
@@ -26,6 +27,30 @@ export const identifiers = (function() {
         totalCounts.totalTasks = allTasks[newValue - 1].length;
         createTaskButtons();
     };
+
+    const updateURL = () => {
+        const url = new URL(window.location);
+        url.searchParams.set('chapter', _chapterIdentifier);
+        url.searchParams.set('task', _taskIdentifier);
+        history.replaceState(null, '', url);
+    };
+
+    const initializeFromURL = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const chapter = parseInt(urlParams.get('chapter'), 10);
+        const task = parseInt(urlParams.get('task'), 10);
+
+        if (!isNaN(chapter) && chapter > 0 && chapter <= allTasks.length) {
+            _chapterIdentifier = chapter;
+        }
+
+        if (!isNaN(task) && task > 0 && task <= allTasks[_chapterIdentifier - 1].length) {
+            _taskIdentifier = task;
+        }
+    };
+
+    // Initialize identifiers from URL on page load
+    initializeFromURL();
 
     return {
         get taskIdentifier() {
