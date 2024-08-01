@@ -15,8 +15,6 @@ export function createInstructionPage() {
     let insAppDiv = document.createElement('div');
     insAppDiv.id = 'instructions-container';
     insAppDiv.classList.add("box");
-    insAppDiv.style.flexDirection = "row";
-    insAppDiv.style.display = "flex";
     window.addEventListener('load', function () {
         createTaskButtons("instructions"); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
     });
