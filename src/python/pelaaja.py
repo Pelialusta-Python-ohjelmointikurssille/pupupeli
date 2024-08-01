@@ -11,16 +11,9 @@ def tracer(frame, event, arg):
         userCodeLength = js.getSourceLineCount()
     except Exception as e:
         pass
-    class_name = None
     code = frame.f_code
-    func_name = code.co_qualname
     line_number = frame.f_lineno
     filename = code.co_filename
-    try:
-        class_name = frame.f_locals["self"].__class__.__name__
-    except:
-        pass
-    #print(f"[e:{event} f:{filename}]: {func_name}(), line {line_number}, class: {class_name}, codelen: {userCodeLength}")
     if ("<exec>" in filename and line_number-1 <= userCodeLength and line_number-1 > 0):
         # DIRTY HACK, otherwise raises error in pyodide about js not being defined
         try:
@@ -32,7 +25,6 @@ def tracer(frame, event, arg):
             sleep(0.05)
         except Exception as e:
             pass
-        #print(f"ASSUMED LINE: {frame.f_lineno-1}")
     # DIRTY HACK, otherwise raises error in pyodide about tracer not being defined
     try:
         return tracer
@@ -49,7 +41,6 @@ def check_while_usage(source_code):
             return True
 
     return False
-
 
 def check_for_usage(source_code):
     tree = ast.parse(source_code)
