@@ -3,6 +3,7 @@ import { setCurrentLine } from "./py_error_handling.js";
 
 let editor;
 let currentLineMarker; //the line that is currently executing
+let errorLineMarker
 
 const aceEditorScript = document.createElement('script');
 aceEditorScript.src = `https://cdnjs.cloudflare.com/ajax/libs/ace/${ace_version}/ace.js`;
@@ -62,4 +63,12 @@ export function highlightCurrentLine(lineNumber) {
 export function resetLineHighlight() {
     setCurrentLine(null);
     editor.session.removeMarker(currentLineMarker);
+    editor.session.removeMarker(errorLineMarker);
+}
+
+export function setErrorLine(lineNumber) {
+    if (errorLineMarker !== undefined && errorLineMarker !== null) {
+        editor.session.removeMarker(errorLineMarker);
+    }
+    errorLineMarker = editor.session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "error-line", "fullLine");
 }
