@@ -198,9 +198,9 @@ async function runPythonCode(pyodide, codeString) {
     console.log("Started running code...");
     let asyncCode = codeStringLined;
     self.continuePythonExecution = pyodide.runPythonAsync(asyncCode);
-    console.log(asyncCode + "\n" + pythonFileStr);
+    //console.log(asyncCode + "\n" + pythonFileStr);
     userCodeLength = codeString.split(/\r\n|\r|\n/).length;
-    console.log("LENGTH AAA:", codeString.split(/\r\n|\r|\n/).length)
+    //console.log("LENGTH AAA:", codeString.split(/\r\n|\r|\n/).length)
     try {
         await self.continuePythonExecution;
         await checkClearedConditions(codeString);
