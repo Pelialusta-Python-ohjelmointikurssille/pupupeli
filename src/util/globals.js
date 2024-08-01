@@ -47,9 +47,10 @@ export const identifiers = (function() {
         } else {
             chapterValid = false;
             _chapterIdentifier = 1;
+            _taskIdentifier = 1;
         }
     
-        if (!isNaN(task) && task > 0 && task <= allTasks[_chapterIdentifier - 1].length) {
+        if (!isNaN(task) && task > 0 && task <= allTasks[_chapterIdentifier - 1].length && chapterValid) {
             _taskIdentifier = task;
         } else {
             taskValid = false;
