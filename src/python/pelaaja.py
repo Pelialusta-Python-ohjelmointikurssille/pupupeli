@@ -21,10 +21,10 @@ def tracer(frame, event, arg):
     except:
         pass
     #print(f"[e:{event} f:{filename}]: {func_name}(), line {line_number}, class: {class_name}, codelen: {userCodeLength}")
-    if ("<exec>" in filename and frame.f_lineno-1 <= userCodeLength and frame.f_lineno-1 > 0):
+    if ("<exec>" in filename and line_number-1 <= userCodeLength and line_number-1 > 0):
         # DIRTY HACK, otherwise raises error in pyodide about js not being defined
         try:
-            js.sendLine(frame.f_lineno-1)
+            js.sendLine(line_number-1)
             # Without sleep() the highlight wouldn't appear 
             # since it will be immediatly changed
             # Should be changed since this is really bad for performance

@@ -39,7 +39,9 @@ function decrementStringNumber(lastLineReference) {
     if (lastLineReference) {
         const numberValue = Number(lastLineReference);
         if (!isNaN(numberValue)) {
-            return String(numberValue - 2);
+            // Changed form -2 to -1 since 
+            // python line detection changed
+            return String(numberValue - 1);
         }
     }
     return lastLineReference;
