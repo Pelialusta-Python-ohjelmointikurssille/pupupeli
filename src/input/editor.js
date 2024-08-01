@@ -70,5 +70,6 @@ export function setErrorLine(lineNumber) {
     if (errorLineMarker !== undefined && errorLineMarker !== null) {
         editor.session.removeMarker(errorLineMarker);
     }
+    // eslint-disable-next-line no-undef
     errorLineMarker = editor.session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "error-line", "fullLine");
 }

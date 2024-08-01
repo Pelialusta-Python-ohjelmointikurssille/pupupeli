@@ -1,7 +1,7 @@
 import * as globals from "../util/globals.js";
 import * as api from "../api/api.js";
 import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
-import { getEditor, setErrorLine, resetLineHighlight } from "../input/editor.js"
+import { getEditor, setErrorLine } from "../input/editor.js"
 import { initWorker } from "../worker_messenger.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";

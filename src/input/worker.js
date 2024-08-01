@@ -4,7 +4,7 @@ let pythonFileStr;
 let continuePythonExecution;
 let saveState;
 let resetFlag = false;
-let codeString;
+//let codeString;
 let interruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
 let theme;
 let hasUsedInput = false;
@@ -144,13 +144,9 @@ function sendLine(line) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 function getSourceLineCount() {
     return userCodeLength;
-}
-
-// Help function for printing from python to js console
-function printPython(output) {
-    console.log(output)
 }
 
 /**
@@ -190,11 +186,12 @@ function removeObject(x, y) {
  */
 async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
-    let codeStringTest;
-    codeStringTest = removeInputs(codeString);
-    codeStringTest = indentString(codeStringTest);
+    //let codeStringTest;
+    //codeStringTest = removeInputs(codeString);
+    //codeStringTest = indentString(codeStringTest);
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
+    //codeStringLined = removeInputs(codeStringLined);
     console.log("Started running code...");
     let asyncCode = codeStringLined;
     self.continuePythonExecution = pyodide.runPythonAsync(asyncCode);
@@ -232,6 +229,7 @@ async function checkClearedConditions(codeString) {
     self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
 }
 
+/*
 function removeInputs(codeString) {
     return codeString.replace(/input\(/g, 'mock_input(');
 }
@@ -242,12 +240,13 @@ function indentString(str, indent = '    ') {  // Default indentation is 4 space
     codeString = `${theme} = ErrorCheck()\ndef test_string():\n` + codeString;
     return codeString;
 }
+*/
 
 function addLineNumberOutputs(codeString) {
     if (codeString === undefined) return;
     let lines = codeString.split('\n');
-    lines = lines.map((line, index) => {
-        const indentation = line.match(/^\s*/)[0];
+    lines = lines.map((line) => {
+        //const indentation = line.match(/^\s*/)[0];
         const trimmedLine = line.trim();
 
         // Check if the line starts with 'else:' or 'elif:' or 'except' or 'finally'
