@@ -79,16 +79,16 @@ class Pelaaja:
             raise ValueError("Virheellinen suunta")
 
     def sano(self, sentence: str):
-        #        if reset_flag:
-        #            raise Exception("Interpreter was reset")
+        if reset_flag:
+            raise Exception("Interpreter was reset")
         js.runCommand("say", sentence)
 
     def puhu(self, sentence: str):
         self.sano(sentence)
 
     def kysy(self, question: str = "?"):
-        #        if reset_flag:
-        #            raise Exception("Interpreter was reset")
+        if reset_flag:
+            raise Exception("Interpreter was reset")
         js.runCommand("ask", question)
         return input()
 
