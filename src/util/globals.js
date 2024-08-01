@@ -1,5 +1,5 @@
 import { fetchAllTasks } from "../file_reader.js";
-import { loadNextTaskInfo } from "../ui/ui.js";
+import { loadNextTaskInfo, showPopUpNotification } from "../ui/ui.js";
 import { Task } from "../util/task.js";
 import { createTaskButtons, updateCurrentChapterButton, updateCurrentTaskButton } from "../ui/ui_buttons.js";
 
@@ -39,13 +39,26 @@ export const identifiers = (function() {
         const urlParams = new URLSearchParams(window.location.search);
         const chapter = parseInt(urlParams.get('chapter'), 10);
         const task = parseInt(urlParams.get('task'), 10);
-
+        let chapterValid = true;
+        let taskValid = true;
+    
         if (!isNaN(chapter) && chapter > 0 && chapter <= allTasks.length) {
             _chapterIdentifier = chapter;
+        } else {
+            chapterValid = false;
+            _chapterIdentifier = 1;
         }
-
+    
         if (!isNaN(task) && task > 0 && task <= allTasks[_chapterIdentifier - 1].length) {
             _taskIdentifier = task;
+        } else {
+            taskValid = false;
+            _taskIdentifier = 1;
+        }
+    
+        if (!chapterValid || !taskValid) {
+            showPopUpNotification("task-not-found")
+            updateURL();
         }
     };
 

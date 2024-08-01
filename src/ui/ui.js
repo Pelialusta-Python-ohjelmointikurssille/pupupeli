@@ -282,7 +282,11 @@ export function showPopUpNotification(elementId) {
             element.classList.remove("pop-up-notification-show-login");
         }, 6000);
         element.classList.add("pop-up-notification-show-login");
-
+    } else if (elementId === "task-not-found"){
+        setTimeout(() => {
+            element.classList.remove("pop-up-notification-show");
+        }, 6000);
+        element.classList.add("pop-up-notification-show");
     } else {
         element.classList.add("pop-up-notification-show");
     }

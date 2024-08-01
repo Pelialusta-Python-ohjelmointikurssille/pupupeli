@@ -410,7 +410,7 @@ button:hover {
     padding: 0;
 }
 
-#login-failed, #condition-failed {
+#login-failed, #condition-failed, #task-not-found {
     display: none;
     position: absolute;
     top: calc(6rem - 1px);
