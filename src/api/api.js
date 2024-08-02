@@ -1,6 +1,7 @@
 import * as globals from "../util/globals.js";
 import { getEditor } from "../input/editor.js";
 import { translateToCommon } from "../util/theme_translator.js";
+import { displayWarningMessage } from "../ui/ui.js";
 
 const url = 'http://localhost:3000/api/';
 
@@ -85,7 +86,11 @@ export async function logout() {
 export async function sendTask() {
     const token = localStorage.getItem("token");
     const task =  "chapter" + globals.identifiers.chapterIdentifier + "task" + globals.identifiers.taskIdentifier;
-    const editorData = translateToCommon(getEditor().getValue());
+    let editorData = translateToCommon(getEditor().getValue());
+    if (editorData.length > 10000) {
+        displayWarningMessage("Koodisi on pidempi kuin 10000 merkkiä, joten se ei tallennu.");
+        editorData = "";
+    }
     const result = globals.isGameWon;
     const params = {
         token: token,

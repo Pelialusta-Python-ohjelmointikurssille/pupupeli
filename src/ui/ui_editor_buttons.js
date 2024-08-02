@@ -6,7 +6,7 @@ import { resetAndInitContent, toggleGrid, toggleTrail, setTheme } from "../game/
 import { resetInputHistory } from "./inputBox.js";
 import { isWaitingForInput, resetInputWaiting } from "../game/game_input_controller.js";
 import { setCurrentTheme } from "../util/globals.js";
-import { setDescription, setEditorCode } from "./ui.js";
+import { setDescription, setEditorCode, toggleErrorVisibility } from "./ui.js";
 import { sendTask } from "../api/api.js";
 
 let _buttonsState;
@@ -95,9 +95,14 @@ function resetCelebrationBox() {
 
 function resetErrorText() {
     if (document.getElementById("error").innerHTML !== "") {
-        let errorContainer = document.getElementById("error-box");
-        errorContainer.classList.toggle("show-error");
-        errorContainer.children[0].textContent = "";
+        toggleErrorVisibility(false)
+        let errorContainer = document.getElementById("error")
+        errorContainer.textContent = "";
+    }
+    if (document.getElementById("warning").innerHTML !== "") {
+        toggleErrorVisibility(false)
+        let warningContainer = document.getElementById("warning")
+        warningContainer.textContent = "";
     }
 }
 
