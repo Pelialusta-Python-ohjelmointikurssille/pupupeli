@@ -15,22 +15,38 @@ const gridObjectManifest = {
     4: Constants.QUESTION_COLLECTIBLE
 }
 
+const defaultTaskValues = {
+    playerStartPosition: { x: 0, y: 0 },
+    gridWidth: 1,
+    gridHeight: 1,
+    gridIntTable: 
+    [
+        [0]
+    ]
+}
+
 /**
  * 
  * @returns Returns a newly initialized grid for the current task.
  */
 export function getGameTask() {
-    const task = globals.task;
-    const playerStartPosition = task.getPlayerStartPosition();
-    const gridWidth = task.getGridDimensions().width;
-    const gridHeight = task.getGridDimensions().height;
-    let gridIntTable = globals.task.getGrid();
+    let task = globals.task;
+    
+    let gridIntTable = task.getGrid() ?? defaultTaskValues.gridIntTable;
+    if (gridIntTable[0] === undefined || gridIntTable[0].length === 0) gridIntTable = defaultTaskValues.gridIntTable;
+    
+    let gridWidth = task.getGridDimensions().width ?? defaultTaskValues.gridWidth;
+    if (gridWidth <= 0) gridWidth = defaultTaskValues.gridWidth;
+    let gridHeight = task.getGridDimensions().height ?? defaultTaskValues.gridHeight;
+    if (gridHeight <= 0) gridHeight = defaultTaskValues.gridHeight;
+    
+    let playerStartPosition = task.getPlayerStartPosition() ?? defaultTaskValues.playerStartPosition;
+    
     let newGrid = getNewGrid(gridWidth, gridHeight, playerStartPosition.y, playerStartPosition.x);
-
     buildGrid(gridIntTable, newGrid, gridWidth, gridHeight);
     //Send the grid and the gamemode
     return newGrid;
-};
+};  
 
 /**
  * Creates a new initialized grid with player.
