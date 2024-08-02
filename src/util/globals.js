@@ -29,7 +29,7 @@ export const identifiers = (function() {
     };
 
     const updateURL = () => {
-        const url = new URL(window.location);
+        const url = new URL(window.location.origin);
         url.searchParams.set('chapter', _chapterIdentifier);
         url.searchParams.set('task', _taskIdentifier);
         history.replaceState(null, '', url);
@@ -41,6 +41,14 @@ export const identifiers = (function() {
         const task = parseInt(urlParams.get('task'), 10);
         let chapterValid = true;
         let taskValid = true;
+
+        if (!urlParams.has('chapter') && !urlParams.has('task')) {
+            // No parameters given, default to chapter 1 and task 1
+            _chapterIdentifier = 1;
+            _taskIdentifier = 1;
+            updateURL();
+            return;
+        }
     
         if (!isNaN(chapter) && chapter > 0 && chapter <= allTasks.length) {
             _chapterIdentifier = chapter;
