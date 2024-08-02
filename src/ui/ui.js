@@ -7,7 +7,7 @@ import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, resetAndInitContent, setTheme } from "../game/game_controller.js";
 import { conditionsNotCleared } from "../clear_conditions.js";
-import { createChapterButtons, createInstructionPage } from "./ui_buttons.js";
+import { createChapterButtons } from "./ui_buttons.js";
 import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";
@@ -21,11 +21,10 @@ let currentTask = globals.identifiers.taskIdentifier;
  */
 async function main() {
     initPage(); // creates task json global variable
-    if (globals.task.getTaskType() != instructionsStr) {
-        initWorker();
-        initializeEditorButtons();
-        await initGameAndCanvas();
-    }
+    initWorker();
+    initializeEditorButtons();
+    await initGameAndCanvas();
+    loadNextTaskInfo();
 
     // Move somewhere that makes more sense. Disables scrolling on top of game window.
     document.getElementById("game-container").addEventListener("wheel", (event) => { event.preventDefault() });
@@ -49,11 +48,7 @@ async function initGameAndCanvas() {
 async function initPage() {
     updateLoginUI(); //currently also creates task and chapter buttons
     // checking if current task type is instructions
-    if (globals.task.getTaskType() != instructionsStr) {
-        createGamePage();
-    } else {
-        createInstructionPage();
-    }
+    createGamePage();
 }
 
 /**
@@ -287,7 +282,11 @@ export function showPopUpNotification(elementId) {
             element.classList.remove("pop-up-notification-show-login");
         }, 6000);
         element.classList.add("pop-up-notification-show-login");
-
+    } else if (elementId === "task-not-found"){
+        setTimeout(() => {
+            element.classList.remove("pop-up-notification-show");
+        }, 6000);
+        element.classList.add("pop-up-notification-show");
     } else {
         element.classList.add("pop-up-notification-show");
     }
@@ -301,10 +300,26 @@ export function displayErrorMessage(error) {
     if (typeof error === "string") { console.log(error) } else { console.log(error.message) }
     let errorDetails = extractErrorDetails(error.message);
     if (errorDetails.text === "KeyboardInterrupt") return; // intended error; do not display to user
-    let errorContainer = document.getElementById("error-box");
-    errorContainer.classList.toggle("show-error");
-    errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
+    let errorContainer = document.getElementById("error");
+    toggleErrorVisibility(true)
+    errorContainer.textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
     disablePlayButton("error");
+}
+
+export function displayWarningMessage(message) {
+    console.warn(message);
+    let errorContainer = document.getElementById("warning");
+    toggleErrorVisibility(true)
+    errorContainer.textContent = message;
+}
+
+export function toggleErrorVisibility(toggle) {
+    let errorDiv = document.getElementById("error-box");
+    if (toggle) {
+        errorDiv.classList.add("show-error");
+    } else {
+        errorDiv.classList.remove("show-error");
+    }
 }
 
 export function loadNextTaskInfo() {
@@ -375,6 +390,7 @@ function loadIstructionTask(appDiv, insAppDiv) {
     insAppDiv.appendChild(insDiv);
     insDiv.appendChild(insHead);
     insDiv.appendChild(insDesc);
+    onTaskComplete(true);
 }
 
 

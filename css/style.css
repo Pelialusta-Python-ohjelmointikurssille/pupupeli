@@ -375,6 +375,14 @@ button:hover {
     word-wrap: break-word;
     color: red;
     text-align: center;
+    padding: 0.1rem;
+}
+
+#warning {
+    word-wrap: break-word;
+    color: rgb(0, 0, 255);
+    text-align: center;
+    padding: 0.1rem;
 }
 
 #grid-toggle-button, #theme-select, #login-button, #trail-toggle-button {
@@ -418,7 +426,7 @@ button:hover {
     padding: 0;
 }
 
-#login-failed, #condition-failed {
+#login-failed, #condition-failed, #task-not-found {
     display: none;
     position: absolute;
     top: calc(6rem - 1px);
