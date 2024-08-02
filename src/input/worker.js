@@ -213,6 +213,7 @@ async function checkClearedConditions(codeString) {
     clearedConditions.push({ condition: "conditionUsedFor", parameter: await pyodide.runPythonAsync(`check_for_usage("""${codeString}""")`) });
     clearedConditions.push({ condition: "conditionMaxLines", parameter: codeString.split("\n").filter(line => line.trim() !== "").length });
     clearedConditions.push({ condition: "conditionUsedInput", parameter: hasUsedInput });
+    clearedConditions.push({ condition: "conditionIdenticalCode", parameter: codeString });
     clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
     self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
 }

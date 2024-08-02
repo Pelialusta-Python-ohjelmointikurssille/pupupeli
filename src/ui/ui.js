@@ -206,6 +206,9 @@ export function onTaskComplete(isWon) {
                 case "conditionMaxLines":
                     errorMessage += "\n<li>vastauksessasi oli liian monta riviä</li>"
                     break;
+                case "conditionIdenticalCode":
+                    errorMessage += "\n<li>korjattu koodi ei vastannut odotettua koodia</li>"
+                    break;
             }
         })
         errorMessage += "</ol></h2>";
