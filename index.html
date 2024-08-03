@@ -17,6 +17,28 @@
             Läpäisit tehtävän, onneksi olkoon!
         </div>
     </div>
+    <div id="settings-container">
+        <div id="settings-window" class="is-hidden">
+            <div id="settings-box" class="box">
+                <div id="settings-header">
+                    <h1>Asetukset</h1>
+                </div>
+                <div id="settings-content">
+                    <div id="settings-top">
+                        Yläasetukset
+                    </div>
+                    <div id="settings-bottom">
+                        <div id="task-progress">
+                        <p>Kirjaudu sisään nähdäksesi edistyminen</p>
+                        </div>
+                        <div id="close-settings">
+                            <button id="settings-close-button" type="button">Sulje</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="header" class="is-flex">
         <div id="header-container" class="box is-flex">
             <h1>Pupupeli</h1>
@@ -35,6 +57,7 @@
                     <button id="login-button" value="login">Kirjaudu sisään</button>
                 </form>
                 <button id="logout-button" class="is-hidden" value="logout">Kirjaudu ulos</button>
+                <button id="settings-button" value="settings">Asetukset</button>
                 <div id="login-failed" class="box">
                     <h1>Voi ei! Käyttäjää ei ole olemassa tai salasana on väärin!</h1>
                 </div>
