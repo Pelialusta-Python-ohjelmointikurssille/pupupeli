@@ -20,6 +20,7 @@ export class Game {
         this.canDoNextMove = true;
         this.isGridEnabled = true;
         this.tempObjectIds = [];
+        this.gameSpeedModifier = 1;
     }
 
     /**
@@ -86,7 +87,7 @@ export class Game {
         let dir = translatePythonMoveStringToDirection(commandParameter);
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh, this);
         //(possibility) we can save moveCommand for later when/if we want to add undo functionality
-        moveCommand.execute();
+        moveCommand.execute(this.gameSpeedModifier);
     }
 
     /**
@@ -95,7 +96,7 @@ export class Game {
      */
     makeSayCommand(commandParameter) {
         let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
-        sayCommand.execute();
+        sayCommand.execute(this.gameSpeedModifier);
     }
 
     /**
@@ -104,10 +105,10 @@ export class Game {
      */
     makeAskCommand(commandParameter) {
         let askCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
-        askCommand.execute();
+        askCommand.execute(this.gameSpeedModifier);
         this.onAnimsReady();
     }
-
+    
     /**
      * Restores the gamestate back to the beginning of the task.
      */
@@ -218,5 +219,9 @@ export class Game {
         }
         this.gh.doAction(gridObject.id, AnimationNames.APPEAR_HIDE, { time: 0.5 });
         this.grid.removeFromGrid(gridObject);
+    }
+
+    setSpeedModifier(speed) {
+        this.gameSpeedModifier = speed;
     }
 }

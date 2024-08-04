@@ -2,7 +2,7 @@ import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
 import { getEditor, resetLineHighlight } from "../input/editor.js";
-import { resetAndInitContent, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
+import { resetAndInitContent, toggleGrid, toggleTrail, setTheme, setTurboSpeedActive } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 import { isWaitingForInput, resetInputWaiting } from "../game/game_input_controller.js";
 import { setCurrentTheme } from "../util/globals.js";
@@ -55,12 +55,13 @@ function addEventToButton(id, func) {
 }
 
 function toggleTurbo() {
-    if (isTurboActive) {
-        turboButton.style.backgroundColor = "white";
-    } else {
-        turboButton.style.backgroundColor = "yellow";
-    }
     isTurboActive = !isTurboActive;
+    if (isTurboActive) {
+        turboButton.style.backgroundColor = "yellow";
+    } else {
+        turboButton.style.backgroundColor = "white";
+    }
+    setTurboSpeedActive(isTurboActive);
 }
 
 /**

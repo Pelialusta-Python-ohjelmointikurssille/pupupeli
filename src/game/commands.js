@@ -30,15 +30,17 @@ export class MoveCommand {
         this.moveStartPos = this.gridObject.getVector2Position();
         this.moveSpeed = 0.4;
         this.objectHideSpeed = 0.6;
+        this.moveSpeedModifier = 1;
     }
 
     /**
      * Executes the MoveCommand using the variables given in the constructor.
      */
-    execute() {
+    execute(speedModifier) {
+        this.moveSpeedModifier = speedModifier;
         let isSuccess = this.grid.moveGridObjectToDir(this.gridObject, this.dir);
         if (isSuccess) this.reactToObjects();
-        let dirObj = { direction: this.dir, time: this.moveSpeed };
+        let dirObj = { direction: this.dir, time: this.moveSpeed * speedModifier};
         if (isSuccess) {
             this.graphicsHandler.doAction(this.gridObject.id, AnimationNames.PAWN_MOVE, dirObj);
         } else {
@@ -68,7 +70,7 @@ export class MoveCommand {
      * @param {*} collectibleGO 
      */
     reactToCollectibles(collectibleGO) {
-        this.graphicsHandler.doAction(collectibleGO.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
+        this.graphicsHandler.doAction(collectibleGO.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed * this.moveSpeedModifier });
         this.grid.removeFromGrid(collectibleGO);
     }
 
@@ -77,7 +79,7 @@ export class MoveCommand {
      * @param {*} go 
      */
     reactToQuestionCollectible(go) {
-        this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed });
+        this.graphicsHandler.doAction(go.id, AnimationNames.PAWN_HIDE, { time: this.objectHideSpeed * this.moveSpeedModifier });
         this.grid.removeFromGrid(go);
 
         requestInputFromGame();
@@ -111,7 +113,7 @@ export class SayCommand {
         this.sayString = sayString;
     }
 
-    execute() {
+    execute(speedModifier) {
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = getRandomUUID();
         this.graphicsHandler.createEntity(
@@ -123,7 +125,7 @@ export class SayCommand {
             },
             SKIN_BUNDLES["speech_bubble"]
         );
-        this.graphicsHandler.doAction(textboxId, AnimationNames.APPEAR_HIDE, { time: 2 });
+        this.graphicsHandler.doAction(textboxId, AnimationNames.APPEAR_HIDE, { time: 2 * speedModifier });
     }
 }
 
@@ -138,7 +140,7 @@ export class AskCommand {
         this.askString = askString;
     }
 
-    execute() {
+    execute(speedModifier) {
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = getRandomUUID();
         this.graphicsHandler.createEntity(

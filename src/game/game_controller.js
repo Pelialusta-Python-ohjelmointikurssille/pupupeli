@@ -8,6 +8,8 @@ import { getVariableTrueName } from './commonstrings.js';
 
 var game;
 var currentCommand;
+const gameDefaultSpeed = 1;
+const gameTurboSpeed = 0.2;
 
 /**
  * Initializes the game. It loads the current level using the instuctions from current task and initializes the rendering.
@@ -111,4 +113,12 @@ export function destroyObject(commandParameters) {
     let x = commandParameters[0];
     let y = commandParameters[1];
     game.destroyObject(x, y);
+}
+
+export function setTurboSpeedActive(isBool) {
+    if (!isBool) {
+        game.setSpeedModifier(gameDefaultSpeed); //Default speed
+        return;
+    }
+    game.setSpeedModifier(gameTurboSpeed);
 }
