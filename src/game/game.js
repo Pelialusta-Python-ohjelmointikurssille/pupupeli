@@ -105,7 +105,7 @@ export class Game {
      */
     makeAskCommand(commandParameter) {
         let askCommand = new AskCommand(this.grid.player, this.gh, commandParameter);
-        askCommand.execute(this.gameSpeedModifier);
+        askCommand.execute();
         this.onAnimsReady();
     }
     
