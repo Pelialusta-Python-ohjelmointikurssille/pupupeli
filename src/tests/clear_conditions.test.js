@@ -24,7 +24,7 @@ jest.mock('../util/globals.js', () => ({
 
 import { task, getMultipleChoiceCorrect } from "../util/globals.js";
 
-import { allConditionsCleared } from '../clear_conditions.js';
+import { isAllConditionsCleared } from '../clear_conditions.js';
 
 describe('allConditionsCleared tests', () => {
     beforeEach(() => {
@@ -57,7 +57,7 @@ describe('allConditionsCleared tests', () => {
       task.getMultipleChoiceQuestions.mockReturnValue(["a","b","c"]); // Simulate at least one multiple choice question
       global.getMultipleChoiceCorrect.mockReturnValue(false); // Simulate incorrect answer
   
-      const result = allConditionsCleared();
+      const result = isAllConditionsCleared();
       console.log(result);
       expect(result).toBe(false);
     });
@@ -69,7 +69,7 @@ describe('allConditionsCleared tests', () => {
       global.collectibles.current = 9; // Not all collectibles collected
       global.collectibles.total = 10;
   
-      const result = allConditionsCleared();
+      const result = isAllConditionsCleared();
       expect(result).toBe(false);
       // Since multiple choice question is incorrect, conditionsNotCleared should not include collectibles condition
       expect(global.conditionsNotCleared).not.toContain("conditionCollectAllCollectibles");
@@ -81,7 +81,7 @@ describe('allConditionsCleared tests', () => {
       global.collectibles.current = 10; // All collectibles are collected
       global.collectibles.total = 10;
   
-      const result = allConditionsCleared();
+      const result = isAllConditionsCleared();
       expect(result).toBe(true);
     });
   });
