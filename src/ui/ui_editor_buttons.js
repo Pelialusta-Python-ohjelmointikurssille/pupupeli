@@ -33,6 +33,7 @@ export function initializeEditorButtons() {
     addEventToButton("editor-skip-button", onNextStepButtonClick);
     addEventToButton("grid-toggle-button", toggleGrid);
     addEventToButton("trail-toggle-button", toggleTrail);
+    addEventToButton("editor-turbo-button", toggleTurbo);
     nextStepButton = document.getElementById("editor-skip-button");
     startAndPauseButton = document.getElementById("editor-run-pause-button");
     celebrationBox = document.getElementById("celebration");
@@ -47,6 +48,10 @@ export function initializeEditorButtons() {
 function addEventToButton(id, func) {
     let buttonInput = document.getElementById(id);
     buttonInput.addEventListener("click", func, false);
+}
+
+function toggleTurbo() {
+    console.log("TURBO!!!");
 }
 
 /**
