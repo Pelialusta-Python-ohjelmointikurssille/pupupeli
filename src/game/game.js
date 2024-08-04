@@ -114,7 +114,7 @@ export class Game {
     resetAndInitContent() {
         this.gh.destroyAllEntities();
         this.grid = getGameTask();
-        this.collectibleCounter = new CollectibleCounter(this.grid);
+        this.collectibleCounter.initialize(this.grid);
         this.canDoNextMove = true;
         this.isGridEnabled = true;
         this.tempObjectIds = [];
