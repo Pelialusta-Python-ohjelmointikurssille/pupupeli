@@ -140,7 +140,7 @@ export class AskCommand {
         this.askString = askString;
     }
 
-    execute(speedModifier = 1) {
+    execute() {
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = getRandomUUID();
         this.graphicsHandler.createEntity(
