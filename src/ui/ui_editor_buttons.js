@@ -143,11 +143,13 @@ function onNextStepButtonClick() {
  * @param {*} cause 
  */
 export function disablePlayButton(cause = null) {
+    let button = document.getElementById("editor-run-pause-button");
+    let buttonNext = document.getElementById("editor-skip-button");
     let img = button.querySelector('img');
     let runButtonText = button.querySelector('#runButtonText');
     if (!img) {
         img = document.createElement('img');
-        startAndPauseButton.appendChild(img);
+        button.appendChild(img);
     }
     img.src = "src/static/resetbutton.png";
     if (cause === "error") {
@@ -156,8 +158,8 @@ export function disablePlayButton(cause = null) {
         runButtonText.textContent = 'Loppu';
     }
     _buttonsState = States.ENDED;
-    nextStepButton.disabled = true;
-    startAndPauseButton.disabled = true;
+    buttonNext.disabled = true;
+    button.disabled = true;
 }
 
 /**
