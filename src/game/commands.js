@@ -36,7 +36,7 @@ export class MoveCommand {
     /**
      * Executes the MoveCommand using the variables given in the constructor.
      */
-    execute(speedModifier) {
+    execute(speedModifier = 1) {
         this.moveSpeedModifier = speedModifier;
         let isSuccess = this.grid.moveGridObjectToDir(this.gridObject, this.dir);
         if (isSuccess) this.reactToObjects();
@@ -113,7 +113,7 @@ export class SayCommand {
         this.sayString = sayString;
     }
 
-    execute(speedModifier) {
+    execute(speedModifier = 1) {
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = getRandomUUID();
         this.graphicsHandler.createEntity(
@@ -140,7 +140,7 @@ export class AskCommand {
         this.askString = askString;
     }
 
-    execute(speedModifier) {
+    execute(speedModifier = 1) {
         this.graphicsHandler.destroyTextBoxes();
         let textboxId = getRandomUUID();
         this.graphicsHandler.createEntity(
