@@ -14,6 +14,7 @@ let startAndPauseButton;
 let nextStepButton;
 let celebrationBox;
 let themeSelectDropdown;
+let turboButton;
 
 //Button states as const strings:
 class States {
@@ -22,6 +23,7 @@ class States {
     static PAUSED = "paused";
     static ENDED = "ended";
 }
+let isTurboActive = false;
 
 /**
  * Adds events to code execution buttons (run/pause, stop, skip)
@@ -37,6 +39,7 @@ export function initializeEditorButtons() {
     nextStepButton = document.getElementById("editor-skip-button");
     startAndPauseButton = document.getElementById("editor-run-pause-button");
     celebrationBox = document.getElementById("celebration");
+    turboButton = document.getElementById("editor-turbo-button");
     initThemeSelect();
 }
 
@@ -45,13 +48,19 @@ export function initializeEditorButtons() {
      * @param {string} id 
      * @param {function} func 
      */
+//If were just gonna take a refrence of every button, this function is kind of unnecessary.
 function addEventToButton(id, func) {
     let buttonInput = document.getElementById(id);
     buttonInput.addEventListener("click", func, false);
 }
 
 function toggleTurbo() {
-    console.log("TURBO!!!");
+    if (isTurboActive) {
+        turboButton.style.backgroundColor = "white";
+    } else {
+        turboButton.style.backgroundColor = "yellow";
+    }
+    isTurboActive = !isTurboActive;
 }
 
 /**
@@ -134,13 +143,11 @@ function onNextStepButtonClick() {
  * @param {*} cause 
  */
 export function disablePlayButton(cause = null) {
-    let button = document.getElementById("editor-run-pause-button");
-    let buttonNext = document.getElementById("editor-skip-button");
     let img = button.querySelector('img');
     let runButtonText = button.querySelector('#runButtonText');
     if (!img) {
         img = document.createElement('img');
-        button.appendChild(img);
+        startAndPauseButton.appendChild(img);
     }
     img.src = "src/static/resetbutton.png";
     if (cause === "error") {
@@ -149,8 +156,8 @@ export function disablePlayButton(cause = null) {
         runButtonText.textContent = 'Loppu';
     }
     _buttonsState = States.ENDED;
-    buttonNext.disabled = true;
-    button.disabled = true;
+    nextStepButton.disabled = true;
+    startAndPauseButton.disabled = true;
 }
 
 /**
