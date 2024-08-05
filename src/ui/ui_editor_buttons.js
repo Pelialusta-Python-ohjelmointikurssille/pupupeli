@@ -2,7 +2,7 @@ import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
 import { getEditor, resetLineHighlight } from "../input/editor.js";
-import { resetAndInitContent, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
+import { resetAndInitContent, toggleGrid, toggleTrail, setTheme, setTurboSpeedActive } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 import { isWaitingForInput, resetInputWaiting } from "../game/game_input_controller.js";
 import { setCurrentTheme } from "../util/globals.js";
@@ -14,6 +14,7 @@ let startAndPauseButton;
 let nextStepButton;
 let celebrationBox;
 let themeSelectDropdown;
+let turboButton;
 
 //Button states as const strings:
 class States {
@@ -22,6 +23,7 @@ class States {
     static PAUSED = "paused";
     static ENDED = "ended";
 }
+let isTurboActive = false;
 
 /**
  * Adds events to code execution buttons (run/pause, stop, skip)
@@ -33,9 +35,11 @@ export function initializeEditorButtons() {
     addEventToButton("editor-skip-button", onNextStepButtonClick);
     addEventToButton("grid-toggle-button", toggleGrid);
     addEventToButton("trail-toggle-button", toggleTrail);
+    addEventToButton("editor-turbo-button", toggleTurbo);
     nextStepButton = document.getElementById("editor-skip-button");
     startAndPauseButton = document.getElementById("editor-run-pause-button");
     celebrationBox = document.getElementById("celebration");
+    turboButton = document.getElementById("editor-turbo-button");
     initThemeSelect();
 }
 
@@ -44,9 +48,20 @@ export function initializeEditorButtons() {
      * @param {string} id 
      * @param {function} func 
      */
+//If were just gonna take a refrence of every button, this function is kind of unnecessary.
 function addEventToButton(id, func) {
     let buttonInput = document.getElementById(id);
     buttonInput.addEventListener("click", func, false);
+}
+
+function toggleTurbo() {
+    isTurboActive = !isTurboActive;
+    if (isTurboActive) {
+        turboButton.style.backgroundColor = "yellow";
+    } else {
+        turboButton.style.backgroundColor = "white";
+    }
+    setTurboSpeedActive(isTurboActive);
 }
 
 /**
