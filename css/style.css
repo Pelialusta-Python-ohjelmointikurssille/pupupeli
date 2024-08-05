@@ -33,6 +33,11 @@ h1 {
     margin: unset;
 }
 
+h2 {
+    margin: unset;
+    margin-bottom: var(--default-margin);
+}
+
 p {
     display: block;
     margin-block-start: 5px;
@@ -179,6 +184,21 @@ button:hover {
 .game-layered > * {
     grid-column-start: 1;
     grid-row-start: 1;
+}
+
+.settings-unit-top {
+    display: flex;
+    border: 1px solid var(--color-border); /* Adds a solid border */
+    border-radius: var(--default-border-radius); /* Adds rounded corners */
+    padding: 10px; /* Adds some padding inside the border */
+    margin: 10px 0; /* Adds some margin to separate it from other elements */
+}
+
+.settings-unit-bottom {
+    border: 1px solid var(--color-border); /* Adds a solid border */
+    border-radius: var(--default-border-radius); /* Adds rounded corners */
+    padding: 10px; /* Adds some padding inside the border */
+    margin: 10px 0; /* Adds some margin to separate it from other elements */
 }
 
 /* identifiers */
