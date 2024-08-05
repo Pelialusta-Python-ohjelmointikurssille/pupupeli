@@ -16,6 +16,7 @@ export class CollectibleCounter {
             this.grid.eventTarget.removeEventListener("remove", this.removedFromGrid.bind(this));
         }
         this.grid = newGrid;
+        collectibles.total = this.grid.data.getGridObjectsOfTypeCount(Constants.COLLECTIBLE);
         newGrid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
         this.reset();
     }
