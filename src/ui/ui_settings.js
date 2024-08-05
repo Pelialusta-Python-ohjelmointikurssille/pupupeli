@@ -26,8 +26,6 @@ export function settingsTaskProgress() {
         api.getCompletedTasks().then(taskList => {
             let completedTasksList = taskList.tasks;
             let totalTasks = globals.totalTasksbyChapter
-            console.log(totalTasks);
-            console.log(completedTasksList);
             for (let i = 0; i < totalTasks.length; i++) {
                 let completedTasks = 0;
                 for (let j = 0; j < totalTasks[i]; j++) {
