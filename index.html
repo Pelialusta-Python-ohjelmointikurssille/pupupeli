@@ -25,7 +25,28 @@
                 </div>
                 <div id="settings-content">
                     <div id="settings-top">
-                        Yläasetukset
+                        <div id="theme-select" class="settings-unit-top">
+                            <h2>Teema</h2>
+                            <select id="theme-select" type="button">
+                                <option>Pupu</option>
+                                <option>Robo</option>
+                                <!-- Add new themes here to add them to dropdown! -->
+                            </select>
+                        </div>
+                        <div id="trail-toggle" class="settings-unit-top">
+                            <h2>Jälkiviiva</h2>
+                            <label class="switch">
+                                <input id="trail-toggle-button" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div id="grid-toggle" class="settings-unit-top">
+                            <h2>Ruudukko</h2>
+                            <label class="switch">
+                                <input id="grid-toggle-button" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
                     </div>
                     <div id="settings-bottom">
                         <div id="task-progress" class="settings-unit-bottom">
@@ -39,6 +60,7 @@
             </div>
         </div>
     </div>
+    <div id="overlay"></div>
     <div id="header" class="is-flex">
         <div id="header-container" class="box is-flex">
             <h1>Pupupeli</h1>
@@ -80,15 +102,6 @@
                             <h1>
                                 <a id="taskTitle"></a>
                             </h1>
-                        </div>
-                        <div id="toggle-buttons-div">
-                            <select id="theme-select" type="button">
-                                <option>Pupu</option>
-                                <option>Robo</option>
-                                <!-- Add new themes here to add them to dropdown! -->
-                            </select>
-                            <button id="trail-toggle-button" type="button">Jälkiviiva</button>
-                            <button id="grid-toggle-button" type="button">Ruudukko</button>
                         </div>
                     </div>
                     <div id="task-description">

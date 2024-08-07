@@ -72,6 +72,8 @@ export function createPlayer(entityUUID, entityData, graphicsEntityHandler, skin
         entity.container.zIndex = 10;
     }
     entity.type = "pawn";
+    const trailToggleButton = document.getElementById('trail-toggle-button');
+    trailToggleButton.textContent = lineDrawer.isEnabled ? 'Päällä' : 'Pois';
     return entity;
 }
 

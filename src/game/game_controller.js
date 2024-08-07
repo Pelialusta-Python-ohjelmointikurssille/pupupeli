@@ -18,6 +18,8 @@ const gameTurboSpeed = 0.2;
 export async function initGame() {
     game = new Game();
     await game.init();
+    const gridToggleButton = document.getElementById("grid-toggle-button");
+    gridToggleButton.checked = game.isGridEnabled;
     return game.getCanvas();
 }
 
