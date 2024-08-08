@@ -12,6 +12,7 @@ import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";
 import { translateToTheme } from "../util/theme_translator.js";
+import { runCode } from "../code_runner/code_runner.js";
 
 const instructionsStr = "instructions";
 let currentChapter = globals.identifiers.chapterIdentifier;

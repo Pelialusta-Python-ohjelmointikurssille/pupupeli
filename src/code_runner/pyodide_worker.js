@@ -1,35 +1,49 @@
-export class WorkerHandler {
-    constructor() {
-        this.pyodideWorker = null;
-        this.pyodideInterruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
-        this.workerWaitArray = new Int32Array(new SharedArrayBuffer(4));
-    }
+importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
 
-    initialize() {
-        this.pyodideWorker = new Worker("./web_worker.js");
-        this.pyodideWorker.onmessage = (event) => {
-            this.pyodideMessageHandler(event)
-        };
-    }
+let waitBuffer;
 
-    pyodideMessageHandler(event) {
-        let message = event.data;
-    }
+async function loadWorkerPyodide() {
+    self.pyodide = await loadPyodide();
+    self.postMessage({type: "INIT_OK"});
+}
 
-    interruptWorker() {
-        this.pyodideInterruptBuffer[0] = 2;
-    }
+let pyodideReadyPromise = loadWorkerPyodide();
 
-    clearWorkerInterrupt() {
-        this.pyodideInterruptBuffer[0] = 0;
-    }
+self.onmessage = async (event) => {
+    await messageHandler(event);
+};
 
-    haltWorker() {
+async function messageHandler(event) {
+    await pyodideReadyPromise;
+    let message = event.data;
+    if (message.type === "SETWAITBUFFER") {
+        setWaitBuffer(message.buffer);
     }
+    if (message.type === "SETINTERRUPTBUFFER") {
+        setInterruptBuffer(message.buffer);
+    }
+    if (message.type === "RUNCODE") {
+        await runCode(message.code);
+    }
+    if (message.type === "RESET") {
+        reset();
+    }
+}
 
-    unHaltWorker() {
-    }
+async function runCode(code) {
+    await pyodideReadyPromise;
+}
 
-    runCode(script, context) {
-    }
+function setWaitBuffer(buffer) {
+    waitBuffer = buffer;
+    self.postMessage({type: "WAITBUFFER_OK"});
+}
+
+function setInterruptBuffer(buffer) {
+    pyodide.setInterruptBuffer(buffer);
+    self.postMessage({type: "INTERRUPTBUFFER_OK"});
+}
+
+function reset() {
+
 }

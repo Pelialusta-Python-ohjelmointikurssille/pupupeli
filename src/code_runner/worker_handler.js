@@ -1,20 +1,54 @@
-importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
+export class WorkerHandler {
+    constructor() {
+        this.pyodideWorker = null;
+        this.pyodideInterruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
+        this.workerWaitArray = new Int32Array(new SharedArrayBuffer(4));
+    }
 
-let waitBuffer;
+    initialize() {
+        this.pyodideWorker = new Worker("/src/code_runner/pyodide_worker.js");
+        this.pyodideWorker.onmessage = async (event) => {
+            await this.pyodideMessageHandler(event)
+        };
+    }
 
-async function loadWorkerPyodide() {
-    console.log("Loading Pyodide");
-    self.pyodide = await loadPyodide();
-    console.log("Loaded pyodide");
-    let end = new Date();
-}
+    async pyodideMessageHandler(event) {
+        let message = event.data;
+        if (message.type === "GAMECMD") {
+        }
+        if (message.type === "ERROR") {
+        }
+        if (message.type === "SETLINE") {
+        }
+        if (message.type === "REQUESTINPUT") {
+        }
+        if (message.type === "INIT_OK") {
+            console.log("Initialized pyodide");
+            this.pyodideWorker.postMessage({ type: "SETWAITBUFFER", buffer: this.workerWaitArray });
+        }
+        if (message.type === "WAITBUFFER_OK") {
+            console.log("Initialized wait buffer");
+            this.pyodideWorker.postMessage({ type: "SETINTERRUPTBUFFER", buffer: this.pyodideInterruptBuffer });
+        }
+        if (message.type === "INTERRUPTBUFFER_OK") {
+            console.log("Initialized interrupt buffer");
+        }
+    }
 
-let pyodideReadyPromise = loadWorkerPyodide();
+    interruptWorker() {
+        this.pyodideInterruptBuffer[0] = 2;
+    }
 
-self.onmessage = async (event) => {
-    await pyodideReadyPromise;
-};
+    clearWorkerInterrupt() {
+        this.pyodideInterruptBuffer[0] = 0;
+    }
 
-async function runCode(code) {
-    await pyodideReadyPromise;
+    haltWorker() {
+    }
+
+    unHaltWorker() {
+    }
+
+    runCode(script, context) {
+    }
 }
