@@ -332,7 +332,7 @@ button:hover {
 #instructions-container {
     flex-direction: row;
     display: flex;
-    width: 1585px;
+    width: 790px;
     max-height: 800px;
     overflow-y: auto;
 }
