@@ -590,7 +590,6 @@ button:hover {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px; /* Adjust as needed */
-    height: 585px; /* Adjust as needed */
     background-color: var(--color-background);
     border-radius: var(--default-border-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -599,15 +598,16 @@ button:hover {
     display: flex;
     flex-direction: column;
     pointer-events: auto; /* Ensure the settings window itself is clickable */
+    max-height: 100vh; /* Ensure it doesn't exceed the viewport height */
 }
 
 #settings-box {
     display: flex;
     flex-direction: column;
     width: 370px; /* Adjust as needed */
-    height: 551px; /* Adjust as needed */
     padding: 1rem;
     position: relative; /* Ensure it can position children absolutely */
+    flex-grow: 1; /* Allow it to grow and fill the available space */
 }
 
 #settings-content {
