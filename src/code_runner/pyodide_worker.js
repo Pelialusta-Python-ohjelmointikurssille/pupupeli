@@ -1,6 +1,7 @@
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
 
 let waitBuffer;
+let pythonRunnerCode;
 
 async function loadWorkerPyodide() {
     self.pyodide = await loadPyodide();
@@ -28,6 +29,9 @@ async function messageHandler(event) {
     if (message.type === "RESET") {
         reset();
     }
+    if(message.type === "SETBACKGROUNDCODE") {
+        await setBackgroundCode(message.runnerCode, message.codeMap);
+    }
 }
 
 async function runCode(code) {
@@ -46,4 +50,12 @@ function setInterruptBuffer(buffer) {
 
 function reset() {
 
+}
+
+async function setBackgroundCode(runnerCode, codeMap) {
+    self.postMessage({type: "BACKGROUNDCODE_OK"});
+    codeMap.forEach(async (value, key) => {
+        await self.pyodide.FS.writeFile(key, value, { encoding: "utf8" });
+    });
+    pythonRunnerCode = runnerCode;
 }

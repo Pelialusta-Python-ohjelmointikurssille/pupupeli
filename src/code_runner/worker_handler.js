@@ -1,3 +1,5 @@
+import { tryGetFileAsText } from "../file_reader.js";
+
 const PYTHON_CODE_FILES = new Map([
     ["error_handler.py", "src/python_code/core/error_handler.py"],
     ["python_tracer.py", "src/python_code/core/python_tracer.py"],
@@ -11,13 +13,26 @@ export class WorkerHandler {
         this.pyodideWorker = null;
         this.pyodideInterruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
         this.workerWaitArray = new Int32Array(new SharedArrayBuffer(4));
+        this.pythonCodeMap;
+        this.pythonRunnerCode;
     }
 
     initialize() {
         this.pyodideWorker = new Worker("/src/code_runner/pyodide_worker.js");
         this.pyodideWorker.onmessage = async (event) => {
-            await this.pyodideMessageHandler(event)
+            await this.pyodideMessageHandler(event);
         };
+        this.pythonCodeMap = this.loadCodeFiles(PYTHON_CODE_FILES);
+        this.pythonRunnerCode = tryGetFileAsText(PYTHON_SCRIPT_RUNNER);
+    }
+
+    loadCodeFiles(fileDict) {
+        let codeMap = new Map();
+        fileDict.forEach((value, key) => {
+            let content = tryGetFileAsText(value);
+            codeMap.set(key, content);
+        });
+        return codeMap;
     }
 
     async pyodideMessageHandler(event) {
@@ -40,6 +55,10 @@ export class WorkerHandler {
         }
         if (message.type === "INTERRUPTBUFFER_OK") {
             console.log("Initialized interrupt buffer");
+            this.pyodideWorker.postMessage({ type: "SETBACKGROUNDCODE", runnerCode: this.pythonRunnerCode, codeMap: this.pythonCodeMap });
+        }
+        if (message.type === "BACKGROUNDCODE_OK") {
+            console.log("Initialized background code");
         }
     }
 
