@@ -8,6 +8,7 @@ import { isWaitingForInput, resetInputWaiting } from "../game/game_input_control
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode } from "./ui.js";
 import { sendTask } from "../api/api.js";
+import { runCode } from "../code_runner/code_runner.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -172,7 +173,8 @@ function onRunButtonClick() {
             if (localStorage.getItem("token")){
                 sendTask();
             }
-            postMessage({ type: 'start', details: getEditor().getValue() });
+            //postMessage({ type: 'start', details: getEditor().getValue() });
+            runCode(getEditor().getValue());
             break;
         case States.RUNNING:
             if(isWaitingForInput) return;

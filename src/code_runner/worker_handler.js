@@ -76,6 +76,7 @@ export class WorkerHandler {
     unHaltWorker() {
     }
 
-    runCode(script, context) {
+    runCode(script) {
+        this.pyodideWorker.postMessage({ type: "RUNCODE", code: script });
     }
 }

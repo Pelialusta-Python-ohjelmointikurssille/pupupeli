@@ -3,6 +3,6 @@ import { WorkerHandler } from "./worker_handler.js";
 let handler = new WorkerHandler();
 handler.initialize();
 
-export async function runCode(code) {
-    
+export function runCode(code) {
+    handler.runCode(code);
 }

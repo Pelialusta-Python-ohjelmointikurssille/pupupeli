@@ -2,6 +2,11 @@ importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
 
 let waitBuffer;
 let pythonRunnerCode;
+let isReadyToRunCode = false;
+
+let loadedScripts = [];
+
+const USER_SCRIPT_NAME = "userscript.py";
 
 async function loadWorkerPyodide() {
     self.pyodide = await loadPyodide();
@@ -31,11 +36,19 @@ async function messageHandler(event) {
     }
     if(message.type === "SETBACKGROUNDCODE") {
         await setBackgroundCode(message.runnerCode, message.codeMap);
+        isReadyToRunCode = true;
+        self.postMessage({type: "BACKGROUNDCODE_OK"});
     }
 }
 
 async function runCode(code) {
-    await pyodideReadyPromise;
+    if (isReadyToRunCode === false) return;
+    await self.pyodide.FS.writeFile(USER_SCRIPT_NAME, code, { encoding: "utf8" });
+    await self.pyodide.loadPackagesFromImports(code);
+    loadedScripts.forEach(async (element) => {
+        await self.pyodide.loadPackagesFromImports(element);
+    });
+    await self.pyodide.runPythonAsync(pythonRunnerCode);
 }
 
 function setWaitBuffer(buffer) {
@@ -49,13 +62,13 @@ function setInterruptBuffer(buffer) {
 }
 
 function reset() {
-
+    loadedScripts = [];
 }
 
 async function setBackgroundCode(runnerCode, codeMap) {
-    self.postMessage({type: "BACKGROUNDCODE_OK"});
     codeMap.forEach(async (value, key) => {
         await self.pyodide.FS.writeFile(key, value, { encoding: "utf8" });
+        loadedScripts.push(value);
     });
     pythonRunnerCode = runnerCode;
 }

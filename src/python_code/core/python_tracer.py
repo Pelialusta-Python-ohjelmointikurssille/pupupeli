@@ -1,3 +1,4 @@
+from time import sleep
 from sys import settrace, setprofile
 
 class PythonTracer:
@@ -9,8 +10,9 @@ class PythonTracer:
         func_name = code.co_name
         line_no = frame.f_lineno
         filename = code.co_filename
-        if filename == "<exec>":
+        if filename == "/home/pyodide/userscript.py":
             print(f"A {event} encountered in {filename}.{func_name}() at line number {line_no} ") 
+            sleep(0.1)
         return self.trace
 
     def set_as_trace(self):
