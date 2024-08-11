@@ -1,8 +1,10 @@
+from js_bridge import JSBridge
 
 class Pelaaja:
-    def __init__(self, name="pupu"):
+    def __init__(self, js_bridge: JSBridge, name="pupu"):
         #self.__name = name
         self.__directions = ["oikea", "vasen", "ylös", "alas"]
+        self.js_bridge = js_bridge
 
     def liiku(self, direction: str):
         pass

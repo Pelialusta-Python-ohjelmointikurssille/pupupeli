@@ -1,9 +1,10 @@
 from time import sleep
 from sys import settrace, setprofile
+from js_bridge import JSBridge
 
 class PythonTracer:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, js_bridge: JSBridge) -> None:
+        self.js_bridge = js_bridge
 
     def trace(self, frame, event, args):
         code = frame.f_code
