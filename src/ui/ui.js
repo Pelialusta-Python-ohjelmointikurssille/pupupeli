@@ -12,6 +12,7 @@ import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";
 import { translateToTheme } from "../util/theme_translator.js";
+import { initializeRunner } from "../code_runner/code_runner.js";
 
 
 const instructionsStr = "instructions";
@@ -24,6 +25,7 @@ async function main() {
     initPage(); // creates task json global variable
     if (globals.task.getTaskType() != instructionsStr) {
         initWorker();
+        initializeRunner();
         initializeEditorButtons();
         await initGameAndCanvas();
     }
