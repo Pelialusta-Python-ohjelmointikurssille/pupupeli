@@ -66,3 +66,11 @@ export function GetDirectionAsString(direction) {
             return Constants.RIGHT_STR;
     }
 }
+
+export class TaskTypes {
+    static collectibles = "collectibles"; //collect all collectables
+    static instruction = "instructions"; //read instructions
+    static multipleChoice = "multiple-choice"; //Choose correct answer
+    static codeFixing = "code-fixing"; //Correct the code (not implemented)
+    static codeBlockMoving = "code-block-Moving"; //Move code blocks to finish the level
+}

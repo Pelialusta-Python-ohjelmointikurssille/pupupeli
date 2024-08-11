@@ -12,8 +12,8 @@ import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";
 import { translateToTheme } from "../util/theme_translator.js";
+import { TaskTypes } from "../game/commonstrings.js";
 
-const instructionsStr = "instructions";
 let currentChapter = globals.identifiers.chapterIdentifier;
 let currentTask = globals.identifiers.taskIdentifier;
 /**
@@ -58,7 +58,7 @@ function createGamePage() {
     let descriptionTargetDiv = document.getElementById("task-description");
     setDescription(descriptionTargetDiv);
 
-    if (globals.task.getMultipleChoiceQuestions().length > 0) {
+    if (globals.task.taskType === TaskTypes.multipleChoice) {
         setMultipleChoice();
     }
 
@@ -84,7 +84,7 @@ function setMultipleChoice() {
         multipleChoiceContainer.removeChild(multipleChoiceContainer.firstChild);
     }
 
-    if (globals.task.getMultipleChoiceQuestions().length === 0) {
+    if (globals.task.taskType !== TaskTypes.multipleChoice) {
         multipleChoiceContainer.classList.add("is-hidden");
     } else {
         multipleChoiceContainer.classList.remove("is-hidden");
@@ -176,7 +176,7 @@ export function onTaskComplete(isWon) {
     if (isWon) {
         const buttonid = apiTaskIdentifier;
         let button = document.getElementById(buttonid);
-        if (globals.task.getTaskType() != instructionsStr) {
+        if (globals.task.getTaskType() != TaskTypes.instruction) {
             celebration();
         }
         if (button.classList.contains("button-incompleted")) {
@@ -336,7 +336,7 @@ export function loadNextTaskInfo() {
     const insAppDiv = document.createElement('div');
     insAppDiv.id = 'instructions-container'; // Assign a unique ID
 
-    if (globals.task.getTaskType() === instructionsStr) {
+    if (globals.task.getTaskType() === TaskTypes.instruction) {
         appDiv.classList.add("is-hidden");
         insAppDiv.classList.remove("is-hidden");
         loadIstructionTask(appDiv, insAppDiv);
