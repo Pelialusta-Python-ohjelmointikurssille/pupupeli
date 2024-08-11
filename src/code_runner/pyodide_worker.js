@@ -75,3 +75,8 @@ async function setBackgroundCode(runnerCode, codeMap) {
     });
     pythonRunnerCode = runnerCode;
 }
+
+function processLine(lineNumber) {
+    console.log(`JS: processed line ${lineNumber}`);
+    Atomics.wait(waitBuffer, 0, 1);
+}

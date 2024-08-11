@@ -20,9 +20,9 @@ export function resetRunner() {
 }
 
 export function pauseRunner() {
-
+    handler.haltWorker();
 }
 
 export function resumeRunner() {
-
+    handler.unHaltWorker();
 }

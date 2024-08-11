@@ -13,6 +13,7 @@ class PythonTracer:
         filename = code.co_filename
         if filename == "/home/pyodide/userscript.py":
             print(f"A {event} encountered in {filename}.{func_name}() at line number {line_no} ") 
+            self.js_bridge.send_line_info(line_no)
             sleep(0.1)
         return self.trace
 

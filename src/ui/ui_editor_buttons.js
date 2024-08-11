@@ -8,7 +8,7 @@ import { isWaitingForInput, resetInputWaiting } from "../game/game_input_control
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode } from "./ui.js";
 import { sendTask } from "../api/api.js";
-import { runCode, resetRunner } from "../code_runner/code_runner.js";
+import { runCode, resetRunner, pauseRunner, resumeRunner } from "../code_runner/code_runner.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -179,10 +179,12 @@ function onRunButtonClick() {
         case States.RUNNING:
             if(isWaitingForInput) return;
             //setMessagePassingState({ paused: true });
+            pauseRunner();
             break;
         case States.PAUSED:
             if(isWaitingForInput) return;
             //setMessagePassingState({ paused: false });
+            resumeRunner();
             break;
 
     }
