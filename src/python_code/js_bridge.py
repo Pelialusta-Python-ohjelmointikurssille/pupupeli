@@ -21,3 +21,6 @@ class JSBridge:
 
     def send_error_info(self, line_number, error_message, error_type):
         pass
+
+    def finished_execution(self):
+        js.onFinishedExecution()

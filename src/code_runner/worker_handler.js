@@ -61,6 +61,9 @@ export class WorkerHandler {
         if (message.type === "BACKGROUNDCODE_OK") {
             console.log("Initialized background code");
         }
+        if(message.type === "EXECFINISH") {
+            console.log("Finished python execution");
+        }
     }
 
     interruptWorker() {
