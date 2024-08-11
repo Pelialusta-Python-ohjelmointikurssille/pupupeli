@@ -1,12 +1,12 @@
 import { tryGetFileAsText } from "../file_reader.js";
 
 const PYTHON_CODE_FILES = new Map([
-    ["error_handler.py", "src/python_code/core/error_handler.py"],
-    ["python_tracer.py", "src/python_code/core/python_tracer.py"],
-    ["player.py", "src/python_code/game/player.py"]
+    ["error_handler.py", "src/python_code/error_handler.py"],
+    ["python_tracer.py", "src/python_code/python_tracer.py"],
+    ["player.py", "src/python_code/player.py"]
 ]);
 
-const PYTHON_SCRIPT_RUNNER = "src/python_code/core/runner.py";
+const PYTHON_SCRIPT_RUNNER = "src/python_code/runner.py";
 
 export class WorkerHandler {
     constructor() {
