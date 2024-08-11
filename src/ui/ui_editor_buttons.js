@@ -1,6 +1,6 @@
 import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
-import { runSingleCommand, postMessage, setMessagePassingState, /*resetWorker,*/ inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
+import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
 import { getEditor, resetLineHighlight } from "../input/editor.js";
 import { resetAndInitContent, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
@@ -8,7 +8,7 @@ import { isWaitingForInput, resetInputWaiting } from "../game/game_input_control
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode } from "./ui.js";
 import { sendTask } from "../api/api.js";
-import { runCode, resetWorker } from "../code_runner/code_runner.js";
+import { runCode, resetRunner } from "../code_runner/code_runner.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -56,7 +56,7 @@ function addEventToButton(id, func) {
  * Does nothing if state is initial.
  */
 function onResetButtonClick() {
-    inputToWorker(Constants.PYODIDE_INTERRUPT_INPUT); //Special str that interrupt pyodide if it's in handleInput()
+    //inputToWorker(Constants.PYODIDE_INTERRUPT_INPUT); //Special str that interrupt pyodide if it's in handleInput()
     if (_buttonsState === States.INITIAL) return; //No need to reset
     nextStepButton.disabled = false;
     startAndPauseButton.disabled = false;
@@ -65,11 +65,11 @@ function onResetButtonClick() {
     resetErrorText();
     hideAndClearInputBox();
     resetCelebrationBox();
-    resetWorker();
+    resetRunner();
     resetAndInitContent();
     resetInputHistory();
     _buttonsState = States.INITIAL;
-    setMessagePassingState({ paused: false });
+    //setMessagePassingState({ paused: false });
     resetLineHighlight();
     resetInputWaiting();
 }
@@ -115,7 +115,7 @@ function onNextStepButtonClick() {
     }
     if (_buttonsState == States.PAUSED) {
         if(isWaitingForInput) return;
-        runSingleCommand();
+        //runSingleCommand();
     }
 }
 
@@ -178,11 +178,11 @@ function onRunButtonClick() {
             break;
         case States.RUNNING:
             if(isWaitingForInput) return;
-            setMessagePassingState({ paused: true });
+            //setMessagePassingState({ paused: true });
             break;
         case States.PAUSED:
             if(isWaitingForInput) return;
-            setMessagePassingState({ paused: false });
+            //setMessagePassingState({ paused: false });
             break;
 
     }
@@ -196,7 +196,7 @@ function initThemeSelect() {
     themeSelectDropdown.addEventListener('change', function (event) {
         let selectedValue = event.target.value;
         setCurrentTheme(selectedValue);
-        themeChangeToWorker()
+        //themeChangeToWorker()
         setTheme(selectedValue);
         setEditorCode();
         descriptionTargetDiv.innerHTML = ''; // clear content
