@@ -5,16 +5,16 @@ class JSBridge:
         pass
 
     def run_command(self, command, parameter):
-        pass
+        js.runCommand(command, parameter)
 
     def create_object(self, object_type, x, y):
-        pass
+        js.createObject(object_type, x, y)
 
     def destroy_object(self, x, y):
-        pass
+        js.destroyObject(x, y)
 
     def get_int(self, variable_name):
-        pass
+        js.getInt(variable_name)
 
     def send_line_info(self, line_number):
         js.processLine(line_number)

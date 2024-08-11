@@ -42,7 +42,7 @@ export class WorkerHandler {
 
     async pyodideMessageHandler(event) {
         let message = event.data;
-        if (message.type === "GAMECMD") {
+        if (message.type === "COMMAND") {
         }
         if (message.type === "ERROR") {
         }

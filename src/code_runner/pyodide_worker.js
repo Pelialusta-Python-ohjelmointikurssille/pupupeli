@@ -88,3 +88,23 @@ function processLine(lineNumber) {
 function onFinishedExecution() {
     self.postMessage({ type: "EXECFINISH" });
 }
+
+function runCommand(cmd, params) {
+    self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
+}
+
+function createObject(objectType, x, y) {
+    
+}
+
+function destroyObject(x, y) {
+
+}
+
+function getInt(variableName) {
+
+}
+
+function processErrorInfo() {
+
+}
