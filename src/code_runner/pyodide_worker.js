@@ -66,6 +66,7 @@ function reset() {
     console.log("RESETTING");
     loadedScripts = [];
     pyodide.pyodide_py._state.restore_state(saveState);
+    self.postMessage({ type: "RESET_OK" });
 }
 
 async function setBackgroundCode(runnerCode, codeMap) {
@@ -81,6 +82,7 @@ async function setBackgroundCode(runnerCode, codeMap) {
 function processLine(lineNumber) {
     console.log(`JS: processed line ${lineNumber}`);
     Atomics.wait(waitBuffer, 0, 1);
+    self.postMessage({ type: "SETLINE", line: lineNumber });
 }
 
 function onFinishedExecution() {

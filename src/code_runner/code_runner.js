@@ -12,7 +12,7 @@ export function runCode(code, theme) {
 }
 
 export function runUntilNextLine() {
-
+    handler.stepToNextLine();
 }
 
 export function resetRunner() {

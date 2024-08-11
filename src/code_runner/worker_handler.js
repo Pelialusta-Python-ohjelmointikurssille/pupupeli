@@ -1,4 +1,5 @@
 import { tryGetFileAsText } from "../file_reader.js";
+import { RUNNER_STATES } from "./runner_state.js";
 
 const PYTHON_CODE_FILES = new Map([
     ["error_handler.py", "src/python_code/error_handler.py"],
@@ -16,9 +17,12 @@ export class WorkerHandler {
         this.workerWaitArray = new Int32Array(new SharedArrayBuffer(4));
         this.pythonCodeMap;
         this.pythonRunnerCode;
+        this.runnerState = RUNNER_STATES.PREINIT;
+        this.executeSingleLine = false;
     }
 
     initialize() {
+        this.runnerState = RUNNER_STATES.PREINIT;
         this.pyodideWorker = new Worker("/src/code_runner/pyodide_worker.js");
         this.pyodideWorker.onmessage = async (event) => {
             await this.pyodideMessageHandler(event);
@@ -43,8 +47,12 @@ export class WorkerHandler {
         if (message.type === "ERROR") {
         }
         if (message.type === "SETLINE") {
+            if (this.executeSingleLine && this.runnerState === RUNNER_STATES.RUNNING) {
+                this.haltWorker();
+            }
         }
         if (message.type === "REQUESTINPUT") {
+            this.runnerState = RUNNER_STATES.WAITING_INPUT;
         }
         if (message.type === "INIT_OK") {
             console.log("Initialized pyodide");
@@ -60,9 +68,15 @@ export class WorkerHandler {
         }
         if (message.type === "BACKGROUNDCODE_OK") {
             console.log("Initialized background code");
+            this.runnerState = RUNNER_STATES.READY;
         }
         if(message.type === "EXECFINISH") {
             console.log("Finished python execution");
+            this.runnerState = RUNNER_STATES.ENDED;
+        }
+        if (message.type === "RESET_OK") {
+            console.log("Reset pyodide");
+            this.runnerState = RUNNER_STATES.READY;
         }
     }
 
@@ -77,16 +91,24 @@ export class WorkerHandler {
     haltWorker() {
         Atomics.store(this.workerWaitArray, 0, 1);
         Atomics.notify(this.workerWaitArray, 0, 1);
+        this.runnerState = RUNNER_STATES.PAUSED;
     }
 
     unHaltWorker() {
         Atomics.store(this.workerWaitArray, 0, 0);
         Atomics.notify(this.workerWaitArray, 0, 1);
+        this.runnerState = RUNNER_STATES.RUNNING;
     }
 
     runCode(script) {
         this.clearWorkerInterrupt();
         this.pyodideWorker.postMessage({ type: "RUNCODE", code: script });
+        this.runnerState = RUNNER_STATES.RUNNING;
+    }
+
+    stepToNextLine() {
+        this.executeSingleLine = true;
+        this.unHaltWorker();
     }
 
     reset() {
