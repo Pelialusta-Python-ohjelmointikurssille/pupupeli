@@ -21,8 +21,8 @@ export function initWorker() {
     //TODO: this function is long and will potentially grow longer.
     //One solution: Dictionary with strings function pairs.
     worker = new Worker('/src/input/worker.js');
-    worker.onmessage = (message) => {
-        message = message.data;
+    worker.onmessage = (event) => {
+        message = event.data;
         switch (message.type) {
             case "init-finish":
                 enableEditorButtons();
