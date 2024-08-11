@@ -6,3 +6,7 @@ handler.initialize();
 export function runCode(code) {
     handler.runCode(code);
 }
+
+export function resetWorker() {
+    handler.reset();
+}

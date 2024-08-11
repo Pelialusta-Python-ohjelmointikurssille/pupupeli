@@ -77,6 +77,13 @@ export class WorkerHandler {
     }
 
     runCode(script) {
+        this.clearWorkerInterrupt();
         this.pyodideWorker.postMessage({ type: "RUNCODE", code: script });
+    }
+
+    reset() {
+        this.clearWorkerInterrupt();
+        this.interruptWorker();
+        this.pyodideWorker.postMessage({ type: "RESET" });
     }
 }

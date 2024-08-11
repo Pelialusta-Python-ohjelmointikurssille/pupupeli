@@ -3,8 +3,8 @@ importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
 let waitBuffer;
 let pythonRunnerCode;
 let isReadyToRunCode = false;
-
 let loadedScripts = [];
+let saveState;
 
 const USER_SCRIPT_NAME = "userscript.py";
 
@@ -36,6 +36,7 @@ async function messageHandler(event) {
     }
     if(message.type === "SETBACKGROUNDCODE") {
         await setBackgroundCode(message.runnerCode, message.codeMap);
+        saveState = pyodide.pyodide_py._state.save_state();
         isReadyToRunCode = true;
         self.postMessage({type: "BACKGROUNDCODE_OK"});
     }
@@ -45,7 +46,7 @@ async function runCode(code) {
     if (isReadyToRunCode === false) return;
     await self.pyodide.FS.writeFile(USER_SCRIPT_NAME, code, { encoding: "utf8" });
     await self.pyodide.loadPackagesFromImports(code);
-    loadedScripts.forEach(async (element) => {
+    await loadedScripts.forEach(async (element) => {
         await self.pyodide.loadPackagesFromImports(element);
     });
     await self.pyodide.runPythonAsync(pythonRunnerCode);
@@ -62,7 +63,9 @@ function setInterruptBuffer(buffer) {
 }
 
 function reset() {
+    console.log("RESETTING");
     loadedScripts = [];
+    pyodide.pyodide_py._state.restore_state(saveState);
 }
 
 async function setBackgroundCode(runnerCode, codeMap) {

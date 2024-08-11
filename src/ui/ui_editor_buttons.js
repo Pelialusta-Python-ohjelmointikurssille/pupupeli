@@ -1,6 +1,6 @@
 import { Constants } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
-import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
+import { runSingleCommand, postMessage, setMessagePassingState, /*resetWorker,*/ inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
 import { getEditor, resetLineHighlight } from "../input/editor.js";
 import { resetAndInitContent, toggleGrid, toggleTrail, setTheme } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
@@ -8,7 +8,7 @@ import { isWaitingForInput, resetInputWaiting } from "../game/game_input_control
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode } from "./ui.js";
 import { sendTask } from "../api/api.js";
-import { runCode } from "../code_runner/code_runner.js";
+import { runCode, resetWorker } from "../code_runner/code_runner.js";
 
 let _buttonsState;
 let startAndPauseButton;

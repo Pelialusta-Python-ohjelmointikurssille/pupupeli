@@ -3,9 +3,9 @@ from python_tracer import PythonTracer
 import sys
 import signal
 
-e = ErrorHandler()
-t = PythonTracer()
-t.start_tracer()
+errorHandler = ErrorHandler()
+tracer = PythonTracer()
+tracer.start_tracer()
 
 USER_SCRIPT_NAME = "userscript"
 
@@ -18,4 +18,4 @@ signal.signal(signal.SIGINT, interrupt_handler)
 try:
     __import__(USER_SCRIPT_NAME)
 except Exception as e:
-    e.pass_error_info(e)
+    errorHandler.pass_error_info(e)
