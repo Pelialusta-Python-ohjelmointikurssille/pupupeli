@@ -22,7 +22,7 @@ export function initWorker() {
     //One solution: Dictionary with strings function pairs.
     worker = new Worker('/src/input/worker.js');
     worker.onmessage = (event) => {
-        message = event.data;
+        let message = event.data;
         switch (message.type) {
             case "init-finish":
                 enableEditorButtons();
