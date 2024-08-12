@@ -80,9 +80,8 @@ async function setBackgroundCode(runnerCode, codeMap) {
 // JS functions called from python
 
 function processLine(lineNumber) {
-    console.log(`JS: processed line ${lineNumber}`);
-    Atomics.wait(waitBuffer, 0, 1);
     self.postMessage({ type: "SETLINE", line: lineNumber });
+    Atomics.wait(waitBuffer, 0, 1);
 }
 
 function onFinishedExecution() {

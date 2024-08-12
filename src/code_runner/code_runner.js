@@ -19,9 +19,11 @@ export function resetRunner() {
 }
 
 export function pauseRunner() {
-    handler.haltWorker();
+    handler.executeSingleLine = false;
+    handler.pauseUser();
 }
 
 export function resumeRunner() {
-    handler.unHaltWorker();
+    handler.executeSingleLine = false;
+    handler.resumeUser();
 }

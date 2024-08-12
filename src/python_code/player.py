@@ -1,22 +1,24 @@
 from js_bridge import JSBridge
 
 class Pelaaja:
-    def __init__(self, js_bridge: JSBridge, name="pupu"):
-        #self.__name = name
+    def __init__(self, js_bridge: JSBridge):
         self.__directions = ["oikea", "vasen", "ylös", "alas"]
         self.js_bridge = js_bridge
 
     def liiku(self, direction: str):
-        pass
+        if (direction not in self.__directions):
+            raise ValueError("Virheellinen suunta")
+        self.js_bridge.run_command("move", direction)
 
     def sano(self, sentence: str):
-        pass
+        self.js_bridge.run_command("say", sentence)
 
     def puhu(self, sentence: str):
         self.sano(sentence)
 
     def kysy(self, question: str = "?"):
-        pass
+        self.js_bridge.run_command("ask", question)
+        return input()
 
     def laske(self, variableName: str):
         pass

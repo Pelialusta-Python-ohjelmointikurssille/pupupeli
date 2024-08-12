@@ -19,6 +19,10 @@ export class WorkerHandler {
         this.pythonRunnerCode;
         this.runnerState = RUNNER_STATES.PREINIT;
         this.executeSingleLine = false;
+
+        this.isUserPaused = false;
+        this.isWaitingGame = false;
+        this.isWaitingInput = false;
     }
 
     initialize() {
@@ -43,16 +47,21 @@ export class WorkerHandler {
     async pyodideMessageHandler(event) {
         let message = event.data;
         if (message.type === "COMMAND") {
+            console.log("COMMAND RECEIVED")
+            this.pauseWaitGame();
+            console.log(this.runnerState)
         }
         if (message.type === "ERROR") {
         }
         if (message.type === "SETLINE") {
-            if (this.executeSingleLine && this.runnerState === RUNNER_STATES.RUNNING) {
-                this.haltWorker();
+            console.log(`Processed line ${message.line}`)
+            if (this.executeSingleLine) {
+                this.pauseUser();
             }
+            console.log(this.runnerState)
         }
         if (message.type === "REQUESTINPUT") {
-            this.runnerState = RUNNER_STATES.WAITING_INPUT;
+            this.pauseWaitInput();
         }
         if (message.type === "INIT_OK") {
             console.log("Initialized pyodide");
@@ -80,6 +89,49 @@ export class WorkerHandler {
         }
     }
 
+    pauseUser() {
+        this.isUserPaused = true;
+        this.checkPauseState();
+    }
+
+    resumeUser() {
+        this.isUserPaused = false;
+        this.checkPauseState();
+    }
+
+    pauseWaitGame() {
+        this.isWaitingGame = true;
+        this.checkPauseState();
+    }
+
+    resumeWaitGame() {
+        this.isWaitingGame = false;
+        this.checkPauseState();
+    }
+
+    pauseWaitInput() {
+        this.isWaitingInput = true;
+        this.checkPauseState();
+    }
+
+    resumeWaitInput() {
+        this.isWaitingInput = false;
+        this.checkPauseState();
+    }
+
+    checkPauseState() {
+        if (this.runnerState === RUNNER_STATES.RUNNING) {
+            if (this.isUserPaused || this.isWaitingGame || this.isWaitingInput) {
+                this.haltWorker();
+            }
+        }
+        if (this.runnerState === RUNNER_STATES.PAUSED) {
+           if (!this.isUserPaused && !this.isWaitingGame && !this.isWaitingInput) {
+                this.unHaltWorker();
+            } 
+        }
+    }
+
     interruptWorker() {
         this.pyodideInterruptBuffer[0] = 2;
     }
@@ -89,15 +141,15 @@ export class WorkerHandler {
     }
 
     haltWorker() {
+        this.runnerState = RUNNER_STATES.PAUSED;
         Atomics.store(this.workerWaitArray, 0, 1);
         Atomics.notify(this.workerWaitArray, 0, 1);
-        this.runnerState = RUNNER_STATES.PAUSED;
     }
 
     unHaltWorker() {
+        this.runnerState = RUNNER_STATES.RUNNING;
         Atomics.store(this.workerWaitArray, 0, 0);
         Atomics.notify(this.workerWaitArray, 0, 1);
-        this.runnerState = RUNNER_STATES.RUNNING;
     }
 
     runCode(script) {
@@ -112,8 +164,13 @@ export class WorkerHandler {
     }
 
     reset() {
+        this.unHaltWorker();
         this.clearWorkerInterrupt();
         this.interruptWorker();
         this.pyodideWorker.postMessage({ type: "RESET" });
+        this.executeSingleLine = false;
+        this.isUserPaused = false;
+        this.isWaitingGame = false;
+        this.isWaitingInput = false;
     }
 }
