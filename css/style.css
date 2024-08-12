@@ -201,6 +201,13 @@ button:hover {
     margin: 10px 0; /* Adds some margin to separate it from other elements */
 }
 
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
 /* identifiers */
 #app {
     position: relative; /* This makes the #app div a positioning context for absolutely positioned children */
@@ -330,11 +337,25 @@ button:hover {
 }
 
 #instructions-container {
-    flex-direction: row;
     display: flex;
-    width: 790px;
-    max-height: 800px;
+    max-height: calc(var(--canvas-height) * 1.5);
+    flex-direction: row;
+}
+
+#left-instructions-container {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    width: 800px;
+    max-height: 768px;
     overflow-y: auto;
+}
+
+#right-instructions-container {
+    flex-direction: column;
+    display: flex;
+    width: 735px;
+    max-height: 768px;
 }
 
 #instruction-head {
