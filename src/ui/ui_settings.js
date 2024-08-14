@@ -4,15 +4,18 @@ import * as api from "../api/api.js";
 let settingsButton = document.getElementById("settings-button");
 let closeButton = document.getElementById("settings-close-button");
 let settingsWindow = document.getElementById("settings-window");
+let overlay = document.getElementById("overlay");
 
 function addSettingsButtonListener() {
     settingsButton.addEventListener("click", () => {
         console.log("Settings button clicked");
         settingsWindow.classList.toggle("is-hidden");
+        overlay.classList.toggle("is-visible");
     });
     closeButton.addEventListener("click", () => {
         console.log("Close button clicked");
         settingsWindow.classList.toggle("is-hidden");
+        overlay.classList.toggle("is-visible");
     });
 }
 
