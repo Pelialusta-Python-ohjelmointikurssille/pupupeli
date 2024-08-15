@@ -17,6 +17,7 @@ USER_SCRIPT_NAME = "userscript"
 
 def interrupt_handler(sig, frame):
     print("INTERRUPT EXECUTION")
+    js_bridge.system_exit()
     sys.exit(0)
 
 signal.signal(signal.SIGINT, interrupt_handler)

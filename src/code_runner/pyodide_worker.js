@@ -5,6 +5,8 @@ let pythonRunnerCode;
 let isReadyToRunCode = false;
 let loadedScripts = [];
 let saveState;
+let interruptBuffer;
+let resetting = false;
 
 const USER_SCRIPT_NAME = "userscript.py";
 
@@ -32,7 +34,11 @@ async function messageHandler(event) {
         await runCode(message.code);
     }
     if (message.type === "RESET") {
+        console.log("RESETTING FROM HANDLER TO WORKER OG")
         reset();
+    }
+    if (message.type === "RESET_WORKER_OK") {
+        resetting = false;
     }
     if(message.type === "SETBACKGROUNDCODE") {
         await setBackgroundCode(message.runnerCode, message.codeMap);
@@ -59,6 +65,7 @@ function setWaitBuffer(buffer) {
 
 function setInterruptBuffer(buffer) {
     pyodide.setInterruptBuffer(buffer);
+    interruptBuffer = buffer;
     self.postMessage({type: "INTERRUPTBUFFER_OK"});
 }
 
@@ -80,8 +87,17 @@ async function setBackgroundCode(runnerCode, codeMap) {
 // JS functions called from python
 
 function processLine(lineNumber) {
+    if(resetting) return;
+    if (lineNumber <= 0) return;
+    console.log("=========================================================0")
+    console.log(`Worker process line ${lineNumber}`);
     self.postMessage({ type: "SETLINE", line: lineNumber });
+    console.log("HALTING FROM WORKER")
+    Atomics.store(waitBuffer, 0, 1);
+    Atomics.notify(waitBuffer, 0, 1);
     Atomics.wait(waitBuffer, 0, 1);
+    console.log(`WORKER AFTER LINE PROCESS WAIT ${lineNumber}`);
+    console.log("=========================================================0")
 }
 
 function onFinishedExecution() {
@@ -89,7 +105,14 @@ function onFinishedExecution() {
 }
 
 function runCommand(cmd, params) {
+    if(resetting) return;
+    console.log("=========================================================0")
+    console.log(`WORKER CMD: ${cmd}(${params})`);
     self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
+    Atomics.store(waitBuffer, 0, 1);
+    Atomics.notify(waitBuffer, 0, 1);
+    Atomics.wait(waitBuffer, 0, 1);
+    console.log("=========================================================0")
 }
 
 function createObject(objectType, x, y) {
@@ -106,4 +129,11 @@ function getInt(variableName) {
 
 function processErrorInfo() {
 
+}
+
+function resetFromPython() {
+    resetting = true;
+    console.log("EXITING PYTHON")
+    interruptBuffer[0] = 2;
+    reset();
 }

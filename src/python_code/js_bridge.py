@@ -5,6 +5,7 @@ class JSBridge:
         pass
 
     def run_command(self, command, parameter):
+        print("RUNNING COMMAND FROM PYTHON")
         js.runCommand(command, parameter)
 
     def create_object(self, object_type, x, y):
@@ -24,3 +25,6 @@ class JSBridge:
 
     def finished_execution(self):
         js.onFinishedExecution()
+    
+    def system_exit(self):
+        js.resetFromPython()

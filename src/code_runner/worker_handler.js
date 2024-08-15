@@ -1,4 +1,5 @@
 import { tryGetFileAsText } from "../file_reader.js";
+import { highlightCurrentLine, resetLineHighlight } from "../input/editor.js";
 import { RUNNER_STATES } from "./runner_state.js";
 
 const PYTHON_CODE_FILES = new Map([
@@ -47,18 +48,13 @@ export class WorkerHandler {
     async pyodideMessageHandler(event) {
         let message = event.data;
         if (message.type === "COMMAND") {
-            console.log("COMMAND RECEIVED")
-            this.pauseWaitGame();
-            console.log(this.runnerState)
+            console.log(`CMD: ${message.command}(${message.parameters})`);
         }
         if (message.type === "ERROR") {
         }
         if (message.type === "SETLINE") {
             console.log(`Processed line ${message.line}`)
-            if (this.executeSingleLine) {
-                this.pauseUser();
-            }
-            console.log(this.runnerState)
+            highlightCurrentLine(message.line);
         }
         if (message.type === "REQUESTINPUT") {
             this.pauseWaitInput();
@@ -85,49 +81,23 @@ export class WorkerHandler {
         }
         if (message.type === "RESET_OK") {
             console.log("Reset pyodide");
+            this.pyodideWorker.postMessage({ type: "RESET_WORKER_OK"});
             this.runnerState = RUNNER_STATES.READY;
         }
     }
 
-    pauseUser() {
-        this.isUserPaused = true;
-        this.checkPauseState();
-    }
-
-    resumeUser() {
-        this.isUserPaused = false;
-        this.checkPauseState();
-    }
-
-    pauseWaitGame() {
-        this.isWaitingGame = true;
-        this.checkPauseState();
-    }
-
-    resumeWaitGame() {
-        this.isWaitingGame = false;
-        this.checkPauseState();
-    }
-
-    pauseWaitInput() {
-        this.isWaitingInput = true;
-        this.checkPauseState();
-    }
-
-    resumeWaitInput() {
-        this.isWaitingInput = false;
-        this.checkPauseState();
-    }
-
     checkPauseState() {
+        console.log("CHECKING PAUSE STATE")
         if (this.runnerState === RUNNER_STATES.RUNNING) {
             if (this.isUserPaused || this.isWaitingGame || this.isWaitingInput) {
                 this.haltWorker();
+                console.log("HALT");
             }
         }
         if (this.runnerState === RUNNER_STATES.PAUSED) {
            if (!this.isUserPaused && !this.isWaitingGame && !this.isWaitingInput) {
                 this.unHaltWorker();
+                console.log("UNHALT");
             } 
         }
     }
@@ -148,6 +118,7 @@ export class WorkerHandler {
 
     unHaltWorker() {
         this.runnerState = RUNNER_STATES.RUNNING;
+        console.log("UNHALTING")
         Atomics.store(this.workerWaitArray, 0, 0);
         Atomics.notify(this.workerWaitArray, 0, 1);
     }
@@ -164,13 +135,15 @@ export class WorkerHandler {
     }
 
     reset() {
-        this.unHaltWorker();
-        this.clearWorkerInterrupt();
-        this.interruptWorker();
-        this.pyodideWorker.postMessage({ type: "RESET" });
+        console.log("RESETTING FROM HANDLER")
         this.executeSingleLine = false;
         this.isUserPaused = false;
         this.isWaitingGame = false;
         this.isWaitingInput = false;
+        this.clearWorkerInterrupt();
+        this.unHaltWorker();
+        this.interruptWorker();
+        this.pyodideWorker.postMessage({ type: "RESET" });
+        resetLineHighlight();
     }
 }
