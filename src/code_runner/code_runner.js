@@ -27,3 +27,19 @@ export function resumeRunner() {
     //handler.executeSingleLine = false;
     //handler.resumeUser();
 }
+
+export function onGameFinishAnim() {
+
+}
+
+export function subscribeToGameCommands(func) {
+    handler.gameCommandCallbacks.push(func);
+}
+
+export function subscribeToSetLineCallbacks(func) {
+    handler.setLineCallbacks.push(func);
+}
+
+export function subscribeToResetCallbacks(func) {
+    handler.resetCallbacks.push(func);
+}

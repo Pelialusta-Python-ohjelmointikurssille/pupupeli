@@ -1,5 +1,4 @@
 import { tryGetFileAsText } from "../file_reader.js";
-import { highlightCurrentLine, resetLineHighlight } from "../input/editor.js";
 import { RUNNER_STATES } from "./runner_state.js";
 
 const PYTHON_CODE_FILES = new Map([
@@ -24,6 +23,10 @@ export class WorkerHandler {
         this.isUserPaused = false;
         this.isWaitingGame = false;
         this.isWaitingInput = false;
+
+        this.setLineCallbacks = [];
+        this.gameCommandCallbacks = [];
+        this.resetCallbacks = [];
     }
 
     initialize() {
@@ -49,12 +52,17 @@ export class WorkerHandler {
         let message = event.data;
         if (message.type === "COMMAND") {
             console.log(`CMD: ${message.command}(${message.parameters})`);
+            this.gameCommandCallbacks.forEach(func => {
+                func.call(this, message.command, message.parameters);
+            });
         }
         if (message.type === "ERROR") {
         }
         if (message.type === "SETLINE") {
             console.log(`Processed line ${message.line}`)
-            highlightCurrentLine(message.line);
+            this.setLineCallbacks.forEach(func => {
+                func.call(this, message.line);
+            });
         }
         if (message.type === "REQUESTINPUT") {
             this.pauseWaitInput();
@@ -82,6 +90,9 @@ export class WorkerHandler {
         if (message.type === "RESET_OK") {
             console.log("Reset pyodide");
             this.pyodideWorker.postMessage({ type: "RESET_WORKER_OK"});
+            this.resetCallbacks.forEach(func => {
+                func.call(this);
+            });
             this.runnerState = RUNNER_STATES.READY;
         }
     }
@@ -144,6 +155,5 @@ export class WorkerHandler {
         this.unHaltWorker();
         this.interruptWorker();
         this.pyodideWorker.postMessage({ type: "RESET" });
-        resetLineHighlight();
     }
 }

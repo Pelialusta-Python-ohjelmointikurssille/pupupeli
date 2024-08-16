@@ -1,6 +1,9 @@
 import { Game } from "./game.js";
 import { postMessage } from "../worker_messenger.js";
 import { getVariableTrueName } from './commonstrings.js';
+import { onGameFinishAnim, subscribeToGameCommands } from "../code_runner/code_runner.js";
+
+subscribeToGameCommands((command, parameters) => giveCommand({ data: { command: command, parameters: parameters } }))
 
 //This file controls game. 
 // - Creates new game instances (Game contains both logic and rendering)
@@ -36,7 +39,8 @@ export function commandsDone() {
     if (currentCommand === undefined) {
         return;
     }
-    postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
+    onGameFinishAnim();
+    //postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
 }
 
 /**
