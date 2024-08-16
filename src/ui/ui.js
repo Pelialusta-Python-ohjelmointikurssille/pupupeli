@@ -325,24 +325,16 @@ export function toggleErrorVisibility(toggle) {
 export function loadNextTaskInfo() {
     currentChapter = globals.identifiers.chapterIdentifier;
     currentTask = globals.identifiers.taskIdentifier;
-    const appDiv = document.getElementById("app-container");
-
-    // Check if insAppDiv already exists and remove it if it does
-    const existingInsAppDiv = document.getElementById('instructions-container');
-    if (existingInsAppDiv) {
-        existingInsAppDiv.parentNode.removeChild(existingInsAppDiv);
-    }
-
-    const insAppDiv = document.createElement('div');
-    insAppDiv.id = 'instructions-container'; // Assign a unique ID
+    const appContDiv = document.getElementById("app-container");
+    const insContDiv = document.getElementById("instructions-container");
 
     if (globals.task.getTaskType() === instructionsStr) {
-        appDiv.classList.add("is-hidden");
-        insAppDiv.classList.remove("is-hidden");
-        loadIstructionTask(appDiv, insAppDiv);
+        appContDiv.classList.add("is-hidden");
+        insContDiv.classList.remove("is-hidden");
+        loadIstructionTask();
     } else {
-        appDiv.classList.remove("is-hidden");
-        insAppDiv.classList.add("is-hidden");
+        appContDiv.classList.remove("is-hidden");
+        insContDiv.classList.add("is-hidden");
     }
 
     let descriptionTargetDiv = document.getElementById("task-description");
@@ -359,19 +351,19 @@ export function loadNextTaskInfo() {
     resetInputController();
 };
 
-function loadIstructionTask(appDiv, insAppDiv) {
-    insAppDiv.innerHTML = "";
-    insAppDiv.id = 'instructions-container';
-    insAppDiv.classList.add("box");
-    insAppDiv.style.flexDirection = "row";
-    insAppDiv.style.display = "flex";
-    const insDiv = document.createElement('div');
-    insDiv.id = 'instruction-div';
+function loadIstructionTask() {
+    loadIstructionLeft();
+}
+
+function loadIstructionLeft() {
+    const leftDiv = document.getElementById('left-instructions-container');
+    leftDiv.innerHTML = '';
     
     let insHead = document.createElement('div');
     insHead.id = 'instruction-head';
+    insHead.classList.add('center-content');
 
-    let insHeadline = document.createElement('h1');
+    let insHeadline = document.createElement('h2');
     
     let instructionTitle = document.createElement('a');
     instructionTitle.id = 'instructionTitle';
@@ -384,12 +376,9 @@ function loadIstructionTask(appDiv, insAppDiv) {
     let insDesc = document.createElement('div');
     setDescription(insDesc);
     insDesc.id = 'instruction-desc';
-    
-    
-    appDiv.insertAdjacentElement("afterend", insAppDiv);
-    insAppDiv.appendChild(insDiv);
-    insDiv.appendChild(insHead);
-    insDiv.appendChild(insDesc);
+
+    leftDiv.appendChild(insHead);
+    leftDiv.appendChild(insDesc);
     onTaskComplete(true);
 }
 
