@@ -65,7 +65,6 @@ export class WorkerHandler {
             });
         }
         if (message.type === "REQUESTINPUT") {
-            this.pauseWaitInput();
         }
         if (message.type === "INIT_OK") {
             console.log("Initialized pyodide");
@@ -94,22 +93,6 @@ export class WorkerHandler {
                 func.call(this);
             });
             this.runnerState = RUNNER_STATES.READY;
-        }
-    }
-
-    checkPauseState() {
-        console.log("CHECKING PAUSE STATE")
-        if (this.runnerState === RUNNER_STATES.RUNNING) {
-            if (this.isUserPaused || this.isWaitingGame || this.isWaitingInput) {
-                this.haltWorker();
-                console.log("HALT");
-            }
-        }
-        if (this.runnerState === RUNNER_STATES.PAUSED) {
-           if (!this.isUserPaused && !this.isWaitingGame && !this.isWaitingInput) {
-                this.unHaltWorker();
-                console.log("UNHALT");
-            } 
         }
     }
 
