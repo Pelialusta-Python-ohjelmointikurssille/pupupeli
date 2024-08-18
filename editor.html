@@ -189,6 +189,7 @@
             margin-bottom: 0.25rem;
         }
 
+        #code-blocks-container,
         #multiple-choice-container {
             border: 1px solid black;
             border-radius: 5px;
@@ -196,6 +197,8 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
 
+        #add-codeBlock,
+        #del-codeBlock,
         #add-multiple-choice-button,
         #del-multiple-choice-button {
             margin: 0;
@@ -275,7 +278,7 @@
                 </div>
                 <div id="task-type" class="is-flex is-flex-center">
                     <h3>Tehtävän tyyppi:</h3>
-                    <!--Values in the below radio buttons should match the strings in TaskTypes in commonstrings.js.-->
+                    <!--value fields in the below radio buttons should match the strings in TaskTypes in commonstrings.js.-->
                     <input type="radio" id="taskTypeCollectibles" name="taskType" value="collectibles"
                         style="margin-right: 10px;" checked>
                     <label for="taskTypeCollectibles" style="margin-right: 20px;">Kerää esineet</label>
@@ -292,7 +295,7 @@
                         style="margin-right: 10px;">
                     <label for="taskTypeInstructions">Koodin korjaus</label>
 
-                    <input type="radio" id="taskTypeCodeBlockMoving" name="taskType" value="code-block-Moving"
+                    <input type="radio" id="taskTypeCodeBlockMoving" name="taskType" value="code-block-moving"
                         style="margin-right: 10px;">
                     <label for="taskTypeInstructions">Rivien siirtely</label>
                 </div>
@@ -357,6 +360,8 @@
                     <textarea rows="3" name="editor-input" id="editor-input" class="is-hidden" value=""
                         placeholder="Lisää tehtävän tekstieditoriin etukäteen asetettu koodi"></textarea>
                     <div id="multiple-choice-container" class="is-hidden">
+                    </div>
+                    <div id="code-blocks-container" class="is-hidden">
                     </div>
                 </div>
             </div>

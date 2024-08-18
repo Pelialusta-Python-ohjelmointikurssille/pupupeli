@@ -1,6 +1,6 @@
 import { TaskTypes } from "../game/commonstrings.js";
-import { importTaskFromJSON } from "./editorJsonHandler.js";
-import { createTable, createGridFromTable } from "./editorGridHandler.js";
+import { importTaskFromJSON, generateTaskOutput } from "./editorJsonHandler.js";
+import { createTable } from "./editorGridHandler.js";
 
 let multipleChoiceButton = document.getElementById("inputMultipleChoice");
 let inputCodeBlocksButton = document.getElementById("inputCodeBlocks");
@@ -24,11 +24,14 @@ function initialize() {
     inputCodeBlocksButton.addEventListener("click", inputButtonsToggler);
     document.getElementById("add-multiple-choice-button").addEventListener("click", addMultipleChoiceQuestion);
     document.getElementById("del-multiple-choice-button").addEventListener("click", delMultipleChoiceQuestion);
+    document.getElementById("add-codeBlock").addEventListener("click", addCodeBlock);
+    document.getElementById("del-codeBlock").addEventListener("click", addCodeBlock);
     createTable();
 }
 
 function ImportTask() {
     importTaskFromJSON();
+    //aa ei vissiin tarvii muuta?
 }
 
 // Get all the radio buttons
@@ -55,6 +58,7 @@ taskTypeRadios.forEach(radio => {
         } else if (this.value === TaskTypes.multipleChoice) {
             multipleChoiceButton.classList.remove('is-hidden');
         } else if (this.value == TaskTypes.codeBlockMoving) {
+            console.log("Show??");
             inputCodeBlocksButton.classList.remove('is-hidden');
         }
         inputDescriptionButton.click();
@@ -86,117 +90,6 @@ function hideInstructions() {
     });
 }
 
-class Level {
-    constructor(description, taskTitle, enableAddRemove, taskType, editorCode, multipleChoiceQuestions, grid, conditions) {
-        this.title = taskTitle;
-        this.taskType = taskType;
-        this.enableAddRemove = enableAddRemove;
-        this.description = description;
-        this.editorCode = editorCode;
-        this.multipleChoiceQuestions = multipleChoiceQuestions;
-        this.grid = grid;
-        this.conditions = conditions;
-    }
-}
-
-function getConditions() {
-    let conditions = [];
-    let conditionElements = document.getElementsByClassName("checkbox");
-    for (let x = 0; x < conditionElements.length; x++) {
-        if (conditionElements[x].value === "conditionMaxLines") {
-            let maxLinesValue = conditionElements[x].checked ? conditionElements[x].nextElementSibling.children[0].value : false;
-            conditions.push({ condition: conditionElements[x].value, parameter: maxLinesValue });
-        } else {
-            conditions.push({ condition: conditionElements[x].value, parameter: conditionElements[x].checked });
-        }
-    }
-    return conditions;
-}
-
-function getMultipleChoices() {
-    let multipleChoices = document.getElementById("multiple-choice-container").childNodes;
-    let multipleChoiceArray = []
-
-    for (let i = 1; i < multipleChoices.length; i++) {
-        multipleChoiceArray.push({ question: multipleChoices[i].childNodes[0].value, isCorrectAnswer: multipleChoices[i].childNodes[1].childNodes[0].checked });
-    }
-
-    return multipleChoiceArray;
-}
-
-function getEditorCode() {
-    const editorCodeLines = [];
-    document.getElementById("editor-input").value.split("\n").forEach((line) => {
-        editorCodeLines.push(line);
-    });
-    return editorCodeLines;
-}
-
-function getTitle() {
-    let titleLine = document.querySelector("#task-title-input").value;
-    return titleLine;
-}
-
-function getTaskType() {
-    let typeLine = document.querySelector('input[name="taskType"]:checked').value;
-    return typeLine;
-}
-
-function getEnableAddRemove() {
-    let enableAddRemove = document.getElementById("enable-add-remove-checkbox").checked;
-    return enableAddRemove;
-}
-
-export function generateTaskOutput() {
-    let taskTitle = document.querySelector('#task-title-input').value;
-    let selectedTaskType = document.querySelector('input[name="taskType"]:checked').value;
-    const taskDescriptionLines = [];
-    if (selectedTaskType === 'instructions') {
-        document.getElementById('instructions-input').value.split("\n").forEach((line) => {
-            taskDescriptionLines.push(line);
-        });
-    } else {
-        document.getElementById("task-input").value.split("\n").forEach((line) => {
-            taskDescriptionLines.push(line);
-        });
-    }
-
-    // use Level class to get json output
-    let output = new Level(taskDescriptionLines, getTitle(), getEnableAddRemove(), getTaskType(), getEditorCode(), getMultipleChoices(), createGridFromTable(), getConditions());
-    let outputField = document.getElementById("output-field");
-    outputField.value = customJSONStringify(output);
-    // need to fire input event to resize output field
-    // outputField.dispatchEvent(new Event("input"));
-
-    // show save button after generating task output
-    const save_button = document.getElementById("save-button");
-    if (save_button.classList.contains("is-hidden")) save_button.classList.toggle("is-hidden");
-
-    // check if array consists of single characters only (relevant for printing our grid nicely)
-    function isSingleCharArray(array) {
-        return Array.isArray(array) && array.every(item => typeof item === 'string' && item.length === 1);
-    }
-
-    // replacer function for JSON.stringify
-    function stringifyReplacer(key, value) {
-        if (isSingleCharArray(value)) {
-            return `[${value.join(',')}]`;
-        }
-        return value;
-    }
-
-    // remove extra quotes around the single-character arrays
-    function customJSONStringify(obj) {
-        return JSON.stringify(obj, (key, value) => {
-            let replacedValue = stringifyReplacer(key, value);
-            if (typeof replacedValue === 'string' && replacedValue.startsWith('[')) {
-                return replacedValue;
-            }
-            return value;
-        }, 2).replace(/"(\[.*?\])"/g, '$1');
-    }
-}
-
 function clickConditionBox(targetName) {
     let target = document.getElementById(targetName);
     target.classList.toggle('checked');
@@ -204,17 +97,24 @@ function clickConditionBox(targetName) {
 }
 
 function inputButtonsToggler(event) {
+    //Refactor this someday, even better if move to new file
     let taskInput = document.getElementById("task-input");
     let editorInput = document.getElementById("editor-input");
     let multipleChoiceContainer = document.getElementById("multiple-choice-container");
     let multipleChoiceAddButton = document.getElementById("add-multiple-choice-button");
     let multipleChoiceDelButton = document.getElementById("del-multiple-choice-button");
+    let inputCodeBlocksContainer = document.getElementById("code-blocks-container");
+    let inputCodeBlocksAddButton = document.getElementById("add-codeBlock");
+    let inputCodeBlocksDelButton = document.getElementById("del-codeBlock");
     let typeIndicator = document.getElementById("box-type-indicator");
     taskInput.classList.add("is-hidden");
     editorInput.classList.add("is-hidden");
     multipleChoiceContainer.classList.add("is-hidden");
     multipleChoiceAddButton.classList.add("is-hidden");
     multipleChoiceDelButton.classList.add("is-hidden");
+    inputCodeBlocksContainer.classList.add("is-hidden");
+    inputCodeBlocksAddButton.classList.add("is-hidden");
+    inputCodeBlocksDelButton.classList.add("is-hidden");
     switch (event.target.value) {
         case "inputDescription":
             typeIndicator.innerHTML = "Tehtävän kuvaus:";
@@ -230,6 +130,10 @@ function inputButtonsToggler(event) {
             multipleChoiceAddButton.classList.remove("is-hidden");
             multipleChoiceDelButton.classList.remove("is-hidden");
             break;
+        case "inputCodeBlocks":
+            inputCodeBlocksContainer.classList.remove("is-hidden");
+            inputCodeBlocksAddButton.classList.remove("is-hidden");
+            inputCodeBlocksDelButton.classList.remove("is-hidden");
     }
 }
 
@@ -247,6 +151,18 @@ export function addMultipleChoiceQuestion(question = null) {
         }
     }
     multipleChoiceContainer.insertAdjacentElement("beforeend", multipleChoiceElement);
+}
+
+export function addCodeBlock(string = null) {
+    let inputCodeBlocksContainer = document.getElementById("code-blocks-container");
+    let codeBlock = document.createElement("div");
+    codeBlock.classList.add("multiple-choice", "is-flex", "is-flex-column");
+    if (string === null) {
+        codeBlock.innerHTML = `<input type='text' id='multiple-choice-input-box' placeholder='Koodirivi'>`;
+    } else {
+        codeBlock.innerHTML = `<input type='text' id='multiple-choice-input-box' placeholder='Koodirivi' value=${question.question}>`;
+    }
+    inputCodeBlocksContainer.insertAdjacentElement("beforeend", codeBlock);
 }
 
 function delMultipleChoiceQuestion() {

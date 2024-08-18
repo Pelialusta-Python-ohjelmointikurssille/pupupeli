@@ -23,7 +23,6 @@ export function createTable(isLoad, isImport = false, width = 8, height = 8) {
             cell.dataset.value = "1";
             cell.innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>';
 
-
             cell.addEventListener('click', function () {
                 //Case 1 is is the default value, grass.
                 //Case 0 is reserved for player, so we skip it

@@ -1,5 +1,5 @@
-import { addMultipleChoiceQuestion, generateTaskOutput } from "./editor.js";
-import { createTable, importGrid } from "./editorGridHandler.js";
+import { addMultipleChoiceQuestion } from "./editor.js";
+import { createTable, importGrid, createGridFromTable } from "./editorGridHandler.js";
 
 export function importTaskFromJSON() {
     const fileInput = document.getElementById("import-task-input");
@@ -20,6 +20,7 @@ export function importTaskFromJSON() {
             importEditorCode(task.editorCode);
             importGrid(task.grid);
             importMultipleChoice(task.multipleChoiceQuestions);
+            importCodeBlocks(task.codeBlocks);
 
             // send fake input to textareas to resize them
             tx.forEach(inputBox => {
@@ -101,6 +102,57 @@ function importEditorCode(editorCode) {
     }
 }
 
+export function generateTaskOutput() {
+    let taskTitle = document.querySelector('#task-title-input').value;
+    let selectedTaskType = document.querySelector('input[name="taskType"]:checked').value;
+    const taskDescriptionLines = [];
+    if (selectedTaskType === 'instructions') {
+        document.getElementById('instructions-input').value.split("\n").forEach((line) => {
+            taskDescriptionLines.push(line);
+        });
+    } else {
+        document.getElementById("task-input").value.split("\n").forEach((line) => {
+            taskDescriptionLines.push(line);
+        });
+    }
+
+    // use Level class to get json output
+    let output = new Level(taskDescriptionLines, getTitle(), getEnableAddRemove(),
+        getTaskType(), getEditorCode(), getMultipleChoices(), getCodeBlocks(), createGridFromTable(), getConditions());
+    let outputField = document.getElementById("output-field");
+    outputField.value = customJSONStringify(output);
+    // need to fire input event to resize output field
+    // outputField.dispatchEvent(new Event("input"));
+
+    // show save button after generating task output
+    const save_button = document.getElementById("save-button");
+    if (save_button.classList.contains("is-hidden")) save_button.classList.toggle("is-hidden");
+
+    // check if array consists of single characters only (relevant for printing our grid nicely)
+    function isSingleCharArray(array) {
+        return Array.isArray(array) && array.every(item => typeof item === 'string' && item.length === 1);
+    }
+
+    // replacer function for JSON.stringify
+    function stringifyReplacer(key, value) {
+        if (isSingleCharArray(value)) {
+            return `[${value.join(',')}]`;
+        }
+        return value;
+    }
+
+    // remove extra quotes around the single-character arrays
+    function customJSONStringify(obj) {
+        return JSON.stringify(obj, (key, value) => {
+            let replacedValue = stringifyReplacer(key, value);
+            if (typeof replacedValue === 'string' && replacedValue.startsWith('[')) {
+                return replacedValue;
+            }
+            return value;
+        }, 2).replace(/"(\[.*?\])"/g, '$1');
+    }
+}
+
 function importMultipleChoice(questions) {
     // clear old questions
     document.getElementById("multiple-choice-container").innerHTML = "\n";
@@ -108,4 +160,86 @@ function importMultipleChoice(questions) {
     questions.forEach(question => {
         addMultipleChoiceQuestion(question);
     })
+}
+
+function importCodeBlocks(codeBlocks) {
+    // clear old questions
+    document.getElementById("code-blocks-container").innerHTML = "\n";
+    // add new questions
+    questions.forEach(question => {
+        addMultipleChoiceQuestion(question);
+    })
+}
+
+class Level {
+    constructor(description, taskTitle, enableAddRemove, taskType, editorCode, multipleChoiceQuestions, codeBlocks, grid, conditions) {
+        this.title = taskTitle;
+        this.taskType = taskType;
+        this.enableAddRemove = enableAddRemove;
+        this.description = description;
+        this.editorCode = editorCode;
+        this.multipleChoiceQuestions = multipleChoiceQuestions;
+        this.codeBlocks = codeBlocks;
+        this.grid = grid;
+        this.conditions = conditions;
+    }
+}
+
+function getConditions() {
+    let conditions = [];
+    let conditionElements = document.getElementsByClassName("checkbox");
+    for (let x = 0; x < conditionElements.length; x++) {
+        if (conditionElements[x].value === "conditionMaxLines") {
+            let maxLinesValue = conditionElements[x].checked ? conditionElements[x].nextElementSibling.children[0].value : false;
+            conditions.push({ condition: conditionElements[x].value, parameter: maxLinesValue });
+        } else {
+            conditions.push({ condition: conditionElements[x].value, parameter: conditionElements[x].checked });
+        }
+    }
+    return conditions;
+}
+
+function getMultipleChoices() {
+    let multipleChoices = document.getElementById("multiple-choice-container").childNodes;
+    let multipleChoiceArray = []
+
+    for (let i = 1; i < multipleChoices.length; i++) {
+        multipleChoiceArray.push({ question: multipleChoices[i].childNodes[0].value, isCorrectAnswer: multipleChoices[i].childNodes[1].childNodes[0].checked });
+    }
+
+    return multipleChoiceArray;
+}
+
+function getCodeBlocks() {
+    let codeBlocks = document.getElementById("code-blocks-container").childNodes;
+    let multipleChoiceArray = []
+
+    for (let i = 1; i < codeBlocks.length; i++) {
+        multipleChoiceArray.push(codeBlocks[i].childNodes[0].value);
+    }
+
+    return multipleChoiceArray;
+}
+
+function getEditorCode() {
+    const editorCodeLines = [];
+    document.getElementById("editor-input").value.split("\n").forEach((line) => {
+        editorCodeLines.push(line);
+    });
+    return editorCodeLines;
+}
+
+function getTitle() {
+    let titleLine = document.querySelector("#task-title-input").value;
+    return titleLine;
+}
+
+function getTaskType() {
+    let typeLine = document.querySelector('input[name="taskType"]:checked').value;
+    return typeLine;
+}
+
+function getEnableAddRemove() {
+    let enableAddRemove = document.getElementById("enable-add-remove-checkbox").checked;
+    return enableAddRemove;
 }
