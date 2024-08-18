@@ -1,27 +1,34 @@
 import { TaskTypes } from "../game/commonstrings.js";
+import { importTaskFromJSON } from "./editorJsonHandler.js";
+import { createTable, createGridFromTable } from "./editorGridHandler.js";
 
 let multipleChoiceButton = document.getElementById("inputMultipleChoice");
 let inputCodeBlocksButton = document.getElementById("inputCodeBlocks");
+let inputDescriptionButton = document.getElementById("inputDescription");
 
 function initialize() {
     //Uppest buttons
     document.getElementById("createTable").addEventListener("click", createTable);
     document.getElementById("generateTaskOutput").addEventListener("click", generateTaskOutput);
     document.getElementById("save-button").addEventListener("click", downloadOutput);
-    document.getElementById("import-task-input").addEventListener("change", importTaskFromJSON);
+    document.getElementById("import-task-input").addEventListener("change", ImportTask);
     //condition buttons
     document.getElementById("conditionUsedWhile").addEventListener("click", () => clickConditionBox("conditionUsedWhile"));
     document.getElementById("conditionUsedFor").addEventListener("click", () => clickConditionBox("conditionUsedFor"));
     document.getElementById("conditionUsedInput").addEventListener("click", () => clickConditionBox("conditionUsedInput"));
     document.getElementById("conditionMaxLines").addEventListener("click", () => clickConditionBox("conditionMaxLines"));
     //Tabs for selected tasktype
-    document.getElementById("inputDescription").addEventListener("click", inputButtonsToggler);
+    inputDescriptionButton.addEventListener("click", inputButtonsToggler);
     document.getElementById("inputEditorCode").addEventListener("click", inputButtonsToggler);
     multipleChoiceButton.addEventListener("click", inputButtonsToggler);
     inputCodeBlocksButton.addEventListener("click", inputButtonsToggler);
     document.getElementById("add-multiple-choice-button").addEventListener("click", addMultipleChoiceQuestion);
     document.getElementById("del-multiple-choice-button").addEventListener("click", delMultipleChoiceQuestion);
     createTable();
+}
+
+function ImportTask() {
+    importTaskFromJSON();
 }
 
 // Get all the radio buttons
@@ -50,6 +57,7 @@ taskTypeRadios.forEach(radio => {
         } else if (this.value == TaskTypes.codeBlockMoving) {
             inputCodeBlocksButton.classList.remove('is-hidden');
         }
+        inputDescriptionButton.click();
     });
 });
 // hides regular view and shows instruction view
@@ -89,79 +97,6 @@ class Level {
         this.grid = grid;
         this.conditions = conditions;
     }
-}
-
-function createTable(isLoad, isImport = false, width = 8, height = 8) {
-    let gridDimensions;
-    if (isImport) {
-        gridDimensions = {
-            width: width,
-            height: height
-        };
-    } else {
-        gridDimensions = {
-            width: document.getElementById("grid-width-input").value,
-            height: document.getElementById("grid-height-input").value
-        };
-    }
-    const table = document.getElementById("editor-table");
-
-    // empty the table in case user generates multiple times without reloading page
-    table.innerHTML = '';
-
-    for (let x = 0; x < gridDimensions.height; x++) {
-        table.appendChild(document.createElement("tr"));
-        for (let y = 0; y < gridDimensions.width; y++) {
-            let cell = table.children[x].appendChild(document.createElement("td"));
-            cell.dataset.value = "1";
-            cell.innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>';
-
-
-            cell.addEventListener('click', function () {
-                //Case 1 is is the default value, grass.
-                //Case 0 is reserved for player, so we skip it
-                this.dataset.value++;
-                if (this.dataset.value > _maxImageIndex) this.dataset = 1;
-                this.innerHTML = getImage(this.dataset.value);
-            });
-        }
-    }
-
-    let cells = table.getElementsByTagName("td");
-
-    Array.from(cells).forEach(cell => {
-        cell.addEventListener("contextmenu", function (event) {
-            event.preventDefault();
-            Array.from(cells).forEach(c => {
-                if (c.dataset.value === "0") {
-                    c.dataset.value = "1";
-                    c.innerHTML = '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>'
-                }
-            });
-
-            this.dataset.value = "0";
-            this.innerHTML = '<img src="/src/static/game_assets/characters/bunny_right.png"></img>';
-        });
-    });
-}
-
-function createGridFromTable() {
-    const table = document.getElementById('editor-table');
-    const rows = table.rows;
-    const grid = [];
-
-    for (let i = 0; i < rows.length; i++) {
-        const cells = rows[i].cells;
-        const rowArray = [];
-
-        for (let j = 0; j < cells.length; j++) {
-            rowArray.push(cells[j].dataset.value);
-        }
-
-        grid.push(rowArray);
-    }
-
-    return grid;
 }
 
 function getConditions() {
@@ -212,8 +147,7 @@ function getEnableAddRemove() {
     return enableAddRemove;
 }
 
-function generateTaskOutput() {
-    console.log(document.querySelector('#task-title-input').value);
+export function generateTaskOutput() {
     let taskTitle = document.querySelector('#task-title-input').value;
     let selectedTaskType = document.querySelector('input[name="taskType"]:checked').value;
     const taskDescriptionLines = [];
@@ -299,7 +233,7 @@ function inputButtonsToggler(event) {
     }
 }
 
-function addMultipleChoiceQuestion(question = null) {
+export function addMultipleChoiceQuestion(question = null) {
     let multipleChoiceContainer = document.getElementById("multiple-choice-container");
     let multipleChoiceElement = document.createElement("div");
     multipleChoiceElement.classList.add("multiple-choice", "is-flex", "is-flex-column");
@@ -344,161 +278,6 @@ for (let i = 0; i < tx.length; i++) {
 function OnInput() {
     this.style.height = 'auto';
     this.style.height = (this.scrollHeight) + "px";
-}
-
-// import related functions
-function importTaskFromJSON() {
-    const fileInput = document.getElementById("import-task-input");
-    const file = fileInput.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            let task = JSON.parse(e.target.result);
-            console.log(task.grid.length)
-            createTable(false, true, task.grid[0].length, task.grid.length);
-
-            importTitle(task.title);
-            importTaskType(task.taskType);
-            importEnableAddRemove(task.enableAddRemove);
-            importConditions(task.conditions);
-            importDescription(task.description, task.taskType);
-            importEditorCode(task.editorCode);
-            importGrid(task.grid);
-            importMultipleChoice(task.multipleChoiceQuestions);
-
-            // send fake input to textareas to resize them
-            tx.forEach(inputBox => {
-                inputBox.dispatchEvent(new Event("input"));
-            });
-
-            generateTaskOutput();
-        }
-
-        reader.readAsText(file);
-    }
-
-    function importTitle(title) {
-        let taskTitle = document.getElementById("task-title-input");
-        taskTitle.value = title;
-    }
-
-    function importTaskType(taskType) {
-        let taskTypeRadios = document.getElementsByName("taskType");
-
-        for (let i = 0; i < taskTypeRadios.length; i++) {
-            if (taskTypeRadios[i].value === taskType) {
-                taskTypeRadios[i].checked = true;
-                if (taskType === "instructions") {
-                    showInstructions();
-                } else {
-                    hideInstructions();
-                }
-            }
-        }
-    }
-
-    function importEnableAddRemove(enableAddRemove) {
-        let checkbox = document.getElementById("enable-add-remove-checkbox");
-        if (enableAddRemove) {
-            checkbox.checked = true;
-        } else {
-            checkbox.checked = false;
-        }
-    }
-
-
-    function importConditions(conditions) {
-        document.getElementById("options-conditions").querySelectorAll(".checkbox-container").forEach(element => {
-            element.childNodes[0].checked = false;
-            element.classList.remove("active");
-        })
-
-        for (let i = 0; i < conditions.length; i++) {
-            if (conditions[i].condition === "conditionMaxLines") {
-                if (conditions[i].parameter !== false) {
-                    document.getElementById(conditions[i].condition).checked = true;
-                    document.getElementById(conditions[i].condition).parentNode.classList.add("active");
-                    document.getElementById("maxLinesInput").value = conditions[i].parameter;
-                }
-            } else if (conditions[i].parameter !== false) {
-                document.getElementById(conditions[i].condition).checked = true;
-                document.getElementById(conditions[i].condition).parentNode.classList.add("active");
-            }
-        }
-    }
-
-    function importDescription(description, taskType) {
-        let taskInput;
-        if (taskType != "instructions") {
-            taskInput = document.getElementById("task-input");
-        } else {
-            taskInput = document.getElementById("instructions-input");
-        }
-        taskInput.value = "";
-
-        for (let i = 0; i < description.length; i++) {
-            taskInput.value += (i === description.length - 1) ? description[i] : description[i] + "\n";
-        }
-    }
-
-    function importEditorCode(editorCode) {
-        let editorCodeInput = document.getElementById("editor-input");
-        editorCodeInput.value = "";
-
-        for (let i = 0; i < editorCode.length; i++) {
-            editorCodeInput.value += (i === editorCode.length - 1) ? editorCode[i] : editorCode[i] + "\n";
-        }
-    }
-
-    function importGrid(grid) {
-        const table = document.getElementById("editor-table");
-        let cells = table.getElementsByTagName("td");
-        let ctr = 0;
-
-        for (let i = 0; i < grid.length; i++) {
-            for (let j = 0; j < grid[i].length; j++) {
-                cells[ctr].dataset.value = grid[i][j];
-                ctr++;
-            }
-        }
-
-        for (let i = 0; i < cells.length; i++) {
-            cells[i].innerHTML = getImage(cells[i].dataset.value);
-        }
-    }
-
-    function importMultipleChoice(questions) {
-        // clear old questions
-        document.getElementById("multiple-choice-container").innerHTML = "\n";
-        // add new questions
-        questions.forEach(question => {
-            addMultipleChoiceQuestion(question);
-        })
-    }
-}
-
-//Change this value if you add more images to the switch statement in getImage() below
-var _maxImageIndex = 3;
-//IMPORTANT! "maxImageIndex" above must be the same as the max value used in the switch statement below
-/**
- * Get the image path by using the value it represents in gamecode when it creates the grid in game logic.
- * Remember that if you change the values below, change the values of "gridObjectManifest" in gridfactory.js.
- * They must be the same.
- */
-function getImage(value) {
-    //Player is 0, grass is 1 and is used as the default
-    switch (value) {
-        case '0':
-            return '<img src="/src/static/game_assets/characters/bunny_right.png"></img>';
-        case '2':
-            return '<img src="/src/static/game_assets/collectibles/carrot.png"></img>';
-        case '3':
-            return '<img src="/src/static/game_assets/obstacles/rock.png"></img>';
-        default:
-            return '<img src="/src/static/game_assets/backgrounds/background_grass.png"></img>';
-    }
 }
 
 initialize();
