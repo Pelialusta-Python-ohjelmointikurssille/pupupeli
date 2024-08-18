@@ -25,7 +25,7 @@ function initialize() {
     document.getElementById("add-multiple-choice-button").addEventListener("click", addMultipleChoiceQuestion);
     document.getElementById("del-multiple-choice-button").addEventListener("click", delMultipleChoiceQuestion);
     document.getElementById("add-codeBlock").addEventListener("click", addCodeBlock);
-    document.getElementById("del-codeBlock").addEventListener("click", addCodeBlock);
+    document.getElementById("del-codeBlock").addEventListener("click", delCodeBlock);
     createTable();
 }
 
@@ -58,7 +58,6 @@ taskTypeRadios.forEach(radio => {
         } else if (this.value === TaskTypes.multipleChoice) {
             multipleChoiceButton.classList.remove('is-hidden');
         } else if (this.value == TaskTypes.codeBlockMoving) {
-            console.log("Show??");
             inputCodeBlocksButton.classList.remove('is-hidden');
         }
         inputDescriptionButton.click();
@@ -153,21 +152,26 @@ export function addMultipleChoiceQuestion(question = null) {
     multipleChoiceContainer.insertAdjacentElement("beforeend", multipleChoiceElement);
 }
 
-export function addCodeBlock(string = null) {
-    let inputCodeBlocksContainer = document.getElementById("code-blocks-container");
-    let codeBlock = document.createElement("div");
-    codeBlock.classList.add("multiple-choice", "is-flex", "is-flex-column");
-    if (string === null) {
-        codeBlock.innerHTML = `<input type='text' id='multiple-choice-input-box' placeholder='Koodirivi'>`;
-    } else {
-        codeBlock.innerHTML = `<input type='text' id='multiple-choice-input-box' placeholder='Koodirivi' value=${question.question}>`;
-    }
-    inputCodeBlocksContainer.insertAdjacentElement("beforeend", codeBlock);
-}
-
 function delMultipleChoiceQuestion() {
     let multipleChoiceContainer = document.getElementById("multiple-choice-container");
     multipleChoiceContainer.childNodes[multipleChoiceContainer.childNodes.length - 1].remove();
+}
+
+export function addCodeBlock(string = null) {
+    let codeBlocksContainer = document.getElementById("code-blocks-container");
+    let codeBlock = document.createElement("div");
+    codeBlock.classList.add("multiple-choice", "is-flex", "is-flex-column");
+    if (string === null) {
+        codeBlock.innerHTML = `<input type='text' id='code-block-input-box' placeholder='Koodirivi'>`;
+    } else {
+        codeBlock.innerHTML = `<input type='text' id='code-block-input-box' value=${string}>`;
+    }
+    codeBlocksContainer.insertAdjacentElement("beforeend", codeBlock);
+}
+
+function delCodeBlock() {
+    let codeBlocksContainer = document.getElementById("code-blocks-container");
+    codeBlocksContainer.childNodes[codeBlocksContainer.childNodes.length - 1].remove();
 }
 
 // creates a downloadable file from the text in the output field

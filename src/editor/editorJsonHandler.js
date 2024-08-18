@@ -163,11 +163,10 @@ function importMultipleChoice(questions) {
 }
 
 function importCodeBlocks(codeBlocks) {
-    // clear old questions
+    //clear, then add
     document.getElementById("code-blocks-container").innerHTML = "\n";
-    // add new questions
-    questions.forEach(question => {
-        addMultipleChoiceQuestion(question);
+    codeBlocks.forEach(codeblock => {
+        addMultipleChoiceQuestion(codeblock);
     })
 }
 
