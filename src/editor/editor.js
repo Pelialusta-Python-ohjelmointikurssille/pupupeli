@@ -22,9 +22,9 @@ function initialize() {
     document.getElementById("inputEditorCode").addEventListener("click", inputButtonsToggler);
     multipleChoiceButton.addEventListener("click", inputButtonsToggler);
     inputCodeBlocksButton.addEventListener("click", inputButtonsToggler);
-    document.getElementById("add-multiple-choice-button").addEventListener("click", addMultipleChoiceQuestion);
+    document.getElementById("add-multiple-choice-button").addEventListener("click", () => addMultipleChoiceQuestion());
     document.getElementById("del-multiple-choice-button").addEventListener("click", delMultipleChoiceQuestion);
-    document.getElementById("add-codeBlock").addEventListener("click", addCodeBlock);
+    document.getElementById("add-codeBlock").addEventListener("click", () => addCodeBlock());
     document.getElementById("del-codeBlock").addEventListener("click", delCodeBlock);
     createTable();
 }
@@ -154,6 +154,7 @@ export function addMultipleChoiceQuestion(question = null) {
 
 function delMultipleChoiceQuestion() {
     let multipleChoiceContainer = document.getElementById("multiple-choice-container");
+    if (!multipleChoiceContainer.hasChildNodes()) return;
     multipleChoiceContainer.childNodes[multipleChoiceContainer.childNodes.length - 1].remove();
 }
 
@@ -171,6 +172,7 @@ export function addCodeBlock(string = null) {
 
 function delCodeBlock() {
     let codeBlocksContainer = document.getElementById("code-blocks-container");
+    if (!codeBlocksContainer.hasChildNodes()) return;
     codeBlocksContainer.childNodes[codeBlocksContainer.childNodes.length - 1].remove();
 }
 

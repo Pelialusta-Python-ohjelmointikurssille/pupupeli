@@ -1,4 +1,4 @@
-import { addMultipleChoiceQuestion } from "./editor.js";
+import { addMultipleChoiceQuestion, addCodeBlock } from "./editor.js";
 import { createTable, importGrid, createGridFromTable } from "./editorGridHandler.js";
 
 export function importTaskFromJSON() {
@@ -166,7 +166,7 @@ function importCodeBlocks(codeBlocks) {
     //clear, then add
     document.getElementById("code-blocks-container").innerHTML = "\n";
     codeBlocks.forEach(codeblock => {
-        addMultipleChoiceQuestion(codeblock);
+        addCodeBlock(codeblock);
     })
 }
 
