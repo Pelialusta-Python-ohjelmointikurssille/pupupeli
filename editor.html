@@ -258,11 +258,12 @@
                 </div>
                 <div id="grid-input-submit-container" class="is-flex">
                     <button class="grid-input-submit" type="submit" id="createTable">Luo uusi tyhjä ruudukko</button>
-                    <button class="grid-input-submit" type="submit" id="generateTaskOutput">Tulosta taso</button>
-                    <button id="save-button" class="grid-input-submit is-hidden" type="submit">Tallenna</button>
+                    <button class="grid-input-submit" type="submit" id="generateTaskOutput">Generoi Tiedosto</button>
+                    <button id="save-button" class="grid-input-submit is-hidden" type="submit">Tallenna
+                        Tiedosto</button>
                     <input type="file" id="import-task-input" class="" type="input" value="Import">
                     <button type="submit" id="import-task-button" class="grid-input-submit" value="Import"
-                        onclick="document.getElementById('import-task-input').click();">Import</button>
+                        onclick="document.getElementById('import-task-input').click();">Lataa Tiedosto</button>
                     </input>
                 </div>
             </div>
@@ -339,10 +340,17 @@
                             kuvaus</button>
                         <button class="options-input-buttons" value="inputEditorCode" id="inputEditorCode">Editorin
                             koodi</button>
-                        <button class="options-input-buttons" value="inputMultipleChoice" id="inputMultipleChoice">
+                        <!--Multiple choice toggle add remove buttons button-->
+                        <button class="options-input-buttons is-hidden" value="inputMultipleChoice"
+                            id="inputMultipleChoice">
                             Monivalintatehtävät</button>
                         <button id="add-multiple-choice-button" class="is-hidden">+</button>
                         <button id="del-multiple-choice-button" class="is-hidden">x</button>
+                        <!--Code block add remove buttons button-->
+                        <button class="options-input-buttons is-hidden" value="inputCodeBlocks" id="inputCodeBlocks">
+                            Koodi Palikat</button>
+                        <button id="add-codeBlock" class="is-hidden">+</button>
+                        <button id="del-codeBlock" class="is-hidden">x</button>
                     </div>
                     <textarea rows="3" name="task-input" id="task-input" value=""
                         placeholder="Lisää tehtävän kuvaus"></textarea>

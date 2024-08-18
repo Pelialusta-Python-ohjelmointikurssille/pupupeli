@@ -1,7 +1,9 @@
 import { TaskTypes } from "../game/commonstrings.js";
 
+let multipleChoiceButton = document.getElementById("inputMultipleChoice");
+let inputCodeBlocksButton = document.getElementById("inputCodeBlocks");
+
 function initialize() {
-    //refactor later...
     //Uppest buttons
     document.getElementById("createTable").addEventListener("click", createTable);
     document.getElementById("generateTaskOutput").addEventListener("click", generateTaskOutput);
@@ -15,7 +17,8 @@ function initialize() {
     //Tabs for selected tasktype
     document.getElementById("inputDescription").addEventListener("click", inputButtonsToggler);
     document.getElementById("inputEditorCode").addEventListener("click", inputButtonsToggler);
-    document.getElementById("inputMultipleChoice").addEventListener("click", inputButtonsToggler);
+    multipleChoiceButton.addEventListener("click", inputButtonsToggler);
+    inputCodeBlocksButton.addEventListener("click", inputButtonsToggler);
     document.getElementById("add-multiple-choice-button").addEventListener("click", addMultipleChoiceQuestion);
     document.getElementById("del-multiple-choice-button").addEventListener("click", delMultipleChoiceQuestion);
     createTable();
@@ -31,18 +34,21 @@ let optionsAddRemoveDiv = document.getElementById('task-enable-add-remove');
 let optionsAppContainer = document.getElementById('app-container');
 let instructionsInput = document.getElementById('instructions-input');
 let headlines = document.querySelectorAll('.headline');
+
 // Add the event listener to each radio button
 taskTypeRadios.forEach(radio => {
     radio.addEventListener('change', function () {
-        // If the selected task type is 'instructions', show the text box and hide the divs
+        //hide all
+        hideInstructions();
+        multipleChoiceButton.classList.add('is-hidden');
+        inputCodeBlocksButton.classList.add('is-hidden');
+        //un-hide those that are needed
         if (this.value === TaskTypes.instruction) {
             showInstructions()
-        } else {
-            // Otherwise, hide the text box and show the divs
-            hideInstructions()
-            if (this.value === TaskTypes.multipleChoice) {
-                console.log("multiple");
-            }
+        } else if (this.value === TaskTypes.multipleChoice) {
+            multipleChoiceButton.classList.remove('is-hidden');
+        } else if (this.value == TaskTypes.codeBlockMoving) {
+            inputCodeBlocksButton.classList.remove('is-hidden');
         }
     });
 });
@@ -52,7 +58,7 @@ function showInstructions() {
     optionsInputDiv.style.display = 'none';
     optionsAppContainer.style.display = 'none';
     optionsAddRemoveDiv.style.display = 'none';
-    instructionsInput.style.display = 'block';
+    //instructionsInput.style.display = 'block'; //Oli turha??
     instructionsInput.classList.remove('is-hidden');
     headlines.forEach(headline => {
         headline.style.display = 'none';
@@ -61,11 +67,11 @@ function showInstructions() {
 
 // hides instruction view and shows regular view
 function hideInstructions() {
-    instructionsInput.style.display = 'none';
     optionsConditionsDiv.style.display = 'flex';
     optionsInputDiv.style.display = 'flex';
     optionsAppContainer.style.display = 'flex';
     optionsAddRemoveDiv.style.display = 'flex';
+    //instructionsInput.style.display = 'none'; //Oli turha??
     instructionsInput.classList.add('is-hidden');
     headlines.forEach(headline => {
         headline.style.display = 'block';
@@ -270,40 +276,25 @@ function inputButtonsToggler(event) {
     let multipleChoiceAddButton = document.getElementById("add-multiple-choice-button");
     let multipleChoiceDelButton = document.getElementById("del-multiple-choice-button");
     let typeIndicator = document.getElementById("box-type-indicator");
-
+    taskInput.classList.add("is-hidden");
+    editorInput.classList.add("is-hidden");
+    multipleChoiceContainer.classList.add("is-hidden");
+    multipleChoiceAddButton.classList.add("is-hidden");
+    multipleChoiceDelButton.classList.add("is-hidden");
     switch (event.target.value) {
         case "inputDescription":
             typeIndicator.innerHTML = "Tehtävän kuvaus:";
-            if (taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
-            if (!editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
-            if (!multipleChoiceContainer.classList.contains("is-hidden")) {
-                multipleChoiceContainer.classList.toggle("is-hidden");
-                multipleChoiceAddButton.classList.toggle("is-hidden");
-                multipleChoiceDelButton.classList.toggle("is-hidden");
-                multipleChoiceContainer.classList.toggle("is-flex");
-            }
+            taskInput.classList.remove("is-hidden");
             break;
         case "inputEditorCode":
             typeIndicator.innerHTML = "Editorin koodi:";
-            if (!taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
-            if (editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
-            if (!multipleChoiceContainer.classList.contains("is-hidden")) {
-                multipleChoiceContainer.classList.toggle("is-hidden");
-                multipleChoiceAddButton.classList.toggle("is-hidden");
-                multipleChoiceDelButton.classList.toggle("is-hidden");
-                multipleChoiceContainer.classList.toggle("is-flex");
-            }
+            editorInput.classList.remove("is-hidden");
             break;
         case "inputMultipleChoice":
             typeIndicator.innerHTML = "Monivalinta vaihtoehdot:";
-            if (!taskInput.classList.contains("is-hidden")) taskInput.classList.toggle("is-hidden");
-            if (!editorInput.classList.contains("is-hidden")) editorInput.classList.toggle("is-hidden");
-            if (multipleChoiceContainer.classList.contains("is-hidden")) {
-                multipleChoiceContainer.classList.toggle("is-hidden");
-                multipleChoiceAddButton.classList.toggle("is-hidden");
-                multipleChoiceDelButton.classList.toggle("is-hidden");
-                multipleChoiceContainer.classList.toggle("is-flex");
-            }
+            multipleChoiceContainer.classList.remove("is-hidden");
+            multipleChoiceAddButton.classList.remove("is-hidden");
+            multipleChoiceDelButton.classList.remove("is-hidden");
             break;
     }
 }
