@@ -3,8 +3,8 @@ import { setCurrentLine } from "./py_error_handling.js";
 
 let editor;
 let currentLineMarker; //the line that is currently executing
+let codeBlocksElement = document.getElementById("code-blocks-container");
 let aceEditorElement = document.getElementById("editor");
-
 const aceEditorScript = document.createElement('script');
 aceEditorScript.src = `https://cdnjs.cloudflare.com/ajax/libs/ace/${ace_version}/ace.js`;
 document.head.appendChild(aceEditorScript);
@@ -70,10 +70,33 @@ export function resetLineHighlight() {
  * Codeblocks are instead used as visuals, that arrange the code inside editor secretly.
  * @param {*} isCodeblockMode bool
  */
-export function useCodeBlocksInsteadOfEditor(isCodeblockMode) {
+export function showCodeBlocksInsteadOfEditor(isCodeblockMode) {
     if (isCodeblockMode) {
         aceEditorElement.classList.add("is-hidden");
+        codeBlocksElement.classList.remove("is-hidden");
         return;
     }
     aceEditorElement.classList.remove("is-hidden");
+    codeBlocksElement.classList.add("is-hidden");
 }
+
+export function createCodeBlocks(strings) {
+    while (codeBlocksElement.firstChild) {
+        codeBlocksElement.removeChild(codeBlocksElement.lastChild);
+    }
+    strings.forEach(codeblock => {
+        createListGroupitem(codeblock);
+    });
+}
+
+function createListGroupitem(string) {
+    let listItem = document.createElement("div");
+    listItem.className = "list-group-item";
+    listItem.textContent = string;
+    console.log(listItem);
+    codeBlocksElement.appendChild(listItem);
+}
+
+//<div class="list-group-item">This is <a
+//href="http://rubaxa.github.io/Sortable/">Sortable</a></div>
+//<div class="list-group-item">It works with Bootstrap...</div>

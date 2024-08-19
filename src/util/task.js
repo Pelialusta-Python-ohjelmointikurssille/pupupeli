@@ -17,13 +17,14 @@ import { getCurrentTheme } from "./globals.js";
  * @returns {Task} - An object representing a task
  */
 export class Task {
-    constructor(taskType, title, enableAddRemove, description, editorCode, multipleChoiceQuestions, grid, conditions) {
+    constructor(taskType, title, enableAddRemove, description, editorCode, multipleChoiceQuestions, codeBlocks, grid, conditions) {
         this.taskType = taskType;
         this.title = title;
         this.enableAddRemove = enableAddRemove;
         this.description = description;
         this.editorCode = editorCode;
         this.multipleChoiceQuestions = multipleChoiceQuestions;
+        this.codeBlocks = codeBlocks;
         this.grid = grid;
         this.conditions = conditions;
     }
@@ -40,6 +41,7 @@ export class Task {
         this.description = '';
         this.editorCode = '';
         this.multipleChoiceQuestions = [];
+        this.codeBlocks = [];
         this.grid = [];
         this.conditions = [];
     
