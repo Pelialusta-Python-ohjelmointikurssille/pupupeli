@@ -29,7 +29,7 @@ export function resumeRunner() {
 }
 
 export function onGameFinishAnim() {
-
+    handler.onFinishAnimations();
 }
 
 export function subscribeToGameCommands(func) {

@@ -6,9 +6,11 @@ import sys
 import signal
 import runpy
 
+CODE_WAIT_TIME = 0.05
+
 js_bridge = JSBridge()
 erro_handler = ErrorHandler(js_bridge)
-tracer = PythonTracer(js_bridge)
+tracer = PythonTracer(js_bridge, CODE_WAIT_TIME)
 tracer.start_tracer()
 
 pelaaja = Pelaaja(js_bridge)

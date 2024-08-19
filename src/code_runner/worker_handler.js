@@ -63,6 +63,9 @@ export class WorkerHandler {
             this.setLineCallbacks.forEach(func => {
                 func.call(this, message.line);
             });
+            if (this.executeSingleLine === false) {
+                this.unHaltWorker();
+            }
         }
         if (message.type === "REQUESTINPUT") {
         }
@@ -126,6 +129,12 @@ export class WorkerHandler {
     stepToNextLine() {
         this.executeSingleLine = true;
         this.unHaltWorker();
+    }
+
+    onFinishAnimations() {
+        if (this.executeSingleLine === false) {
+            this.unHaltWorker();
+        }
     }
 
     reset() {

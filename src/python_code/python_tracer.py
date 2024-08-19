@@ -3,8 +3,9 @@ from sys import settrace, setprofile
 from js_bridge import JSBridge
 
 class PythonTracer:
-    def __init__(self, js_bridge: JSBridge) -> None:
+    def __init__(self, js_bridge: JSBridge, code_wait_time: int) -> None:
         self.js_bridge = js_bridge
+        self.code_wait_time = code_wait_time
 
     def trace(self, frame, event, args):
         code = frame.f_code
@@ -14,6 +15,7 @@ class PythonTracer:
         if filename == "/home/pyodide/userscript.py":
             print(f"A {event} encountered in {filename}.{func_name}() at line number {line_no} ") 
             self.js_bridge.send_line_info(line_no)
+            sleep(self.code_wait_time)
         return self.trace
 
     def set_as_trace(self):
