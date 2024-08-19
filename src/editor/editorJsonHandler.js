@@ -164,7 +164,7 @@ function importMultipleChoice(questions) {
 
 function importCodeBlocks(codeBlocks) {
     //clear, then add
-    document.getElementById("code-blocks-container").innerHTML = "\n";
+    document.getElementById("code-blocks-container").innerHTML = "";
     codeBlocks.forEach(codeblock => {
         addCodeBlock(codeblock);
     })

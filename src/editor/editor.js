@@ -160,14 +160,17 @@ function delMultipleChoiceQuestion() {
 
 export function addCodeBlock(string = null) {
     let codeBlocksContainer = document.getElementById("code-blocks-container");
-    let codeBlock = document.createElement("div");
-    codeBlock.classList.add("multiple-choice", "is-flex", "is-flex-column");
+    let inputContainer = document.createElement("div");
+    inputContainer.classList.add("multiple-choice", "is-flex", "is-flex-column");
+    let codeBlock = document.createElement("input");
+    codeBlock.classList.add("is-flex", "is-flex-column");
     if (string === null) {
-        codeBlock.innerHTML = `<input type='text' id='code-block-input-box' placeholder='Koodirivi'>`;
+        codeBlock.placeholder = 'Koodirivi';
     } else {
-        codeBlock.innerHTML = `<input type='text' id='code-block-input-box' value=${string}>`;
+        codeBlock.value = string;
     }
-    codeBlocksContainer.insertAdjacentElement("beforeend", codeBlock);
+    inputContainer.appendChild(codeBlock);
+    codeBlocksContainer.insertAdjacentElement("beforeend", inputContainer);
 }
 
 function delCodeBlock() {
