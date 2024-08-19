@@ -1,5 +1,4 @@
 import { Game } from "./game.js";
-import { postMessage } from "../worker_messenger.js";
 import { getVariableTrueName } from './commonstrings.js';
 import { onGameFinishAnim, subscribeToGameCommands } from "../code_runner/code_runner.js";
 

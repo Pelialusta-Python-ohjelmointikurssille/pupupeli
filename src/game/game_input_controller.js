@@ -1,4 +1,3 @@
-import { onUserSendInputToWorker, setMessagePassingState } from "../worker_messenger.js";
 import { displayPreviousInputs, hideAndClearInputBox, showInputBox } from "../ui/inputBox.js";
 
 let userInputs = [];
@@ -14,19 +13,16 @@ export function requestInputFromPython() {
 export function requestInputFromGame() {
     showInputBox();
     isWaitingForInput = true;
-    setMessagePassingState({ paused: true });
 }
 
 export function answerInput(inputString) {
     if (isWaitingForPython) {
         isWaitingForPython = false;
     } else {
-        setMessagePassingState({ paused: false });
     }
     isWaitingForInput = false;
     userInputs.push(inputString);
     displayPreviousInputs();
-    onUserSendInputToWorker(inputString);
     hideAndClearInputBox();
 }
 
