@@ -152,4 +152,8 @@ export class WorkerHandler {
         this.interruptWorker();
         this.pyodideWorker.postMessage({ type: "RESET" });
     }
+
+    isThreadLocked() {
+        return Atomics.load(this.workerWaitArray, 0) === 1;
+    }
 }
