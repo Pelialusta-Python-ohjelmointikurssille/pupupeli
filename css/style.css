@@ -215,6 +215,12 @@ button:hover {
     margin: 10px 0; /* Adds some margin to separate it from other elements */
 }
 
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 .switch {
     position: relative;
     display: inline-block;
@@ -384,22 +390,20 @@ button:hover {
     max-width: calc(var(--canvas-width) * 2.5);
 }
 
-#instruction-div {
+#left-instructions-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    padding: 2rem;
+    margin: 1rem 0rem 1rem 1rem;
+    width: var(--canvas-width);
+    max-height: 768px;
+    overflow-y: auto;
 }
 
-#instructions-container {
-    flex-direction: row;
+#right-instructions-container {
+    flex-direction: column;
     display: flex;
-    width: 1585px;
-    max-height: 800px;
-    overflow-y: auto;
+    justify-content: center;
+    align-items: center;
 }
 
 #instruction-head {
@@ -659,7 +663,7 @@ button:hover {
 
 /* media queries */
 @media (max-width: calc((768px * 2) + 3rem)) {
-    #app-container {
+    #app-container, #instructions-container {
         grid-template-columns: 1fr;
         gap: unset;
     }
