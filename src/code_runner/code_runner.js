@@ -43,3 +43,7 @@ export function subscribeToSetLineCallbacks(func) {
 export function subscribeToResetCallbacks(func) {
     handler.resetCallbacks.push(func);
 }
+
+export function subscribeToFinishCallbacks(func) {
+    handler.finishCallbacks.push(func);
+}

@@ -27,6 +27,7 @@ export class WorkerHandler {
         this.setLineCallbacks = [];
         this.gameCommandCallbacks = [];
         this.resetCallbacks = [];
+        this.finishCallbacks = [];
     }
 
     initialize() {
@@ -88,6 +89,9 @@ export class WorkerHandler {
         if(message.type === "EXECFINISH") {
             console.log("Finished python execution");
             this.runnerState = RUNNER_STATES.ENDED;
+            this.finishCallbacks.forEach(func => {
+                func.call(this);
+            });
         }
         if (message.type === "RESET_OK") {
             console.log("Reset pyodide");

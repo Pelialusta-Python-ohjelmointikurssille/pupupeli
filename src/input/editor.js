@@ -1,4 +1,4 @@
-import { subscribeToResetCallbacks, subscribeToSetLineCallbacks } from "../code_runner/code_runner.js";
+import { subscribeToFinishCallbacks, subscribeToResetCallbacks, subscribeToSetLineCallbacks } from "../code_runner/code_runner.js";
 import { ace_version } from "../util/version_strings.js";
 import { setCurrentLine } from "./py_error_handling.js";
 
@@ -8,6 +8,7 @@ let errorLineMarker;
 
 subscribeToSetLineCallbacks(highlightCurrentLine);
 subscribeToResetCallbacks(resetLineHighlight);
+subscribeToFinishCallbacks(resetLineHighlight);
 
 const aceEditorScript = document.createElement('script');
 aceEditorScript.src = `https://cdnjs.cloudflare.com/ajax/libs/ace/${ace_version}/ace.js`;
