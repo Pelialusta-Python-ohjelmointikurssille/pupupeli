@@ -118,6 +118,24 @@
                 </div>
                 <div id="editor-container" class="is-flex">
                     <div id="editor"></div>
+                    <div id="code-blocks-container">
+                        <!-- Latest compiled and minified CSS (for Sortable) -->
+                        <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
+                        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+                        <!-- Simple List -->
+                        <div id="simpleList" class="list-group">
+                            <div class="list-group-item">This is <a
+                                    href="http://rubaxa.github.io/Sortable/">Sortable</a></div>
+                            <div class="list-group-item">It works with Bootstrap...</div>
+                            <div class="list-group-item">...out of the box.</div>
+                            <div class="list-group-item">It has support for touch devices.</div>
+                            <div class="list-group-item">Just drag some elements around.</div>
+                        </div>
+                        <script>
+                            //Uses sortable
+                            Sortable.create(simpleList, { /* options */ });
+                        </script>
+                    </div>
                     <div id="error-box">
                         <div id="error" class="error"></div>
                         <div id="warning" class="warning"></div>

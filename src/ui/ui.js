@@ -1,7 +1,7 @@
 import * as globals from "../util/globals.js";
 import * as api from "../api/api.js";
 import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
-import { getEditor } from "../input/editor.js"
+import { getEditor, useCodeBlocksInsteadOfEditor } from "../input/editor.js"
 import { initWorker } from "../worker_messenger.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
@@ -61,7 +61,6 @@ function createGamePage() {
     if (globals.task.taskType === TaskTypes.multipleChoice) {
         setMultipleChoice();
     }
-
     setEditorCode();
 
     let titleTargetDiv = document.getElementById("taskTitle");
@@ -84,7 +83,7 @@ function setMultipleChoice() {
         multipleChoiceContainer.removeChild(multipleChoiceContainer.firstChild);
     }
 
-    if (globals.task.taskType !== TaskTypes.multipleChoice) {
+    if (globals.task.taskType !== TaskTypes.multipleChoice) { //But we know it's MultipleChoice...
         multipleChoiceContainer.classList.add("is-hidden");
     } else {
         multipleChoiceContainer.classList.remove("is-hidden");
@@ -119,16 +118,18 @@ export function setTitle(titleDiv) {
 
 export async function setEditorCode() {
     let editorCode = "";
+    let isHidden = (globals.task.taskType === TaskTypes.codeBlockMoving) ? true : false;
+    useCodeBlocksInsteadOfEditor(isHidden);
     if (localStorage.getItem("token")) {
         api.getTask().then((task) => {
             if (task.data) {
-            editorCode = translateToTheme(task.data);
+                editorCode = translateToTheme(task.data);
             } else {
-            editorCode = globals.task.getEditorCode();
+                editorCode = globals.task.getEditorCode();
             }
-        getEditor().setValue(editorCode);
-        getEditor().clearSelection();
-    });
+            getEditor().setValue(editorCode);
+            getEditor().clearSelection();
+        });
     } else {
         editorCode = globals.task.getEditorCode();
         getEditor().setValue(editorCode);
@@ -283,7 +284,7 @@ export function showPopUpNotification(elementId) {
             element.classList.remove("pop-up-notification-show-login");
         }, 6000);
         element.classList.add("pop-up-notification-show-login");
-    } else if (elementId === "task-not-found"){
+    } else if (elementId === "task-not-found") {
         setTimeout(() => {
             element.classList.remove("pop-up-notification-show");
         }, 6000);
@@ -358,21 +359,21 @@ function loadIstructionTask() {
 function loadIstructionLeft() {
     const leftDiv = document.getElementById('left-instructions-container');
     leftDiv.innerHTML = '';
-    
+
     let insHead = document.createElement('div');
     insHead.id = 'instruction-head';
     insHead.classList.add('center-content');
 
     let insHeadline = document.createElement('h2');
-    
+
     let instructionTitle = document.createElement('a');
     instructionTitle.id = 'instructionTitle';
     setTitle(instructionTitle);
-    
+
     insHeadline.appendChild(instructionTitle);
 
     insHead.appendChild(insHeadline);
-    
+
     let insDesc = document.createElement('div');
     setDescription(insDesc);
     insDesc.id = 'instruction-desc';

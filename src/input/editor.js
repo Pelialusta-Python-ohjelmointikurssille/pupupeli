@@ -3,6 +3,7 @@ import { setCurrentLine } from "./py_error_handling.js";
 
 let editor;
 let currentLineMarker; //the line that is currently executing
+let aceEditorElement = document.getElementById("editor");
 
 const aceEditorScript = document.createElement('script');
 aceEditorScript.src = `https://cdnjs.cloudflare.com/ajax/libs/ace/${ace_version}/ace.js`;
@@ -56,10 +57,23 @@ export function highlightCurrentLine(lineNumber) {
         editor.session.removeMarker(currentLineMarker);
     }
     // eslint-disable-next-line no-undef
-    currentLineMarker = editor.session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "executing-line", "fullLine");
+    currentLineMarker = editor.session.addMarker(new ace.Range(lineNumber - 1, 4, lineNumber - 1, 5), "executing-line", "fullLine");
 }
 
 export function resetLineHighlight() {
     setCurrentLine(null);
     editor.session.removeMarker(currentLineMarker);
+}
+
+/**
+ * Sets if the aceEditor is visible inside the editor container.
+ * Codeblocks are instead used as visuals, that arrange the code inside editor secretly.
+ * @param {*} isCodeblockMode bool
+ */
+export function useCodeBlocksInsteadOfEditor(isCodeblockMode) {
+    if (isCodeblockMode) {
+        aceEditorElement.classList.add("is-hidden");
+        return;
+    }
+    aceEditorElement.classList.remove("is-hidden");
 }
