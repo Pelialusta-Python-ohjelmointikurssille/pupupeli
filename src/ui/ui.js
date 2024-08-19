@@ -121,10 +121,11 @@ export async function setEditorCode() {
     let editorCode = "";
     if (localStorage.getItem("token")) {
         api.getTask().then((task) => {
+            if (task.data) {
             editorCode = translateToTheme(task.data);
-        if (editorCode === "") {
+            } else {
             editorCode = globals.task.getEditorCode();
-        }
+            }
         getEditor().setValue(editorCode);
         getEditor().clearSelection();
     });
