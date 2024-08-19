@@ -7,7 +7,7 @@ import { isWaitingForInput, resetInputWaiting } from "../game/game_input_control
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode } from "./ui.js";
 import { sendTask } from "../api/api.js";
-import { runCode, resetRunner, pauseRunner, resumeRunner, runUntilNextLine } from "../code_runner/code_runner.js";
+import { runCode, resetRunner, pauseRunner, resumeRunner, runUntilNextLine, subscribeToReadyCallbacks } from "../code_runner/code_runner.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -22,6 +22,8 @@ class States {
     static PAUSED = "paused";
     static ENDED = "ended";
 }
+
+subscribeToReadyCallbacks(enableEditorButtons);
 
 /**
  * Adds events to code execution buttons (run/pause, stop, skip)

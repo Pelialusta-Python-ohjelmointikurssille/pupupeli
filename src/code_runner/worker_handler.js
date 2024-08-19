@@ -28,6 +28,7 @@ export class WorkerHandler {
         this.gameCommandCallbacks = [];
         this.resetCallbacks = [];
         this.finishCallbacks = [];
+        this.readyCallbacks = [];
     }
 
     initialize() {
@@ -85,6 +86,9 @@ export class WorkerHandler {
         if (message.type === "BACKGROUNDCODE_OK") {
             console.log("Initialized background code");
             this.runnerState = RUNNER_STATES.READY;
+            this.readyCallbacks.forEach(func => {
+                func.call(this);
+            });
         }
         if(message.type === "EXECFINISH") {
             console.log("Finished python execution");

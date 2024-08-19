@@ -47,3 +47,7 @@ export function subscribeToResetCallbacks(func) {
 export function subscribeToFinishCallbacks(func) {
     handler.finishCallbacks.push(func);
 }
+
+export function subscribeToReadyCallbacks(func) {
+    handler.readyCallbacks.push(func);
+}
