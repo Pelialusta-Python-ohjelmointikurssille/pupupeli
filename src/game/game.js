@@ -117,7 +117,7 @@ export class Game {
         this.grid = getGameTask();
         this.collectibleCounter.initialize(this.grid);
         this.canDoNextMove = true;
-        this.isGridEnabled = true;
+        this.isGridEnabled = this.gridStateAtInit();
         this.tempObjectIds = [];
         this.gh.createGrid(this.grid.height, this.grid.width);
         this.grid.gridObjects.forEach(item => {
@@ -157,6 +157,7 @@ export class Game {
      */
     toggleGrid() {
         this.isGridEnabled = !this.isGridEnabled;
+        localStorage.setItem("gridEnabled", this.isGridEnabled);
         this.gh.setGridState(this.isGridEnabled);
     }
 
@@ -223,5 +224,13 @@ export class Game {
 
     setSpeedModifier(speed) {
         this.gameSpeedModifier = speed;
+    }
+
+    gridStateAtInit() {
+        const gridEnabled = localStorage.getItem("gridEnabled");
+        if (gridEnabled === "false") {
+            return false;
+        }
+        return true;
     }
 }
