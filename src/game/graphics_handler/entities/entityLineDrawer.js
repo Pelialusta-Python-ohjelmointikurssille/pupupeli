@@ -10,8 +10,7 @@ export class PawnEntityLineDrawer {
         } else {
             this.graphics.alpha = 0;
         }
-        this.trailToggleButton = document.getElementById("trail-toggle-button");
-        this.trailToggleButton.checked = this.isEnabled;
+        this.setTrailToggleButton();
     }
 
     onUpdatePawnEntityPosition(x, y) {
@@ -43,7 +42,10 @@ export class PawnEntityLineDrawer {
             localStorage.setItem("lineState", "true");
             this.graphics.alpha = 1;
         }
-        this.trailToggleButton.checked = this.isEnabled;
+        const trailToggleButton = document.getElementById("trail-toggle-button");
+        if (trailToggleButton) {
+            trailToggleButton.checked = this.isEnabled;
+        }
     }
 
     lineStateInit() {
@@ -52,5 +54,12 @@ export class PawnEntityLineDrawer {
             return true;
         }
         return false;
+    }
+
+    setTrailToggleButton() {
+        const trailToggleButton = document.getElementById("trail-toggle-button");
+        if (trailToggleButton) {
+            trailToggleButton.checked = this.isEnabled;
+        }
     }
 }
