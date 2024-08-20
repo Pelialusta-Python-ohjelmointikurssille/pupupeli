@@ -8,12 +8,10 @@ let overlay = document.getElementById("overlay");
 
 function addSettingsButtonListener() {
     settingsButton.addEventListener("click", () => {
-        console.log("Settings button clicked");
         settingsWindow.classList.toggle("is-hidden");
         overlay.classList.toggle("is-visible");
     });
     closeButton.addEventListener("click", () => {
-        console.log("Close button clicked");
         settingsWindow.classList.toggle("is-hidden");
         overlay.classList.toggle("is-visible");
     });
