@@ -4,8 +4,14 @@ export class PawnEntityLineDrawer {
     constructor(graphics) {
         this.graphics = graphics;
         this.moveHistory = [];
-        this.isEnabled = false;
-        this.graphics.alpha = 0;
+        this.isEnabled = this.lineStateInit();
+        if (this.isEnabled) {
+            this.graphics.alpha = 1;
+        } else {
+            this.graphics.alpha = 0;
+        }
+        this.trailToggleButton = document.getElementById("trail-toggle-button");
+        this.trailToggleButton.checked = this.isEnabled;
     }
 
     onUpdatePawnEntityPosition(x, y) {
@@ -30,11 +36,21 @@ export class PawnEntityLineDrawer {
     toggle() {
         if (this.isEnabled) {
             this.isEnabled = false;
+            localStorage.setItem("lineState", "false");
             this.graphics.alpha = 0;
         } else {
             this.isEnabled = true;
+            localStorage.setItem("lineState", "true");
             this.graphics.alpha = 1;
         }
-        console.log("is trail enabled? : " + this.isEnabled);
+        this.trailToggleButton.checked = this.isEnabled;
+    }
+
+    lineStateInit() {
+        const lineState = localStorage.getItem("lineState");
+        if (lineState === "true") {
+            return true;
+        }
+        return false;
     }
 }
