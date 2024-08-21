@@ -1,4 +1,3 @@
-from error_handler import ErrorHandler
 from python_tracer import PythonTracer
 from player import Pelaaja
 from js_bridge import JSBridge
@@ -9,7 +8,6 @@ import runpy
 CODE_WAIT_TIME = 0.05
 
 js_bridge = JSBridge()
-erro_handler = ErrorHandler(js_bridge)
 tracer = PythonTracer(js_bridge, CODE_WAIT_TIME)
 tracer.start_tracer()
 
@@ -31,6 +29,6 @@ user_script_globals = {
 try:
     runpy.run_module(mod_name=USER_SCRIPT_NAME, init_globals=user_script_globals)
 except Exception as e:
-    erro_handler.pass_error_info(e)
+    js_bridge.send_error_info(0, "", "")
 finally:
     js_bridge.finished_execution()

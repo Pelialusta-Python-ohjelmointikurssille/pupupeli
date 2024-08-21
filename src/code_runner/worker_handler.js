@@ -2,7 +2,6 @@ import { tryGetFileAsText } from "../file_reader.js";
 import { RUNNER_STATES } from "./runner_state.js";
 
 const PYTHON_CODE_FILES = new Map([
-    ["error_handler.py", "src/python_code/error_handler.py"],
     ["python_tracer.py", "src/python_code/python_tracer.py"],
     ["player.py", "src/python_code/player.py"],
     ["js_bridge.py", "src/python_code/js_bridge.py"]

@@ -20,7 +20,7 @@ class JSBridge:
         js.processLine(line_number)
 
     def send_error_info(self, line_number, error_message, error_type):
-        pass
+        print("ERROR")
 
     def finished_execution(self):
         js.onFinishedExecution()
