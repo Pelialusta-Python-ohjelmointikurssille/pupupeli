@@ -90,6 +90,15 @@ export function createCodeBlocks(strings) {
     });
 }
 
+export function setEditorTextFromCodeBlocks() {
+    let str = "";
+    let children = codeBlocksListElement.children;
+    for (var i = 0; i < children.length; i++) {
+        str += children[i].textContent + "\n";
+    }
+    editor.setValue(str);
+}
+
 function createListGroupitem(string) {
     let listItem = document.createElement("div");
     listItem.className = "list-group-item";
