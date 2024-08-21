@@ -32,13 +32,16 @@ export class WorkerHandler {
     }
 
     initialize() {
+        console.log("[Worker Handler]: Initializing worker handler...");
         this.runnerState = RUNNER_STATES.PREINIT;
         this.pyodideWorker = new Worker("/src/code_runner/pyodide_worker.js");
         this.pyodideWorker.onmessage = async (event) => {
             await this.pyodideMessageHandler(event);
         };
+        console.log("[Worker Handler]: Loading python base code files...");
         this.pythonCodeMap = this.loadCodeFiles(PYTHON_CODE_FILES);
         this.pythonRunnerCode = tryGetFileAsText(PYTHON_SCRIPT_RUNNER);
+        console.log("[Worker Handler]: Loaded code files");
     }
 
     loadCodeFiles(fileDict) {
@@ -53,7 +56,7 @@ export class WorkerHandler {
     async pyodideMessageHandler(event) {
         let message = event.data;
         if (message.type === "COMMAND") {
-            console.log(`CMD: ${message.command}(${message.parameters})`);
+            console.log("[Worker Handler]: Running command");
             this.gameCommandCallbacks.forEach(func => {
                 func.call(this, message.command, message.parameters);
             });
@@ -61,92 +64,98 @@ export class WorkerHandler {
         if (message.type === "ERROR") {
         }
         if (message.type === "SETLINE") {
-            console.log(`Processed line ${message.line}`)
+            console.log(`[Worker Handler]: Processing line ${message.line}`);
             this.setLineCallbacks.forEach(func => {
                 func.call(this, message.line);
             });
             if (this.executeSingleLine === false) {
+                console.log("[Worker Handler]: Unhalting since not executing in single line mode");
                 this.unHaltWorker();
             }
         }
         if (message.type === "REQUESTINPUT") {
         }
         if (message.type === "INIT_OK") {
-            console.log("Initialized pyodide");
+            console.log("[Worker Handler]: Setting wait buffer");
             this.pyodideWorker.postMessage({ type: "SETWAITBUFFER", buffer: this.workerWaitArray });
         }
         if (message.type === "WAITBUFFER_OK") {
-            console.log("Initialized wait buffer");
+            console.log("[Worker Handler]: Setting interrupt buffer");
             this.pyodideWorker.postMessage({ type: "SETINTERRUPTBUFFER", buffer: this.pyodideInterruptBuffer });
         }
         if (message.type === "INTERRUPTBUFFER_OK") {
-            console.log("Initialized interrupt buffer");
+            console.log("[Worker Handler]: Setting python background code");
             this.pyodideWorker.postMessage({ type: "SETBACKGROUNDCODE", runnerCode: this.pythonRunnerCode, codeMap: this.pythonCodeMap });
         }
         if (message.type === "BACKGROUNDCODE_OK") {
-            console.log("Initialized background code");
             this.runnerState = RUNNER_STATES.READY;
             this.readyCallbacks.forEach(func => {
                 func.call(this);
             });
+            console.log("[Worker Handler]: Ready");
         }
         if(message.type === "EXECFINISH") {
-            console.log("Finished python execution");
             this.runnerState = RUNNER_STATES.ENDED;
             this.finishCallbacks.forEach(func => {
                 func.call(this);
             });
         }
         if (message.type === "RESET_OK") {
-            console.log("Reset pyodide");
             this.pyodideWorker.postMessage({ type: "RESET_WORKER_OK"});
             this.resetCallbacks.forEach(func => {
                 func.call(this);
             });
             this.runnerState = RUNNER_STATES.READY;
+            console.log("[Worker handler]: Finished resetting");
         }
     }
 
     interruptWorker() {
+        console.log("[Worker handler]: Interrupting pyodide worker with buffer");
         this.pyodideInterruptBuffer[0] = 2;
     }
 
     clearWorkerInterrupt() {
+        console.log("[Worker handler]: Clearing interrupt buffer");
         this.pyodideInterruptBuffer[0] = 0;
     }
 
     haltWorker() {
+        console.log("[Worker handler]: Sleeping worker");
         this.runnerState = RUNNER_STATES.PAUSED;
         Atomics.store(this.workerWaitArray, 0, 1);
         Atomics.notify(this.workerWaitArray, 0, 1);
     }
 
     unHaltWorker() {
+        console.log("[Worker handler]: Waking worker");
         this.runnerState = RUNNER_STATES.RUNNING;
-        console.log("UNHALTING")
         Atomics.store(this.workerWaitArray, 0, 0);
         Atomics.notify(this.workerWaitArray, 0, 1);
     }
 
     runCode(script) {
+        console.log("[Worker handler]: Running code");
         this.clearWorkerInterrupt();
         this.pyodideWorker.postMessage({ type: "RUNCODE", code: script });
         this.runnerState = RUNNER_STATES.RUNNING;
     }
 
     stepToNextLine() {
+        console.log("[Worker handler]: Stepping to next line");
         this.executeSingleLine = true;
         this.unHaltWorker();
     }
 
     onFinishAnimations() {
+        console.log("[Worker handler]: Game has finished processing");
         if (this.executeSingleLine === false) {
             this.unHaltWorker();
         }
     }
 
     reset() {
-        console.log("RESETTING FROM HANDLER")
+        console.log("[Worker handler]: Resetting...");
         this.executeSingleLine = false;
         this.isUserPaused = false;
         this.isWaitingGame = false;

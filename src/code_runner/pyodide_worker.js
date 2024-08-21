@@ -1,4 +1,6 @@
+console.log("[Pyodide Worker]: Importing pyodide...");
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
+console.log("[Pyodide Worker]: Finished pyodide import");
 
 let waitBuffer;
 let pythonRunnerCode;
@@ -11,7 +13,10 @@ let resetting = false;
 const USER_SCRIPT_NAME = "userscript.py";
 
 async function loadWorkerPyodide() {
+    console.log("[Pyodide Worker]: Initializing pyodide");
+    console.time("[Pyodide Worker]: Finished initializing pyodide");
     self.pyodide = await loadPyodide();
+    console.timeEnd("[Pyodide Worker]: Finished initializing pyodide");
     self.postMessage({type: "INIT_OK"});
 }
 
@@ -34,49 +39,58 @@ async function messageHandler(event) {
         await runCode(message.code);
     }
     if (message.type === "RESET") {
-        console.log("RESETTING FROM HANDLER TO WORKER OG")
-        reset();
     }
     if (message.type === "RESET_WORKER_OK") {
         resetting = false;
+        console.log("[Pyodide Worker]: Finished resetting");
     }
     if(message.type === "SETBACKGROUNDCODE") {
         await setBackgroundCode(message.runnerCode, message.codeMap);
-        saveState = pyodide.pyodide_py._state.save_state();
-        isReadyToRunCode = true;
         self.postMessage({type: "BACKGROUNDCODE_OK"});
+        isReadyToRunCode = true;
+        saveCurrentState();
     }
 }
 
 async function runCode(code) {
-    if (isReadyToRunCode === false) return;
+    console.log("[Pyodide Worker]: Running python code");
+    if (isReadyToRunCode === false) {
+        console.warning("[Pyodide Worker]: Trying to run code before worker is ready to run code, returning early...");
+        return;
+    }
+    console.log("[Pyodide Worker]: Writing user code to virtual file");
     await self.pyodide.FS.writeFile(USER_SCRIPT_NAME, code, { encoding: "utf8" });
+    console.log("[Pyodide Worker]: Loading packages from imports");
     await self.pyodide.loadPackagesFromImports(code);
     await loadedScripts.forEach(async (element) => {
         await self.pyodide.loadPackagesFromImports(element);
     });
+    console.log("[Pyodide Worker]: Running python code");
     await self.pyodide.runPythonAsync(pythonRunnerCode);
 }
 
 function setWaitBuffer(buffer) {
+    console.log("[Pyodide Worker]: Got wait buffer");
     waitBuffer = buffer;
     self.postMessage({type: "WAITBUFFER_OK"});
 }
 
 function setInterruptBuffer(buffer) {
+    console.log("[Pyodide Worker]: Got interrupt buffer");
     pyodide.setInterruptBuffer(buffer);
     interruptBuffer = buffer;
     self.postMessage({type: "INTERRUPTBUFFER_OK"});
 }
 
 function reset() {
-    console.log("RESETTING");
+    console.log("[Pyodide Worker]: Resetting...");
     loadedScripts = [];
     pyodide.pyodide_py._state.restore_state(saveState);
     self.postMessage({ type: "RESET_OK" });
 }
 
 async function setBackgroundCode(runnerCode, codeMap) {
+    console.log("[Pyodide Worker]: Got python background code");
     codeMap.forEach(async (value, key) => {
         await self.pyodide.FS.writeFile(key, value, { encoding: "utf8" });
         loadedScripts.push(value);
@@ -84,20 +98,22 @@ async function setBackgroundCode(runnerCode, codeMap) {
     pythonRunnerCode = runnerCode;
 }
 
+function saveCurrentState() {
+    console.log("[Pyodide Worker]: Saving current pyodide state");
+    saveState = pyodide.pyodide_py._state.save_state();
+}
+
 // JS functions called from python
 
 function processLine(lineNumber) {
     if(resetting) return;
     if (lineNumber <= 0) return;
-    console.log("=========================================================0")
-    console.log(`Worker process line ${lineNumber}`);
+    console.log(`[Pyodide Worker]: Processing line ${lineNumber}`);
     self.postMessage({ type: "SETLINE", line: lineNumber });
-    console.log("HALTING FROM WORKER")
+    console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
     Atomics.notify(waitBuffer, 0, 1);
     Atomics.wait(waitBuffer, 0, 1);
-    console.log(`WORKER AFTER LINE PROCESS WAIT ${lineNumber}`);
-    console.log("=========================================================0")
 }
 
 function onFinishedExecution() {
@@ -106,13 +122,12 @@ function onFinishedExecution() {
 
 function runCommand(cmd, params) {
     if(resetting) return;
-    console.log("=========================================================0")
-    console.log(`WORKER CMD: ${cmd}(${params})`);
+    console.log("[Pyodide Worker]: Running game command");
     self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
+    console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
     Atomics.notify(waitBuffer, 0, 1);
     Atomics.wait(waitBuffer, 0, 1);
-    console.log("=========================================================0")
 }
 
 function createObject(objectType, x, y) {
@@ -132,8 +147,7 @@ function processErrorInfo() {
 }
 
 function resetFromPython() {
+    console.log("[Pyodide Worker]: Python asked for reset");
     resetting = true;
-    console.log("EXITING PYTHON")
-    interruptBuffer[0] = 2;
     reset();
 }

@@ -18,7 +18,7 @@ pelaaja = Pelaaja(js_bridge)
 USER_SCRIPT_NAME = "userscript"
 
 def interrupt_handler(sig, frame):
-    print("INTERRUPT EXECUTION")
+    print("[Python|Pyodide]: Handling interrupt")
     js_bridge.system_exit()
     sys.exit(0)
 
