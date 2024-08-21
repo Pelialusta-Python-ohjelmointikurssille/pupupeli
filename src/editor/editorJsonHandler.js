@@ -103,7 +103,6 @@ function importEditorCode(editorCode) {
 }
 
 export function generateTaskOutput() {
-    let taskTitle = document.querySelector('#task-title-input').value;
     let selectedTaskType = document.querySelector('input[name="taskType"]:checked').value;
     const taskDescriptionLines = [];
     if (selectedTaskType === 'instructions') {
