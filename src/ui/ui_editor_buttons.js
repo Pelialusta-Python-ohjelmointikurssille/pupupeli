@@ -1,13 +1,14 @@
-import { Constants } from "../game/commonstrings.js";
+import { Constants, TaskTypes } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
 import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
-import { getEditor, resetLineHighlight } from "../input/editor.js";
+import { getEditor, resetLineHighlight, setEditorTextFromCodeBlocks } from "../input/editor.js";
 import { resetAndInitContent, toggleGrid, toggleTrail, setTheme, setTurboSpeedActive } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
 import { isWaitingForInput, resetInputWaiting } from "../game/game_input_controller.js";
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode, toggleErrorVisibility } from "./ui.js";
 import { sendTask } from "../api/api.js";
+import { task } from "../util/globals.js";
 
 let _buttonsState;
 let startAndPauseButton;
@@ -189,6 +190,7 @@ function onRunButtonClick() {
 
     switch (_buttonsState) {
         case States.INITIAL:
+            if (task.taskType === TaskTypes.codeBlockMoving) setEditorTextFromCodeBlocks();
             if (localStorage.getItem("token")){
                 sendTask();
             }
