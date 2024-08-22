@@ -1,4 +1,5 @@
 import { tryGetFileAsText } from "../file_reader.js";
+import { PauseHandler } from "./pause_handler.js";
 import { RUNNER_STATES } from "./runner_state.js";
 
 const PYTHON_CODE_FILES = new Map([
@@ -13,21 +14,18 @@ export class WorkerHandler {
     constructor() {
         this.pyodideWorker = null;
         this.pyodideInterruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
-        this.workerWaitArray = new Int32Array(new SharedArrayBuffer(4));
         this.pythonCodeMap;
         this.pythonRunnerCode;
         this.runnerState = RUNNER_STATES.PREINIT;
         this.executeSingleLine = false;
-
-        this.isUserPaused = false;
-        this.isWaitingGame = false;
-        this.isWaitingInput = false;
 
         this.setLineCallbacks = [];
         this.gameCommandCallbacks = [];
         this.resetCallbacks = [];
         this.finishCallbacks = [];
         this.readyCallbacks = [];
+
+        this.pauseHandler = new PauseHandler();
     }
 
     initialize() {
@@ -76,7 +74,7 @@ export class WorkerHandler {
         }
         if (message.type === "INIT_OK") {
             console.log("[Worker Handler]: Setting wait buffer");
-            this.pyodideWorker.postMessage({ type: "SETWAITBUFFER", buffer: this.workerWaitArray });
+            this.pyodideWorker.postMessage({ type: "SETWAITBUFFER", buffer: this.pauseHandler.workerWaitArray });
         }
         if (message.type === "WAITBUFFER_OK") {
             console.log("[Worker Handler]: Setting interrupt buffer");
@@ -121,16 +119,14 @@ export class WorkerHandler {
 
     haltWorker() {
         console.log("[Worker handler]: Sleeping worker");
+        this.pauseHandler.pauseWorker();
         this.runnerState = RUNNER_STATES.PAUSED;
-        Atomics.store(this.workerWaitArray, 0, 1);
-        Atomics.notify(this.workerWaitArray, 0, 1);
     }
 
     unHaltWorker() {
         console.log("[Worker handler]: Waking worker");
+        this.pauseHandler.unpauseWorker();
         this.runnerState = RUNNER_STATES.RUNNING;
-        Atomics.store(this.workerWaitArray, 0, 0);
-        Atomics.notify(this.workerWaitArray, 0, 1);
     }
 
     runCode(script) {
@@ -156,16 +152,9 @@ export class WorkerHandler {
     reset() {
         console.log("[Worker handler]: Resetting...");
         this.executeSingleLine = false;
-        this.isUserPaused = false;
-        this.isWaitingGame = false;
-        this.isWaitingInput = false;
         this.clearWorkerInterrupt();
         this.unHaltWorker();
         this.interruptWorker();
         this.pyodideWorker.postMessage({ type: "RESET" });
-    }
-
-    isThreadLocked() {
-        return Atomics.load(this.workerWaitArray, 0) === 1;
     }
 }
