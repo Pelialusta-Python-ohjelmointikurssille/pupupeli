@@ -87,20 +87,15 @@ export class PauseHandler {
 
     #pauseWorker() {
         console.log("[Pause Handler]: Pausing worker");
-        console.log(Atomics.load(this.workerWaitArray, 0));
-
         if (this.isWorkerPaused() === false) {
-            console.log("WORKER NOT PAUSED; PAUSING");
             Atomics.store(this.workerWaitArray, 0, 1);
             Atomics.notify(this.workerWaitArray, 0);
         }
     }
 
     #unpauseWorker() {
-        console.log("[Pause Handler]: Unpausing worker--------------------------");
-        console.log(Atomics.load(this.workerWaitArray, 0));
+        console.log("[Pause Handler]: Unpausing worker");
         if (this.isWorkerPaused() === true) {
-            console.log("WORKER PAUSED; UNPAUSING");
             Atomics.store(this.workerWaitArray, 0, 0);
             Atomics.notify(this.workerWaitArray, 0);
         }
@@ -114,7 +109,6 @@ export class PauseHandler {
     }
 
     #checkPauseState() {
-        console.log(`CURRENT WAIT STATE: ${Atomics.load(this.workerWaitArray, 0)}`)
         this.#updatePauseStateFromBuffer();
         if (
             this.isPausedByUser === false &&
@@ -122,7 +116,6 @@ export class PauseHandler {
             this.isPausedByInput === false &&
             this.isPausedByLineProcess === false
         ) {
-            console.log("[Pause Handler]: Unpausing worker CHECK STATE--------------------------");
             this.#unpauseWorker();
         } else {
             if(this.isWorkerPaused === true) return;
