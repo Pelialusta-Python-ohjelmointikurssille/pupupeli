@@ -9,6 +9,7 @@ let loadedScripts = [];
 let saveState;
 let interruptBuffer;
 let resetting = false;
+let sharedInputArray;
 
 const USER_SCRIPT_NAME = "userscript.py";
 
@@ -39,6 +40,9 @@ async function messageHandler(event) {
     }
     if (message.type === "SETINTERRUPTBUFFER") {
         setInterruptBuffer(message.buffer);
+    }
+    if (message.type === "SETSHAREDINPUTARRAY") {
+        setSharedInputArray(message.array);
     }
     if (message.type === "RUNCODE") {
         await runCode(message.code);
@@ -83,7 +87,7 @@ function setWaitBuffer(buffer) {
 function setInterruptBuffer(buffer) {
     console.log("[Pyodide Worker]: Got interrupt buffer");
     pyodide.setInterruptBuffer(buffer);
-    interruptBuffer = buffer;pyodide.setStdin
+    interruptBuffer = buffer;
     self.postMessage({type: "INTERRUPTBUFFER_OK"});
 }
 
@@ -101,6 +105,23 @@ async function setBackgroundCode(runnerCode, codeMap) {
         loadedScripts.push(value);
     });
     pythonRunnerCode = runnerCode;
+}
+
+function setSharedInputArray(array) {
+    console.log("[Pyodide Worker]: Got shared input array");
+    sharedInputArray = array;
+    self.postMessage({type: "SHAREDINPUTARRAY_OK"});
+}
+
+function readFromSharedArray() {
+    let userInput = "";
+    for (let i = 0; i < sharedInputArray.length; i++) {
+        if (sharedInputArray[i] === 0) break;
+        let character = String.fromCharCode(sharedInputArray[i]);
+        userInput += character;
+    }
+    console.log(`[Pyodide Worker]: Read from shared input array: ${userInput}`)
+    return userInput;
 }
 
 function saveCurrentState() {
@@ -167,5 +188,5 @@ function stdInHandler() {
     Atomics.store(waitBuffer, 3, 1);
     Atomics.wait(waitBuffer, 0, 1);
     self.pyodide.checkInterrupt();
-    return "test";
+    return readFromSharedArray();
 }

@@ -1,6 +1,5 @@
 import { tryGetFileAsText } from "../file_reader.js";
 import { PauseHandler } from "./pause_handler.js";
-import { RUNNER_STATES } from "./runner_state.js";
 
 const PYTHON_CODE_FILES = new Map([
     ["python_tracer.py", "src/python_code/python_tracer.py"],
@@ -10,10 +9,14 @@ const PYTHON_CODE_FILES = new Map([
 
 const PYTHON_SCRIPT_RUNNER = "src/python_code/runner.py";
 
+const INPUT_CHARACTER_LIMIT = 512;
+const BYTES_PER_CHARACTER = 2;
+
 export class WorkerHandler {
     constructor() {
         this.pyodideWorker = null;
         this.pyodideInterruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
+        this.sharedInputArray = new Uint16Array(new SharedArrayBuffer(INPUT_CHARACTER_LIMIT * BYTES_PER_CHARACTER)); // For up to 512 utf-16 characters
         this.pythonCodeMap;
         this.pythonRunnerCode;
         this.executeSingleLine = false;
@@ -24,6 +27,7 @@ export class WorkerHandler {
         this.finishCallbacks = [];
         this.readyCallbacks = [];
         this.inputCallbacks = [];
+        this.errorCallbacks = [];
 
         this.pauseHandler = new PauseHandler();
     }
@@ -62,6 +66,9 @@ export class WorkerHandler {
             }
         }
         if (message.type === "ERROR") {
+            this.errorCallbacks.forEach(func => {
+                func.call(this);
+            });
         }
         if (message.type === "SETLINE") {
             console.log(`[Worker Handler]: Processing line ${message.line}`);
@@ -89,6 +96,10 @@ export class WorkerHandler {
             this.pyodideWorker.postMessage({ type: "SETINTERRUPTBUFFER", buffer: this.pyodideInterruptBuffer });
         }
         if (message.type === "INTERRUPTBUFFER_OK") {
+            console.log("[Worker Handler]: Setting shared input array");
+            this.pyodideWorker.postMessage({ type: "SETSHAREDINPUTARRAY", array: this.sharedInputArray });
+        }
+        if (message.type === "SHAREDINPUTARRAY_OK") {
             console.log("[Worker Handler]: Setting python background code");
             this.pyodideWorker.postMessage({ type: "SETBACKGROUNDCODE", runnerCode: this.pythonRunnerCode, codeMap: this.pythonCodeMap });
         }
@@ -141,7 +152,16 @@ export class WorkerHandler {
 
     answerInputRequest(userInput) {
         //GIVE INPUT STR
+        this.writeStringToSharedArray(userInput);
         this.pauseHandler.inputUnpause();
+    }
+
+    writeStringToSharedArray(stringToWrite) {
+        for (let i = 0; i < this.sharedInputArray.length; i++) {
+            if (i >= stringToWrite.length-1) this.sharedInputArray[i] = 0;
+            this.sharedInputArray[i] = stringToWrite.charCodeAt(i);
+        }
+        console.log(`[Worker handler]: Wrote to shared input array: ${this.sharedInputArray}`)
     }
 
     reset() {

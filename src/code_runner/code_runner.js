@@ -61,3 +61,7 @@ export function subscribeToReadyCallbacks(func) {
 export function subscribeToInputCallbacks(func) {
     handler.inputCallbacks.push(func);
 }
+
+export function subscribeToErrorCallbacks(func) {
+    handler.errorCallbacks.push(func);
+}
