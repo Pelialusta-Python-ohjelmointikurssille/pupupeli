@@ -19,78 +19,114 @@ export class PauseHandler {
     }
 
     userPause() {
+        console.log("[Pause Handler]: Paused by user");
         this.isPausedByUser = true;
         Atomics.store(this.workerWaitArray, 1, 1);
-        Atomics.notify(this.workerWaitArray, 1, 1);
+        this.#checkPauseState();
     }
 
     userUnpause() {
+        console.log("[Pause Handler]: Unpaused by user");
         this.isPausedByUser = false;
         Atomics.store(this.workerWaitArray, 1, 0);
-        Atomics.notify(this.workerWaitArray, 1, 0);
+        this.#checkPauseState();
     }
 
     gamePause() {
+        console.log("[Pause Handler]: Paused by game");
         this.isPausedByGame = true;
-        Atomics.store(this.workerWaitArray, 2, 1);
-        Atomics.notify(this.workerWaitArray, 2, 1);
+        this.#checkPauseState();
     }
 
     gameUnpause() {
+        console.log("[Pause Handler]: Unpaused by game");
         this.isPausedByGame = false;
         Atomics.store(this.workerWaitArray, 2, 0);
-        Atomics.notify(this.workerWaitArray, 2, 0);
+        this.#checkPauseState();
     }
 
     inputPause() {
+        console.log("[Pause Handler]: Paused by input");
         this.isPausedByInput = true;
         Atomics.store(this.workerWaitArray, 3, 1);
-        Atomics.notify(this.workerWaitArray, 3, 1);
+        this.#checkPauseState();
     }
 
     inputUnpause() {
+        console.log("[Pause Handler]: Unpaused by input");
         this.isPausedByInput = false;
         Atomics.store(this.workerWaitArray, 3, 0);
-        Atomics.notify(this.workerWaitArray, 3, 0);
+        this.#checkPauseState();
     }
 
     lineProcessPause() {
+        console.log("[Pause Handler]: Paused by line process");
         this.isPausedByLineProcess = true;
         Atomics.store(this.workerWaitArray, 4, 1);
-        Atomics.notify(this.workerWaitArray, 4, 1);
+        this.#checkPauseState();
     }
 
     lineProcessUnpause() {
+        console.log("[Pause Handler]: Unpaused by line process");
         this.isPausedByLineProcess = false;
         Atomics.store(this.workerWaitArray, 4, 0);
-        Atomics.notify(this.workerWaitArray, 4, 0);
+        this.#checkPauseState();
     }
 
     resetPause() {
-        this.isPausedByUser = false;
-        this.isPausedByGame = false;
-        this.isPausedByInput = false;
+        console.log("[Pause Handler]: Resetting pause state");
+        this.userUnpause();
+        this.gameUnpause();
+        this.inputUnpause();
+        this.lineProcessUnpause();
     }
 
     isWorkerPaused() {
         return Atomics.load(this.workerWaitArray, 0) === 1;
     }
 
-    pauseWorker() {
-        Atomics.store(this.workerWaitArray, 0, 1);
-        Atomics.notify(this.workerWaitArray, 0, 1);
+    #pauseWorker() {
+        console.log("[Pause Handler]: Pausing worker");
+        console.log(Atomics.load(this.workerWaitArray, 0));
+
+        if (this.isWorkerPaused() === false) {
+            console.log("WORKER NOT PAUSED; PAUSING");
+            Atomics.store(this.workerWaitArray, 0, 1);
+            Atomics.notify(this.workerWaitArray, 0);
+        }
     }
 
-    unpauseWorker() {
-        Atomics.store(this.workerWaitArray, 0, 0);
-        Atomics.notify(this.workerWaitArray, 0, 1);
+    #unpauseWorker() {
+        console.log("[Pause Handler]: Unpausing worker--------------------------");
+        console.log(Atomics.load(this.workerWaitArray, 0));
+        if (this.isWorkerPaused() === true) {
+            console.log("WORKER PAUSED; UNPAUSING");
+            Atomics.store(this.workerWaitArray, 0, 0);
+            Atomics.notify(this.workerWaitArray, 0);
+        }
     }
 
-    #checkWorkerState() {
-
+    #updatePauseStateFromBuffer() {
+        this.isPausedByUser = Atomics.load(this.workerWaitArray, 1) === 1;
+        this.isPausedByGame = Atomics.load(this.workerWaitArray, 2) === 1;
+        this.isPausedByInput = Atomics.load(this.workerWaitArray, 3) === 1;
+        this.isPausedByLineProcess = Atomics.load(this.workerWaitArray, 4) === 1;
     }
 
     #checkPauseState() {
-        
+        console.log(`CURRENT WAIT STATE: ${Atomics.load(this.workerWaitArray, 0)}`)
+        this.#updatePauseStateFromBuffer();
+        if (
+            this.isPausedByUser === false &&
+            this.isPausedByGame === false &&
+            this.isPausedByInput === false &&
+            this.isPausedByLineProcess === false
+        ) {
+            console.log("[Pause Handler]: Unpausing worker CHECK STATE--------------------------");
+            this.#unpauseWorker();
+        } else {
+            if(this.isWorkerPaused === true) return;
+            this.#pauseWorker();
+        }
     }
 }

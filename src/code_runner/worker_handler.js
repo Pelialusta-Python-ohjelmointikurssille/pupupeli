@@ -16,7 +16,6 @@ export class WorkerHandler {
         this.pyodideInterruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
         this.pythonCodeMap;
         this.pythonRunnerCode;
-        this.runnerState = RUNNER_STATES.PREINIT;
         this.executeSingleLine = false;
 
         this.setLineCallbacks = [];
@@ -30,7 +29,6 @@ export class WorkerHandler {
 
     initialize() {
         console.log("[Worker Handler]: Initializing worker handler...");
-        this.runnerState = RUNNER_STATES.PREINIT;
         this.pyodideWorker = new Worker("/src/code_runner/pyodide_worker.js");
         this.pyodideWorker.onmessage = async (event) => {
             await this.pyodideMessageHandler(event);
@@ -57,6 +55,10 @@ export class WorkerHandler {
             this.gameCommandCallbacks.forEach(func => {
                 func.call(this, message.command, message.parameters);
             });
+            this.pauseHandler.gamePause();
+            if(this.executeSingleLine === true) {
+                this.pauseHandler.userPause();
+            }
         }
         if (message.type === "ERROR") {
         }
@@ -65,10 +67,11 @@ export class WorkerHandler {
             this.setLineCallbacks.forEach(func => {
                 func.call(this, message.line);
             });
-            if (this.executeSingleLine === false) {
-                console.log("[Worker Handler]: Unhalting since not executing in single line mode");
-                this.unHaltWorker();
+            if(this.executeSingleLine === true) {
+                console.log("USER PAUSE")
+                this.pauseHandler.userPause();
             }
+            this.pauseHandler.lineProcessUnpause();
         }
         if (message.type === "REQUESTINPUT") {
         }
@@ -85,14 +88,12 @@ export class WorkerHandler {
             this.pyodideWorker.postMessage({ type: "SETBACKGROUNDCODE", runnerCode: this.pythonRunnerCode, codeMap: this.pythonCodeMap });
         }
         if (message.type === "BACKGROUNDCODE_OK") {
-            this.runnerState = RUNNER_STATES.READY;
             this.readyCallbacks.forEach(func => {
                 func.call(this);
             });
             console.log("[Worker Handler]: Ready");
         }
         if(message.type === "EXECFINISH") {
-            this.runnerState = RUNNER_STATES.ENDED;
             this.finishCallbacks.forEach(func => {
                 func.call(this);
             });
@@ -102,7 +103,6 @@ export class WorkerHandler {
             this.resetCallbacks.forEach(func => {
                 func.call(this);
             });
-            this.runnerState = RUNNER_STATES.READY;
             console.log("[Worker handler]: Finished resetting");
         }
     }
@@ -117,43 +117,28 @@ export class WorkerHandler {
         this.pyodideInterruptBuffer[0] = 0;
     }
 
-    haltWorker() {
-        console.log("[Worker handler]: Sleeping worker");
-        this.pauseHandler.pauseWorker();
-        this.runnerState = RUNNER_STATES.PAUSED;
-    }
-
-    unHaltWorker() {
-        console.log("[Worker handler]: Waking worker");
-        this.pauseHandler.unpauseWorker();
-        this.runnerState = RUNNER_STATES.RUNNING;
-    }
-
     runCode(script) {
         console.log("[Worker handler]: Running code");
         this.clearWorkerInterrupt();
         this.pyodideWorker.postMessage({ type: "RUNCODE", code: script });
-        this.runnerState = RUNNER_STATES.RUNNING;
     }
 
     stepToNextLine() {
         console.log("[Worker handler]: Stepping to next line");
         this.executeSingleLine = true;
-        this.unHaltWorker();
+        this.pauseHandler.userUnpause();
     }
 
     onFinishAnimations() {
         console.log("[Worker handler]: Game has finished processing");
-        if (this.executeSingleLine === false) {
-            this.unHaltWorker();
-        }
+        this.pauseHandler.gameUnpause();
     }
 
     reset() {
         console.log("[Worker handler]: Resetting...");
         this.executeSingleLine = false;
         this.clearWorkerInterrupt();
-        this.unHaltWorker();
+        this.pauseHandler.resetPause();
         this.interruptWorker();
         this.pyodideWorker.postMessage({ type: "RESET" });
     }

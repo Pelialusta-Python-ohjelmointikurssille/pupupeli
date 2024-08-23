@@ -19,13 +19,15 @@ export function resetRunner() {
 }
 
 export function pauseRunner() {
-    //handler.executeSingleLine = false;
+    handler.executeSingleLine = false;
     //handler.pauseUser();
+    handler.pauseHandler.userPause();
 }
 
 export function resumeRunner() {
-    //handler.executeSingleLine = false;
+    handler.executeSingleLine = false;
     //handler.resumeUser();
+    handler.pauseHandler.userUnpause();
 }
 
 export function onGameFinishAnim() {

@@ -112,8 +112,9 @@ function processLine(lineNumber) {
     self.postMessage({ type: "SETLINE", line: lineNumber });
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
-    Atomics.notify(waitBuffer, 0, 1);
+    Atomics.store(waitBuffer, 4, 1);
     Atomics.wait(waitBuffer, 0, 1);
+    console.log("[Pyodide Worker]: Worker woke up");
 }
 
 function onFinishedExecution() {
@@ -126,8 +127,9 @@ function runCommand(cmd, params) {
     self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
-    Atomics.notify(waitBuffer, 0, 1);
+    Atomics.store(waitBuffer, 2, 1);
     Atomics.wait(waitBuffer, 0, 1);
+    console.log("[Pyodide Worker]: Worker woke up");
 }
 
 function createObject(objectType, x, y) {

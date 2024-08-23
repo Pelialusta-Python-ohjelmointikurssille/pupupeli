@@ -29,6 +29,6 @@ user_script_globals = {
 try:
     runpy.run_module(mod_name=USER_SCRIPT_NAME, init_globals=user_script_globals)
 except Exception as e:
-    js_bridge.send_error_info(0, "", "")
+    print(e)
 finally:
     js_bridge.finished_execution()
