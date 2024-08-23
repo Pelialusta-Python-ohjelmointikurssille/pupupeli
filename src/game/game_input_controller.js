@@ -1,4 +1,8 @@
+import { answerInputRequest, subscribeToFinishCallbacks, subscribeToInputCallbacks } from "../code_runner/code_runner.js";
 import { displayPreviousInputs, hideAndClearInputBox, showInputBox } from "../ui/inputBox.js";
+
+subscribeToInputCallbacks(requestInputFromPython);
+subscribeToFinishCallbacks(resetInputController);
 
 let userInputs = [];
 let isWaitingForPython = false;
@@ -20,6 +24,7 @@ export function answerInput(inputString) {
         isWaitingForPython = false;
     } else {
     }
+    answerInputRequest(inputString);
     isWaitingForInput = false;
     userInputs.push(inputString);
     displayPreviousInputs();

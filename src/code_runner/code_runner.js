@@ -34,6 +34,10 @@ export function onGameFinishAnim() {
     handler.onFinishAnimations();
 }
 
+export function answerInputRequest(userInput) {
+    handler.answerInputRequest(userInput);
+}
+
 export function subscribeToGameCommands(func) {
     handler.gameCommandCallbacks.push(func);
 }
@@ -52,4 +56,8 @@ export function subscribeToFinishCallbacks(func) {
 
 export function subscribeToReadyCallbacks(func) {
     handler.readyCallbacks.push(func);
+}
+
+export function subscribeToInputCallbacks(func) {
+    handler.inputCallbacks.push(func);
 }

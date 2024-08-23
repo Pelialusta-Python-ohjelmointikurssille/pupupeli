@@ -219,4 +219,8 @@ export class Game {
         this.gh.doAction(gridObject.id, AnimationNames.APPEAR_HIDE, { time: 0.5 });
         this.grid.removeFromGrid(gridObject);
     }
+
+    onFinishedExecution() {
+        this.gh.destroyTextBoxes();
+    }
 }

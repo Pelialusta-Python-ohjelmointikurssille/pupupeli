@@ -23,6 +23,7 @@ export class WorkerHandler {
         this.resetCallbacks = [];
         this.finishCallbacks = [];
         this.readyCallbacks = [];
+        this.inputCallbacks = [];
 
         this.pauseHandler = new PauseHandler();
     }
@@ -74,6 +75,10 @@ export class WorkerHandler {
             this.pauseHandler.lineProcessUnpause();
         }
         if (message.type === "REQUESTINPUT") {
+            console.log(`[Worker Handler]: Worker request input from user`);
+            this.inputCallbacks.forEach(func => {
+                func.call(this);
+            });
         }
         if (message.type === "INIT_OK") {
             console.log("[Worker Handler]: Setting wait buffer");
@@ -132,6 +137,11 @@ export class WorkerHandler {
     onFinishAnimations() {
         console.log("[Worker handler]: Game has finished processing");
         this.pauseHandler.gameUnpause();
+    }
+
+    answerInputRequest(userInput) {
+        //GIVE INPUT STR
+        this.pauseHandler.inputUnpause();
     }
 
     reset() {

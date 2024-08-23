@@ -18,6 +18,11 @@ async function loadWorkerPyodide() {
     self.pyodide = await loadPyodide();
     console.timeEnd("[Pyodide Worker]: Finished initializing pyodide");
     self.postMessage({type: "INIT_OK"});
+    self.pyodide.setStdin({
+        stdin: () => {
+            return stdInHandler();
+        }
+    });
 }
 
 let pyodideReadyPromise = loadWorkerPyodide();
@@ -78,7 +83,7 @@ function setWaitBuffer(buffer) {
 function setInterruptBuffer(buffer) {
     console.log("[Pyodide Worker]: Got interrupt buffer");
     pyodide.setInterruptBuffer(buffer);
-    interruptBuffer = buffer;
+    interruptBuffer = buffer;pyodide.setStdin
     self.postMessage({type: "INTERRUPTBUFFER_OK"});
 }
 
@@ -152,4 +157,15 @@ function resetFromPython() {
     console.log("[Pyodide Worker]: Python asked for reset");
     resetting = true;
     reset();
+}
+
+// Input handler
+
+function stdInHandler() {
+    self.postMessage({ type: "REQUESTINPUT" });
+    Atomics.store(waitBuffer, 0, 1);
+    Atomics.store(waitBuffer, 3, 1);
+    Atomics.wait(waitBuffer, 0, 1);
+    self.pyodide.checkInterrupt();
+    return "test";
 }

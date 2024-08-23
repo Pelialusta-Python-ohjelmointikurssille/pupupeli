@@ -1,8 +1,9 @@
 import { Game } from "./game.js";
 import { getVariableTrueName } from './commonstrings.js';
-import { onGameFinishAnim, subscribeToGameCommands } from "../code_runner/code_runner.js";
+import { onGameFinishAnim, subscribeToFinishCallbacks, subscribeToGameCommands } from "../code_runner/code_runner.js";
 
-subscribeToGameCommands((command, parameters) => giveCommand({ data: { command: command, parameters: parameters } }))
+subscribeToGameCommands((command, parameters) => giveCommand({ data: { command: command, parameters: parameters } }));
+subscribeToFinishCallbacks(onFinishedExecution);
 
 //This file controls game. 
 // - Creates new game instances (Game contains both logic and rendering)
@@ -114,4 +115,8 @@ export function destroyObject(commandParameters) {
     let x = commandParameters[0];
     let y = commandParameters[1];
     game.destroyObject(x, y);
+}
+
+export function onFinishedExecution() {
+    game.onFinishedExecution();
 }
