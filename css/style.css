@@ -350,7 +350,7 @@ button:hover {
     grid-column-start: 2;
     grid-row-start: 1;
 }
-/* These two are for Sortable, used for codeblock tasks */
+/* These are for Sortable, used for codeblock tasks */
 .list-group-item {
     white-space: pre;
     position: relative;
@@ -365,6 +365,13 @@ button:hover {
     padding-left: 0;
     margin-bottom: 20px;
 }
+
+.ghost {
+    opacity: .5;
+    background: #C8EBFB;
+  }
+
+/* -----
 
 /* This one includes both task header and toggle buttons div, we want them on the same level */
 #task-name-div {

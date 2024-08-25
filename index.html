@@ -127,7 +127,10 @@
                         </div>
                         <script>
                             //const SORTABLE = Sortable;
-                            Sortable.create(simpleList, { /* options */ });
+                            Sortable.create(simpleList, {
+                                animation: 100,
+                                ghostClass: 'ghost'
+                            });
                         </script>
                     </div>
                     <div id="error-box">
