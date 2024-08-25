@@ -13,7 +13,7 @@ describe('extractErrorDetails', () => {
         const result = extractErrorDetails(errorMessage);
         expect(result).toEqual({
             text: 'Antamasi suunta ei ole kirjoitettu oikein',
-            line: '2'
+            line: '4'
         });
     });
 
@@ -29,7 +29,7 @@ describe('extractErrorDetails', () => {
         const result = extractErrorDetails(errorMessage);
         expect(result).toEqual({
             text: 'UnknownError: Tuntematon virhe',
-            line: '5'
+            line: '7'
         });
     });
 
@@ -43,7 +43,7 @@ describe('extractErrorDetails', () => {
             UnknownError: Tuntematon virhe
         `;
         const result = extractErrorDetails(errorMessage);
-        expect(result.line).toBe('5');
+        expect(result.line).toBe('7');
     });
 
     test('should handle errors without file reference', () => {
