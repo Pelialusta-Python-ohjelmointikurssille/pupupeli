@@ -1,6 +1,5 @@
-import { Constants, TaskTypes } from "../game/commonstrings.js";
+import { TaskTypes } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
-import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
 import { getEditor, resetLineHighlight, setEditorTextFromCodeBlocks } from "../input/editor.js";
 import { resetAndInitContent, toggleGrid, toggleTrail, setTheme, setTurboSpeedActive } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";

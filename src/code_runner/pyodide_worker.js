@@ -1,4 +1,5 @@
 console.log("[Pyodide Worker]: Importing pyodide...");
+// eslint-disable-next-line no-undef
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
 console.log("[Pyodide Worker]: Finished pyodide import");
 
@@ -7,6 +8,7 @@ let pythonRunnerCode;
 let isReadyToRunCode = false;
 let loadedScripts = [];
 let saveState;
+// eslint-disable-next-line no-unused-vars
 let interruptBuffer;
 let resetting = false;
 let sharedInputArray;
@@ -19,6 +21,7 @@ const CODE_EXECUTION_DELAY = 0.05;
 async function loadWorkerPyodide() {
     console.log("[Pyodide Worker]: Initializing pyodide");
     console.time("[Pyodide Worker]: Finished initializing pyodide");
+    // eslint-disable-next-line no-undef
     self.pyodide = await loadPyodide();
     console.timeEnd("[Pyodide Worker]: Finished initializing pyodide");
     self.postMessage({type: "INIT_OK"});
@@ -93,7 +96,7 @@ function setWaitBuffer(buffer) {
 
 function setInterruptBuffer(buffer) {
     console.log("[Pyodide Worker]: Got interrupt buffer");
-    pyodide.setInterruptBuffer(buffer);
+    self.pyodide.setInterruptBuffer(buffer);
     interruptBuffer = buffer;
     self.postMessage({type: "INTERRUPTBUFFER_OK"});
 }
@@ -101,7 +104,7 @@ function setInterruptBuffer(buffer) {
 function reset() {
     console.log("[Pyodide Worker]: Resetting...");
     loadedScripts = [];
-    pyodide.pyodide_py._state.restore_state(saveState);
+    self.pyodide.pyodide_py._state.restore_state(saveState);
     hasUsedInput = false;
     self.postMessage({ type: "RESET_OK" });
 }
@@ -134,11 +137,12 @@ function readFromSharedArray() {
 
 function saveCurrentState() {
     console.log("[Pyodide Worker]: Saving current pyodide state");
-    saveState = pyodide.pyodide_py._state.save_state();
+    saveState = self.pyodide.pyodide_py._state.save_state();
 }
 
 // JS functions called from python
 
+// eslint-disable-next-line no-unused-vars
 function processLine(lineNumber) {
     if(resetting) return;
     if (lineNumber <= 0) return;
@@ -151,6 +155,7 @@ function processLine(lineNumber) {
     console.log("[Pyodide Worker]: Worker woke up");
 }
 
+// eslint-disable-next-line no-unused-vars
 function onFinishedExecution(usedWhileLoop, usedForLoop) {
     let clearedConditions = [];
     clearedConditions.push({ condition: "conditionUsedWhile", parameter: usedWhileLoop });
@@ -172,19 +177,23 @@ function sendCommand(cmd, params) {
     console.log("[Pyodide Worker]: Worker woke up");
 }
 
+// eslint-disable-next-line no-unused-vars
 function runCommand(cmd, param) {
     if(resetting) return;
     sendCommand(cmd, [param]);
 }
 
+// eslint-disable-next-line no-unused-vars
 function createObject(objectType, x, y) {
     sendCommand("create_obj", [objectType, x, y]);
 }
 
+// eslint-disable-next-line no-unused-vars
 function destroyObject(x, y) {
     sendCommand("destroy_obj", [x, y]);
 }
 
+// eslint-disable-next-line no-unused-vars
 function getObjectCount(objectType) {
     self.postMessage({ type: "GETOBJECTCOUNT", objectType: objectType });
     Atomics.store(waitBuffer, 0, 1);
@@ -194,22 +203,24 @@ function getObjectCount(objectType) {
     return readFromSharedArray();
 }
 
+// eslint-disable-next-line no-unused-vars
 function processErrorInfo(lineNumber, errorMessage, errorType, fullMessage) {
     self.postMessage({ type: "ERROR", errorInfo: { line: lineNumber, type: errorType, message: errorMessage, fullMessage: fullMessage } });
 }
 
+// eslint-disable-next-line no-unused-vars
 function resetFromPython() {
     console.log("[Pyodide Worker]: Python asked for reset");
     resetting = true;
     reset();
 }
 
+// eslint-disable-next-line no-unused-vars
 function getSourceCode() {
     return userCode;
 }
 
 // Input handler
-
 function stdInHandler() {
     hasUsedInput = true;
     self.postMessage({ type: "REQUESTINPUT" });

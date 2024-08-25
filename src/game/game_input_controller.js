@@ -22,7 +22,6 @@ export function requestInputFromGame() {
 export function answerInput(inputString) {
     if (isWaitingForPython) {
         isWaitingForPython = false;
-    } else {
     }
     answerInputRequest(inputString);
     isWaitingForInput = false;
