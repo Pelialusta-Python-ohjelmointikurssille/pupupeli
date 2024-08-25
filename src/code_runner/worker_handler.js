@@ -4,7 +4,8 @@ import { PauseHandler } from "./pause_handler.js";
 const PYTHON_CODE_FILES = new Map([
     ["python_tracer.py", "src/python_code/python_tracer.py"],
     ["player.py", "src/python_code/player.py"],
-    ["js_bridge.py", "src/python_code/js_bridge.py"]
+    ["js_bridge.py", "src/python_code/js_bridge.py"],
+    ["condition_checker.py", "src/python_code/condition_checker.py"]
 ]);
 
 const PYTHON_SCRIPT_RUNNER = "src/python_code/runner.py";
@@ -118,7 +119,7 @@ export class WorkerHandler {
         }
         if(message.type === "EXECFINISH") {
             this.finishCallbacks.forEach(func => {
-                func.call(this);
+                func.call(this, message.clearedConditions);
             });
         }
         if (message.type === "RESET_OK") {

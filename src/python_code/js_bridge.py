@@ -22,8 +22,11 @@ class JSBridge:
     def send_error_info(self, line_number, error_message, error_type):
         print("ERROR")
 
-    def finished_execution(self):
-        js.onFinishedExecution()
+    def finished_execution(self, used_while_loop, used_for_loop):
+        js.onFinishedExecution(used_while_loop, used_for_loop)
     
     def system_exit(self):
         js.resetFromPython()
+
+    def get_source_code(self):
+        return js.getSourceCode()

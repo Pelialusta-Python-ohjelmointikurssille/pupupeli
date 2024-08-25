@@ -10,6 +10,8 @@ let saveState;
 let interruptBuffer;
 let resetting = false;
 let sharedInputArray;
+let hasUsedInput = false;
+let userCode;
 
 const USER_SCRIPT_NAME = "userscript.py";
 
@@ -62,6 +64,7 @@ async function messageHandler(event) {
 }
 
 async function runCode(code, playerName) {
+    userCode = code;
     console.log("[Pyodide Worker]: Running python code");
     console.log(playerName)
     if (isReadyToRunCode === false) {
@@ -97,6 +100,7 @@ function reset() {
     console.log("[Pyodide Worker]: Resetting...");
     loadedScripts = [];
     pyodide.pyodide_py._state.restore_state(saveState);
+    hasUsedInput = false;
     self.postMessage({ type: "RESET_OK" });
 }
 
@@ -145,8 +149,14 @@ function processLine(lineNumber) {
     console.log("[Pyodide Worker]: Worker woke up");
 }
 
-function onFinishedExecution() {
-    self.postMessage({ type: "EXECFINISH" });
+function onFinishedExecution(usedWhileLoop, usedForLoop) {
+    let clearedConditions = [];
+    clearedConditions.push({ condition: "conditionUsedWhile", parameter: usedWhileLoop });
+    clearedConditions.push({ condition: "conditionUsedFor", parameter: usedForLoop });
+    clearedConditions.push({ condition: "conditionMaxLines", parameter: userCode.split("\n").filter(line => line.trim() !== "").length });
+    clearedConditions.push({ condition: "conditionUsedInput", parameter: hasUsedInput });
+    clearedConditions = clearedConditions.filter(condition => condition.parameter !== false);
+    self.postMessage({ type: "EXECFINISH", clearedConditions: clearedConditions });
 }
 
 function sendCommand(cmd, params) {
@@ -192,9 +202,14 @@ function resetFromPython() {
     reset();
 }
 
+function getSourceCode() {
+    return userCode;
+}
+
 // Input handler
 
 function stdInHandler() {
+    hasUsedInput = true;
     self.postMessage({ type: "REQUESTINPUT" });
     Atomics.store(waitBuffer, 0, 1);
     Atomics.store(waitBuffer, 3, 1);

@@ -1,6 +1,7 @@
 from python_tracer import PythonTracer
 from player import Pelaaja
 from js_bridge import JSBridge
+from condition_checker import ConditionChecker
 import sys
 import signal
 import runpy
@@ -8,6 +9,7 @@ import runpy
 CODE_WAIT_TIME = 0.05
 
 js_bridge = JSBridge()
+checker = ConditionChecker(js_bridge)
 tracer = PythonTracer(js_bridge, CODE_WAIT_TIME)
 tracer.start_tracer()
 
@@ -31,4 +33,4 @@ try:
 except Exception as e:
     print(e)
 finally:
-    js_bridge.finished_execution()
+    js_bridge.finished_execution(checker.check_while_usage(), checker.check_for_usage())

@@ -1,3 +1,4 @@
+import { subscribeToFinishCallbacks } from "./code_runner/code_runner.js";
 import { onTaskComplete } from "./ui/ui.js";
 import { task, getMultipleChoiceCorrect } from "./util/globals.js";
 import { collectibles } from "./util/globals.js";
@@ -5,6 +6,8 @@ import { collectibles } from "./util/globals.js";
 export const conditionsCleared = [];
 export const conditions = task.getConditions();
 export const conditionsNotCleared = [];
+
+subscribeToFinishCallbacks((clearedConditions) => { addClearedConditions(clearedConditions); checkIfGameWon();});
 
 export function addClearedConditions(conditionsFromWorkerMessenger) {
     conditionsNotCleared.length = 0;
