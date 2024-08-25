@@ -178,7 +178,7 @@ function onRunButtonClick() {
                 sendTask();
             }
             //postMessage({ type: 'start', details: getEditor().getValue() });
-            runCode(getEditor().getValue());
+            runCode(getEditor().getValue(), localStorage.getItem("theme").toLowerCase());
             break;
         case States.RUNNING:
             if(isWaitingForInput) return;

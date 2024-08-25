@@ -6,8 +6,8 @@ export function initializeRunner() {
     handler.initialize();
 }
 
-export function runCode(code, theme) {
-    handler.runCode(code);
+export function runCode(code, playerName) {
+    handler.runCode(code, playerName);
 }
 
 export function runUntilNextLine() {

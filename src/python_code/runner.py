@@ -23,7 +23,7 @@ def interrupt_handler(sig, frame):
 signal.signal(signal.SIGINT, interrupt_handler)
 
 user_script_globals = {
-    "pupu": pelaaja
+    PLAYER_NAME: pelaaja
 }
 
 try:

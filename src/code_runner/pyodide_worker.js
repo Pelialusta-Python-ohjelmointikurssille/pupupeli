@@ -45,7 +45,7 @@ async function messageHandler(event) {
         setSharedInputArray(message.array);
     }
     if (message.type === "RUNCODE") {
-        await runCode(message.code);
+        await runCode(message.code, message.theme);
     }
     if (message.type === "RESET") {
     }
@@ -61,8 +61,9 @@ async function messageHandler(event) {
     }
 }
 
-async function runCode(code) {
+async function runCode(code, playerName) {
     console.log("[Pyodide Worker]: Running python code");
+    console.log(playerName)
     if (isReadyToRunCode === false) {
         console.warning("[Pyodide Worker]: Trying to run code before worker is ready to run code, returning early...");
         return;
@@ -74,6 +75,7 @@ async function runCode(code) {
     await loadedScripts.forEach(async (element) => {
         await self.pyodide.loadPackagesFromImports(element);
     });
+    self.pyodide.globals.set("PLAYER_NAME", playerName);
     console.log("[Pyodide Worker]: Running python code");
     await self.pyodide.runPythonAsync(pythonRunnerCode);
 }

@@ -140,10 +140,10 @@ export class WorkerHandler {
         this.pyodideInterruptBuffer[0] = 0;
     }
 
-    runCode(script) {
+    runCode(script, playerName) {
         console.log("[Worker handler]: Running code");
         this.clearWorkerInterrupt();
-        this.pyodideWorker.postMessage({ type: "RUNCODE", code: script });
+        this.pyodideWorker.postMessage({ type: "RUNCODE", code: script, theme: playerName });
     }
 
     stepToNextLine() {
