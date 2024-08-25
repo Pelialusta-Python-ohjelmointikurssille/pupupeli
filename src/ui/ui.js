@@ -11,8 +11,9 @@ import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";
 import { translateToTheme } from "../util/theme_translator.js";
-import { initializeRunner } from "../code_runner/code_runner.js";
+import { initializeRunner, subscribeToErrorCallbacks } from "../code_runner/code_runner.js";
 
+subscribeToErrorCallbacks((errorInfo) => {displayErrorMessage(errorInfo.fullMessage)});
 
 const instructionsStr = "instructions";
 let currentChapter = globals.identifiers.chapterIdentifier;
@@ -299,8 +300,8 @@ export function showPopUpNotification(elementId) {
  * @param {*} error The error to display on the page.
  */
 export function displayErrorMessage(error) {
-    if (typeof error === "string") { console.log(error) } else { console.log(error.message) }
-    let errorDetails = extractErrorDetails(error.message);
+    if (typeof error === "string") { console.log(error) }
+    let errorDetails = extractErrorDetails(error);
     if (errorDetails.text === "KeyboardInterrupt") return; // intended error; do not display to user
     let errorContainer = document.getElementById("error-box");
     errorContainer.classList.toggle("show-error");

@@ -19,8 +19,8 @@ class JSBridge:
     def send_line_info(self, line_number):
         js.processLine(line_number)
 
-    def send_error_info(self, line_number, error_message, error_type):
-        print("ERROR")
+    def send_error_info(self, line_number, error_message, error_type, traceback):
+        js.processErrorInfo(line_number, error_message, error_type, traceback)
 
     def finished_execution(self, used_while_loop, used_for_loop):
         js.onFinishedExecution(used_while_loop, used_for_loop)

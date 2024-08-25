@@ -69,7 +69,7 @@ export class WorkerHandler {
         }
         if (message.type === "ERROR") {
             this.errorCallbacks.forEach(func => {
-                func.call(this);
+                func.call(this, message.errorInfo);
             });
         }
         if (message.type === "SETLINE") {

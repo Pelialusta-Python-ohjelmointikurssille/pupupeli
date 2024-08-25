@@ -5,6 +5,7 @@ from condition_checker import ConditionChecker
 import sys
 import signal
 import runpy
+import traceback
 
 CODE_WAIT_TIME = 0.05
 
@@ -31,6 +32,6 @@ user_script_globals = {
 try:
     runpy.run_module(mod_name=USER_SCRIPT_NAME, init_globals=user_script_globals)
 except Exception as e:
-    print(e)
+    js_bridge.send_error_info(-1, str(e), str(type(e).__name__), "".join(traceback.format_exception(e)))
 finally:
     js_bridge.finished_execution(checker.check_while_usage(), checker.check_for_usage())

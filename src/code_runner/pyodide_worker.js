@@ -192,8 +192,8 @@ function getObjectCount(objectType) {
     return readFromSharedArray();
 }
 
-function processErrorInfo() {
-
+function processErrorInfo(lineNumber, errorMessage, errorType, fullMessage) {
+    self.postMessage({ type: "ERROR", errorInfo: { line: lineNumber, type: errorType, message: errorMessage, fullMessage: fullMessage } });
 }
 
 function resetFromPython() {
