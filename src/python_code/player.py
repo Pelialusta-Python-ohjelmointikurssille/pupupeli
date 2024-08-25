@@ -24,7 +24,7 @@ class Pelaaja:
         pass
     
     def luo(self, gridObjectType : str, x = -1, y = -1):
-        pass
+        self.js_bridge.create_object(gridObjectType, x, y)
         
     def poista(self, x, y):
-        pass
+        self.js_bridge.destroy_object(x, y)

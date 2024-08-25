@@ -147,7 +147,7 @@ function onFinishedExecution() {
     self.postMessage({ type: "EXECFINISH" });
 }
 
-function runCommand(cmd, params) {
+function sendCommand(cmd, params) {
     if(resetting) return;
     console.log("[Pyodide Worker]: Running game command");
     self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
@@ -158,12 +158,17 @@ function runCommand(cmd, params) {
     console.log("[Pyodide Worker]: Worker woke up");
 }
 
+function runCommand(cmd, param) {
+    if(resetting) return;
+    sendCommand(cmd, [param]);
+}
+
 function createObject(objectType, x, y) {
-    
+    sendCommand("create_obj", [objectType, x, y]);
 }
 
 function destroyObject(x, y) {
-
+    sendCommand("destroy_obj", [x, y]);
 }
 
 function getInt(variableName) {

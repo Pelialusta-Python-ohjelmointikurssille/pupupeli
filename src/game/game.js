@@ -3,7 +3,7 @@ import { getGameTask } from "./gridfactory.js";
 import { translatePythonMoveStringToDirection } from "./direction.js";
 import { MoveCommand, SayCommand, AskCommand } from "./commands.js";
 import { commandsDone } from "./game_controller.js";
-import { Constants } from "./commonstrings.js";
+import { Constants, getVariableTrueName } from "./commonstrings.js";
 import { SKIN_BUNDLES } from "./graphics_handler/manifests/skin_manifest.js";
 import { GridObject } from "./gridobject.js";
 import { AnimationNames } from "./graphics_handler/manifests/animation_manifest.js";
@@ -60,13 +60,19 @@ export class Game {
         this.gh.destroyTextBoxes();
         switch (commandName) {
             case Constants.MOVE_STR:
-                this.makeMoveCommand(commandParameter);
+                this.makeMoveCommand(commandParameter[0]);
                 break;
             case Constants.SAY_STR:
-                this.makeSayCommand(commandParameter);
+                this.makeSayCommand(commandParameter[0]);
                 break;
             case Constants.ASK_STR:
-                this.makeAskCommand(commandParameter);
+                this.makeAskCommand(commandParameter[0]);
+                break;
+            case Constants.CREATE_OBJ_STR:
+                this.createObjectCommand(commandParameter);
+                break;
+            case Constants.DESTROY_OBJ_STR:
+                this.destroyObjectCommand(commandParameter);
                 break;
         }
     }
@@ -218,6 +224,24 @@ export class Game {
         }
         this.gh.doAction(gridObject.id, AnimationNames.APPEAR_HIDE, { time: 0.5 });
         this.grid.removeFromGrid(gridObject);
+    }
+
+    createObjectCommand(commandParameters) {
+        let name = commandParameters[0]
+        let x = commandParameters[1];
+        let y = commandParameters[2];
+        name = getVariableTrueName(name);
+        this.createNewPlayerCreatedGridObject(name, x, y);
+        this.onFinishedExecution();
+        this.onAnimsReady();
+    }
+
+    destroyObjectCommand(commandParameters) {
+        let x = commandParameters[0];
+        let y = commandParameters[1];
+        this.destroyObject(x, y);
+        this.onFinishedExecution();
+        this.onAnimsReady();
     }
 
     onFinishedExecution() {
