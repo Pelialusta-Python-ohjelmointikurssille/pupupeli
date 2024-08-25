@@ -24,13 +24,10 @@ let currentTask = globals.identifiers.taskIdentifier;
  */
 async function main() {
     initPage(); // creates task json global variable
-    if (globals.task.getTaskType() != instructionsStr) {
-        initializeRunner();
-        initializeEditorButtons();
-        await initGameAndCanvas();
-        loadNextTaskInfo();
-    }
-
+    initializeRunner();
+    initializeEditorButtons();
+    await initGameAndCanvas();
+    loadNextTaskInfo();
 
     // Move somewhere that makes more sense. Disables scrolling on top of game window.
     document.getElementById("game-container").addEventListener("wheel", (event) => { event.preventDefault() });
