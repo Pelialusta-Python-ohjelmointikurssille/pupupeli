@@ -50,8 +50,6 @@ async function messageHandler(event) {
     if (message.type === "RUNCODE") {
         await runCode(message.code, message.theme);
     }
-    if (message.type === "RESET") {
-    }
     if (message.type === "RESET_WORKER_OK") {
         resetting = false;
         console.log("[Pyodide Worker]: Finished resetting");
@@ -67,7 +65,6 @@ async function messageHandler(event) {
 async function runCode(code, playerName) {
     userCode = code;
     console.log("[Pyodide Worker]: Running python code");
-    console.log(playerName)
     if (isReadyToRunCode === false) {
         console.warning("[Pyodide Worker]: Trying to run code before worker is ready to run code, returning early...");
         return;
