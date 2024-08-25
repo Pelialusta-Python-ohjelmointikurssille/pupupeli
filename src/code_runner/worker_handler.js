@@ -28,6 +28,7 @@ export class WorkerHandler {
         this.readyCallbacks = [];
         this.inputCallbacks = [];
         this.errorCallbacks = [];
+        this.objectCountCallbacks = [];
 
         this.pauseHandler = new PauseHandler();
     }
@@ -85,6 +86,12 @@ export class WorkerHandler {
             console.log(`[Worker Handler]: Worker request input from user`);
             this.inputCallbacks.forEach(func => {
                 func.call(this);
+            });
+        }
+        if (message.type === "GETOBJECTCOUNT") {
+            console.log(`[Worker Handler]: Worker request amount of objects from game`);
+            this.objectCountCallbacks.forEach(func => {
+                func.call(this, message.objectType);
             });
         }
         if (message.type === "INIT_OK") {
@@ -156,7 +163,15 @@ export class WorkerHandler {
         this.pauseHandler.inputUnpause();
     }
 
-    writeStringToSharedArray(stringToWrite) {
+    answerObjectCountRequest(count) {
+        console.log("" + count.toString())
+        console.log("ANSWERED")
+        this.writeStringToSharedArray("" + count.toString());
+        this.pauseHandler.inputUnpause();
+    }
+
+    writeStringToSharedArray(string) {
+        let stringToWrite = string.toString();
         for (let i = 0; i < this.sharedInputArray.length; i++) {
             if (i >= stringToWrite.length-1) this.sharedInputArray[i] = 0;
             this.sharedInputArray[i] = stringToWrite.charCodeAt(i);

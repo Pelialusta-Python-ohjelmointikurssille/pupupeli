@@ -171,8 +171,13 @@ function destroyObject(x, y) {
     sendCommand("destroy_obj", [x, y]);
 }
 
-function getInt(variableName) {
-
+function getObjectCount(objectType) {
+    self.postMessage({ type: "GETOBJECTCOUNT", objectType: objectType });
+    Atomics.store(waitBuffer, 0, 1);
+    Atomics.store(waitBuffer, 3, 1);
+    Atomics.wait(waitBuffer, 0, 1);
+    self.pyodide.checkInterrupt();
+    return readFromSharedArray();
 }
 
 function processErrorInfo() {

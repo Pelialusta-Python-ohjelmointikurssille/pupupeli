@@ -20,8 +20,10 @@ class Pelaaja:
         self.js_bridge.run_command("ask", question)
         return input()
 
-    def laske(self, variableName: str):
-        pass
+    def laske(self, objectType: str):
+        result = self.js_bridge.get_object_count(objectType)
+        print(result)
+        return int(result)
     
     def luo(self, gridObjectType : str, x = -1, y = -1):
         self.js_bridge.create_object(gridObjectType, x, y)

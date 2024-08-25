@@ -38,6 +38,11 @@ export function answerInputRequest(userInput) {
     handler.answerInputRequest(userInput);
 }
 
+export function answerObjecCount(count) {
+    console.log("COUNT ANSWERED")
+    handler.answerObjectCountRequest(count);
+}
+
 export function subscribeToGameCommands(func) {
     handler.gameCommandCallbacks.push(func);
 }
@@ -64,4 +69,8 @@ export function subscribeToInputCallbacks(func) {
 
 export function subscribeToErrorCallbacks(func) {
     handler.errorCallbacks.push(func);
+}
+
+export function subscribeToObjectCountCallbacks(func) {
+    handler.objectCountCallbacks.push(func);
 }

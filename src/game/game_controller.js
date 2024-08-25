@@ -1,9 +1,10 @@
 import { Game } from "./game.js";
 import { getVariableTrueName } from './commonstrings.js';
-import { onGameFinishAnim, subscribeToFinishCallbacks, subscribeToGameCommands } from "../code_runner/code_runner.js";
+import { answerObjecCount, onGameFinishAnim, subscribeToFinishCallbacks, subscribeToGameCommands, subscribeToObjectCountCallbacks } from "../code_runner/code_runner.js";
 
 subscribeToGameCommands((command, parameters) => giveCommand({ data: { command: command, parameters: parameters } }));
 subscribeToFinishCallbacks(onFinishedExecution);
+subscribeToObjectCountCallbacks((objectType) => { answerObjectCountRequest(objectType); console.log("ANSWER REQUEST")});
 
 //This file controls game. 
 // - Creates new game instances (Game contains both logic and rendering)
@@ -119,4 +120,8 @@ export function destroyObject(commandParameters) {
 
 export function onFinishedExecution() {
     game.onFinishedExecution();
+}
+
+export function answerObjectCountRequest(objectType) {
+    answerObjecCount(getGridObjectsOfTypeLeft(objectType));
 }

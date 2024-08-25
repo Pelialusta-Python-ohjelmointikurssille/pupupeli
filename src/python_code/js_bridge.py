@@ -13,8 +13,8 @@ class JSBridge:
     def destroy_object(self, x, y):
         js.destroyObject(x, y)
 
-    def get_int(self, variable_name):
-        js.getInt(variable_name)
+    def get_object_count(self, object_type):
+        return js.getObjectCount(object_type)
 
     def send_line_info(self, line_number):
         js.processLine(line_number)
