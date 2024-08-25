@@ -355,10 +355,20 @@ button:hover {
     white-space: pre;
     position: relative;
     display: block;
+    overflow: hidden;
     padding: 10px 15px;
-    margin-bottom: -1px;
+    margin-bottom: 2px;
     background-color: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid #000000;
+}
+
+.list-group-index-item {
+    white-space: pre;
+    float: left;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+    background-color: #ffffff6f;
+    border: 1px solid #000000;
 }
 
 .list-group {
@@ -368,7 +378,7 @@ button:hover {
 
 .ghost {
     opacity: .5;
-    background: #C8EBFB;
+    background: #9ee0ff;
   }
 
 /* -----

@@ -81,27 +81,34 @@ export function showCodeBlocksInsteadOfEditor(isCodeblockMode) {
     codeBlockListContainer.classList.add("is-hidden");
 }
 
-export function createCodeBlocks(strings) {
-    while (codeBlocksListElement.firstChild) {
-        codeBlocksListElement.removeChild(codeBlocksListElement.lastChild);
-    }
-    strings.forEach(codeblock => {
-        createListGroupitem(codeblock);
-    });
-}
-
 export function setEditorTextFromCodeBlocks() {
     let str = "";
     let children = codeBlocksListElement.children;
+    //Children contain two divs, first is for the line number
     for (var i = 0; i < children.length; i++) {
-        str += children[i].textContent + "\n";
+        str += children[i].children[1].textContent + "\n";
     }
     editor.setValue(str);
 }
 
-function createListGroupitem(string) {
+export function createCodeBlocks(strings) {
+    while (codeBlocksListElement.firstChild) {
+        codeBlocksListElement.removeChild(codeBlocksListElement.lastChild);
+    }
+    for (let i = 0; i < strings.length; i++) {
+        createListGroupitem(strings[i], i + 1);   
+    }
+}
+
+function createListGroupitem(string, index) {
+    let div = document.createElement("div");
+    codeBlocksListElement.appendChild(div);
     let listItem = document.createElement("div");
+    let listIndexItem = document.createElement("div");
     listItem.className = "list-group-item";
     listItem.textContent = string;
-    codeBlocksListElement.appendChild(listItem);
+    listIndexItem.className = "list-group-index-item";
+    listIndexItem.textContent = index;
+    div.appendChild(listIndexItem);
+    div.appendChild(listItem);
 }
