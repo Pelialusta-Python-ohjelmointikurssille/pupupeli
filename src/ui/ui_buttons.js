@@ -1,62 +1,11 @@
 import * as api from "../api/api.js";
 import * as globals from "../util/globals.js";
-import { setTitle, setDescription, moveToTask, onTaskComplete } from "./ui.js";
-
-/**
- * Clears app-container, creates a new one and adds elements for instruction page
- */
-export function createInstructionPage() {
-    //Commenting fixes lint, is this even used?
-    //const taskIdentifier = globals.taskIdentifier;
-    //const chapterIdentifier = globals.chapterIdentifier;
-    const appDiv = document.getElementById("app-container");
-    appDiv.classList.add("is-hidden");
-
-    let insAppDiv = document.createElement('div');
-    insAppDiv.id = 'instructions-container';
-    insAppDiv.classList.add("box");
-    insAppDiv.style.flexDirection = "row";
-    insAppDiv.style.display = "flex";
-    window.addEventListener('load', function () {
-        createTaskButtons("instructions"); // must be called here to avoid race condition where token (retrieved from api after login) doesn't exist before the function is called
-    });
-    const insDiv = document.createElement('div');
-    insDiv.id = 'instruction-div';
-
-    let insHead = document.createElement('div');
-    insHead.id = 'instruction-head';
-
-    let insHeadline = document.createElement('h1');
-
-    let instructionTitle = document.createElement('a');
-    instructionTitle.id = 'instructionTitle';
-    setTitle(instructionTitle);
-
-    insHeadline.appendChild(instructionTitle);
-
-    insHead.appendChild(insHeadline);
-
-    let insDesc = document.createElement('div');
-    setDescription(insDesc);
-    insDesc.id = 'instruction-desc';
-
-
-    appDiv.insertAdjacentElement("afterend", insAppDiv);
-    insAppDiv.appendChild(insDiv);
-    insDiv.appendChild(insHead);
-    insDiv.appendChild(insDesc);
-
-    // set previous/next task button eventlisteners
-    Array.from(document.getElementsByClassName("task-navigation-button")).forEach(button => {
-        button.addEventListener("click", moveToTask);
-    });
-}
 
 /**
  * Create buttons for selecting tasks based on how many json files exist in tasks directory.
  * In the future the path should be able to check different directories so we can implement "chapters".
  */
-export function createTaskButtons(str = "") {
+export function createTaskButtons() {
     const buttonContainer = document.getElementById('buttonTable');
     buttonContainer.innerHTML = ''
     const currentChapter = globals.identifiers.chapterIdentifier;
@@ -86,9 +35,6 @@ export function createTaskButtons(str = "") {
                     globals.identifiers.taskIdentifier = i + 1;
                 });
                 buttonContainer.appendChild(button);
-            }
-            if (str === "instructions") {
-                onTaskComplete(true);
             }
         });
     } else { // user is not logged in

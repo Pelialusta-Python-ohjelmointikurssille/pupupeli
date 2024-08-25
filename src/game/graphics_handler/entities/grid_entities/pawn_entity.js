@@ -56,7 +56,6 @@ export class PawnEntity extends GraphicsEntity {
     onDestroy() {
         if (this.lineDrawer !== null) {
             this.entityHandler.renderer.removeFromStage(this.lineDrawer.graphics);
-            console.log("REMOVED LINE DRAWER")
             this.lineDrawer = null;
         }
         super.onDestroy();

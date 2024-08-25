@@ -10,6 +10,11 @@ subscribeToSetLineCallbacks(highlightCurrentLine);
 subscribeToResetCallbacks(resetLineHighlight);
 subscribeToFinishCallbacks(resetLineHighlight);
 
+
+let codeBlockListContainer = document.getElementById("code-blocks-container");
+let codeBlocksListElement = document.getElementById("simpleList");
+let aceEditorElement = document.getElementById("editor");
+
 const aceEditorScript = document.createElement('script');
 aceEditorScript.src = `https://cdnjs.cloudflare.com/ajax/libs/ace/${ace_version}/ace.js`;
 document.head.appendChild(aceEditorScript);
@@ -62,7 +67,7 @@ export function highlightCurrentLine(lineNumber) {
         editor.session.removeMarker(currentLineMarker);
     }
     // eslint-disable-next-line no-undef
-    currentLineMarker = editor.session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "executing-line", "fullLine");
+    currentLineMarker = editor.session.addMarker(new ace.Range(lineNumber - 1, 4, lineNumber - 1, 5), "executing-line", "fullLine");
 }
 
 export function resetLineHighlight() {
@@ -71,10 +76,58 @@ export function resetLineHighlight() {
     editor.session.removeMarker(errorLineMarker);
 }
 
+
 export function setErrorLine(lineNumber) {
     if (errorLineMarker !== undefined && errorLineMarker !== null) {
         editor.session.removeMarker(errorLineMarker);
     }
     // eslint-disable-next-line no-undef
     errorLineMarker = editor.session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "error-line", "fullLine");
+}
+
+/**
+ * Sets if the aceEditor is visible inside the editor container.
+ * Codeblocks are instead used as visuals, that arrange the code inside editor secretly.
+ * @param {*} isCodeblockMode bool
+ */
+export function showCodeBlocksInsteadOfEditor(isCodeblockMode) {
+    if (isCodeblockMode) {
+        aceEditorElement.classList.add("is-hidden");
+        codeBlockListContainer.classList.remove("is-hidden");
+        return;
+    }
+    aceEditorElement.classList.remove("is-hidden");
+    codeBlockListContainer.classList.add("is-hidden");
+}
+
+export function setEditorTextFromCodeBlocks() {
+    let str = "";
+    let children = codeBlocksListElement.children;
+    //Children contain two divs, first is for the line number
+    for (var i = 0; i < children.length; i++) {
+        str += children[i].children[1].textContent + "\n";
+    }
+    editor.setValue(str);
+}
+
+export function createCodeBlocks(strings) {
+    while (codeBlocksListElement.firstChild) {
+        codeBlocksListElement.removeChild(codeBlocksListElement.lastChild);
+    }
+    for (let i = 0; i < strings.length; i++) {
+        createListGroupitem(strings[i], i + 1);   
+    }
+}
+
+function createListGroupitem(string, index) {
+    let div = document.createElement("div");
+    codeBlocksListElement.appendChild(div);
+    let listItem = document.createElement("div");
+    let listIndexItem = document.createElement("div");
+    listItem.className = "list-group-item";
+    listItem.textContent = string;
+    listIndexItem.className = "list-group-index-item";
+    listIndexItem.textContent = index;
+    div.appendChild(listIndexItem);
+    div.appendChild(listItem);
 }

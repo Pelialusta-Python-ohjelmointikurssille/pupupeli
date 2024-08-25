@@ -1,0 +1,37 @@
+{
+  "title": "Pikkutesti",
+  "taskType": "collectibles",
+  "enableAddRemove": false,
+  "description": [
+    "Taas 1 tämmönen"
+  ],
+  "editorCode": [
+    "for i in range(7):",
+    "\tpupu.liiku(\"oikea\")",
+    "for i in range(7):",
+    "\tpupu.liiku(\"alas\")"
+  ],
+  "multipleChoiceQuestions": [],
+  "grid": [
+    [0,2],
+    [1,1]
+  ],
+  "conditions": [
+    {
+      "condition": "conditionUsedWhile",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedFor",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": false
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": false
+    }
+  ]
+}

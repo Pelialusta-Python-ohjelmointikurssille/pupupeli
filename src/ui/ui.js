@@ -1,21 +1,22 @@
 import * as globals from "../util/globals.js";
 import * as api from "../api/api.js";
 import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
-import { getEditor, setErrorLine } from "../input/editor.js"
+import { getEditor, showCodeBlocksInsteadOfEditor, createCodeBlocks, setErrorLine } from "../input/editor.js"
+import { initWorker } from "../worker_messenger.js";
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, resetAndInitContent, setTheme } from "../game/game_controller.js";
 import { conditionsNotCleared } from "../clear_conditions.js";
-import { createChapterButtons, createInstructionPage } from "./ui_buttons.js";
+import { createChapterButtons } from "./ui_buttons.js";
 import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";
 import { translateToTheme } from "../util/theme_translator.js";
 import { initializeRunner, subscribeToErrorCallbacks } from "../code_runner/code_runner.js";
+import { TaskTypes } from "../game/commonstrings.js";
 
 subscribeToErrorCallbacks((errorInfo) => {displayErrorMessage(errorInfo.fullMessage)});
 
-const instructionsStr = "instructions";
 let currentChapter = globals.identifiers.chapterIdentifier;
 let currentTask = globals.identifiers.taskIdentifier;
 /**
@@ -27,7 +28,9 @@ async function main() {
         initializeRunner();
         initializeEditorButtons();
         await initGameAndCanvas();
+        loadNextTaskInfo();
     }
+
 
     // Move somewhere that makes more sense. Disables scrolling on top of game window.
     document.getElementById("game-container").addEventListener("wheel", (event) => { event.preventDefault() });
@@ -51,11 +54,7 @@ async function initGameAndCanvas() {
 async function initPage() {
     updateLoginUI(); //currently also creates task and chapter buttons
     // checking if current task type is instructions
-    if (globals.task.getTaskType() != instructionsStr) {
-        createGamePage();
-    } else {
-        createInstructionPage();
-    }
+    createGamePage();
 }
 
 /**
@@ -65,10 +64,9 @@ function createGamePage() {
     let descriptionTargetDiv = document.getElementById("task-description");
     setDescription(descriptionTargetDiv);
 
-    if (globals.task.getMultipleChoiceQuestions().length > 0) {
+    if (globals.task.taskType === TaskTypes.multipleChoice) {
         setMultipleChoice();
     }
-
     setEditorCode();
 
     let titleTargetDiv = document.getElementById("taskTitle");
@@ -91,7 +89,7 @@ function setMultipleChoice() {
         multipleChoiceContainer.removeChild(multipleChoiceContainer.firstChild);
     }
 
-    if (globals.task.getMultipleChoiceQuestions().length === 0) {
+    if (globals.task.taskType !== TaskTypes.multipleChoice) { //But we know it's MultipleChoice...
         multipleChoiceContainer.classList.add("is-hidden");
     } else {
         multipleChoiceContainer.classList.remove("is-hidden");
@@ -125,16 +123,23 @@ export function setTitle(titleDiv) {
 }
 
 export async function setEditorCode() {
+    if (globals.task.taskType === TaskTypes.codeBlockMoving) {
+        showCodeBlocksInsteadOfEditor(true);
+        createCodeBlocks(globals.task.codeBlocks);
+        return;
+    }
     let editorCode = "";
+    showCodeBlocksInsteadOfEditor(false);
     if (localStorage.getItem("token")) {
         api.getTask().then((task) => {
-            editorCode = translateToTheme(task.data);
-        if (editorCode === "") {
-            editorCode = globals.task.getEditorCode();
-        }
-        getEditor().setValue(editorCode);
-        getEditor().clearSelection();
-    });
+            if (task.data) {
+                editorCode = translateToTheme(task.data);
+            } else {
+                editorCode = globals.task.getEditorCode();
+            }
+            getEditor().setValue(editorCode);
+            getEditor().clearSelection();
+        });
     } else {
         editorCode = globals.task.getEditorCode();
         getEditor().setValue(editorCode);
@@ -183,7 +188,7 @@ export function onTaskComplete(isWon) {
     if (isWon) {
         const buttonid = apiTaskIdentifier;
         let button = document.getElementById(buttonid);
-        if (globals.task.getTaskType() != instructionsStr) {
+        if (globals.task.getTaskType() != TaskTypes.instruction) {
             celebration();
         }
         if (button.classList.contains("button-incompleted")) {
@@ -289,7 +294,11 @@ export function showPopUpNotification(elementId) {
             element.classList.remove("pop-up-notification-show-login");
         }, 6000);
         element.classList.add("pop-up-notification-show-login");
-
+    } else if (elementId === "task-not-found") {
+        setTimeout(() => {
+            element.classList.remove("pop-up-notification-show");
+        }, 6000);
+        element.classList.add("pop-up-notification-show");
     } else {
         element.classList.add("pop-up-notification-show");
     }
@@ -303,34 +312,41 @@ export function displayErrorMessage(error) {
     if (typeof error === "string") { console.log(error) }
     let errorDetails = extractErrorDetails(error);
     if (errorDetails.text === "KeyboardInterrupt") return; // intended error; do not display to user
-    let errorContainer = document.getElementById("error-box");
-    errorContainer.classList.toggle("show-error");
-    errorContainer.children[0].textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
+    let errorContainer = document.getElementById("error");
+    toggleErrorVisibility(true)
+    errorContainer.textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
     disablePlayButton("error");
     setErrorLine(errorDetails.line);
+}
+
+export function displayWarningMessage(message) {
+    console.warn(message);
+    let errorContainer = document.getElementById("warning");
+    toggleErrorVisibility(true)
+    errorContainer.textContent = message;
+}
+
+export function toggleErrorVisibility(toggle) {
+    let errorDiv = document.getElementById("error-box");
+    if (toggle) {
+        errorDiv.classList.add("show-error");
+    } else {
+        errorDiv.classList.remove("show-error");
+    }
 }
 
 export function loadNextTaskInfo() {
     currentChapter = globals.identifiers.chapterIdentifier;
     currentTask = globals.identifiers.taskIdentifier;
-    const appDiv = document.getElementById("app-container");
-
-    // Check if insAppDiv already exists and remove it if it does
-    const existingInsAppDiv = document.getElementById('instructions-container');
-    if (existingInsAppDiv) {
-        existingInsAppDiv.parentNode.removeChild(existingInsAppDiv);
-    }
-
-    const insAppDiv = document.createElement('div');
-    insAppDiv.id = 'instructions-container'; // Assign a unique ID
-
-    if (globals.task.getTaskType() === instructionsStr) {
-        appDiv.classList.add("is-hidden");
-        insAppDiv.classList.remove("is-hidden");
-        loadIstructionTask(appDiv, insAppDiv);
+    const appContDiv = document.getElementById("app-container");
+    const insContDiv = document.getElementById("instructions-container");
+    if (globals.task.getTaskType() === TaskTypes.instruction) {
+        appContDiv.classList.add("is-hidden");
+        insContDiv.classList.remove("is-hidden");
+        loadIstructionTask();
     } else {
-        appDiv.classList.remove("is-hidden");
-        insAppDiv.classList.add("is-hidden");
+        appContDiv.classList.remove("is-hidden");
+        insContDiv.classList.add("is-hidden");
     }
 
     let descriptionTargetDiv = document.getElementById("task-description");
@@ -347,37 +363,35 @@ export function loadNextTaskInfo() {
     resetInputController();
 };
 
-function loadIstructionTask(appDiv, insAppDiv) {
-    insAppDiv.innerHTML = "";
-    insAppDiv.id = 'instructions-container';
-    insAppDiv.classList.add("box");
-    insAppDiv.style.flexDirection = "row";
-    insAppDiv.style.display = "flex";
-    const insDiv = document.createElement('div');
-    insDiv.id = 'instruction-div';
-    
+function loadIstructionTask() {
+    loadIstructionLeft();
+}
+
+function loadIstructionLeft() {
+    const leftDiv = document.getElementById('left-instructions-container');
+    leftDiv.innerHTML = '';
+
     let insHead = document.createElement('div');
     insHead.id = 'instruction-head';
+    insHead.classList.add('center-content');
 
-    let insHeadline = document.createElement('h1');
-    
+    let insHeadline = document.createElement('h2');
+
     let instructionTitle = document.createElement('a');
     instructionTitle.id = 'instructionTitle';
     setTitle(instructionTitle);
-    
+
     insHeadline.appendChild(instructionTitle);
 
     insHead.appendChild(insHeadline);
-    
+
     let insDesc = document.createElement('div');
     setDescription(insDesc);
     insDesc.id = 'instruction-desc';
-    
-    
-    appDiv.insertAdjacentElement("afterend", insAppDiv);
-    insAppDiv.appendChild(insDiv);
-    insDiv.appendChild(insHead);
-    insDiv.appendChild(insDesc);
+
+    leftDiv.appendChild(insHead);
+    leftDiv.appendChild(insDesc);
+    onTaskComplete(true);
 }
 
 

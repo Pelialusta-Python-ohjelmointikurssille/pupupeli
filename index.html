@@ -17,6 +17,50 @@
             Läpäisit tehtävän, onneksi olkoon!
         </div>
     </div>
+    <div id="settings-container">
+        <div id="settings-window" class="is-hidden">
+            <div id="settings-box" class="box">
+                <div id="settings-header">
+                    <h1>Asetukset</h1>
+                </div>
+                <div id="settings-content">
+                    <div id="settings-top">
+                        <div id="theme-select" class="settings-unit-top">
+                            <h2>Teema</h2>
+                            <select id="theme-select" type="button">
+                                <option>Pupu</option>
+                                <option>Robo</option>
+                                <!-- Add new themes here to add them to dropdown! -->
+                            </select>
+                        </div>
+                        <div id="trail-toggle" class="settings-unit-top">
+                            <h2>Jälkiviiva</h2>
+                            <label class="switch">
+                                <input id="trail-toggle-button" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div id="grid-toggle" class="settings-unit-top">
+                            <h2>Ruudukko</h2>
+                            <label class="switch">
+                                <input id="grid-toggle-button" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="settings-bottom">
+                        <div id="task-progress" class="settings-unit-bottom">
+                            <p>Kirjaudu sisään nähdäksesi edistyminen</p>
+                        </div>
+                        <div id="close-settings">
+                            <button id="settings-close-button" type="button">Sulje</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="overlay"></div>
     <div id="header" class="is-flex">
         <div id="header-container" class="box is-flex">
             <h1>Pupupeli</h1>
@@ -35,8 +79,12 @@
                     <button id="login-button" value="login">Kirjaudu sisään</button>
                 </form>
                 <button id="logout-button" class="is-hidden" value="logout">Kirjaudu ulos</button>
+                <button id="settings-button" value="settings">Asetukset</button>
                 <div id="login-failed" class="box">
                     <h1>Voi ei! Käyttäjää ei ole olemassa tai salasana on väärin!</h1>
+                </div>
+                <div id="task-not-found" class="box">
+                    <h1>Tehtävää ei löytynyt! Ladataan oletuksena 1. tehtävä.</h1>
                 </div>
                 <div id="condition-failed" class="box">
                     <h1></h1>
@@ -46,6 +94,13 @@
 
     </div>
     <div id="app" class="is-flex">
+        <div id="instructions-container" class="is-flex is-hidden box">
+            <div id="left-instructions-container" class="is-flex">
+            </div>
+            <div id="right-instructions-container" class="is-flex">
+                <img src="../src/static/game_assets/characters/bunny_down.png" alt="Bunny">
+            </div>
+        </div>
         <div id="app-container" class="box">
             <div id="left-container" class="is-flex">
                 <div id="task-container">
@@ -55,15 +110,6 @@
                                 <a id="taskTitle"></a>
                             </h1>
                         </div>
-                        <div id="toggle-buttons-div">
-                            <select id="theme-select" type="button">
-                                <option>Pupu</option>
-                                <option>Robo</option>
-                                <!-- Add new themes here to add them to dropdown! -->
-                            </select>
-                            <button id="trail-toggle-button" type="button">Jälkiviiva</button>
-                            <button id="grid-toggle-button" type="button">Ruudukko</button>
-                        </div>
                     </div>
                     <div id="task-description">
                     </div>
@@ -72,25 +118,57 @@
                 </div>
                 <div id="editor-container" class="is-flex">
                     <div id="editor"></div>
+                    <div id="code-blocks-container">
+                        <!--Doing some JS here cause it was too time consuming to do it in input/editor.js-->
+                        <!-- Latest compiled and minified CSS (for Sortable) -->
+                        <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
+                        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+                        <!-- Simple List -->
+                        <div id="simpleList" class="list-group">
+                        </div>
+                        <script>
+                            //const SORTABLE = Sortable;
+                            Sortable.create(simpleList, {
+                                animation: 100,
+                                ghostClass: 'ghost',
+                                // Called when dragging element changes position
+                                onChange: function (/**Event*/evt) {
+                                    let children = simpleList.children;
+                                    for (var i = 0; i < children.length; i++) {
+                                        children[i].children[0].textContent = i  + 1;
+                                    }
+                                }
+                            });
+                        </script>
+                    </div>
                     <div id="error-box">
-                        <div id="error"></div>
+                        <div id="error" class="error"></div>
+                        <div id="warning" class="warning"></div>
                     </div>
                     <div id="editor-buttons-container" class="is-flex is-margin-half-rem-x">
+                        <!-- Editor run/pause button -->
                         <button id="editor-run-pause-button" class="editor-button is-margin-half-rem-x" type="button"
                             disabled>
                             <image id="run-icon" src="src/static/runbutton.png"></image>
                             <span id="runButtonText">Ladataan...</span>
                         </button>
+                        <!-- Editor "next step" button -->
                         <button id="editor-skip-button" class="editor-button is-margin-half-rem-x" type="button"
                             disabled>
                             <image id="run-icon" src="src/static/skipbutton.png"></image>
                             <span id="buttonText">Seuraava askel</span>
                         </button>
-
+                        <!-- Editor reset button -->
                         <button id="editor-stop-button" class="editor-button is-margin-half-rem-x" type="button"
                             disabled>
                             <image id="run-icon" src="src/static/resetbutton2.png"></image>
                             <span id="buttonText">Resetoi</span>
+                        </button>
+                        <!-- Editor Turbo button -->
+                        <button id="editor-turbo-button" class="editor-button is-margin-half-rem-x" type="button"
+                            disabled>
+                            <image id="run-icon" src="src/static/turbobutton.png"></image>
+                            <span id="buttonText">Turbo</span>
                         </button>
 
                     </div>

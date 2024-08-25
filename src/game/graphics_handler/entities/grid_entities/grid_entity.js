@@ -74,7 +74,7 @@ export class GridEntity extends GraphicsEntity {
      * Should be changed to actual lines.
      */
     createLines () {
-        this.areLinesEnabled = true;
+        this.areLinesEnabled = this.isEnabled();
         let linexcount = this.gridSize.x + 1;
         let lineycount = this.gridSize.y + 1;
         let linexgap = this.pixelSize.x / this.gridSize.x;
@@ -102,6 +102,8 @@ export class GridEntity extends GraphicsEntity {
             this.container.addChild(textObject);
         }
         this.container.addChild(this.lineGraphics);
+        if (this.areLinesEnabled === false)
+            this.removeLines();
     }
 
     /**
@@ -125,5 +127,13 @@ export class GridEntity extends GraphicsEntity {
 
     getMiddlePixelPosition() {
         return new Vector2(this.pixelSize.x / 2 + this.container.position.x, this.pixelSize.y / 2 + this.container.position.y);
+    }
+
+    isEnabled() {
+        const gridEnabled = localStorage.getItem("gridEnabled");
+        if (gridEnabled === "false") {
+            return false;
+        }
+        return true;
     }
 }

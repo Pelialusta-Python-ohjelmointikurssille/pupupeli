@@ -20,6 +20,7 @@ export class Game {
         this.canDoNextMove = true;
         this.isGridEnabled = true;
         this.tempObjectIds = [];
+        this.gameSpeedModifier = 1;
     }
 
     /**
@@ -92,7 +93,7 @@ export class Game {
         let dir = translatePythonMoveStringToDirection(commandParameter);
         let moveCommand = new MoveCommand(this.grid, this.grid.player, dir, this.gh, this);
         //(possibility) we can save moveCommand for later when/if we want to add undo functionality
-        moveCommand.execute();
+        moveCommand.execute(this.gameSpeedModifier);
     }
 
     /**
@@ -101,7 +102,7 @@ export class Game {
      */
     makeSayCommand(commandParameter) {
         let sayCommand = new SayCommand(this.grid.player, this.gh, commandParameter);
-        sayCommand.execute();
+        sayCommand.execute(this.gameSpeedModifier);
     }
 
     /**
@@ -113,16 +114,16 @@ export class Game {
         askCommand.execute();
         this.onAnimsReady();
     }
-
+    
     /**
      * Restores the gamestate back to the beginning of the task.
      */
     resetAndInitContent() {
         this.gh.destroyAllEntities();
         this.grid = getGameTask();
-        this.collectibleCounter = new CollectibleCounter(this.grid);
+        this.collectibleCounter.initialize(this.grid);
         this.canDoNextMove = true;
-        this.isGridEnabled = true;
+        this.isGridEnabled = this.gridStateAtInit();
         this.tempObjectIds = [];
         this.gh.createGrid(this.grid.height, this.grid.width);
         this.grid.gridObjects.forEach(item => {
@@ -162,6 +163,7 @@ export class Game {
      */
     toggleGrid() {
         this.isGridEnabled = !this.isGridEnabled;
+        localStorage.setItem("gridEnabled", this.isGridEnabled);
         this.gh.setGridState(this.isGridEnabled);
     }
 
@@ -246,5 +248,17 @@ export class Game {
 
     onFinishedExecution() {
         this.gh.destroyTextBoxes();
+    }
+
+    setSpeedModifier(speed) {
+        this.gameSpeedModifier = speed;
+    }
+
+    gridStateAtInit() {
+        const gridEnabled = localStorage.getItem("gridEnabled");
+        if (gridEnabled === "false") {
+            return false;
+        }
+        return true;
     }
 }

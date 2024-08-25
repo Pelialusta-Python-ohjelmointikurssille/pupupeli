@@ -1,6 +1,7 @@
 import { login, logout } from "../api/api.js";
 import { showPopUpNotification } from "../ui/ui.js";
 import { createChapterButtons, createTaskButtons } from "./ui_buttons.js";
+import { settingsTaskProgress } from "./ui_settings.js";
 
 let loginButton = document.getElementById("login-button");
 let logoutButton = document.getElementById("logout-button");
@@ -21,6 +22,7 @@ loginButton.addEventListener("click", () => {
                 showPopUpNotification("login-failed");
             }
             updateLoginUI();
+            settingsTaskProgress();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -33,6 +35,7 @@ logoutButton.addEventListener("click", () => {
             localStorage.removeItem("token");
             localStorage.removeItem("username");
             updateLoginUI();
+            settingsTaskProgress();
         })
         .catch(error => {
             console.error('Error:', error);

@@ -12,6 +12,8 @@ subscribeToObjectCountCallbacks((objectType) => { answerObjectCountRequest(objec
 
 var game;
 var currentCommand;
+const gameDefaultSpeed = 1;
+const gameTurboSpeed = 0.2;
 
 /**
  * Initializes the game. It loads the current level using the instuctions from current task and initializes the rendering.
@@ -20,6 +22,8 @@ var currentCommand;
 export async function initGame() {
     game = new Game();
     await game.init();
+    const gridToggleButton = document.getElementById("grid-toggle-button");
+    gridToggleButton.checked = game.isGridEnabled;
     return game.getCanvas();
 }
 
@@ -124,4 +128,12 @@ export function onFinishedExecution() {
 
 export function answerObjectCountRequest(objectType) {
     answerObjecCount(getGridObjectsOfTypeLeft(objectType));
+}
+
+export function setTurboSpeedActive(isBool) {
+    if (!isBool) {
+        game.setSpeedModifier(gameDefaultSpeed); //Default speed
+        return;
+    }
+    game.setSpeedModifier(gameTurboSpeed);
 }

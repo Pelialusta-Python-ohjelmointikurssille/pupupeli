@@ -7,8 +7,18 @@ import { collectibles, incrementCollectibles } from "../util/globals.js";
  */
 export class CollectibleCounter {
     constructor(grid) {
-        this.grid = grid;
-        grid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
+        this.grid = null;
+        this.initialize(grid);
+    }
+
+    initialize(newGrid) {
+        if (this.grid !== null) {
+            this.grid.eventTarget.removeEventListener("remove", this.removedFromGrid.bind(this));
+        }
+        this.grid = newGrid;
+        collectibles.total = this.grid.data.getGridObjectsOfTypeCount(Constants.COLLECTIBLE);
+        newGrid.eventTarget.addEventListener("remove", this.removedFromGrid.bind(this));
+        this.reset();
     }
 
     /**

@@ -20,15 +20,18 @@
   "Chapter3": {
     "Task1": "1.json",
     "Task2": "2.json",
-    "Task3": "3.json"
+    "Task3": "3.json",
+    "Task4": "taskiJossaKaikkiConditionit.json"
   },
   "Chapter4": {
     "Task1": "1.json",
     "Task2": "2.json",
     "Task3": "3.json",
-    "Task4": "4.json"
+    "Task4": "4.json",
+    "Task5": "pikkutesti.json"
   },
   "Chapter5": {
-    "Task1": "1.json"
+    "Task1": "1.json",
+    "Task2": "riviSiirtoTesti.json"
   }
 }

@@ -1,0 +1,47 @@
+{
+  "title": "Rivien siirtely testi",
+  "taskType": "code-block-moving",
+  "enableAddRemove": false,
+  "description": [
+    "Palikoiden siirtely testitehtävä."
+  ],
+  "editorCode": [
+    "#Tata ei edes tarvitse?",
+    "#Oli joku bugi",
+    "#etta luki vaan et ",
+    "pupu.liiku(\"oikea\")"
+  ],
+  "multipleChoiceQuestions": [],
+  "codeBlocks": [
+    "pupu.liiku(\"oikea\")",
+    "pupu.liiku(\"ylös\")",
+    "  pupu.liiku(\"alas\")",
+    "for x in range(2):",
+    "pupu.liiku(\"vasen\")"
+  ],
+  "grid": [
+    [3,3,3,3,3],
+    [3,3,2,2,3],
+    [3,3,0,2,3],
+    [3,3,2,2,3],
+    [3,3,3,3,3]
+  ],
+  "conditions": [
+    {
+      "condition": "conditionUsedWhile",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedFor",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": false
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": false
+    }
+  ]
+}

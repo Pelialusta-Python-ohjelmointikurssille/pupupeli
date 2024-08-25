@@ -1,0 +1,40 @@
+{
+  "title": "Taski jossa kaikki conditionit",
+  "taskType": "collectibles",
+  "enableAddRemove": false,
+  "description": [
+    "Taski jossa kaikki conditionit"
+  ],
+  "editorCode": [
+    "while True:",
+    "    hypyt = pupu.kysy(\"monta hyppyä?\")",
+    "    for i in range(int(hypyt)):",
+    "        pupu.liiku(\"oikea\")",
+    "    vastaus = pupu.kysy(\"onko kaikki porkkanat kerätty? (kyllä/ei)\")",
+    "    if vastaus == \"kyllä\":",
+    "        break",
+    ""
+  ],
+  "multipleChoiceQuestions": [],
+  "grid": [
+    [0,1,2,1,2,2,1,2]
+  ],
+  "conditions": [
+    {
+      "condition": "conditionUsedWhile",
+      "parameter": true
+    },
+    {
+      "condition": "conditionUsedFor",
+      "parameter": true
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": true
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": false
+    }
+  ]
+}
