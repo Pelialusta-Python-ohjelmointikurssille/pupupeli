@@ -7,16 +7,12 @@ import signal
 import runpy
 import traceback
 
-CODE_WAIT_TIME = 0.05
-
 js_bridge = JSBridge()
 checker = ConditionChecker(js_bridge)
 tracer = PythonTracer(js_bridge, CODE_WAIT_TIME)
 tracer.start_tracer()
 
 pelaaja = Pelaaja(js_bridge)
-
-USER_SCRIPT_NAME = "userscript"
 
 def interrupt_handler(sig, frame):
     print("[Python|Pyodide]: Handling interrupt")

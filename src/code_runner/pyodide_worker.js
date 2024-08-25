@@ -13,7 +13,8 @@ let sharedInputArray;
 let hasUsedInput = false;
 let userCode;
 
-const USER_SCRIPT_NAME = "userscript.py";
+const USER_SCRIPT_NAME = "userscript";
+const CODE_EXECUTION_DELAY = 0.05;
 
 async function loadWorkerPyodide() {
     console.log("[Pyodide Worker]: Initializing pyodide");
@@ -72,13 +73,17 @@ async function runCode(code, playerName) {
         return;
     }
     console.log("[Pyodide Worker]: Writing user code to virtual file");
-    await self.pyodide.FS.writeFile(USER_SCRIPT_NAME, code, { encoding: "utf8" });
+    await self.pyodide.FS.writeFile(USER_SCRIPT_NAME+".py", code, { encoding: "utf8" });
     console.log("[Pyodide Worker]: Loading packages from imports");
     await self.pyodide.loadPackagesFromImports(code);
     await loadedScripts.forEach(async (element) => {
         await self.pyodide.loadPackagesFromImports(element);
     });
+
     self.pyodide.globals.set("PLAYER_NAME", playerName);
+    self.pyodide.globals.set("CODE_WAIT_TIME", CODE_EXECUTION_DELAY);
+    self.pyodide.globals.set("USER_SCRIPT_NAME", USER_SCRIPT_NAME);
+
     console.log("[Pyodide Worker]: Running python code");
     await self.pyodide.runPythonAsync(pythonRunnerCode);
 }
