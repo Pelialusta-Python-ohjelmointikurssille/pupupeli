@@ -5,7 +5,7 @@ class ConditionChecker:
     def __init__(self, js_bridge: JSBridge) -> None:
         self.js_bridge = js_bridge
 
-    def check_while_usage(self):
+    def check_while_usage(self) -> bool:
         tree = ast.parse(self.js_bridge.get_source_code())
 
         for node in ast.walk(tree):
@@ -14,7 +14,7 @@ class ConditionChecker:
 
         return False
 
-    def check_for_usage(self):
+    def check_for_usage(self) -> bool:
         tree = ast.parse(self.js_bridge.get_source_code())
 
         for node in ast.walk(tree):
