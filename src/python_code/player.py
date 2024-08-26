@@ -22,7 +22,6 @@ class Pelaaja:
 
     def laske(self, objectType: str):
         result = self.js_bridge.get_object_count(objectType)
-        print(result)
         return int(result)
     
     def luo(self, gridObjectType : str, x = -1, y = -1):
