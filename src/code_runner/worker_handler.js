@@ -1,6 +1,12 @@
 import { tryGetFileAsText } from "../file_reader.js";
 import { PauseHandler } from "./pause_handler.js";
 
+/*
+Dictionary of all the python files that are used in running Python.
+
+Key = Name of the file to be written into the virtual file system.
+Value = Path to the actual file that should be loaded.
+*/
 const PYTHON_CODE_FILES = new Map([
     ["python_tracer.py", "src/python_code/python_tracer.py"],
     ["player.py", "src/python_code/player.py"],
@@ -11,13 +17,17 @@ const PYTHON_CODE_FILES = new Map([
 const PYTHON_SCRIPT_RUNNER = "src/python_code/runner.py";
 
 const INPUT_CHARACTER_LIMIT = 512;
+// UTF-16 uses 16 bits to represent characters.
 const BYTES_PER_CHARACTER = 2;
 
+/*
+Class that handles communication with the worker. 
+*/
 export class WorkerHandler {
     constructor() {
         this.pyodideWorker = null;
         this.pyodideInterruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
-        this.sharedInputArray = new Uint16Array(new SharedArrayBuffer(INPUT_CHARACTER_LIMIT * BYTES_PER_CHARACTER)); // For up to 512 utf-16 characters
+        this.sharedInputArray = new Uint16Array(new SharedArrayBuffer(INPUT_CHARACTER_LIMIT * BYTES_PER_CHARACTER)); 
         this.pythonCodeMap;
         this.pythonRunnerCode;
         this.executeSingleLine = false;
@@ -34,6 +44,9 @@ export class WorkerHandler {
         this.pauseHandler = new PauseHandler();
     }
 
+    /*
+    Creates web worker and loads python code from files.
+    */
     initialize() {
         console.log("[Worker Handler]: Initializing worker handler...");
         this.pyodideWorker = new Worker("/src/code_runner/pyodide_worker.js");
@@ -46,6 +59,9 @@ export class WorkerHandler {
         console.log("[Worker Handler]: Loaded code files");
     }
 
+    /*
+    Load files from dictionary.
+    */
     loadCodeFiles(fileDict) {
         let codeMap = new Map();
         fileDict.forEach((value, key) => {
@@ -55,6 +71,9 @@ export class WorkerHandler {
         return codeMap;
     }
 
+    /*
+    Function that handles worker postMessage events.
+    */
     async pyodideMessageHandler(event) {
         let message = event.data;
         if (message.type === "COMMAND") {
@@ -131,11 +150,18 @@ export class WorkerHandler {
         }
     }
 
+    /*
+    Sets the interrupt buffer to 2 to trigger a KeyboardInterrupt in pyodide.
+    If processed correctly, will be set back to 0 when pyodide is done.
+    */
     interruptWorker() {
         console.log("[Worker handler]: Interrupting pyodide worker with buffer");
         this.pyodideInterruptBuffer[0] = 2;
     }
 
+    /*
+    Sets the interrupt buffer back to 0. 
+    */
     clearWorkerInterrupt() {
         console.log("[Worker handler]: Clearing interrupt buffer");
         this.pyodideInterruptBuffer[0] = 0;
@@ -153,17 +179,27 @@ export class WorkerHandler {
         this.pauseHandler.userUnpause();
     }
 
+    /*
+    Runs when game has finished animations/processing. 
+    */
     onFinishAnimations() {
         console.log("[Worker handler]: Game has finished processing");
         this.pauseHandler.gameUnpause();
     }
 
+    /*
+    Called by game/ui, userInput is player written input from textbox.
+    Writes to the shared array between handler and worker then unpauses the input pause.
+    This shared array is then read by the web worker and given to the python program.
+    */
     answerInputRequest(userInput) {
-        //GIVE INPUT STR
         this.writeStringToSharedArray(userInput);
         this.pauseHandler.inputUnpause();
     }
 
+    /*
+    Works similarly to answerInputRequest. Instead of text it writes numbers to shared array.
+    */
     answerObjectCountRequest(count) {
         console.log("" + count.toString())
         console.log("ANSWERED")
@@ -171,6 +207,9 @@ export class WorkerHandler {
         this.pauseHandler.inputUnpause();
     }
 
+    /*
+    Writes string to shared array. Pretty much the same as the old worker.
+    */
     writeStringToSharedArray(string) {
         let stringToWrite = string.toString();
         for (let i = 0; i < this.sharedInputArray.length; i++) {
@@ -180,6 +219,9 @@ export class WorkerHandler {
         console.log(`[Worker handler]: Wrote to shared input array: ${this.sharedInputArray}`)
     }
 
+    /*
+    Resets the handler. Clears handler and pause handler values. Lastly sends reset message to worker.
+    */
     reset() {
         console.log("[Worker handler]: Resetting...");
         this.executeSingleLine = false;
