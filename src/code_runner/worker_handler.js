@@ -225,7 +225,7 @@ export class WorkerHandler {
     reset() {
         console.log("[Worker handler]: Resetting...");
         this.executeSingleLine = false;
-        this.clearWorkerInterrupt();
+        //this.clearWorkerInterrupt();
         this.pauseHandler.resetPause();
         this.interruptWorker();
         this.pyodideWorker.postMessage({ type: "RESET" });

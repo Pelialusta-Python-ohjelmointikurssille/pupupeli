@@ -88,7 +88,21 @@ async function runCode(code, playerName) {
     self.pyodide.globals.set("USER_SCRIPT_NAME", USER_SCRIPT_NAME);
 
     console.log("[Pyodide Worker]: Running python code");
-    await self.pyodide.runPythonAsync(pythonRunnerCode);
+    resetting = false;
+    try {
+        await self.pyodide.runPythonAsync(pythonRunnerCode);
+    }
+    catch {
+
+    }
+    
+}
+
+function updateResetStatus() {
+    console.log(`INTERRUPT VAL ${interruptBuffer[0]}`);
+    if (interruptBuffer[0] === 2) {
+        resetting = true;
+    }
 }
 
 function setWaitBuffer(buffer) {
@@ -149,16 +163,15 @@ function saveCurrentState() {
 
 // eslint-disable-next-line no-unused-vars
 function processLine(lineNumber) {
+    updateResetStatus();
     if (resetting === true) return;
     if (lineNumber <= 0) return;
-    self.pyodide.checkInterrupt();
     console.log(`[Pyodide Worker]: Processing line ${lineNumber}`);
     self.postMessage({ type: "SETLINE", line: lineNumber });
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
     Atomics.store(waitBuffer, 4, 1);
     Atomics.wait(waitBuffer, 0, 1);
-    self.pyodide.checkInterrupt();
     console.log("[Pyodide Worker]: Worker woke up");
 }
 
@@ -175,20 +188,20 @@ function onFinishedExecution(usedWhileLoop, usedForLoop) {
 }
 
 function sendCommand(cmd, params) {
+    updateResetStatus();
     if (resetting === true) return;
-    self.pyodide.checkInterrupt();
     console.log("[Pyodide Worker]: Running game command");
     self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
     Atomics.store(waitBuffer, 2, 1);
     Atomics.wait(waitBuffer, 0, 1);
-    self.pyodide.checkInterrupt();
     console.log("[Pyodide Worker]: Worker woke up");
 }
 
 // eslint-disable-next-line no-unused-vars
 function runCommand(cmd, param) {
+    updateResetStatus();
     if (resetting === true) return;
     sendCommand(cmd, [param]);
 }
@@ -221,7 +234,6 @@ function processErrorInfo(lineNumber, errorMessage, errorType, fullMessage) {
 // eslint-disable-next-line no-unused-vars
 function resetFromPython() {
     console.log("[Pyodide Worker]: Python asked for reset");
-    self.pyodide.checkInterrupt();
     resetting = true;
     reset();
 }
