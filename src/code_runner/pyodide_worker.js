@@ -41,6 +41,9 @@ self.onmessage = async (event) => {
 async function messageHandler(event) {
     await pyodideReadyPromise;
     let message = event.data;
+    if (message.type === "RESET") {
+        reset();
+    }
     if (message.type === "SETWAITBUFFER") {
         setWaitBuffer(message.buffer);
     }
@@ -102,7 +105,9 @@ function setInterruptBuffer(buffer) {
 }
 
 function reset() {
+    if (resetting === true) return;
     console.log("[Pyodide Worker]: Resetting...");
+    resetting = true;
     loadedScripts = [];
     self.pyodide.pyodide_py._state.restore_state(saveState);
     hasUsedInput = false;
@@ -144,19 +149,22 @@ function saveCurrentState() {
 
 // eslint-disable-next-line no-unused-vars
 function processLine(lineNumber) {
-    if(resetting) return;
+    if (resetting === true) return;
     if (lineNumber <= 0) return;
+    self.pyodide.checkInterrupt();
     console.log(`[Pyodide Worker]: Processing line ${lineNumber}`);
     self.postMessage({ type: "SETLINE", line: lineNumber });
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
     Atomics.store(waitBuffer, 4, 1);
     Atomics.wait(waitBuffer, 0, 1);
+    self.pyodide.checkInterrupt();
     console.log("[Pyodide Worker]: Worker woke up");
 }
 
 // eslint-disable-next-line no-unused-vars
 function onFinishedExecution(usedWhileLoop, usedForLoop) {
+    if (resetting === true) return;
     let clearedConditions = [];
     clearedConditions.push({ condition: "conditionUsedWhile", parameter: usedWhileLoop });
     clearedConditions.push({ condition: "conditionUsedFor", parameter: usedForLoop });
@@ -167,19 +175,21 @@ function onFinishedExecution(usedWhileLoop, usedForLoop) {
 }
 
 function sendCommand(cmd, params) {
-    if(resetting) return;
+    if (resetting === true) return;
+    self.pyodide.checkInterrupt();
     console.log("[Pyodide Worker]: Running game command");
     self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
     Atomics.store(waitBuffer, 2, 1);
     Atomics.wait(waitBuffer, 0, 1);
+    self.pyodide.checkInterrupt();
     console.log("[Pyodide Worker]: Worker woke up");
 }
 
 // eslint-disable-next-line no-unused-vars
 function runCommand(cmd, param) {
-    if(resetting) return;
+    if (resetting === true) return;
     sendCommand(cmd, [param]);
 }
 
@@ -211,6 +221,7 @@ function processErrorInfo(lineNumber, errorMessage, errorType, fullMessage) {
 // eslint-disable-next-line no-unused-vars
 function resetFromPython() {
     console.log("[Pyodide Worker]: Python asked for reset");
+    self.pyodide.checkInterrupt();
     resetting = true;
     reset();
 }
