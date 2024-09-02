@@ -248,10 +248,10 @@ export class WorkerHandler {
 
     /**
      * Writes a given string to shared array. Pretty much the same as the old worker.
-     * @param {string} stringToWrite 
+     * @param {string} inputString 
      */
-    writeStringToSharedArray(stringToWrite) {
-        let stringToWrite = stringToWrite.toString();
+    writeStringToSharedArray(inputString) {
+        let stringToWrite = inputString.toString();
         for (let i = 0; i < this.sharedInputArray.length; i++) {
             if (i >= stringToWrite.length-1) this.sharedInputArray[i] = 0;
             this.sharedInputArray[i] = stringToWrite.charCodeAt(i);
