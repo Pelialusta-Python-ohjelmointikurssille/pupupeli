@@ -8,7 +8,6 @@ let pythonRunnerCode;
 let isReadyToRunCode = false;
 let loadedScripts = [];
 let saveState;
-// eslint-disable-next-line no-unused-vars
 let interruptBuffer;
 let resetting = false;
 let sharedInputArray;
@@ -89,13 +88,7 @@ async function runCode(code, playerName) {
 
     console.log("[Pyodide Worker]: Running python code");
     resetting = false;
-    try {
-        await self.pyodide.runPythonAsync(pythonRunnerCode);
-    }
-    catch {
-
-    }
-    
+    await self.pyodide.runPythonAsync(pythonRunnerCode);   
 }
 
 function updateResetStatus() {
