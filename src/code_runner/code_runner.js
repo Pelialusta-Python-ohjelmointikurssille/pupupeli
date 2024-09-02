@@ -3,7 +3,7 @@ import { WorkerHandler } from "./worker_handler.js";
 let handler = new WorkerHandler();
 
 export function initializeRunner() {
-    handler.initialize();
+    handler.initialize("/src/code_runner/pyodide_worker.js");
 }
 
 export function runCode(code, playerName) {

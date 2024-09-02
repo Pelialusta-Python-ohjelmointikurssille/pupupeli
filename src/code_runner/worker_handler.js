@@ -47,9 +47,9 @@ export class WorkerHandler {
     /*
     Creates web worker and loads python code from files.
     */
-    initialize() {
+    initialize(workerPath) {
         console.log("[Worker Handler]: Initializing worker handler...");
-        this.pyodideWorker = new Worker("/src/code_runner/pyodide_worker.js");
+        this.pyodideWorker = new Worker(workerPath);
         this.pyodideWorker.onmessage = async (event) => {
             await this.pyodideMessageHandler(event);
         };
