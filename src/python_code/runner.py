@@ -17,8 +17,7 @@ pelaaja = Pelaaja(js_bridge)
 def interrupt_handler(sig, frame):
     #print("[Python|Pyodide]: Handling interrupt")
     js_bridge.system_exit()
-    #sys.exit(0)
-    raise KeyboardInterrupt()
+    sys.exit(0)
 
 signal.signal(signal.SIGINT, interrupt_handler)
 
