@@ -14,9 +14,20 @@ let sharedInputArray;
 let hasUsedInput = false;
 let userCode;
 
+/**
+ * Name of the file containing the user's code that should be written into
+ * the virtual file system.
+ */
 const USER_SCRIPT_NAME = "userscript";
+/**
+ * Time in seconds for which the python execution should sleep between each line of user code.
+ */
 const CODE_EXECUTION_DELAY = 0.05;
 
+/**
+ * Loads pyodide and sets stdin (input) function.
+ * @returns {Promise} Promise of when pyodide has finished loading.
+ */
 async function loadWorkerPyodide() {
     console.log("[Pyodide Worker]: Initializing pyodide");
     console.time("[Pyodide Worker]: Finished initializing pyodide");
@@ -37,7 +48,17 @@ self.onmessage = async (event) => {
     await messageHandler(event);
 };
 
+/**
+ * Handles messages received from worker handler. Works the same way as in worker handler.
+ * The actual message content is stored in event.data
+ * 
+ * The message type is in event.data.type
+ * 
+ * The content of the message can vary, for example event.data.buffer or event.data.array
+ * @param {*} event 
+ */
 async function messageHandler(event) {
+    // Wait until pyodide has initialized before handling any messages.
     await pyodideReadyPromise;
     let message = event.data;
     if (message.type === "RESET") {
@@ -53,7 +74,7 @@ async function messageHandler(event) {
         setSharedInputArray(message.array);
     }
     if (message.type === "RUNCODE") {
-        await runCode(message.code, message.theme);
+        await runCode(message.code, message.playerName);
     }
     if (message.type === "RESET_WORKER_OK") {
         resetting = false;
@@ -67,6 +88,12 @@ async function messageHandler(event) {
     }
 }
 
+/**
+ * Run a given python script using pyodide. 
+ * @param {string} code Python code to run.
+ * @param {string} playerName Name of the player object. For example "pupu" or "robo".
+ * @returns Promise of wether pyodide has finished running the python code.
+ */
 async function runCode(code, playerName) {
     userCode = code;
     console.log("[Pyodide Worker]: Running python code");
@@ -91,6 +118,14 @@ async function runCode(code, playerName) {
     await self.pyodide.runPythonAsync(pythonRunnerCode);   
 }
 
+/**
+ * Used to set the resetting flag to true if the interrupt buffer 
+ * is set to interrupt execution. This is done so that the worker
+ * stops processing lines and commands when it should reset itself, 
+ * but before pyodide has processed the interrupt.
+ * 
+ * Without this, the resetting feature can be buggy and lead to unexpected problems.
+ */
 function updateResetStatus() {
     console.log(`INTERRUPT VAL ${interruptBuffer[0]}`);
     if (interruptBuffer[0] === 2) {
@@ -98,12 +133,27 @@ function updateResetStatus() {
     }
 }
 
+/**
+ * Sets the waitBuffer. 
+ * The waitbuffer is used to sleep the worker for example when waiting for
+ * input or when the user has paused execution.
+ * @param {Int32Array} buffer 
+ */
 function setWaitBuffer(buffer) {
     console.log("[Pyodide Worker]: Got wait buffer");
     waitBuffer = buffer;
     self.postMessage({type: "WAITBUFFER_OK"});
 }
 
+/**
+ * Sets the interrupt buffer.
+ * 
+ * The interrupt buffer is used by pyodide to interrupt execution
+ * using a KeyboardInterrupt. When element of index 0 is set to 2, the execution will be interrupted.
+ * 
+ * After being processed, the element is set back to 0.
+ * @param {Uint8Array} buffer 
+ */
 function setInterruptBuffer(buffer) {
     console.log("[Pyodide Worker]: Got interrupt buffer");
     self.pyodide.setInterruptBuffer(buffer);
@@ -111,7 +161,12 @@ function setInterruptBuffer(buffer) {
     self.postMessage({type: "INTERRUPTBUFFER_OK"});
 }
 
+/**
+ * Reset the worker and python execution.
+ * @returns 
+ */
 function reset() {
+    // If we are already resetting, don't try to reset again
     if (resetting === true) return;
     console.log("[Pyodide Worker]: Resetting...");
     resetting = true;
@@ -120,7 +175,11 @@ function reset() {
     hasUsedInput = false;
     self.postMessage({ type: "RESET_OK" });
 }
-
+/**
+ * Write python files necessary for running user code to pyodide's virtual file system.
+ * @param {string} runnerCode 
+ * @param {Map<string, string>} codeMap 
+ */
 async function setBackgroundCode(runnerCode, codeMap) {
     console.log("[Pyodide Worker]: Got python background code");
     codeMap.forEach(async (value, key) => {
@@ -130,12 +189,22 @@ async function setBackgroundCode(runnerCode, codeMap) {
     pythonRunnerCode = runnerCode;
 }
 
+/**
+ * Set shared input array. Characters are encoded in UTF-16.
+ * This is used for input and object counting.
+ * @param {Uint16Array} array 
+ */
 function setSharedInputArray(array) {
     console.log("[Pyodide Worker]: Got shared input array");
     sharedInputArray = array;
     self.postMessage({type: "SHAREDINPUTARRAY_OK"});
 }
 
+/**
+ * Reads from shared array, used for input and object counting.
+ * Characters are encoded in UTF-16.
+ * @returns string containing the contents of the array. 
+ */
 function readFromSharedArray() {
     let userInput = "";
     for (let i = 0; i < sharedInputArray.length; i++) {
@@ -147,13 +216,41 @@ function readFromSharedArray() {
     return userInput;
 }
 
+/**
+ * Save the current state of pyodide.
+ */
 function saveCurrentState() {
     console.log("[Pyodide Worker]: Saving current pyodide state");
     saveState = self.pyodide.pyodide_py._state.save_state();
 }
 
+/**
+ * Used to send commands to game.
+ * @param {string} cmd The game command in question, defined in game/commonstrings.js
+ * @param {array<string>} params Parameters for the command
+ * @returns 
+ */
+function sendCommand(cmd, params) {
+    updateResetStatus();
+    if (resetting === true) return;
+    console.log("[Pyodide Worker]: Running game command");
+    self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
+    console.log("[Pyodide Worker]: Sleeping worker");
+    Atomics.store(waitBuffer, 0, 1);
+    Atomics.store(waitBuffer, 2, 1);
+    Atomics.wait(waitBuffer, 0, 1);
+    console.log("[Pyodide Worker]: Worker woke up");
+}
+
 // JS functions called from python
 
+/**
+ * Called by python.
+ * 
+ * When trace function enters a new line in user code, line number is sent using this to the editor UI.
+ * @param {number} lineNumber 
+ * @returns 
+ */
 // eslint-disable-next-line no-unused-vars
 function processLine(lineNumber) {
     updateResetStatus();
@@ -168,6 +265,14 @@ function processLine(lineNumber) {
     console.log("[Pyodide Worker]: Worker woke up");
 }
 
+/**
+ * Called from python when the program finishes execution without interruption.
+ * 
+ * Not called when user resets program.
+ * @param {boolean} usedWhileLoop Wether the user used a while loop in the code or not.
+ * @param {boolean} usedForLoop Wether the user used a for loop in the code or not.
+ * @returns 
+ */
 // eslint-disable-next-line no-unused-vars
 function onFinishedExecution(usedWhileLoop, usedForLoop) {
     if (resetting === true) return;
@@ -180,18 +285,12 @@ function onFinishedExecution(usedWhileLoop, usedForLoop) {
     self.postMessage({ type: "EXECFINISH", clearedConditions: clearedConditions });
 }
 
-function sendCommand(cmd, params) {
-    updateResetStatus();
-    if (resetting === true) return;
-    console.log("[Pyodide Worker]: Running game command");
-    self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
-    console.log("[Pyodide Worker]: Sleeping worker");
-    Atomics.store(waitBuffer, 0, 1);
-    Atomics.store(waitBuffer, 2, 1);
-    Atomics.wait(waitBuffer, 0, 1);
-    console.log("[Pyodide Worker]: Worker woke up");
-}
-
+/**
+ * Called by python when calling a game command, for example moving.
+ * @param {string} cmd The game command in question, defined in game/commonstrings.js
+ * @param {string} param Parameter for the command, for example the direction of a move command.
+ * @returns 
+ */
 // eslint-disable-next-line no-unused-vars
 function runCommand(cmd, param) {
     updateResetStatus();
@@ -199,31 +298,61 @@ function runCommand(cmd, param) {
     sendCommand(cmd, [param]);
 }
 
+/**
+ * Called from python. Sends a message to the game to create an object.
+ * @param {string} objectType Type of object, defined in game/commonstrings.js
+ * @param {number} x 
+ * @param {number} y 
+ */
 // eslint-disable-next-line no-unused-vars
 function createObject(objectType, x, y) {
     sendCommand("create_obj", [objectType, x, y]);
 }
 
+/**
+ * Called from python. Sends a message to the game to destroy any object at the specified coordinates.
+ * @param {*} x 
+ * @param {*} y 
+ */
 // eslint-disable-next-line no-unused-vars
 function destroyObject(x, y) {
     sendCommand("destroy_obj", [x, y]);
 }
 
+/**
+ * Called form python to get the number of objects of a certain type.
+ * 
+ * Works the same as an input request, except the response is the number of objects found.
+ * @param {*} objectType Type of object, defined in game/commonstrings.js
+ * @returns 
+ */
 // eslint-disable-next-line no-unused-vars
 function getObjectCount(objectType) {
     self.postMessage({ type: "GETOBJECTCOUNT", objectType: objectType });
+    //Make the worker sleep.
     Atomics.store(waitBuffer, 0, 1);
+    //This doesn't make it sleep, but used by the pause handler to know why the worker is asleep.
     Atomics.store(waitBuffer, 3, 1);
     Atomics.wait(waitBuffer, 0, 1);
     self.pyodide.checkInterrupt();
     return readFromSharedArray();
 }
 
+/**
+ * Called by python. Sends information about an error if one was encountered.
+ * @param {number} lineNumber Line number error occured at.
+ * @param {string} errorMessage Condensed error message.
+ * @param {string} errorType Type of error, for example SyntaxError
+ * @param {string} fullMessage Contains the full error message with traceback.
+ */
 // eslint-disable-next-line no-unused-vars
 function processErrorInfo(lineNumber, errorMessage, errorType, fullMessage) {
     self.postMessage({ type: "ERROR", errorInfo: { line: lineNumber, type: errorType, message: errorMessage, fullMessage: fullMessage } });
 }
 
+/**
+ * Called from python if python catches a KeyboardInterrupt. This starts the resetting process for the worker.
+ */
 // eslint-disable-next-line no-unused-vars
 function resetFromPython() {
     console.log("[Pyodide Worker]: Python asked for reset");
@@ -231,16 +360,29 @@ function resetFromPython() {
     reset();
 }
 
+/**
+ * 
+ * @returns The code the user wrote that was run.
+ */
 // eslint-disable-next-line no-unused-vars
 function getSourceCode() {
     return userCode;
 }
 
-// Input handler
+/**
+ * Called when python asks for input. 
+ * 
+ * First a message is sent to the handler that a response to input is requested.
+ * 
+ * Then the worker puts itself asleep by writing to the wait buffer.
+ * @returns User input that was written into the shared array.
+ */
 function stdInHandler() {
     hasUsedInput = true;
     self.postMessage({ type: "REQUESTINPUT" });
+    //Makes the worker sleep
     Atomics.store(waitBuffer, 0, 1);
+    //This doesn't make it sleep, but used by the pause handler to know why the worker is asleep.
     Atomics.store(waitBuffer, 3, 1);
     Atomics.wait(waitBuffer, 0, 1);
     self.pyodide.checkInterrupt();

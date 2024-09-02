@@ -1,11 +1,12 @@
 import { tryGetFileAsText } from "../file_reader.js";
 import { PauseHandler } from "./pause_handler.js";
 
-/*
+/**
 Dictionary of all the python files that are used in running Python.
 
-Key = Name of the file to be written into the virtual file system.
-Value = Path to the actual file that should be loaded.
+Key: Name of the file to be written into the virtual file system.
+
+Value: Path to the actual file that should be loaded.
 */
 const PYTHON_CODE_FILES = new Map([
     ["python_tracer.py", "src/python_code/python_tracer.py"],
@@ -14,13 +15,17 @@ const PYTHON_CODE_FILES = new Map([
     ["condition_checker.py", "src/python_code/condition_checker.py"]
 ]);
 
+/**
+ * File to the python code runner module that imports all of the other python modules,
+ * including user written code.
+ */
 const PYTHON_SCRIPT_RUNNER = "src/python_code/runner.py";
 
 const INPUT_CHARACTER_LIMIT = 512;
 // UTF-16 uses 16 bits to represent characters.
 const BYTES_PER_CHARACTER = 2;
 
-/*
+/**
 Class that handles communication with the worker. 
 */
 export class WorkerHandler {
@@ -44,8 +49,11 @@ export class WorkerHandler {
         this.pauseHandler = new PauseHandler();
     }
 
-    /*
-    Creates web worker and loads python code from files.
+    /**
+    * Creates web worker and loads python code from files.
+    * These files are later written into the virtual filesystem in the worker for pyodide.
+    * 
+    * @param {string} workerPath Path to the js file that is loaded as a web worker.
     */
     initialize(workerPath) {
         console.log("[Worker Handler]: Initializing worker handler...");
@@ -59,9 +67,11 @@ export class WorkerHandler {
         console.log("[Worker Handler]: Loaded code files");
     }
 
-    /*
-    Load files from dictionary.
-    */
+    /**
+     * Load files from a map.
+     * @param {Map<string, string>} fileDict A map of filenames and paths to said files.
+     * @returns {Map<string, string>} A map of filenames and contents.
+     */
     loadCodeFiles(fileDict) {
         let codeMap = new Map();
         fileDict.forEach((value, key) => {
@@ -71,9 +81,17 @@ export class WorkerHandler {
         return codeMap;
     }
 
-    /*
-    Function that handles worker postMessage events.
-    */
+    /**
+     * Function that handles worker postMessage events received from worker.
+     * 
+     * The actual message content is stored in event.data
+     * 
+     * The message type is in event.data.type
+     * 
+     * The content of the message can vary, for example event.data.command or event.data.objectType
+     * 
+     * @param {*} event 
+     */
     async pyodideMessageHandler(event) {
         let message = event.data;
         if (message.type === "COMMAND") {
@@ -150,56 +168,77 @@ export class WorkerHandler {
         }
     }
 
-    /*
-    Sets the interrupt buffer to 2 to trigger a KeyboardInterrupt in pyodide.
-    If processed correctly, will be set back to 0 when pyodide is done.
-    */
+    /**
+     * Sets the interrupt buffer to 2 to trigger a KeyboardInterrupt in pyodide.
+     * If processed correctly, will be set back to 0 when pyodide is done.
+     */
     interruptWorker() {
         console.log("[Worker handler]: Interrupting pyodide worker with buffer");
         this.pyodideInterruptBuffer[0] = 2;
     }
 
-    /*
-    Sets the interrupt buffer back to 0. 
-    */
+    /**
+     * Sets the interrupt buffer back to 0. 
+     * If pyodide has processed the KeyboardInterrupt correctly, buffer should reset itself automatically.
+     * This is only used as a precaution in case pyodide fails to process the interrupt correctly.
+     */
     clearWorkerInterrupt() {
         console.log("[Worker handler]: Clearing interrupt buffer");
         this.pyodideInterruptBuffer[0] = 0;
     }
 
+    /**
+     * Runs a given snippet of code in pyodide.
+     * 
+     * @param {string} script Python script to run.
+     * @param {string} playerName Name of the player object. Can be for example "pupu" or "robo". Used to reference player object
+     * in the python script.
+     */
     runCode(script, playerName) {
         console.log("[Worker handler]: Running code");
         this.clearWorkerInterrupt();
-        this.pyodideWorker.postMessage({ type: "RUNCODE", code: script, theme: playerName });
+        this.pyodideWorker.postMessage({ type: "RUNCODE", code: script, playerName: playerName });
     }
 
+    /**
+     * Steps execution to the next line and then pauses when line has been processed.
+     */
     stepToNextLine() {
         console.log("[Worker handler]: Stepping to next line");
         this.executeSingleLine = true;
         this.pauseHandler.userUnpause();
     }
 
-    /*
-    Runs when game has finished animations/processing. 
-    */
+    /**
+     * Should be called when the game has finished processing animations.
+     * Sets the game pause flag in pause handler to false, so that the code can continue processing.
+     */
     onFinishAnimations() {
         console.log("[Worker handler]: Game has finished processing");
         this.pauseHandler.gameUnpause();
     }
 
-    /*
-    Called by game/ui, userInput is player written input from textbox.
-    Writes to the shared array between handler and worker then unpauses the input pause.
-    This shared array is then read by the web worker and given to the python program.
-    */
+    /**
+     * Called by game/ui, userInput is player written input from textbox.
+     * Writes to the shared array between handler and worker then unpauses the input pause.
+     * This shared array is then read by the web worker and given to the python program.
+     * 
+     * Maximum length of the user's text is set by INPUT_CHARACTER_LIMIT
+     * @param {string} userInput 
+     */
     answerInputRequest(userInput) {
         this.writeStringToSharedArray(userInput);
         this.pauseHandler.inputUnpause();
     }
 
-    /*
-    Works similarly to answerInputRequest. Instead of text it writes numbers to shared array.
-    */
+    /**
+     * Called by game/ui, count is the number of objects found by the game.
+     * Writes to the shared array between handler and worker then unpauses the input pause.
+     * This shared array is then read by the web worker and given to the python program.
+     * 
+     * Maximum length of the number(converted to text) is set by INPUT_CHARACTER_LIMIT
+     * @param {number} count 
+     */
     answerObjectCountRequest(count) {
         console.log("" + count.toString())
         console.log("ANSWERED")
@@ -207,11 +246,12 @@ export class WorkerHandler {
         this.pauseHandler.inputUnpause();
     }
 
-    /*
-    Writes string to shared array. Pretty much the same as the old worker.
-    */
-    writeStringToSharedArray(string) {
-        let stringToWrite = string.toString();
+    /**
+     * Writes a given string to shared array. Pretty much the same as the old worker.
+     * @param {string} stringToWrite 
+     */
+    writeStringToSharedArray(stringToWrite) {
+        let stringToWrite = stringToWrite.toString();
         for (let i = 0; i < this.sharedInputArray.length; i++) {
             if (i >= stringToWrite.length-1) this.sharedInputArray[i] = 0;
             this.sharedInputArray[i] = stringToWrite.charCodeAt(i);
@@ -219,9 +259,12 @@ export class WorkerHandler {
         console.log(`[Worker handler]: Wrote to shared input array: ${this.sharedInputArray}`)
     }
 
-    /*
-    Resets the handler. Clears handler and pause handler values. Lastly sends reset message to worker.
-    */
+    /**
+     * Resets the handler. Clears handler and pause handler values. Lastly sends reset message to worker.
+     * 
+     * The worker may take some time to reset even if the handler itself has reset.
+     * When the worker has finished resetting, it will sen the RESET_OK message.
+     */
     reset() {
         console.log("[Worker handler]: Resetting...");
         this.executeSingleLine = false;
