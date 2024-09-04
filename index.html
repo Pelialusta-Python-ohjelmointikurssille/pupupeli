@@ -116,31 +116,31 @@
                     <div id="multiple-choice-questions" class="is-hidden">
                     </div>
                 </div>
+                <div id="code-blocks-container">
+                    <!--Doing some JS here cause it was too time consuming to do it in input/editor.js-->
+                    <!-- Latest compiled and minified CSS (for Sortable) -->
+                    <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
+                    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+                    <!-- Simple List -->
+                    <div id="simpleList" class="list-group">
+                    </div>
+                    <script>
+                        //const SORTABLE = Sortable;
+                        Sortable.create(simpleList, {
+                            animation: 100,
+                            ghostClass: 'ghost',
+                            // Called when dragging element changes position
+                            onChange: function (/**Event*/evt) {
+                                let children = simpleList.children;
+                                for (var i = 0; i < children.length; i++) {
+                                    children[i].children[0].textContent = i + 1;
+                                }
+                            }
+                        });
+                    </script>
+                </div>
                 <div id="editor-container" class="is-flex">
                     <div id="editor"></div>
-                    <div id="code-blocks-container">
-                        <!--Doing some JS here cause it was too time consuming to do it in input/editor.js-->
-                        <!-- Latest compiled and minified CSS (for Sortable) -->
-                        <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
-                        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-                        <!-- Simple List -->
-                        <div id="simpleList" class="list-group">
-                        </div>
-                        <script>
-                            //const SORTABLE = Sortable;
-                            Sortable.create(simpleList, {
-                                animation: 100,
-                                ghostClass: 'ghost',
-                                // Called when dragging element changes position
-                                onChange: function (/**Event*/evt) {
-                                    let children = simpleList.children;
-                                    for (var i = 0; i < children.length; i++) {
-                                        children[i].children[0].textContent = i  + 1;
-                                    }
-                                }
-                            });
-                        </script>
-                    </div>
                     <div id="error-box">
                         <div id="error" class="error"></div>
                         <div id="warning" class="warning"></div>
