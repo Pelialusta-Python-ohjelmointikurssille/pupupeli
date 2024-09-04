@@ -13,6 +13,7 @@ let resetting = false;
 let sharedInputArray;
 let hasUsedInput = false;
 let userCode;
+let isRunning = false;
 
 /**
  * Name of the file containing the user's code that should be written into
@@ -58,8 +59,6 @@ self.onmessage = async (event) => {
  * @param {*} event 
  */
 async function messageHandler(event) {
-    // Wait until pyodide has initialized before handling any messages.
-    await pyodideReadyPromise;
     let message = event.data;
     if (message.type === "RESET") {
         reset();
@@ -95,27 +94,46 @@ async function messageHandler(event) {
  * @returns Promise of wether pyodide has finished running the python code.
  */
 async function runCode(code, playerName) {
-    userCode = code;
-    console.log("[Pyodide Worker]: Running python code");
-    if (isReadyToRunCode === false) {
-        console.warning("[Pyodide Worker]: Trying to run code before worker is ready to run code, returning early...");
-        return;
-    }
-    console.log("[Pyodide Worker]: Writing user code to virtual file");
-    await self.pyodide.FS.writeFile(USER_SCRIPT_NAME+".py", code, { encoding: "utf8" });
-    console.log("[Pyodide Worker]: Loading packages from imports");
-    await self.pyodide.loadPackagesFromImports(code);
-    await loadedScripts.forEach(async (element) => {
-        await self.pyodide.loadPackagesFromImports(element);
+    if (isRunning === true) return;
+    await pyodideReadyPromise.then(
+        async () => {
+            isRunning = true;
+            userCode = code;
+            console.log("[Pyodide Worker]: Running python code");
+            if (isReadyToRunCode === false) {
+                console.warning("[Pyodide Worker]: Trying to run code before worker is ready to run code, returning early...");
+                return;
+            }
+            console.log("[Pyodide Worker]: Writing user code to virtual file");
+            await self.pyodide.FS.writeFile(USER_SCRIPT_NAME+".py", code, { encoding: "utf8" });
+            console.log("[Pyodide Worker]: Loading packages from imports");
+            await self.pyodide.loadPackagesFromImports(code);
+            await loadedScripts.forEach(async (element) => {
+                await self.pyodide.loadPackagesFromImports(element);
+            });
+        
+            self.pyodide.globals.set("PLAYER_NAME", playerName);
+            self.pyodide.globals.set("CODE_WAIT_TIME", CODE_EXECUTION_DELAY);
+            self.pyodide.globals.set("USER_SCRIPT_NAME", USER_SCRIPT_NAME);
+        
+            console.log("[Pyodide Worker]: Running python code");
+            resetting = false;
+
+            try {
+                await self.pyodide.runPythonAsync(pythonRunnerCode);
+            }
+            catch (e) {
+                console.log("ERROR RUNNING CODE");
+            }
+        }
+    )
+    .catch((e) => {
+        console.log("ERROR WITH PYODIDE PROMISE");
+    })
+    .finally(() => {
+        console.log("AFTER CODE RUN") 
     });
-
-    self.pyodide.globals.set("PLAYER_NAME", playerName);
-    self.pyodide.globals.set("CODE_WAIT_TIME", CODE_EXECUTION_DELAY);
-    self.pyodide.globals.set("USER_SCRIPT_NAME", USER_SCRIPT_NAME);
-
-    console.log("[Pyodide Worker]: Running python code");
-    resetting = false;
-    await self.pyodide.runPythonAsync(pythonRunnerCode);   
+       
 }
 
 /**
@@ -170,6 +188,7 @@ function reset() {
     if (resetting === true) return;
     console.log("[Pyodide Worker]: Resetting...");
     resetting = true;
+    isRunning = false;
     loadedScripts = [];
     self.pyodide.pyodide_py._state.restore_state(saveState);
     hasUsedInput = false;

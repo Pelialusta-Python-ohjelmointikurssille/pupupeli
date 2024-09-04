@@ -3,6 +3,7 @@ from player import Pelaaja
 from js_bridge import JSBridge
 from condition_checker import ConditionChecker
 import sys
+import os
 import signal
 import runpy
 import traceback
@@ -17,7 +18,9 @@ pelaaja = Pelaaja(js_bridge)
 def interrupt_handler(sig, frame):
     #print("[Python|Pyodide]: Handling interrupt")
     js_bridge.system_exit()
-    sys.exit(0)
+    #sys.exit(0)
+    os._exit(0)
+    #raise SyntaxError("LOL")
 
 signal.signal(signal.SIGINT, interrupt_handler)
 
