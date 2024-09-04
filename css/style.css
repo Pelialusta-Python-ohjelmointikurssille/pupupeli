@@ -350,6 +350,15 @@ button:hover {
     grid-column-start: 2;
     grid-row-start: 1;
 }
+
+.list-group-itemholder {
+    background-color: #ffffff;
+}
+
+.list-group-itemholder-highlighted {
+    background-color: #e2df83;
+}
+
 /* These are for Sortable, used for codeblock tasks */
 .list-group-item {
     white-space: pre;
@@ -358,7 +367,6 @@ button:hover {
     overflow: hidden;
     padding: 10px 15px;
     margin-bottom: 2px;
-    background-color: #fff;
     border: 1px solid #000000;
 }
 
@@ -367,7 +375,7 @@ button:hover {
     float: left;
     padding: 10px 15px;
     margin-bottom: 2px;
-    background-color: #ffffff6f;
+    background-color: #ffffff47;
     border: 1px solid #000000;
 }
 

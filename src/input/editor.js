@@ -5,7 +5,10 @@ let editor;
 let currentLineMarker; //the line that is currently executing
 let codeBlockListContainer = document.getElementById("code-blocks-container");
 let codeBlocksListElement = document.getElementById("simpleList");
+let currentlyHighlightedCodeBlock = undefined;
 let aceEditorElement = document.getElementById("editor");
+const codeBlockHolderClass = "list-group-itemholder";
+const codeBlockHighlightClass = "list-group-itemholder-highlighted";
 const aceEditorScript = document.createElement('script');
 aceEditorScript.src = `https://cdnjs.cloudflare.com/ajax/libs/ace/${ace_version}/ace.js`;
 document.head.appendChild(aceEditorScript);
@@ -54,6 +57,10 @@ export function getEditor() {
 
 export function highlightCurrentLine(lineNumber) {
     setCurrentLine(lineNumber);
+    if (!codeBlockListContainer.classList.contains("is-hidden")) {
+        codeBlockHighlightCurrentLine(lineNumber);
+        return;
+    }
     if (currentLineMarker !== undefined) {
         editor.session.removeMarker(currentLineMarker);
     }
@@ -64,6 +71,23 @@ export function highlightCurrentLine(lineNumber) {
 export function resetLineHighlight() {
     setCurrentLine(null);
     editor.session.removeMarker(currentLineMarker);
+    removeCodeBlockHighlight();
+}
+
+function codeBlockHighlightCurrentLine(lineNumber) {
+    removeCodeBlockHighlight();
+    let children = codeBlocksListElement.children;
+    currentlyHighlightedCodeBlock = children[lineNumber - 1];
+    currentlyHighlightedCodeBlock.classList.remove(codeBlockHolderClass);
+    currentlyHighlightedCodeBlock.classList.add(codeBlockHighlightClass);
+}
+
+function removeCodeBlockHighlight() {
+    if (currentlyHighlightedCodeBlock !== undefined) {
+        currentlyHighlightedCodeBlock.classList.remove(codeBlockHighlightClass);
+        currentlyHighlightedCodeBlock.classList.add(codeBlockHolderClass);
+        currentlyHighlightedCodeBlock = undefined;
+    }
 }
 
 /**
@@ -96,12 +120,13 @@ export function createCodeBlocks(strings) {
         codeBlocksListElement.removeChild(codeBlocksListElement.lastChild);
     }
     for (let i = 0; i < strings.length; i++) {
-        createListGroupitem(strings[i], i + 1);   
+        createListGroupitem(strings[i], i + 1);
     }
 }
 
 function createListGroupitem(string, index) {
     let div = document.createElement("div");
+    div.className = codeBlockHolderClass;
     codeBlocksListElement.appendChild(div);
     let listItem = document.createElement("div");
     let listIndexItem = document.createElement("div");

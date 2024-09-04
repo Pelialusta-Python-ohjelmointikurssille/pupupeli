@@ -117,11 +117,6 @@ export function setTitle(titleDiv) {
 }
 
 export async function setEditorCode() {
-    if (globals.task.taskType === TaskTypes.codeBlockMoving) {
-        showCodeBlocksInsteadOfEditor(true);
-        createCodeBlocks(globals.task.codeBlocks);
-        return;
-    }
     let editorCode = "";
     showCodeBlocksInsteadOfEditor(false);
     if (localStorage.getItem("token")) {
@@ -138,6 +133,11 @@ export async function setEditorCode() {
         editorCode = globals.task.getEditorCode();
         getEditor().setValue(editorCode);
         getEditor().clearSelection();
+    }
+    //Keep this last, TODO: codeblocks reorders blocks automatically to be like the editor
+    if (globals.task.taskType === TaskTypes.codeBlockMoving) {
+        showCodeBlocksInsteadOfEditor(true);
+        createCodeBlocks(globals.task.codeBlocks);
     }
 }
 
