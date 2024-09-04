@@ -131,7 +131,9 @@ async function runCode(code, playerName) {
         console.log("ERROR WITH PYODIDE PROMISE");
     })
     .finally(() => {
-        console.log("AFTER CODE RUN") 
+        console.log("AFTER CODE RUN");
+        //new Promise(r => setTimeout(r, 5))
+        //.then(console.log("AFTER COUPLE SECONDS"));
     });
        
 }

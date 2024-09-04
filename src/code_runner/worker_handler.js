@@ -61,6 +61,11 @@ export class WorkerHandler {
         this.pyodideWorker.onmessage = async (event) => {
             await this.pyodideMessageHandler(event);
         };
+
+        this.pyodideWorker.onerror = (error) => {
+            console.error("Worker suffered an error", error.message);
+        };
+
         console.log("[Worker Handler]: Loading python base code files...");
         this.pythonCodeMap = this.loadCodeFiles(PYTHON_CODE_FILES);
         this.pythonRunnerCode = tryGetFileAsText(PYTHON_SCRIPT_RUNNER);
