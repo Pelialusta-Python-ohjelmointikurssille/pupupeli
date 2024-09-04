@@ -118,7 +118,9 @@ export function setTitle(titleDiv) {
 
 export async function setEditorCode() {
     let editorCode = "";
+    let isEditorCodeLoaded = false;
     showCodeBlocksInsteadOfEditor(false);
+    console.log(globals.task);
     if (localStorage.getItem("token")) {
         api.getTask().then((task) => {
             if (task.data) {
@@ -126,18 +128,22 @@ export async function setEditorCode() {
             } else {
                 editorCode = globals.task.getEditorCode();
             }
+            console.log(editorCode);
             getEditor().setValue(editorCode);
             getEditor().clearSelection();
         });
+        isEditorCodeLoaded = true;
     } else {
         editorCode = globals.task.getEditorCode();
         getEditor().setValue(editorCode);
         getEditor().clearSelection();
     }
-    //Keep this last, TODO: codeblocks reorders blocks automatically to be like the editor
+    //Keep this last, codeblocks read the editor to reorded to the previous answer
     if (globals.task.taskType === TaskTypes.codeBlockMoving) {
+        console.log(isEditorCodeLoaded);
+        console.log(getEditor().getValue());
+        createCodeBlocks(globals.task.codeBlocks, isEditorCodeLoaded);
         showCodeBlocksInsteadOfEditor(true);
-        createCodeBlocks(globals.task.codeBlocks);
     }
 }
 

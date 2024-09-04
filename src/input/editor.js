@@ -115,10 +115,46 @@ export function setEditorTextFromCodeBlocks() {
     editor.setValue(str);
 }
 
-export function createCodeBlocks(strings) {
+export function createCodeBlocks(taskDataStrings, isEditorCodeSaved) {
+    //clear from previous blocks
     while (codeBlocksListElement.firstChild) {
         codeBlocksListElement.removeChild(codeBlocksListElement.lastChild);
     }
+    if (isEditorCodeSaved) {
+        //if isEditorCodeSaved, then editor has the correct/last answer inserted.
+        //But if task has been changed in any way, then the new blocks are ignored
+        //so we avoid this issue by checking if anything has changed to the saved version.
+        let lines = editor.session.getLines(0, taskDataStrings.length - 1);
+        if (CheckIfStringsContainsSameStrings(taskDataStrings, lines) && CheckIfStringsContainsSameStrings(lines, taskDataStrings)) {
+            createCodeBlockDivs(lines);
+            return;
+        }
+    }
+    //regular way (directly from task)
+    createCodeBlockDivs(taskDataStrings);
+}
+
+/**
+ * @param {*} strings1 
+ * @param {*} strings2 
+ * @returns returns true if strings2 contains all the strings strings1 contains.
+ */
+function CheckIfStringsContainsSameStrings(strings1, strings2) {
+    if (strings1.length != strings2.length) return false;
+    for (let i = 0; i < strings1.length; i++) {
+        let matchFound = false;
+        for (let y = 0; y < strings1.length; y++) {
+            if (strings1[i] == strings2[y]) {
+                matchFound = true;
+                break;
+            }
+        }
+        if (!matchFound) return false;
+    }
+    return true;
+}
+
+function createCodeBlockDivs(strings) {
     for (let i = 0; i < strings.length; i++) {
         createListGroupitem(strings[i], i + 1);
     }
