@@ -284,7 +284,9 @@ function processLine(lineNumber) {
     self.postMessage({ type: "SETLINE", line: lineNumber });
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
+    console.log("STORING TO WAITBUFFER [4] = 1");
     Atomics.store(waitBuffer, 4, 1);
+    console.log(waitBuffer);
     Atomics.wait(waitBuffer, 0, 1);
     console.log("[Pyodide Worker]: Worker woke up");
 }
