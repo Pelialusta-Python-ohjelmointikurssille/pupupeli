@@ -9,11 +9,13 @@ let isReadyToRunCode = false;
 let loadedScripts = [];
 let saveState;
 let interruptBuffer;
-let resetting = false;
+let isResetting = false;
 let sharedInputArray;
 let hasUsedInput = false;
 let userCode;
 let isRunning = false;
+let ignorePythonFunctions = false;
+let hasFinishedExecution = false;
 
 /**
  * Name of the file containing the user's code that should be written into
@@ -41,6 +43,7 @@ async function loadWorkerPyodide() {
             return stdInHandler();
         }
     });
+    self.pyodide.runPython("");
 }
 
 let pyodideReadyPromise = loadWorkerPyodide();
@@ -76,7 +79,8 @@ async function messageHandler(event) {
         await runCode(message.code, message.playerName);
     }
     if (message.type === "RESET_WORKER_OK") {
-        resetting = false;
+        isResetting = false;
+        ignorePythonFunctions = false;
         console.log("[Pyodide Worker]: Finished resetting");
     }
     if(message.type === "SETBACKGROUNDCODE") {
@@ -95,6 +99,7 @@ async function messageHandler(event) {
  */
 async function runCode(code, playerName) {
     if (isRunning === true) return;
+    hasFinishedExecution = false;
     await pyodideReadyPromise.then(
         async () => {
             isRunning = true;
@@ -117,40 +122,30 @@ async function runCode(code, playerName) {
             self.pyodide.globals.set("USER_SCRIPT_NAME", USER_SCRIPT_NAME);
         
             console.log("[Pyodide Worker]: Running python code");
-            resetting = false;
+            isResetting = false;
 
             try {
                 await self.pyodide.runPythonAsync(pythonRunnerCode);
             }
             catch (e) {
-                console.log("ERROR RUNNING CODE");
+                console.error(e);
             }
         }
     )
     .catch((e) => {
-        console.log("ERROR WITH PYODIDE PROMISE");
+        console.error(e);
     })
     .finally(() => {
-        console.log("AFTER CODE RUN");
-        //new Promise(r => setTimeout(r, 5))
-        //.then(console.log("AFTER COUPLE SECONDS"));
+        if (isResetting === true) {
+            self.postMessage({ type: "RESET_OK" });
+        }
     });
        
 }
 
-/**
- * Used to set the resetting flag to true if the interrupt buffer 
- * is set to interrupt execution. This is done so that the worker
- * stops processing lines and commands when it should reset itself, 
- * but before pyodide has processed the interrupt.
- * 
- * Without this, the resetting feature can be buggy and lead to unexpected problems.
- */
 function updateResetStatus() {
-    console.log(`INTERRUPT VAL ${interruptBuffer[0]}`);
-    if (interruptBuffer[0] === 2) {
-        resetting = true;
-    }
+    if (ignorePythonFunctions === true || interruptBuffer[0] === 0) return;
+    ignorePythonFunctions = true;
 }
 
 /**
@@ -187,14 +182,18 @@ function setInterruptBuffer(buffer) {
  */
 function reset() {
     // If we are already resetting, don't try to reset again
-    if (resetting === true) return;
+    if (isResetting === true) return;
+    ignorePythonFunctions = true;
     console.log("[Pyodide Worker]: Resetting...");
-    resetting = true;
-    isRunning = false;
+    isResetting = true;
     loadedScripts = [];
+    if (hasFinishedExecution === true) interruptBuffer[0] = 0; 
     self.pyodide.pyodide_py._state.restore_state(saveState);
     hasUsedInput = false;
-    self.postMessage({ type: "RESET_OK" });
+    if (isRunning === false || hasFinishedExecution === true) {
+        self.postMessage({ type: "RESET_OK" });
+    }
+    isRunning = false;
 }
 /**
  * Write python files necessary for running user code to pyodide's virtual file system.
@@ -253,7 +252,7 @@ function saveCurrentState() {
  */
 function sendCommand(cmd, params) {
     updateResetStatus();
-    if (resetting === true) return;
+    if (ignorePythonFunctions === true) return;
     console.log("[Pyodide Worker]: Running game command");
     self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
     console.log("[Pyodide Worker]: Sleeping worker");
@@ -262,6 +261,9 @@ function sendCommand(cmd, params) {
     Atomics.wait(waitBuffer, 0, 1);
     console.log("[Pyodide Worker]: Worker woke up");
 }
+
+
+// -----------------------------------------------------------------------------------------------------
 
 // JS functions called from python
 
@@ -275,7 +277,7 @@ function sendCommand(cmd, params) {
 // eslint-disable-next-line no-unused-vars
 function processLine(lineNumber) {
     updateResetStatus();
-    if (resetting === true) return;
+    if (ignorePythonFunctions === true) return;
     if (lineNumber <= 0) return;
     console.log(`[Pyodide Worker]: Processing line ${lineNumber}`);
     self.postMessage({ type: "SETLINE", line: lineNumber });
@@ -296,7 +298,8 @@ function processLine(lineNumber) {
  */
 // eslint-disable-next-line no-unused-vars
 function onFinishedExecution(usedWhileLoop, usedForLoop) {
-    if (resetting === true) return;
+    hasFinishedExecution = true;
+    if (ignorePythonFunctions === true) return;
     let clearedConditions = [];
     clearedConditions.push({ condition: "conditionUsedWhile", parameter: usedWhileLoop });
     clearedConditions.push({ condition: "conditionUsedFor", parameter: usedForLoop });
@@ -315,7 +318,7 @@ function onFinishedExecution(usedWhileLoop, usedForLoop) {
 // eslint-disable-next-line no-unused-vars
 function runCommand(cmd, param) {
     updateResetStatus();
-    if (resetting === true) return;
+    if (ignorePythonFunctions === true) return;
     sendCommand(cmd, [param]);
 }
 
@@ -377,7 +380,6 @@ function processErrorInfo(lineNumber, errorMessage, errorType, fullMessage) {
 // eslint-disable-next-line no-unused-vars
 function resetFromPython() {
     console.log("[Pyodide Worker]: Python asked for reset");
-    resetting = true;
     reset();
 }
 

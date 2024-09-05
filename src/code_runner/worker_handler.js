@@ -36,6 +36,8 @@ export class WorkerHandler {
         this.pythonCodeMap;
         this.pythonRunnerCode;
         this.executeSingleLine = false;
+        this.isResetting = false;
+        this.isRunning = false;
 
         this.setLineCallbacks = [];
         this.gameCommandCallbacks = [];
@@ -100,6 +102,7 @@ export class WorkerHandler {
     async pyodideMessageHandler(event) {
         let message = event.data;
         if (message.type === "COMMAND") {
+            if (this.isResetting === true) return;
             console.log("[Worker Handler]: Running command");
             this.gameCommandCallbacks.forEach(func => {
                 func.call(this, message.command, message.parameters);
@@ -113,14 +116,15 @@ export class WorkerHandler {
             this.errorCallbacks.forEach(func => {
                 func.call(this, message.errorInfo);
             });
+            this.isRunning = false;
         }
         if (message.type === "SETLINE") {
+            if (this.isResetting === true) return;
             console.log(`[Worker Handler]: Processing line ${message.line}`);
             this.setLineCallbacks.forEach(func => {
                 func.call(this, message.line);
             });
             if(this.executeSingleLine === true) {
-                console.log("USER PAUSE")
                 this.pauseHandler.userPause();
             }
             this.pauseHandler.lineProcessUnpause();
@@ -163,12 +167,15 @@ export class WorkerHandler {
             this.finishCallbacks.forEach(func => {
                 func.call(this, message.clearedConditions);
             });
+            //this.isRunning = false;
         }
         if (message.type === "RESET_OK") {
             this.pyodideWorker.postMessage({ type: "RESET_WORKER_OK"});
             this.resetCallbacks.forEach(func => {
                 func.call(this);
             });
+            this.isResetting = false;
+            this.isRunning = false;
             console.log("[Worker handler]: Finished resetting");
         }
     }
@@ -200,9 +207,14 @@ export class WorkerHandler {
      * in the python script.
      */
     runCode(script, playerName) {
+        if (this.isResetting === true) {
+            console.error("TRYING TO RUN BEFORE WORKER HAS FINISHED RESETTING!");
+            return;
+        }
         console.log("[Worker handler]: Running code");
         this.clearWorkerInterrupt();
         this.pyodideWorker.postMessage({ type: "RUNCODE", code: script, playerName: playerName });
+        this.isRunning = true;
     }
 
     /**
@@ -245,8 +257,6 @@ export class WorkerHandler {
      * @param {number} count 
      */
     answerObjectCountRequest(count) {
-        console.log("" + count.toString())
-        console.log("ANSWERED")
         this.writeStringToSharedArray("" + count.toString());
         this.pauseHandler.inputUnpause();
     }
@@ -271,11 +281,13 @@ export class WorkerHandler {
      * When the worker has finished resetting, it will sen the RESET_OK message.
      */
     reset() {
+        //if (this.isRunning === false) return;
         console.log("[Worker handler]: Resetting...");
         this.executeSingleLine = false;
-        //this.clearWorkerInterrupt();
+        this.clearWorkerInterrupt();
+        this.isResetting = true;
         this.pauseHandler.resetPause();
-        this.interruptWorker();
+        if (this.isRunning === true) this.interruptWorker();
         this.pyodideWorker.postMessage({ type: "RESET" });
     }
 }

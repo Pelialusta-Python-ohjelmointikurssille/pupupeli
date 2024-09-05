@@ -15,14 +15,14 @@ tracer.start_tracer()
 
 pelaaja = Pelaaja(js_bridge)
 
-def interrupt_handler(sig, frame):
+#def interrupt_handler(sig, frame):
     #print("[Python|Pyodide]: Handling interrupt")
-    js_bridge.system_exit()
+    #js_bridge.system_exit()
     #sys.exit(0)
-    os._exit(0)
+    #os._exit(0)
     #raise SyntaxError("LOL")
 
-signal.signal(signal.SIGINT, interrupt_handler)
+#signal.signal(signal.SIGINT, interrupt_handler)
 
 user_script_globals = {
     PLAYER_NAME: pelaaja
@@ -30,6 +30,8 @@ user_script_globals = {
 
 try:
     runpy.run_module(mod_name=USER_SCRIPT_NAME, init_globals=user_script_globals)
+except KeyboardInterrupt as ki:
+    js_bridge.system_exit()
 except Exception as e:
     js_bridge.send_error_info(-1, str(e), str(type(e).__name__), "".join(traceback.format_exception(e)))
 finally:
