@@ -277,13 +277,11 @@ function sendCommand(cmd, params) {
 // eslint-disable-next-line no-unused-vars
 function processLine(lineNumber) {
     updateResetStatus();
-    console.log(this);
     if (ignorePythonFunctions === true) return;
     if (lineNumber <= 0) return;
     console.log(`[Pyodide Worker]: Processing line ${lineNumber}`);
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
-    console.log("STORING TO WAITBUFFER [4] = 1");
     Atomics.store(waitBuffer, 4, 1);
     console.log(waitBuffer);
     self.postMessage({ type: "SETLINE", line: lineNumber });

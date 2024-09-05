@@ -69,10 +69,7 @@ export class PauseHandler {
     lineProcessUnpause() {
         console.log("[Pause Handler]: Unpaused by line process");
         this.isPausedByLineProcess = false;
-        console.log("SETTING [4] to 0")
-        let v = Atomics.store(this.workerWaitArray, 4, 0);
-        console.log(v);
-        console.log(this.workerWaitArray)
+        Atomics.store(this.workerWaitArray, 4, 0);
         this.#checkPauseState();
     }
 
@@ -109,12 +106,9 @@ export class PauseHandler {
         this.isPausedByGame = Atomics.load(this.workerWaitArray, 2) === 1;
         this.isPausedByInput = Atomics.load(this.workerWaitArray, 3) === 1;
         this.isPausedByLineProcess = Atomics.load(this.workerWaitArray, 4) === 1;
-        console.log(this.workerWaitArray);
-        console.log("Updating state");
     }
 
     #checkPauseState() {
-        console.log(this);
         this.#updatePauseStateFromBuffer();
         if (
             this.isPausedByUser === false &&
@@ -127,6 +121,5 @@ export class PauseHandler {
             if(this.isWorkerPaused === true) return;
             this.#pauseWorker();
         }
-        console.log(this);
     }
 }

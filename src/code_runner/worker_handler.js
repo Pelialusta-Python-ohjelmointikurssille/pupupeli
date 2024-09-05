@@ -102,7 +102,6 @@ export class WorkerHandler {
     async pyodideMessageHandler(event) {
         let message = event.data;
         if (message.type === "COMMAND") {
-            console.log(this);
             if (this.isResetting === true) return;
             console.log("[Worker Handler]: Running command");
             this.gameCommandCallbacks.forEach(func => {
@@ -120,7 +119,6 @@ export class WorkerHandler {
             this.isRunning = false;
         }
         if (message.type === "SETLINE") {
-            console.log(this);
             if (this.isResetting === true) {
                 this.pauseHandler.resetPause();
                 return;
