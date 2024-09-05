@@ -254,10 +254,10 @@ function sendCommand(cmd, params) {
     updateResetStatus();
     if (ignorePythonFunctions === true) return;
     console.log("[Pyodide Worker]: Running game command");
-    self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
     Atomics.store(waitBuffer, 2, 1);
+    self.postMessage({ type: "COMMAND", command: cmd, parameters: params });
     Atomics.wait(waitBuffer, 0, 1);
     console.log("[Pyodide Worker]: Worker woke up");
 }
@@ -281,12 +281,12 @@ function processLine(lineNumber) {
     if (ignorePythonFunctions === true) return;
     if (lineNumber <= 0) return;
     console.log(`[Pyodide Worker]: Processing line ${lineNumber}`);
-    self.postMessage({ type: "SETLINE", line: lineNumber });
     console.log("[Pyodide Worker]: Sleeping worker");
     Atomics.store(waitBuffer, 0, 1);
     console.log("STORING TO WAITBUFFER [4] = 1");
     Atomics.store(waitBuffer, 4, 1);
     console.log(waitBuffer);
+    self.postMessage({ type: "SETLINE", line: lineNumber });
     Atomics.wait(waitBuffer, 0, 1);
     console.log("[Pyodide Worker]: Worker woke up");
 }
