@@ -279,6 +279,8 @@ function processLine(lineNumber) {
     updateResetStatus();
     if (ignorePythonFunctions === true) return;
     if (lineNumber <= 0) return;
+    if (interruptBuffer[0] === 2) return;
+    console.log(interruptBuffer[0]);
     console.log(`[Pyodide Worker]: Processing line ${lineNumber}`);
     self.postMessage({ type: "SETLINE", line: lineNumber });
     console.log("[Pyodide Worker]: Sleeping worker");
@@ -401,6 +403,7 @@ function getSourceCode() {
  * @returns User input that was written into the shared array.
  */
 function stdInHandler() {
+    self.pyodide.checkInterrupt();
     hasUsedInput = true;
     self.postMessage({ type: "REQUESTINPUT" });
     //Makes the worker sleep

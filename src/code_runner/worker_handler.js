@@ -119,7 +119,10 @@ export class WorkerHandler {
             this.isRunning = false;
         }
         if (message.type === "SETLINE") {
-            if (this.isResetting === true) return;
+            if (this.isResetting === true) {
+                this.pauseHandler.resetPause();
+                return;
+            }
             console.log(`[Worker Handler]: Processing line ${message.line}`);
             this.setLineCallbacks.forEach(func => {
                 func.call(this, message.line);
