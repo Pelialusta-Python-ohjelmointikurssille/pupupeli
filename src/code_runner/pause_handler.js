@@ -106,9 +106,12 @@ export class PauseHandler {
         this.isPausedByGame = Atomics.load(this.workerWaitArray, 2) === 1;
         this.isPausedByInput = Atomics.load(this.workerWaitArray, 3) === 1;
         this.isPausedByLineProcess = Atomics.load(this.workerWaitArray, 4) === 1;
+        console.log(this.workerWaitArray);
+        console.log("Updating state");
     }
 
     #checkPauseState() {
+        console.log(this);
         this.#updatePauseStateFromBuffer();
         if (
             this.isPausedByUser === false &&
