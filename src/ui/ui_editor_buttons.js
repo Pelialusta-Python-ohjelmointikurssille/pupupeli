@@ -1,6 +1,5 @@
-import { Constants, TaskTypes } from "../game/commonstrings.js";
+import { TaskTypes } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
-import { runSingleCommand, postMessage, setMessagePassingState, resetWorker, inputToWorker, themeChangeToWorker } from "../worker_messenger.js";
 import { getEditor, resetLineHighlight, setEditorTextFromCodeBlocks } from "../input/editor.js";
 import { resetAndInitContent, toggleGrid, toggleTrail, setTheme, setTurboSpeedActive } from "../game/game_controller.js";
 import { resetInputHistory } from "./inputBox.js";
@@ -8,14 +7,19 @@ import { isWaitingForInput, resetInputWaiting } from "../game/game_input_control
 import { setCurrentTheme } from "../util/globals.js";
 import { setDescription, setEditorCode, toggleErrorVisibility } from "./ui.js";
 import { sendTask } from "../api/api.js";
+import { runCode, resetRunner, pauseRunner, resumeRunner, runUntilNextLine, subscribeToReadyCallbacks, subscribeToFinishCallbacks, subscribeToErrorCallbacks, subscribeToResetCallbacks } from "../code_runner/code_runner.js";
+
 import { task } from "../util/globals.js";
 
 let _buttonsState;
 let startAndPauseButton;
 let nextStepButton;
+let resetButton;
 let celebrationBox;
 let themeSelectDropdown;
 let turboButton;
+let isResetting = false;
+let isRunning = false;
 
 //Button states as const strings:
 class States {
@@ -25,6 +29,16 @@ class States {
     static ENDED = "ended";
 }
 let isTurboActive = false;
+
+subscribeToReadyCallbacks(enableEditorButtons);
+subscribeToFinishCallbacks(() => { disablePlayButton(); isRunning = false; });
+subscribeToErrorCallbacks(() => { disablePlayButton("error"); isRunning = false; });
+subscribeToResetCallbacks(() => { 
+    isResetting = false;
+    isRunning = false;
+    resetEditorUIState();
+    resetButton.disabled = false;
+});
 
 /**
  * Adds events to code execution buttons (run/pause, stop, skip)
@@ -39,6 +53,7 @@ export function initializeEditorButtons() {
     addEventToButton("editor-turbo-button", toggleTurbo);
     nextStepButton = document.getElementById("editor-skip-button");
     startAndPauseButton = document.getElementById("editor-run-pause-button");
+    resetButton = document.getElementById("editor-stop-button");
     celebrationBox = document.getElementById("celebration");
     turboButton = document.getElementById("editor-turbo-button");
     initThemeSelect();
@@ -65,14 +80,7 @@ function toggleTurbo() {
     setTurboSpeedActive(isTurboActive);
 }
 
-/**
- * Sets state to initial and resets all task elements to default state.
- * Also resets worker by calling initialize while initialized === true.
- * Does nothing if state is initial.
- */
-function onResetButtonClick() {
-    inputToWorker(Constants.PYODIDE_INTERRUPT_INPUT); //Special str that interrupt pyodide if it's in handleInput()
-    if (_buttonsState === States.INITIAL) return; //No need to reset
+function resetEditorUIState() {
     nextStepButton.disabled = false;
     startAndPauseButton.disabled = false;
     resetNotificationPopUps();
@@ -80,13 +88,35 @@ function onResetButtonClick() {
     resetErrorText();
     hideAndClearInputBox();
     resetCelebrationBox();
-    resetWorker();
-    resetAndInitContent();
+    
     resetInputHistory();
     _buttonsState = States.INITIAL;
-    setMessagePassingState({ paused: false });
+    //setMessagePassingState({ paused: false });
     resetLineHighlight();
+    
+}
+
+/**
+ * Sets state to initial and resets all task elements to default state.
+ * Also resets worker by calling initialize while initialized === true.
+ * Does nothing if state is initial.
+ */
+function onResetButtonClick() {
+    if (isResetting === true) return;
+    isResetting = true;
+    resetButton.disabled = true;
+    resetRunner();
+    resetAndInitContent();
+    resetInputHistory();
     resetInputWaiting();
+    if (isRunning === false) {
+        resetEditorUIState();
+        isResetting = false;
+        resetButton.disabled = false;
+    } else {
+        disablePlayButton("reset");
+        
+    }
 }
 
 function resetNotificationPopUps() {
@@ -135,7 +165,8 @@ function onNextStepButtonClick() {
     }
     if (_buttonsState == States.PAUSED) {
         if(isWaitingForInput) return;
-        runSingleCommand();
+        runUntilNextLine();
+        //runSingleCommand();
     }
 }
 
@@ -156,7 +187,10 @@ export function disablePlayButton(cause = null) {
     img.src = "src/static/resetbutton.png";
     if (cause === "error") {
         runButtonText.textContent = 'Virhe';
-    } else {
+    } else if (cause === "reset"){
+        runButtonText.textContent = "Ladataan..."
+    } 
+    else {
         runButtonText.textContent = 'Loppu';
     }
     _buttonsState = States.ENDED;
@@ -187,22 +221,25 @@ function onRunButtonClick() {
         img = document.createElement('img');
         button.appendChild(img);
     }
-
+    isRunning = true;
     switch (_buttonsState) {
         case States.INITIAL:
             if (task.taskType === TaskTypes.codeBlockMoving) setEditorTextFromCodeBlocks();
             if (localStorage.getItem("token")){
                 sendTask();
             }
-            postMessage({ type: 'start', details: getEditor().getValue() });
+            //postMessage({ type: 'start', details: getEditor().getValue() });
+            runCode(getEditor().getValue(), localStorage.getItem("theme").toLowerCase());
             break;
         case States.RUNNING:
             if(isWaitingForInput) return;
-            setMessagePassingState({ paused: true });
+            //setMessagePassingState({ paused: true });
+            pauseRunner();
             break;
         case States.PAUSED:
             if(isWaitingForInput) return;
-            setMessagePassingState({ paused: false });
+            //setMessagePassingState({ paused: false });
+            resumeRunner();
             break;
 
     }
@@ -216,7 +253,7 @@ function initThemeSelect() {
     themeSelectDropdown.addEventListener('change', function (event) {
         let selectedValue = event.target.value;
         setCurrentTheme(selectedValue);
-        themeChangeToWorker()
+        //themeChangeToWorker()
         setTheme(selectedValue);
         setEditorCode();
         descriptionTargetDiv.innerHTML = ''; // clear content

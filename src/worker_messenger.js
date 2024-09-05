@@ -1,7 +1,7 @@
 import * as gameController from './game/game_controller.js';
 import { disablePlayButton, enableEditorButtons } from './ui/ui_editor_buttons.js'
 import { displayErrorMessage } from './ui/ui.js';
-import * as globals from './util/globals.js';
+import * as globals from "./util/globals.js";
 import { tryGetFileAsText } from './file_reader.js';
 import { highlightCurrentLine } from './input/editor.js';
 import { requestInputFromPython } from './game/game_input_controller.js';
@@ -12,6 +12,8 @@ let lastMessage = { type: "foo", message: "bar", sab: "baz" };
 let isMessagePassingPaused = false; //keep default as false
 let sharedArray; //array shared with worker
 let syncArray; //used to notifie worker when it has permission to continue 
+
+let currentSAB;
 /**
  * Creates a new worker
  */
@@ -19,8 +21,8 @@ export function initWorker() {
     //TODO: this function is long and will potentially grow longer.
     //One solution: Dictionary with strings function pairs.
     worker = new Worker('/src/input/worker.js');
-    worker.onmessage = (message) => {
-        message = message.data;
+    worker.onmessage = (event) => {
+        let message = event.data;
         switch (message.type) {
             case "init-finish":
                 enableEditorButtons();
@@ -31,7 +33,7 @@ export function initWorker() {
                 requestInputFromPython();
                 break;
             case "command": //commands are game commands without return values
-                globals.setCurrentSAB(message.sab);
+                currentSAB = message.sab;
                 gameController.giveCommand({ data: message.details, sab: message.sab });
                 break;
             case "conditionsCleared":
@@ -70,6 +72,7 @@ export function initWorker() {
         postMessage({ type: 'init', details: pythonFileStr });
         postMessage({ type: 'theme', details: globals.getCurrentTheme().toLowerCase() });
     } catch (error) {
+        console.log(error);
         displayErrorMessage(error);
     }
 }
@@ -157,8 +160,8 @@ export function inputToWorker(word) {
  * so that the worker knows to not run any more python code.
  */
 export function resetWorker() {
-    if (globals.getCurrentSAB() === undefined) return;
-    const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
+    if (currentSAB === undefined) return;
+    const waitArray = new Int32Array(currentSAB, 0, 2);
     Atomics.store(waitArray, 0, 1); // this is for stopping the wait
     Atomics.notify(waitArray, 0, 1);
     Atomics.store(waitArray, 1, 1); // this is for checking (in worker) if we've reset the game
@@ -172,7 +175,7 @@ export function resetWorker() {
 function postMessageToWorker(message) {
     worker.postMessage({ type: message.type, details: message.details });
     if (message.sab !== null) {
-        const waitArray = new Int32Array(globals.getCurrentSAB(), 0, 2);
+        const waitArray = new Int32Array(currentSAB, 0, 2);
         Atomics.store(waitArray, 0, message.value);
         Atomics.notify(waitArray, 0, message.value);
     }

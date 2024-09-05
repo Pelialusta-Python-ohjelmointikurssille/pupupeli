@@ -11,6 +11,8 @@
     --color-completed-task: rgb(0, 255, 0);
     --color-currently-executing-line: rgba(255, 255, 0, 0.5);
 
+    --color-error-line: rgba(255, 0, 0, 0.5);
+
     --color-button: rgb(255, 255, 255);
     --color-text: rgb(0, 0, 0);
     --color-border: rgb(0, 0, 0);
@@ -123,6 +125,12 @@ button:hover {
 
 .ace_marker-layer .executing-line {
     background: var(--color-currently-executing-line);
+    position: absolute;
+    z-index: 1000;
+}
+
+.ace_marker-layer .error-line {
+    background: var(--color-error-line);
     position: absolute;
     z-index: 1000;
 }

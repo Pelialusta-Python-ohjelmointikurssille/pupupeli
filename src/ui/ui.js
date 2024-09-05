@@ -1,8 +1,7 @@
 import * as globals from "../util/globals.js";
 import * as api from "../api/api.js";
 import * as marked from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
-import { getEditor, showCodeBlocksInsteadOfEditor, createCodeBlocks } from "../input/editor.js"
-import { initWorker } from "../worker_messenger.js";
+import { getEditor, showCodeBlocksInsteadOfEditor, createCodeBlocks, setErrorLine } from "../input/editor.js"
 import { extractErrorDetails } from "../input/py_error_handling.js"
 import { disablePlayButton, initializeEditorButtons } from "./ui_editor_buttons.js";
 import { initGame, resetAndInitContent, setTheme } from "../game/game_controller.js";
@@ -12,7 +11,10 @@ import { checkIfGameWon } from "../clear_conditions.js";
 import { resetInputController } from "../game/game_input_controller.js";
 import { updateLoginUI } from "./ui_login.js";
 import { translateToTheme } from "../util/theme_translator.js";
+import { initializeRunner, subscribeToErrorCallbacks } from "../code_runner/code_runner.js";
 import { TaskTypes } from "../game/commonstrings.js";
+
+subscribeToErrorCallbacks((errorInfo) => {displayErrorMessage(errorInfo.fullMessage)});
 
 let currentChapter = globals.identifiers.chapterIdentifier;
 let currentTask = globals.identifiers.taskIdentifier;
@@ -21,7 +23,7 @@ let currentTask = globals.identifiers.taskIdentifier;
  */
 async function main() {
     initPage(); // creates task json global variable
-    initWorker();
+    initializeRunner();
     initializeEditorButtons();
     await initGameAndCanvas();
     loadNextTaskInfo();
@@ -303,13 +305,14 @@ export function showPopUpNotification(elementId) {
  * @param {*} error The error to display on the page.
  */
 export function displayErrorMessage(error) {
-    if (typeof error === "string") { console.log(error) } else { console.log(error.message) }
-    let errorDetails = extractErrorDetails(error.message);
+    if (typeof error === "string") { console.log(error) }
+    let errorDetails = extractErrorDetails(error);
     if (errorDetails.text === "KeyboardInterrupt") return; // intended error; do not display to user
     let errorContainer = document.getElementById("error");
     toggleErrorVisibility(true)
     errorContainer.textContent = '"' + errorDetails.text + '" Rivin ' + errorDetails.line + ' lähistöllä';
     disablePlayButton("error");
+    setErrorLine(errorDetails.line);
 }
 
 export function displayWarningMessage(message) {

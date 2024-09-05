@@ -1,6 +1,10 @@
 import { Game } from "./game.js";
-import { postMessage } from "../worker_messenger.js";
 import { getVariableTrueName } from './commonstrings.js';
+import { answerObjecCount, onGameFinishAnim, subscribeToFinishCallbacks, subscribeToGameCommands, subscribeToObjectCountCallbacks } from "../code_runner/code_runner.js";
+
+subscribeToGameCommands((command, parameters) => giveCommand({ data: { command: command, parameters: parameters } }));
+subscribeToFinishCallbacks(onFinishedExecution);
+subscribeToObjectCountCallbacks((objectType) => { answerObjectCountRequest(objectType); console.log("ANSWER REQUEST")});
 
 //This file controls game. 
 // - Creates new game instances (Game contains both logic and rendering)
@@ -40,7 +44,8 @@ export function commandsDone() {
     if (currentCommand === undefined) {
         return;
     }
-    postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
+    onGameFinishAnim();
+    //postMessage({ type: "return", details: "returning from game.js", sab: currentCommand.sab });
 }
 
 /**
@@ -115,6 +120,14 @@ export function destroyObject(commandParameters) {
     let x = commandParameters[0];
     let y = commandParameters[1];
     game.destroyObject(x, y);
+}
+
+export function onFinishedExecution() {
+    game.onFinishedExecution();
+}
+
+export function answerObjectCountRequest(objectType) {
+    answerObjecCount(getGridObjectsOfTypeLeft(objectType));
 }
 
 export function setTurboSpeedActive(isBool) {
