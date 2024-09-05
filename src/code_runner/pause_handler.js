@@ -121,5 +121,6 @@ export class PauseHandler {
             if(this.isWorkerPaused === true) return;
             this.#pauseWorker();
         }
+        console.log(this);
     }
 }

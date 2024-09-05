@@ -277,6 +277,7 @@ function sendCommand(cmd, params) {
 // eslint-disable-next-line no-unused-vars
 function processLine(lineNumber) {
     updateResetStatus();
+    console.log(this);
     if (ignorePythonFunctions === true) return;
     if (lineNumber <= 0) return;
     console.log(`[Pyodide Worker]: Processing line ${lineNumber}`);

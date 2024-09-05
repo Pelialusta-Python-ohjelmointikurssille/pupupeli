@@ -119,6 +119,7 @@ export class WorkerHandler {
             this.isRunning = false;
         }
         if (message.type === "SETLINE") {
+            console.log(this);
             if (this.isResetting === true) {
                 this.pauseHandler.resetPause();
                 return;
