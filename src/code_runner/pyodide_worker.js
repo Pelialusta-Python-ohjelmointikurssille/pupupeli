@@ -374,6 +374,7 @@ function getObjectCount(objectType) {
  */
 // eslint-disable-next-line no-unused-vars
 function processErrorInfo(lineNumber, errorMessage, errorType, fullMessage) {
+    isRunning = false;
     self.postMessage({ type: "ERROR", errorInfo: { line: lineNumber, type: errorType, message: errorMessage, fullMessage: fullMessage } });
 }
 
