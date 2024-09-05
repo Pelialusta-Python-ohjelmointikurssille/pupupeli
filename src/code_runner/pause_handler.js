@@ -69,7 +69,9 @@ export class PauseHandler {
     lineProcessUnpause() {
         console.log("[Pause Handler]: Unpaused by line process");
         this.isPausedByLineProcess = false;
+        console.log("SETTING [4] to 0")
         Atomics.store(this.workerWaitArray, 4, 0);
+        console.log(this.workerWaitArray)
         this.#checkPauseState();
     }
 
