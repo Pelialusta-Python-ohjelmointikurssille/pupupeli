@@ -50,8 +50,8 @@ async function sendPostRequest(url, params) {
  */
 async function sendGetRequest(url) {
     return fetch(url)
-    .then(response => response.json())
-    .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .catch(error => console.error('Error:', error));
 }
 
 /**
@@ -64,7 +64,7 @@ export async function login(user, pass) {
         username: user,
         password: pass
     };
-    return sendPostRequest(url+"login", params);
+    return sendPostRequest(url + "login", params);
 }
 
 /**
@@ -75,7 +75,7 @@ export async function logout() {
     const params = {
         token: localStorage.getItem("token")
     };
-    return sendPostRequest(url+"logout", params);
+    return sendPostRequest(url + "logout", params);
 }
 
 /**
@@ -85,7 +85,7 @@ export async function logout() {
  */
 export async function sendTask() {
     const token = localStorage.getItem("token");
-    const task =  "chapter" + globals.identifiers.chapterIdentifier + "task" + globals.identifiers.taskIdentifier;
+    const task = "chapter" + globals.identifiers.chapterIdentifier + "task" + globals.identifiers.taskIdentifier;
     let editorData = translateToCommon(getEditor().getValue());
     if (editorData.length > 10000) {
         displayWarningMessage("Koodisi on pidempi kuin 10000 merkkiä, joten se ei tallennu.");
@@ -98,7 +98,7 @@ export async function sendTask() {
         data: editorData,
         result: result
     }
-    return sendPostRequest(url+"put", params);
+    return sendPostRequest(url + "put", params);
 }
 
 /**
@@ -113,7 +113,7 @@ export async function getTask() {
         token: token,
         task: task
     }
-    const getURL = buildURL(url+"get", params);
+    const getURL = buildURL(url + "get", params);
     return sendGetRequest(getURL);
 }
 
@@ -126,7 +126,7 @@ export async function getCompletedTasks() {
     const params = {
         token: token
     }
-    const getURL = buildURL(url+"list", params);
+    const getURL = buildURL(url + "list", params);
     return sendGetRequest(getURL);
 }
 

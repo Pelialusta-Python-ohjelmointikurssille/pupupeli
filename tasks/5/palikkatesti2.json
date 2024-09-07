@@ -1,0 +1,51 @@
+{
+  "title": "Palikka testi 2",
+  "taskType": "code-block-moving",
+  "enableAddRemove": false,
+  "description": [
+    ""
+  ],
+  "editorCode": [
+    ""
+  ],
+  "multipleChoiceQuestions": [],
+  "codeBlocks": [
+    "c = 2",
+    "c = c * 2",
+    "c = 1",
+    "c = c // 2",
+    "for x in range(c):",
+    "    pupu.liiku(\"oikea\")",
+    "for x in range(c):",
+    "    pupu.liiku(\"alas\")",
+    "for x in range(c):",
+    "    pupu.liiku(\"vasen\")",
+    "for x in range(c):",
+    "  pupu.liiku(\"alas\")"
+  ],
+  "grid": [
+    [1,1,1,1,1],
+    [1,0,1,2,1],
+    [1,2,1,2,1],
+    [1,2,1,1,1],
+    [1,1,1,1,1]
+  ],
+  "conditions": [
+    {
+      "condition": "conditionUsedWhile",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedFor",
+      "parameter": false
+    },
+    {
+      "condition": "conditionUsedInput",
+      "parameter": false
+    },
+    {
+      "condition": "conditionMaxLines",
+      "parameter": false
+    }
+  ]
+}

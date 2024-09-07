@@ -14,7 +14,7 @@ import { translateToTheme } from "../util/theme_translator.js";
 import { initializeRunner, subscribeToErrorCallbacks } from "../code_runner/code_runner.js";
 import { TaskTypes } from "../game/commonstrings.js";
 
-subscribeToErrorCallbacks((errorInfo) => {displayErrorMessage(errorInfo.fullMessage)});
+subscribeToErrorCallbacks((errorInfo) => { displayErrorMessage(errorInfo.fullMessage) });
 
 let currentChapter = globals.identifiers.chapterIdentifier;
 let currentTask = globals.identifiers.taskIdentifier;
@@ -119,13 +119,9 @@ export function setTitle(titleDiv) {
 }
 
 export async function setEditorCode() {
-    if (globals.task.taskType === TaskTypes.codeBlockMoving) {
-        showCodeBlocksInsteadOfEditor(true);
-        createCodeBlocks(globals.task.codeBlocks);
-        return;
-    }
     let editorCode = "";
     showCodeBlocksInsteadOfEditor(false);
+    console.log(globals.task);
     if (localStorage.getItem("token")) {
         api.getTask().then((task) => {
             if (task.data) {
@@ -135,11 +131,19 @@ export async function setEditorCode() {
             }
             getEditor().setValue(editorCode);
             getEditor().clearSelection();
+            if (globals.task.taskType === TaskTypes.codeBlockMoving) {
+                createCodeBlocks(globals.task.codeBlocks, true);
+                showCodeBlocksInsteadOfEditor(true);
+            }
         });
     } else {
         editorCode = globals.task.getEditorCode();
         getEditor().setValue(editorCode);
         getEditor().clearSelection();
+        if (globals.task.taskType === TaskTypes.codeBlockMoving) {
+            createCodeBlocks(globals.task.codeBlocks, false);
+            showCodeBlocksInsteadOfEditor(true);
+        }
     }
 }
 
