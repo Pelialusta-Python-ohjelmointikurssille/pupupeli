@@ -14,7 +14,7 @@ import { translateToTheme } from "../util/theme_translator.js";
 import { initializeRunner, subscribeToErrorCallbacks } from "../code_runner/code_runner.js";
 import { TaskTypes } from "../game/commonstrings.js";
 
-subscribeToErrorCallbacks((errorInfo) => {displayErrorMessage(errorInfo.fullMessage)});
+subscribeToErrorCallbacks((errorInfo) => { displayErrorMessage(errorInfo.fullMessage) });
 
 let currentChapter = globals.identifiers.chapterIdentifier;
 let currentTask = globals.identifiers.taskIdentifier;
@@ -130,22 +130,22 @@ export async function setEditorCode() {
             } else {
                 editorCode = globals.task.getEditorCode();
             }
-            console.log(editorCode);
             getEditor().setValue(editorCode);
             getEditor().clearSelection();
+            if (globals.task.taskType === TaskTypes.codeBlockMoving) {
+                createCodeBlocks(globals.task.codeBlocks, true);
+                showCodeBlocksInsteadOfEditor(true);
+            }
         });
         isEditorCodeLoaded = true;
     } else {
         editorCode = globals.task.getEditorCode();
         getEditor().setValue(editorCode);
         getEditor().clearSelection();
-    }
-    //Keep this last, codeblocks read the editor to reorded to the previous answer
-    if (globals.task.taskType === TaskTypes.codeBlockMoving) {
-        console.log(isEditorCodeLoaded);
-        console.log(getEditor().getValue());
-        createCodeBlocks(globals.task.codeBlocks, isEditorCodeLoaded);
-        showCodeBlocksInsteadOfEditor(true);
+        if (globals.task.taskType === TaskTypes.codeBlockMoving) {
+            createCodeBlocks(globals.task.codeBlocks, false);
+            showCodeBlocksInsteadOfEditor(true);
+        }
     }
 }
 

@@ -163,8 +163,8 @@ export function createCodeBlocks(taskDataStrings, isEditorCodeSaved) {
     }
     if (isEditorCodeSaved) {
         //if isEditorCodeSaved, then editor has the correct/last answer inserted.
-        //But if task has been changed in any way, then the new blocks are ignored
-        //so we avoid this issue by checking if anything has changed to the saved version.
+        //But if task has been changed in any way, then the changes are ignored....
+        //we avoid this issue by checking if anything has changed to the saved version.
         let lines = editor.session.getLines(0, taskDataStrings.length - 1);
         if (CheckIfStringsContainsSameStrings(taskDataStrings, lines) && CheckIfStringsContainsSameStrings(lines, taskDataStrings)) {
             createCodeBlockDivs(lines);
@@ -184,6 +184,7 @@ function CheckIfStringsContainsSameStrings(strings1, strings2) {
     if (strings1.length != strings2.length) return false;
     for (let i = 0; i < strings1.length; i++) {
         let matchFound = false;
+        console.log("contains? : " + strings1[i]);
         for (let y = 0; y < strings1.length; y++) {
             if (strings1[i] == strings2[y]) {
                 matchFound = true;
