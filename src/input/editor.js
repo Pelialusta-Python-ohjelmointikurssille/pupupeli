@@ -1,8 +1,16 @@
+import { subscribeToFinishCallbacks, subscribeToResetCallbacks, subscribeToSetLineCallbacks } from "../code_runner/code_runner.js";
 import { ace_version } from "../util/version_strings.js";
 import { setCurrentLine } from "./py_error_handling.js";
 
 let editor;
 let currentLineMarker; //the line that is currently executing
+let errorLineMarker;
+
+subscribeToSetLineCallbacks(highlightCurrentLine);
+subscribeToResetCallbacks(resetLineHighlight);
+subscribeToFinishCallbacks(resetLineHighlight);
+
+
 let codeBlockListContainer = document.getElementById("code-blocks-container");
 let codeBlocksListElement = document.getElementById("simpleList");
 let currentlyHighlightedCodeBlock = undefined;
@@ -71,6 +79,7 @@ export function highlightCurrentLine(lineNumber) {
 export function resetLineHighlight() {
     setCurrentLine(null);
     editor.session.removeMarker(currentLineMarker);
+    editor.session.removeMarker(errorLineMarker);
     removeCodeBlockHighlight();
 }
 
@@ -88,6 +97,15 @@ function removeCodeBlockHighlight() {
         currentlyHighlightedCodeBlock.classList.add(codeBlockHolderClass);
         currentlyHighlightedCodeBlock = undefined;
     }
+}
+
+
+export function setErrorLine(lineNumber) {
+    if (errorLineMarker !== undefined && errorLineMarker !== null) {
+        editor.session.removeMarker(errorLineMarker);
+    }
+    // eslint-disable-next-line no-undef
+    errorLineMarker = editor.session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "error-line", "fullLine");
 }
 
 /**

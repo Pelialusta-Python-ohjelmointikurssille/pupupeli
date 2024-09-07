@@ -1,5 +1,8 @@
-import { onUserSendInputToWorker, setMessagePassingState } from "../worker_messenger.js";
+import { answerInputRequest, subscribeToFinishCallbacks, subscribeToInputCallbacks } from "../code_runner/code_runner.js";
 import { displayPreviousInputs, hideAndClearInputBox, showInputBox } from "../ui/inputBox.js";
+
+subscribeToInputCallbacks(requestInputFromPython);
+subscribeToFinishCallbacks(resetInputController);
 
 let userInputs = [];
 let isWaitingForPython = false;
@@ -14,19 +17,16 @@ export function requestInputFromPython() {
 export function requestInputFromGame() {
     showInputBox();
     isWaitingForInput = true;
-    setMessagePassingState({ paused: true });
 }
 
 export function answerInput(inputString) {
     if (isWaitingForPython) {
         isWaitingForPython = false;
-    } else {
-        setMessagePassingState({ paused: false });
     }
+    answerInputRequest(inputString);
     isWaitingForInput = false;
     userInputs.push(inputString);
     displayPreviousInputs();
-    onUserSendInputToWorker(inputString);
     hideAndClearInputBox();
 }
 

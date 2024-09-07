@@ -4,12 +4,15 @@ let pythonFileStr;
 let continuePythonExecution;
 let saveState;
 let resetFlag = false;
-let codeString;
+//let codeString;
 let interruptBuffer = new Uint8Array(new SharedArrayBuffer(1));
 let theme;
 let hasUsedInput = false;
 //remember to update this when new commands are added
 const validCommands = ["move", "say", "ask"];
+
+// temp stuff, holds lines of code in the current pyodide execution
+let userCodeLength = 0;
 
 // eslint-disable-next-line no-undef
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.0/full/pyodide.js");
@@ -141,6 +144,11 @@ function sendLine(line) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
+function getSourceLineCount() {
+    return userCodeLength;
+}
+
 /**
  * 
  * @param {*} variableName Name of the variable we want the value of.
@@ -178,14 +186,18 @@ function removeObject(x, y) {
  */
 async function runPythonCode(pyodide, codeString) {
     let codeStringLined;
-    let codeStringTest;
-    codeStringTest = removeInputs(codeString);
-    codeStringTest = indentString(codeStringTest);
+    //let codeStringTest;
+    //codeStringTest = removeInputs(codeString);
+    //codeStringTest = indentString(codeStringTest);
     pyodide.runPython(pythonFileStr);
     codeStringLined = addLineNumberOutputs(codeString);
+    //codeStringLined = removeInputs(codeStringLined);
     console.log("Started running code...");
-    self.continuePythonExecution = pyodide.runPythonAsync(codeStringTest + '\n' + codeStringLined);
-
+    let asyncCode = codeStringLined;
+    self.continuePythonExecution = pyodide.runPythonAsync(asyncCode);
+    //console.log(asyncCode + "\n" + pythonFileStr);
+    userCodeLength = codeString.split(/\r\n|\r|\n/).length;
+    //console.log("LENGTH AAA:", codeString.split(/\r\n|\r|\n/).length)
     try {
         await self.continuePythonExecution;
         await checkClearedConditions(codeString);
@@ -217,6 +229,7 @@ async function checkClearedConditions(codeString) {
     self.postMessage({ type: 'conditionsCleared', details: clearedConditions });
 }
 
+/*
 function removeInputs(codeString) {
     return codeString.replace(/input\(/g, 'mock_input(');
 }
@@ -227,12 +240,13 @@ function indentString(str, indent = '    ') {  // Default indentation is 4 space
     codeString = `${theme} = ErrorCheck()\ndef test_string():\n` + codeString;
     return codeString;
 }
+*/
 
 function addLineNumberOutputs(codeString) {
     if (codeString === undefined) return;
     let lines = codeString.split('\n');
-    lines = lines.map((line, index) => {
-        const indentation = line.match(/^\s*/)[0];
+    lines = lines.map((line) => {
+        //const indentation = line.match(/^\s*/)[0];
         const trimmedLine = line.trim();
 
         // Check if the line starts with 'else:' or 'elif:' or 'except' or 'finally'
@@ -243,7 +257,8 @@ function addLineNumberOutputs(codeString) {
         else if (trimmedLine === '' || trimmedLine.startsWith('#')) {
             return line;
         } else {
-            return `${indentation}${theme}.rivi(${index + 1})\n${line}`;
+            return line;
+            //return `${indentation}${theme}.rivi(${index + 1})\n${line}`;
         }
     });
     codeString = lines.join('\n');
