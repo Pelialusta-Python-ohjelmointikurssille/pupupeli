@@ -14,9 +14,11 @@ subscribeToFinishCallbacks(resetLineHighlight);
 let codeBlockListContainer = document.getElementById("code-blocks-container");
 let codeBlocksListElement = document.getElementById("simpleList");
 let currentlyHighlightedCodeBlock = undefined;
+let currentlyErrorMarkedCodeBlock = undefined;
 let aceEditorElement = document.getElementById("editor");
 const codeBlockHolderClass = "list-group-itemholder";
 const codeBlockHighlightClass = "list-group-itemholder-highlighted";
+const codeBlockErrorLineClass = "list-group-itemholder-errorLine";
 const aceEditorScript = document.createElement('script');
 aceEditorScript.src = `https://cdnjs.cloudflare.com/ajax/libs/ace/${ace_version}/ace.js`;
 document.head.appendChild(aceEditorScript);
@@ -66,7 +68,7 @@ export function getEditor() {
 export function highlightCurrentLine(lineNumber) {
     setCurrentLine(lineNumber);
     if (!codeBlockListContainer.classList.contains("is-hidden")) {
-        codeBlockHighlightCurrentLine(lineNumber);
+        codeBlockHighlighLine(lineNumber);
         return;
     }
     if (currentLineMarker !== undefined) {
@@ -76,14 +78,7 @@ export function highlightCurrentLine(lineNumber) {
     currentLineMarker = editor.session.addMarker(new ace.Range(lineNumber - 1, 4, lineNumber - 1, 5), "executing-line", "fullLine");
 }
 
-export function resetLineHighlight() {
-    setCurrentLine(null);
-    editor.session.removeMarker(currentLineMarker);
-    editor.session.removeMarker(errorLineMarker);
-    removeCodeBlockHighlight();
-}
-
-function codeBlockHighlightCurrentLine(lineNumber) {
+function codeBlockHighlighLine(lineNumber) {
     removeCodeBlockHighlight();
     let children = codeBlocksListElement.children;
     currentlyHighlightedCodeBlock = children[lineNumber - 1];
@@ -91,12 +86,28 @@ function codeBlockHighlightCurrentLine(lineNumber) {
     currentlyHighlightedCodeBlock.classList.add(codeBlockHighlightClass);
 }
 
-function removeCodeBlockHighlight() {
-    if (currentlyHighlightedCodeBlock !== undefined) {
-        currentlyHighlightedCodeBlock.classList.remove(codeBlockHighlightClass);
-        currentlyHighlightedCodeBlock.classList.add(codeBlockHolderClass);
-        currentlyHighlightedCodeBlock = undefined;
+export function resetLineHighlight() {
+    setCurrentLine(null);
+    editor.session.removeMarker(currentLineMarker);
+    editor.session.removeMarker(errorLineMarker);
+    if (!codeBlockListContainer.classList.contains("is-hidden")) {
+        removeCodeBlockHighlight();
+        removeCodeBlockErrorLine();
     }
+}
+
+function removeCodeBlockHighlight() {
+    if (currentlyHighlightedCodeBlock === undefined) return;
+    currentlyHighlightedCodeBlock.classList.remove(codeBlockHighlightClass);
+    currentlyHighlightedCodeBlock.classList.add(codeBlockHolderClass);
+    currentlyHighlightedCodeBlock = undefined;
+}
+
+function removeCodeBlockErrorLine() {
+    if (currentlyErrorMarkedCodeBlock === undefined) return;
+    currentlyErrorMarkedCodeBlock.classList.remove(codeBlockErrorLineClass);
+    currentlyErrorMarkedCodeBlock.classList.add(codeBlockHolderClass);
+    currentlyErrorMarkedCodeBlock = undefined;
 }
 
 
@@ -104,8 +115,20 @@ export function setErrorLine(lineNumber) {
     if (errorLineMarker !== undefined && errorLineMarker !== null) {
         editor.session.removeMarker(errorLineMarker);
     }
+    if (!codeBlockListContainer.classList.contains("is-hidden")) {
+        setCodeBlockErrorMark(lineNumber);
+    }
     // eslint-disable-next-line no-undef
-    errorLineMarker = editor.session.addMarker(new ace.Range(lineNumber-1, 4, lineNumber-1, 5), "error-line", "fullLine");
+    errorLineMarker = editor.session.addMarker(new ace.Range(lineNumber - 1, 4, lineNumber - 1, 5), "error-line", "fullLine");
+}
+
+function setCodeBlockErrorMark(lineNumber) {
+    removeCodeBlockHighlight();
+    removeCodeBlockErrorLine();
+    let children = codeBlocksListElement.children;
+    currentlyErrorMarkedCodeBlock = children[lineNumber - 1];
+    currentlyErrorMarkedCodeBlock.classList.remove(codeBlockHolderClass);
+    currentlyErrorMarkedCodeBlock.classList.add(codeBlockErrorLineClass);
 }
 
 /**

@@ -367,6 +367,10 @@ button:hover {
     background-color: #e2df83;
 }
 
+.list-group-itemholder-errorLine {
+    background-color: #a34343;
+}
+
 /* These are for Sortable, used for codeblock tasks */
 .list-group-item {
     white-space: pre;
