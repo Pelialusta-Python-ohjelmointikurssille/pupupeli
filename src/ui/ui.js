@@ -120,7 +120,6 @@ export function setTitle(titleDiv) {
 
 export async function setEditorCode() {
     let editorCode = "";
-    let isEditorCodeLoaded = false;
     showCodeBlocksInsteadOfEditor(false);
     console.log(globals.task);
     if (localStorage.getItem("token")) {
@@ -137,7 +136,6 @@ export async function setEditorCode() {
                 showCodeBlocksInsteadOfEditor(true);
             }
         });
-        isEditorCodeLoaded = true;
     } else {
         editorCode = globals.task.getEditorCode();
         getEditor().setValue(editorCode);
