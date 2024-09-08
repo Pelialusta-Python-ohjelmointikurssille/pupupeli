@@ -1,6 +1,7 @@
 import { subscribeToFinishCallbacks, subscribeToResetCallbacks, subscribeToSetLineCallbacks } from "../code_runner/code_runner.js";
 import { ace_version } from "../util/version_strings.js";
 import { setCurrentLine } from "./py_error_handling.js";
+import { translateToTheme } from "../util/theme_translator.js";
 
 let editor;
 let currentLineMarker; //the line that is currently executing
@@ -184,9 +185,8 @@ function CheckIfStringsContainsSameStrings(strings1, strings2) {
     if (strings1.length != strings2.length) return false;
     for (let i = 0; i < strings1.length; i++) {
         let matchFound = false;
-        console.log("contains? : " + strings1[i]);
         for (let y = 0; y < strings1.length; y++) {
-            if (strings1[i] == strings2[y]) {
+            if (translateToTheme(strings1[i]) === translateToTheme(strings2[y])) {
                 matchFound = true;
                 break;
             }
@@ -198,7 +198,8 @@ function CheckIfStringsContainsSameStrings(strings1, strings2) {
 
 function createCodeBlockDivs(strings) {
     for (let i = 0; i < strings.length; i++) {
-        createListGroupitem(strings[i], i + 1);
+        let str = translateToTheme(strings[i]);
+        createListGroupitem(str, i + 1);
     }
 }
 

@@ -9,15 +9,15 @@
     "#Tata ei edes tarvitse?",
     "#Oli joku bugi",
     "#etta luki vaan et ",
-    "pupu.liiku(\"oikea\")"
+    "hahmo.liiku(\"oikea\")"
   ],
   "multipleChoiceQuestions": [],
   "codeBlocks": [
-    "pupu.liiku(\"oikea\")",
-    "pupu.liiku(\"ylös\")",
-    "  pupu.liiku(\"alas\")",
+    "hahmo.liiku(\"oikea\")",
+    "hahmo.liiku(\"ylös\")",
+    "  hahmo.liiku(\"alas\")",
     "for x in range(2):",
-    "pupu.liiku(\"vasen\")"
+    "hahmo.liiku(\"vasen\")"
   ],
   "grid": [
     [3,3,3,3,3],

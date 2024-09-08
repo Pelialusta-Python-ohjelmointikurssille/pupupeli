@@ -15,13 +15,13 @@
     "c = 1",
     "c = c // 2",
     "for x in range(c):",
-    "    pupu.liiku(\"oikea\")",
+    "    hahmo.liiku(\"oikea\")",
     "for x in range(c):",
-    "    pupu.liiku(\"alas\")",
+    "    hahmo.liiku(\"alas\")",
     "for x in range(c):",
-    "    pupu.liiku(\"vasen\")",
+    "    hahmo.liiku(\"vasen\")",
     "for x in range(c):",
-    "  pupu.liiku(\"alas\")"
+    "  hahmo.liiku(\"alas\")"
   ],
   "grid": [
     [1,1,1,1,1],
