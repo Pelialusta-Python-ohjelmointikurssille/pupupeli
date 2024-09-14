@@ -15,6 +15,7 @@ tracer = PythonTracer(js_bridge, CODE_WAIT_TIME)
 tracer.start_tracer()
 
 pelaaja = Pelaaja(js_bridge)
+testi = 0
 kerattavat = GlobalVariable(1)
 
 # def interrupt_handler(sig, frame):
@@ -28,7 +29,8 @@ kerattavat = GlobalVariable(1)
 
 user_script_globals = {
     PLAYER_NAME: pelaaja,
-    COLLECTIBLES_COUNT: kerattavat
+    COLLECTIBLES_COUNT: kerattavat,
+    TESTI : testi
 }
 
 try:

@@ -2,6 +2,8 @@ class GlobalVariable:
     def __init__(self, default_value=0):
         self._value = default_value
         self._callbacks = []
+        global testi
+        testi = default_value
 
     @property
     def value(self):
@@ -9,6 +11,8 @@ class GlobalVariable:
 
     @value.setter
     def value(self, new_value):
+        global testi
+        testi = new_value
         old_value = self._value
         self._value = new_value
         #self._notify_observers(old_value, new_value)

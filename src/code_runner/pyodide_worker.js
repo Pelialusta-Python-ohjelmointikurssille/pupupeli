@@ -123,6 +123,7 @@ async function runCode(code, playerName, collectiblesVariableName) {
             self.pyodide.globals.set("COLLECTIBLES_COUNT", collectiblesVariableName);
             self.pyodide.globals.set("CODE_WAIT_TIME", CODE_EXECUTION_DELAY);
             self.pyodide.globals.set("USER_SCRIPT_NAME", USER_SCRIPT_NAME);
+            self.pyodide.globals.set("TESTI", "testi");
             console.log("[Pyodide Worker]: Running python code");
             isResetting = false;
 
