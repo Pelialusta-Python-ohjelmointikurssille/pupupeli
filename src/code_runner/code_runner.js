@@ -6,8 +6,8 @@ export function initializeRunner() {
     handler.initialize("/src/code_runner/pyodide_worker.js");
 }
 
-export function runCode(code, playerName) {
-    handler.runCode(code, playerName);
+export function runCode(code, playerName, collectiblesVariableName) {
+    handler.runCode(code, playerName, collectiblesVariableName);
 }
 
 export function runUntilNextLine() {

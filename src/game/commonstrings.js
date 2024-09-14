@@ -36,6 +36,11 @@ export class ThemeNames {
     static ROBOT = "robot";
 }
 
+export class ThemeNamesFin {
+    static PUPU = "pupu";
+    static ROBO = "robo";
+}
+
 //Todo: aliases change depending on current theme
 const COLLECTIBLE_ALIASES = ["porkkana", "jakoavain", "ruoka"];
 const OBSTACLE_ALIASES = ["kivi", "viemäri", "este"];
@@ -54,6 +59,15 @@ export function getVariableTrueName(name) {
     if (OBSTACLE_ALIASES.includes(name))
         return Constants.OBSTACLE;
     return false;
+}
+
+const COLLECTIBLE_PLURAL_ALIASES = ["porkkanat", "jakoavaimet", "ruuat"];
+export function getVariablePlural(themeName) {
+    if (themeName === ThemeNamesFin.PUPU)
+        return COLLECTIBLE_PLURAL_ALIASES[0];
+    if (themeName === ThemeNamesFin.ROBO)
+        return COLLECTIBLE_PLURAL_ALIASES[1];
+    return COLLECTIBLE_PLURAL_ALIASES[2];
 }
 
 export function GetDirectionAsString(direction) {

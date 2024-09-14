@@ -12,7 +12,8 @@ const PYTHON_CODE_FILES = new Map([
     ["python_tracer.py", "src/python_code/python_tracer.py"],
     ["player.py", "src/python_code/player.py"],
     ["js_bridge.py", "src/python_code/js_bridge.py"],
-    ["condition_checker.py", "src/python_code/condition_checker.py"]
+    ["condition_checker.py", "src/python_code/condition_checker.py"],
+    ["global_variable.py", "src/python_code/global_variable.py"]
 ]);
 
 /**
@@ -208,15 +209,22 @@ export class WorkerHandler {
      * @param {string} script Python script to run.
      * @param {string} playerName Name of the player object. Can be for example "pupu" or "robo". Used to reference player object
      * in the python script.
+     * @param {string} collectiblesVariableName Name of the collectibles count integer variable. Can be for example "porkkanat" 
+     * or "jakoavaimet". Used to refrence the collectible count and change it.
      */
-    runCode(script, playerName) {
+    runCode(script, playerName, collectiblesVariableName) {
         if (this.isResetting === true) {
             console.error("TRYING TO RUN BEFORE WORKER HAS FINISHED RESETTING!");
             return;
         }
         console.log("[Worker handler]: Running code");
         this.clearWorkerInterrupt();
-        this.pyodideWorker.postMessage({ type: "RUNCODE", code: script, playerName: playerName });
+        this.pyodideWorker.postMessage(
+            { type: "RUNCODE", 
+                code: script, 
+                playerName: playerName, 
+                collectiblesVariableName: collectiblesVariableName }
+        );
         this.isRunning = true;
     }
 

@@ -1,4 +1,4 @@
-import { TaskTypes } from "../game/commonstrings.js";
+import { TaskTypes, getVariablePlural } from "../game/commonstrings.js";
 import { hideAndClearInputBox } from "./inputBox.js";
 import { getEditor, resetLineHighlight, setEditorTextFromCodeBlocks } from "../input/editor.js";
 import { resetAndInitContent, toggleGrid, toggleTrail, setTheme, setTurboSpeedActive } from "../game/game_controller.js";
@@ -33,7 +33,7 @@ let isTurboActive = false;
 subscribeToReadyCallbacks(enableEditorButtons);
 subscribeToFinishCallbacks(() => { disablePlayButton(); isRunning = false; });
 subscribeToErrorCallbacks(() => { disablePlayButton("error"); isRunning = false; });
-subscribeToResetCallbacks(() => { 
+subscribeToResetCallbacks(() => {
     isResetting = false;
     isRunning = false;
     resetEditorUIState();
@@ -88,12 +88,12 @@ function resetEditorUIState() {
     resetErrorText();
     hideAndClearInputBox();
     resetCelebrationBox();
-    
+
     resetInputHistory();
     _buttonsState = States.INITIAL;
     //setMessagePassingState({ paused: false });
     resetLineHighlight();
-    
+
 }
 
 /**
@@ -115,7 +115,7 @@ function onResetButtonClick() {
         resetButton.disabled = false;
     } else {
         disablePlayButton("reset");
-        
+
     }
 }
 
@@ -164,7 +164,7 @@ function onNextStepButtonClick() {
         onRunButtonClick(); //changes state to paused
     }
     if (_buttonsState == States.PAUSED) {
-        if(isWaitingForInput) return;
+        if (isWaitingForInput) return;
         runUntilNextLine();
         //runSingleCommand();
     }
@@ -187,9 +187,9 @@ export function disablePlayButton(cause = null) {
     img.src = "src/static/resetbutton.png";
     if (cause === "error") {
         runButtonText.textContent = 'Virhe';
-    } else if (cause === "reset"){
+    } else if (cause === "reset") {
         runButtonText.textContent = "Ladataan..."
-    } 
+    }
     else {
         runButtonText.textContent = 'Loppu';
     }
@@ -225,19 +225,25 @@ function onRunButtonClick() {
     switch (_buttonsState) {
         case States.INITIAL:
             if (task.taskType === TaskTypes.codeBlockMoving) setEditorTextFromCodeBlocks();
-            if (localStorage.getItem("token")){
+            if (localStorage.getItem("token")) {
                 sendTask();
             }
             //postMessage({ type: 'start', details: getEditor().getValue() });
-            runCode(getEditor().getValue(), localStorage.getItem("theme").toLowerCase());
+            let theme = localStorage.getItem("theme").toLowerCase();
+            console.log("themename: " + theme);
+            runCode(
+                getEditor().getValue(),
+                theme,
+                getVariablePlural(theme)
+            );
             break;
         case States.RUNNING:
-            if(isWaitingForInput) return;
+            if (isWaitingForInput) return;
             //setMessagePassingState({ paused: true });
             pauseRunner();
             break;
         case States.PAUSED:
-            if(isWaitingForInput) return;
+            if (isWaitingForInput) return;
             //setMessagePassingState({ paused: false });
             resumeRunner();
             break;

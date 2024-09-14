@@ -37,7 +37,7 @@ async function loadWorkerPyodide() {
     // eslint-disable-next-line no-undef
     self.pyodide = await loadPyodide();
     console.timeEnd("[Pyodide Worker]: Finished initializing pyodide");
-    self.postMessage({type: "INIT_OK"});
+    self.postMessage({ type: "INIT_OK" });
     self.pyodide.setStdin({
         stdin: () => {
             return stdInHandler();
@@ -76,16 +76,16 @@ async function messageHandler(event) {
         setSharedInputArray(message.array);
     }
     if (message.type === "RUNCODE") {
-        await runCode(message.code, message.playerName);
+        await runCode(message.code, message.playerName, message.collectiblesVariableName);
     }
     if (message.type === "RESET_WORKER_OK") {
         isResetting = false;
         ignorePythonFunctions = false;
         console.log("[Pyodide Worker]: Finished resetting");
     }
-    if(message.type === "SETBACKGROUNDCODE") {
+    if (message.type === "SETBACKGROUNDCODE") {
         await setBackgroundCode(message.runnerCode, message.codeMap);
-        self.postMessage({type: "BACKGROUNDCODE_OK"});
+        self.postMessage({ type: "BACKGROUNDCODE_OK" });
         isReadyToRunCode = true;
         saveCurrentState();
     }
@@ -95,9 +95,11 @@ async function messageHandler(event) {
  * Run a given python script using pyodide. 
  * @param {string} code Python code to run.
  * @param {string} playerName Name of the player object. For example "pupu" or "robo".
+ * @param {string} collectiblesVariableName Name of the collectibles count integer variable. Can be for example "porkkanat" 
+ * or "jakoavaimet".
  * @returns Promise of wether pyodide has finished running the python code.
  */
-async function runCode(code, playerName) {
+async function runCode(code, playerName, collectiblesVariableName) {
     if (isRunning === true) return;
     hasFinishedExecution = false;
     await pyodideReadyPromise.then(
@@ -110,17 +112,17 @@ async function runCode(code, playerName) {
                 return;
             }
             console.log("[Pyodide Worker]: Writing user code to virtual file");
-            await self.pyodide.FS.writeFile(USER_SCRIPT_NAME+".py", code, { encoding: "utf8" });
+            await self.pyodide.FS.writeFile(USER_SCRIPT_NAME + ".py", code, { encoding: "utf8" });
             console.log("[Pyodide Worker]: Loading packages from imports");
             await self.pyodide.loadPackagesFromImports(code);
             await loadedScripts.forEach(async (element) => {
                 await self.pyodide.loadPackagesFromImports(element);
             });
-        
+
             self.pyodide.globals.set("PLAYER_NAME", playerName);
+            self.pyodide.globals.set("COLLECTIBLES_COUNT", collectiblesVariableName);
             self.pyodide.globals.set("CODE_WAIT_TIME", CODE_EXECUTION_DELAY);
             self.pyodide.globals.set("USER_SCRIPT_NAME", USER_SCRIPT_NAME);
-        
             console.log("[Pyodide Worker]: Running python code");
             isResetting = false;
 
@@ -132,15 +134,15 @@ async function runCode(code, playerName) {
             }
         }
     )
-    .catch((e) => {
-        console.error(e);
-    })
-    .finally(() => {
-        if (isResetting === true) {
-            self.postMessage({ type: "RESET_OK" });
-        }
-    });
-       
+        .catch((e) => {
+            console.error(e);
+        })
+        .finally(() => {
+            if (isResetting === true) {
+                self.postMessage({ type: "RESET_OK" });
+            }
+        });
+
 }
 
 function updateResetStatus() {
@@ -157,7 +159,7 @@ function updateResetStatus() {
 function setWaitBuffer(buffer) {
     console.log("[Pyodide Worker]: Got wait buffer");
     waitBuffer = buffer;
-    self.postMessage({type: "WAITBUFFER_OK"});
+    self.postMessage({ type: "WAITBUFFER_OK" });
 }
 
 /**
@@ -173,7 +175,7 @@ function setInterruptBuffer(buffer) {
     console.log("[Pyodide Worker]: Got interrupt buffer");
     self.pyodide.setInterruptBuffer(buffer);
     interruptBuffer = buffer;
-    self.postMessage({type: "INTERRUPTBUFFER_OK"});
+    self.postMessage({ type: "INTERRUPTBUFFER_OK" });
 }
 
 /**
@@ -187,7 +189,7 @@ function reset() {
     console.log("[Pyodide Worker]: Resetting...");
     isResetting = true;
     loadedScripts = [];
-    if (hasFinishedExecution === true) interruptBuffer[0] = 0; 
+    if (hasFinishedExecution === true) interruptBuffer[0] = 0;
     self.pyodide.pyodide_py._state.restore_state(saveState);
     hasUsedInput = false;
     if (isRunning === false || hasFinishedExecution === true) {
@@ -217,7 +219,7 @@ async function setBackgroundCode(runnerCode, codeMap) {
 function setSharedInputArray(array) {
     console.log("[Pyodide Worker]: Got shared input array");
     sharedInputArray = array;
-    self.postMessage({type: "SHAREDINPUTARRAY_OK"});
+    self.postMessage({ type: "SHAREDINPUTARRAY_OK" });
 }
 
 /**
